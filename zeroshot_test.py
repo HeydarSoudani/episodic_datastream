@@ -5,19 +5,18 @@ from pandas import read_csv
 from datasets.dataset import DatasetFM
 from detectors.reptile_detector import ReptileDetector
 from detectors.pt_detector import PtDetector, pt_detector
-from augmentation import transforms
+
+from utils.preparation import transforms_preparation
 
 def zeroshot_test(model, args, device, known_labels=None):
   print('================================ Zero-Shot Test ================================')
   # == Data ==================================
-  transform = transforms.Compose([
-    transforms.ToPILImage(),
-    transforms.ToTensor(),
-    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-  ])
   stream_data = read_csv(args.test_path, sep=',', header=None).values
-  stream_dataset = DatasetFM(stream_data)
-  # stream_dataset = DatasetFM(stream_data, transforms=transform)
+  if args.use_transform:
+    _, test_transform = transforms_preparation()
+    stream_dataset = DatasetFM(stream_data, transforms=test_transform)
+  else:
+    stream_dataset = DatasetFM(stream_data)
   dataloader = DataLoader(dataset=stream_dataset, batch_size=1, shuffle=False)
 
   ## == Load model ============================

@@ -1,5 +1,4 @@
 import torch
-import time
 
 def compute_prototypes(
   support_features: torch.Tensor, support_labels: torch.Tensor

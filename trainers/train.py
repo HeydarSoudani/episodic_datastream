@@ -5,9 +5,6 @@ import os
 import time
 
 # from pytorch_metric_learning import distances, losses, miners
-# from torchvision.transforms.transforms import RandomRotation
-# from augmentation import transforms
-# from augmentation.autoaugment.autoaugment import CIFAR10Policy
 # from utils.functions import imshow
 
 from utils.preparation import dataloader_preparation
@@ -69,7 +66,7 @@ def train(model,
           train_loss = 0.
 
           # evalute on val_dataset
-          # val_loss_total = reptile_evaluate(model, val_dataloader, criterion, device) # For Reptile
+          # val_loss_total = reptile_evaluate(model, val_dataloader) # For Reptile
           val_loss_total = pt_learner.evaluate(model, val_dataloader)  # For Pt.
           
           # print losses
