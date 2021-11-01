@@ -14,7 +14,6 @@ from init_learn import init_learn
 from zeroshot_test import zeroshot_test
 from stream_learn import stream_learn
 from utils.plot_tsne import plot_tsne
-from utils.functions import set_novel_label, mapping_text2int
 
 
 
@@ -33,15 +32,33 @@ parser.add_argument('--query_ways', type=int, default=5, help='')
 parser.add_argument('--shot', type=int, default=1, help='')
 parser.add_argument('--query_num', type=int, default=1, help='')
 parser.add_argument('--buffer_size', type=int, default=1000, help='')
+
+# Transform
+parser.add_argument('--use_transform', action='store_true')
+
+# Prototypical algorithm
+parser.add_argument('--beta', type=float, default=1.0, help='Update Prototype in Prototypical algorithm')
+parser.add_argument('--std_coefficient', type=float, default=1.0, help='for Prototype algorithm')
+
+# Reptile algorithm
 parser.add_argument('--update_step', type=int, default=5, help='for Reptile algorithm')
 
+# loss function
+parser.add_argument("--lambda_1", type=float, default=1.0, help="DCE Coefficient in loss function")
+parser.add_argument("--lambda_2", type=float, default=1.0, help="CE Coefficient in loss function")
+parser.add_argument("--lambda_3", type=float, default=0.001, help="PT Coefficient in loss function")
+parser.add_argument("--temp_scale", type=float, default=0.2, help="Temperature scale for DCE in loss function",)
+
+# optimizer
 parser.add_argument('--lr', type=float, default=0.0001, help='')
 parser.add_argument('--momentum', type=float, default=0.9, help='')
 parser.add_argument('--wd', type=float, default=0.0005, help='')  #l2 regularization
-parser.add_argument('--gamma', type=float, default=0.1, help='for lr step')
-parser.add_argument('--beta', type=float, default=0.06, help='for Reptile algorithm')
 parser.add_argument('--grad_clip', type=float, default=5.0)
-parser.add_argument('--std_coefficient', type=float, default=1.0, help='for Prototype algorithm')
+
+# scheduler
+parser.add_argument("--scheduler", action="store_true", help="use scheduler")
+parser.add_argument("--step_size", default=3000, type=int)
+parser.add_argument('--gamma', type=float, default=0.5, help='for lr step')
 
 parser.add_argument('--which_model', type=str, default='best', help='')
 parser.add_argument('--dropout', type=float, default=0.2, help='')
@@ -81,7 +98,7 @@ if torch.cuda.is_available():
     args.cuda = True
   torch.cuda.manual_seed_all(args.seed)
 device = torch.device("cuda" if args.cuda else "cpu")
-# print('Device: {}'.format(device))
+print('Device: {}'.format(device))
 
 ## == Apply seed =================
 torch.manual_seed(args.seed)

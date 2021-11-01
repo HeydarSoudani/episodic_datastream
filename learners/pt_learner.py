@@ -1,85 +1,104 @@
 import torch
-import torch.nn.functional as F
-import numpy as np
 import time
 
-
 def compute_prototypes(
-    support_features: torch.Tensor, support_labels: torch.Tensor
+  support_features: torch.Tensor, support_labels: torch.Tensor
 ) -> torch.Tensor:
-    """
-    Compute class prototypes from support features and labels
-    Args:
-        support_features: for each instance in the support set, its feature vector
-        support_labels: for each instance in the support set, its label
-    Returns:
-        for each label of the support set, the average feature vector of instances with this label
-    """
-    seen_labels = torch.unique(support_labels)
+  """
+  Compute class prototypes from support features and labels
+  Args:
+    support_features: for each instance in the support set, its feature vector
+    support_labels: for each instance in the support set, its label
+  Returns:
+    for each label of the support set, the average feature vector of instances with this label
+  """
+  seen_labels = torch.unique(support_labels)
 
-    # Prototype i is the mean of all instances of features corresponding to labels == i
-    return torch.cat(
-        [
-          support_features[(support_labels == l).nonzero(as_tuple=True)[0]].mean(0).reshape(1, -1)
-          for l in seen_labels
-        ]
+  # Prototype i is the mean of all instances of features corresponding to labels == i
+  return torch.cat(
+    [
+      support_features[(support_labels == l).nonzero(as_tuple=True)[0]].mean(0).reshape(1, -1)
+      for l in seen_labels
+    ]
+  )
+
+
+class PtLearner:
+  def __init__(self, criterion, device):
+    self.criterion = criterion
+    self.device = device
+    self.prototypes = None
+
+  def train(self, model, queue, optimizer, iteration, args):
+    model.train()  
+    optimizer.zero_grad()
+
+    queue_len = len(queue)
+    support_len = queue_len * args.shot * args.ways
+    n_query = queue_len * args.query_num
+
+    support_images, support_labels, query_images, query_labels = queue[0]
+    support_images = support_images.reshape(-1, *support_images.shape[2:])
+    support_labels = support_labels.flatten()
+    query_images = query_images.reshape(-1, *query_images.shape[2:])
+    query_labels = query_labels.flatten()
+    support_images = support_images.to(self.device)
+    support_labels = support_labels.to(self.device)
+    query_images = query_images.to(self.device)
+    query_labels = query_labels.to(self.device)
+
+    images = torch.cat(support_images, query_images)
+    outputs, features = model.forward(images)
+    
+    new_prototypes = compute_prototypes(
+      features[:support_len], support_labels
     )
 
-
-def pt_learner(model,
-                support_images,
-                support_labels,
-                query_images,
-                query_labels,
-                criterion,
-                optimizer,
-                args):
-  model.train()  
-  optimizer.zero_grad()
-
-  # with torch.no_grad():
-  _, support_features = model.forward(support_images)
-  
-  prototypes = compute_prototypes(support_features, support_labels)
-  # prototypes = prototypes.detach()
-  outputs, query_features = model.forward(query_images)
-
-  #   dists = torch.cdist(z_query, prototypes)
-  #   classification_scores = -dists
-  #   loss = criterion(classification_scores, query_labels)
-  # input = torch.cat((support_features, query_features))
-  # target = torch.cat((support_labels, query_labels))
-
-  # loss, prototypes = prototypical_loss(input, target, args.ways)
-  loss = criterion(query_features, outputs, query_labels, prototypes)
-
-  loss.backward()
-
-  torch.nn.utils.clip_grad_norm_(model.parameters(), args.grad_clip)
-  optimizer.step()
-
-  return loss, prototypes
+    beta = args.beta * iteration / args.meta_iteration
+    if iteration > 1 and beta > 0.0:
+      self.prototypes = beta * self.prototypes + (1 - beta) * new_prototypes
+    else:
+      self.prototypes = new_prototypes
 
 
-## For Pt.
-def pt_evaluate(model, dataloader, prototypes, criterion, device):
-  
-  ce = torch.nn.CrossEntropyLoss()
+    loss = self.criterion(
+      features[support_len:],
+      outputs[support_len:],
+      query_labels,
+      self.prototypes,
+      n_query=n_query,
+      n_classes=args.ways,
+    )
+    loss.backward()
+    torch.nn.utils.clip_grad_norm_(model.parameters(), args.grad_clip)
+    optimizer.step()
 
-  with torch.no_grad():
-    total_loss = 0.0
-    model.eval()
-    for i, batch in enumerate(dataloader):
+    if beta > 0.0:
+      self.prototypes = self.prototypes.detach()
+    else:
+      self.prototypes = None
 
-      sample, labels = batch
-      sample, labels = sample.to(device), labels.to(device)
-      
-      logits, features = model.forward(sample)
-      # loss = criterion(features, logits, labels, prototypes)
-      loss = ce(logits, labels)
-      # loss, acc = criterion(features, target=labels)
-      loss = loss.mean()
-      total_loss += loss.item()
+    return loss.detach().item()
 
-    total_loss /= len(dataloader)
-    return total_loss
+  #TODO: classification with distance metric
+  def evaluate(self, model, dataloader):
+    
+    ce = torch.nn.CrossEntropyLoss()
+
+    with torch.no_grad():
+      total_loss = 0.0
+      model.eval()
+      for i, batch in enumerate(dataloader):
+
+        sample, labels = batch
+        sample, labels = sample.to(self.device), labels.to(self.device)
+        
+        logits, features = model.forward(sample)
+        # loss = criterion(features, logits, labels, prototypes)
+        loss = ce(logits, labels)
+        # loss, acc = criterion(features, target=labels)
+        loss = loss.mean()
+        total_loss += loss.item()
+
+      total_loss /= len(dataloader)
+      return total_loss

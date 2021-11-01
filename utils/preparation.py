@@ -5,7 +5,7 @@ from torch.utils.data import DataLoader
 from augmentation import transforms
 from generator import task_generator
 from datasets.dataset import DatasetFM
-from sampler import TaskSampler
+from sampler import DataSampler
 
 
 def dataloader_preparation(train_data, args):
@@ -21,7 +21,7 @@ def dataloader_preparation(train_data, args):
   # task: [n, 765(feature_in_line+label)]
   task_list = task_generator(train_data, args, task_number=1, type='random') #['random', 'dreca']
 
-  ## =========
+  ## ==========================
   transform_train = transforms.Compose([
     transforms.ToPILImage(),
     # transforms.RandomCrop(32, padding=4, fill=128),
@@ -42,12 +42,12 @@ def dataloader_preparation(train_data, args):
   ## = trainloader ============
   train_dataloaders = []
   for task_data in task_list:
-    if args.use_transform == False:
-      temp_dataset = DatasetFM(task_data)
-    else:
+    if args.use_transform:
       temp_dataset = DatasetFM(task_data, transforms=transform_train)
-
-    train_sampler = TaskSampler(
+    else:
+      temp_dataset = DatasetFM(task_data)
+      
+    train_sampler = DataSampler(
       temp_dataset,
       n_way=args.ways,
       n_shot=args.shot,
@@ -64,13 +64,12 @@ def dataloader_preparation(train_data, args):
     train_dataloaders.append(train_loader)
 
   ## = Data validation ================
-
-  if args.use_transform == False:
-    val_dataset = DatasetFM(val_data)
-  else:
+  if args.use_transform:
     val_dataset = DatasetFM(val_data, transforms=transform_val)
+  else:
+    val_dataset = DatasetFM(val_data)
   
-  val_sampler = TaskSampler(
+  val_sampler = DataSampler(
     val_dataset,
     n_way=args.ways,
     n_shot=args.shot,
