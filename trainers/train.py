@@ -35,7 +35,7 @@ def train(model,
   # criterion  = nn.CrossEntropyLoss()
   # criterion_mt = losses.NTXentLoss(temperature=0.07)
   # criterion = PrototypicalLoss(n_support=args.shot)
-  criterion = TotalLoss(args)
+  criterion = TotalLoss(device, args)
   
   optim = SGD(model.parameters(),
               lr=args.lr,

@@ -47,7 +47,7 @@ class PtLearner:
     query_images = query_images.to(self.device)
     query_labels = query_labels.to(self.device)
 
-    images = torch.cat(support_images, query_images)
+    images = torch.cat((support_images, query_images))
     outputs, features = model.forward(images)
     
     new_prototypes = compute_prototypes(
@@ -59,7 +59,6 @@ class PtLearner:
       self.prototypes = beta * self.prototypes + (1 - beta) * new_prototypes
     else:
       self.prototypes = new_prototypes
-
 
     loss = self.criterion(
       features[support_len:],

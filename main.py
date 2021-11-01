@@ -20,18 +20,20 @@ from utils.plot_tsne import plot_tsne
 ## == Params ===========
 parser = argparse.ArgumentParser()
 
+# init train
 parser.add_argument('--start_epoch', type=int, default=0, help='')
 parser.add_argument('--epochs', type=int, default=2, help='')
-parser.add_argument('--retrain_epochs', type=int, default=1, help='')
 parser.add_argument('--meta_iteration', type=int, default=3000, help='')
-parser.add_argument('--retrain_meta_iteration', type=int, default=1000, help='')
 parser.add_argument('--log_interval', type=int, default=100, help='must be less then meta_iteration parameter')
-parser.add_argument('--batch_size', type=int, default=64, help='')
 parser.add_argument('--ways', type=int, default=5, help='')
-parser.add_argument('--query_ways', type=int, default=5, help='')
-parser.add_argument('--shot', type=int, default=1, help='')
-parser.add_argument('--query_num', type=int, default=1, help='')
+parser.add_argument('--shot', type=int, default=5, help='')
+parser.add_argument('--query_num', type=int, default=5, help='')
 parser.add_argument('--buffer_size', type=int, default=1000, help='')
+parser.add_argument('--batch_size', type=int, default=64, help='')
+
+# retrain
+parser.add_argument('--retrain_epochs', type=int, default=1, help='')
+parser.add_argument('--retrain_meta_iteration', type=int, default=1000, help='')
 
 # Transform
 parser.add_argument('--use_transform', action='store_true')

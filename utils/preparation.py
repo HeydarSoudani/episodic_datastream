@@ -3,7 +3,7 @@ import torch
 from torch.utils.data import DataLoader
 
 from augmentation import transforms
-from generator import task_generator
+from utils.generator import task_generator
 from datasets.dataset import DatasetFM
 from sampler import DataSampler
 
@@ -69,22 +69,22 @@ def dataloader_preparation(train_data, args):
   else:
     val_dataset = DatasetFM(val_data)
   
-  val_sampler = DataSampler(
-    val_dataset,
-    n_way=args.ways,
-    n_shot=args.shot,
-    n_query=args.query_num,
-    n_tasks=100
-  )
-  val_dataloader = DataLoader(
-      temp_dataset,
-      batch_sampler=val_sampler,
-      num_workers=1,
-      pin_memory=True,
-      collate_fn=val_sampler.episodic_collate_fn,
-    )
-
-  # val_dataloader = DataLoader(dataset=val_dataset, batch_size=8, shuffle=False)
+  # val_sampler = DataSampler(
+  #   val_dataset,
+  #   n_way=args.ways,
+  #   n_shot=args.shot,
+  #   n_query=args.query_num,
+  #   n_tasks=100
+  # )
+  # val_dataloader = DataLoader(
+  #     temp_dataset,
+  #     batch_sampler=val_sampler,
+  #     num_workers=1,
+  #     pin_memory=True,
+  #     collate_fn=val_sampler.episodic_collate_fn,
+  #   )
+  val_dataloader = DataLoader(dataset=val_dataset, batch_size=8, shuffle=False)
+  
   return train_dataloaders, val_dataloader
 
 

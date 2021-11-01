@@ -72,14 +72,14 @@ class DCELoss(nn.Module):
     return loss_val
 
 class TotalLoss(nn.Module):
-  def __init__(self, args):
+  def __init__(self, device, args):
     super().__init__()
     self.args = args
     self.lambda_1 = args.lambda_1
     self.lambda_2 = args.lambda_2
     self.lambda_3 = args.lambda_3
     
-    self.dce = DCELoss(gamma=args.temp_scale)
+    self.dce = DCELoss(device, gamma=args.temp_scale)
     self.ce = torch.nn.CrossEntropyLoss()
     # self.proto = PrototypeLoss()
 
