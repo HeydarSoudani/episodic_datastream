@@ -1,25 +1,18 @@
-import torch
-import torch.nn as nn
-from torch.utils.data import DataLoader
-from torch.optim import SGD, Adam
+
+from torch.optim import SGD
 from torch.optim.lr_scheduler import StepLR
 import os
 import time
-import numpy as np
-# from pytorch_metric_learning import distances, losses, miners
-from collections import Counter
 
-from torchvision.transforms.transforms import RandomRotation
+# from pytorch_metric_learning import distances, losses, miners
+# from torchvision.transforms.transforms import RandomRotation
+# from augmentation import transforms
+# from augmentation.autoaugment.autoaugment import CIFAR10Policy
+# from utils.functions import imshow
 
 from utils.preparation import dataloader_preparation
-
-
-from learners.reptile_learner import reptile_learner, reptile_evaluate
 from learners.pt_learner import PtLearner
 from losses import TotalLoss
-from augmentation import transforms
-from augmentation.autoaugment.autoaugment import CIFAR10Policy
-from utils.functions import imshow
 
 
 def train(model,
@@ -28,7 +21,7 @@ def train(model,
           device):
   model.to(device)
 
-  train_dataloaders,\
+  train_dataloader,\
   val_dataloader=  dataloader_preparation(train_data, args)
 
   ## = Model Update config.
@@ -60,15 +53,13 @@ def train(model,
     for epoch_item in range(args.start_epoch, args.epochs):
       print('===================================== Epoch %d =====================================' % epoch_item)
       train_loss = 0.
-      
-      train_loader_iterations = [
-        iter(train_loader) for train_loader in train_dataloaders
-      ]
+      trainloader = iter(train_dataloader)
 
       for miteration_item in range(args.meta_iteration):
-        queue = [next(trainloader) for trainloader in train_loader_iterations]  
+  
+        batch = next(trainloader)
       
-        loss = pt_learner.train(model,queue,optim,miteration_item,args)
+        loss = pt_learner.train(model,batch,optim,miteration_item,args)
         train_loss += loss
 
         ## == validation ==============

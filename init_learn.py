@@ -1,9 +1,7 @@
-import time
 from pandas import read_csv
 
 from datasets.dataset import DatasetFM
 from trainers import train
-
 from detectors.reptile_detector import replite_detector
 from detectors.pt_detector import pt_detector
 
@@ -35,10 +33,10 @@ def init_learn(model, args, device):
   # batch_train(model, train_data, args, device)
 
   ## == Save Novel detector =========
-  # if args.which_model == 'best':
-  #   model.load(args.best_model_path)
+  if args.which_model == 'best':
+    model.load(args.best_model_path)
   # _ = replite_detector(model, train_data, args, device)
-  # _ = pt_detector(model, train_data, base_labels, args, device)
+  _ = pt_detector(model, train_data, base_labels, args, device)
 
 
 

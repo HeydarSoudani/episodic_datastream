@@ -29,15 +29,13 @@ class PtLearner:
     self.device = device
     self.prototypes = None
 
-  def train(self, model, queue, optimizer, iteration, args):
+  def train(self, model, batch, optimizer, iteration, args):
     model.train()  
     optimizer.zero_grad()
 
-    queue_len = len(queue)
-    support_len = queue_len * args.shot * args.ways
-    n_query = queue_len * args.query_num
+    support_len = args.shot * args.ways
 
-    support_images, support_labels, query_images, query_labels = queue[0]
+    support_images, support_labels, query_images, query_labels = batch
     support_images = support_images.reshape(-1, *support_images.shape[2:])
     support_labels = support_labels.flatten()
     query_images = query_images.reshape(-1, *query_images.shape[2:])
@@ -65,7 +63,7 @@ class PtLearner:
       outputs[support_len:],
       query_labels,
       self.prototypes,
-      n_query=n_query,
+      n_query=args.query_num,
       n_classes=args.ways,
     )
     loss.backward()

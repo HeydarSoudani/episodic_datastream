@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 class CNNEncoder(nn.Module):    
 	def __init__(self, args):
@@ -9,7 +8,6 @@ class CNNEncoder(nn.Module):
 		self.device = None
 
 		img_channels = 3
-
 
 		self.layer1 = nn.Sequential(
 		nn.Conv2d(in_channels=img_channels, out_channels=32, kernel_size=5, padding=2), #input: 28 * 28 * 3, output: 28 * 28 * 32
@@ -27,7 +25,6 @@ class CNNEncoder(nn.Module):
 		)
 		self.fc1 = nn.Linear(in_features=64*6*6, out_features=args.hidden_dims)
 		
-		# self.weight = nn.Parameter(torch.randn(args.seen_labels, args.hidden_dims)) #[5, 768]
 		self.classifier = nn.Linear(args.hidden_dims, 10)
 		
 		# self.device = device
@@ -39,7 +36,6 @@ class CNNEncoder(nn.Module):
 		out = cnn_output.view(cnn_output.size(0), -1)
 		features = torch.relu(self.fc1(out))
 		logits = self.classifier(features)
-		# logits = F.linear(pooled_output, self.weight)
 		return logits, features
 	
 	def to(self, *args, **kwargs):
