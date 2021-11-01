@@ -2,7 +2,7 @@ from pandas import read_csv
 
 from datasets.dataset import DatasetFM
 from trainers import train
-from detectors.reptile_detector import replite_detector
+# from detectors.reptile_detector import replite_detector
 from detectors.pt_detector import pt_detector
 
 def init_learn(model, args, device):
