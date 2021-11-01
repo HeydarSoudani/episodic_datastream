@@ -58,8 +58,9 @@ def zeroshot_test(model, args, device, known_labels=None):
       real_novelty = label.item() not in novelty_detector.base_labels
       detection_results.append((label.item(), predicted_label, real_novelty, detected_novelty))
 
-      print("[stream %5d]: %d, %d, %7.4f, %5s, %5s"%
-        (i+1, label, predicted_label, prob, real_novelty, detected_novelty))
+      if (i+1) % 500 == 0:
+        print("[stream %5d]: %d, %d, %7.4f, %5s, %5s"%
+          (i+1, label, predicted_label, prob, real_novelty, detected_novelty))
 
     tp, fp, fn, tn, cm, acc, acc_all = novelty_detector.evaluate(detection_results)
     precision = tp / (tp + fp + 1)
