@@ -20,6 +20,8 @@ from utils.plot_tsne import plot_tsne
 ## == Params ===========
 parser = argparse.ArgumentParser()
 
+parser.add_argument('--phase', type=str, default='init_learn', help='')
+
 # init train
 parser.add_argument('--start_epoch', type=int, default=0, help='')
 parser.add_argument('--epochs', type=int, default=2, help='')
@@ -122,6 +124,9 @@ model = CNNEncoder_2(args)
 #           dropRate=args.dropout,
 #         )
 
+# TODO: add init. weight
+# model.apply(weights_init)
+
 if __name__ == '__main__':
 
   ## == Batch ===========================
@@ -129,24 +134,13 @@ if __name__ == '__main__':
   # batch_test(model, args, device)
 
   ## == Train & test ====================
-  # == 1) init. train
-  init_learn(model, args, device)
-  # time.sleep(3)
-
-  # == 2) zeroshot test (with 5 seen class)
-  # zeroshot_test(model, args, device)
-  # time.sleep(10)
-
-  # == 3) stream train
-  # stream_learn(model, args, device)
-
-  # == 4) zeroshot test (with 5 seen class)
-  # zeroshot_test(model, args, device)
-  # time.sleep(10)
-
-  # == 5) zeroshot test (with 10 seen class)
-  # zeroshot_test(model, args, device,
-  #               known_labels=[0., 1., 2., 3., 4.])
+  if __name__ == '__main__':
+    if args.phase == 'init_learn':
+      init_learn(model, args, device)
+    elif args.phase == 'zeroshot_test':
+      zeroshot_test(model, args, device)
+    elif args.phase == 'stream_learn':
+      stream_learn(model, args, device)
 
   ## == Data Visualization ==============
   # set_novel_label(args)
