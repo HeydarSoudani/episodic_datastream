@@ -198,36 +198,6 @@ def get_accuracy(preds, labels, k=(1, 5,), **kwargs):
   return accuracy_list
 
 
-# def evaluate(pred_file, gt_file, k=(1, 5,)):
-#   """Evaluates the performance as top-k accuracy
-#   Args:
-#     pred_file (str): path to csv file containing pred labels
-#       Column 0 - file name
-#       Column 1..n - probability of data point being class 'n'
-#     gt_file (str): path to csv file containing gt labels for each data point.
-#       Column 0 - file name
-#       Column 1 - class_id
-#     k (tuple of int): 'k' in 'top-k' accuracy. 'k' top probabilities will be used for evaluation
-#   """
-#   assert os.path.isfile(pred_file), f'File not found: {pred_file}'
-#   assert os.path.isfile(gt_file), f'File not found: {gt_file}'
-
-#   gt_df = pd.read_csv(gt_file)
-#   pred_df = pd.read_csv(pred_file, header=None, index_col=None)
-#   # Comparing the full file paths as of now, we might want to revisit this based on how we name data points later
-#   assert len(gt_df) == len(pred_df), 'GT and Prediction files have different number of records'
-#   assert gt_df.iloc[:, 0].tolist() == pred_df.iloc[:, 0].tolist(), 'GT and Prediction files do not have the data' \
-#                                                                     ' points in same order'
-#   gt_class = np.asarray(gt_df.iloc[:, 1].tolist())
-#   pred_df.drop(pred_df.columns[0], inplace=True, axis=1)
-#   pred_class = pred_df.to_numpy()
-#   accuracy_list = get_accuracy(pred_class, gt_class, k, gt_shift=0)
-#   for k_val in accuracy_list.keys():
-#     print(f'The top-{k_val} average accuracy is {accuracy_list[k_val]["accuracy"]}')
-#     for class_id in sorted(accuracy_list[k_val].keys()):
-#       print(f'\t\t The top-{k_val} accuracy for class {class_id} is {accuracy_list[k_val][class_id]}')
-
-
 def evaluate(results, known_labels, k=(1, 5,), eps=1e-8):
   results = np.array(results, dtype=[
     ('true_label', np.int32),
@@ -272,13 +242,6 @@ def evaluate(results, known_labels, k=(1, 5,), eps=1e-8):
   return M_new, F_new, CwCA, OwCA, cm
 
 
-def main():
-  parser = get_parser()
-  args = parser.parse_args()
-  if isinstance(args.k_vals, int):
-    args.k_vals = [args.k_vals]
-  evaluate(args.pred_file, args.gt_file, tuple(map(int, args.k_vals)))
-
 
 if __name__ == '__main__':
-  main()
+  pass

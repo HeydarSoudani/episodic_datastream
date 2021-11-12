@@ -23,6 +23,76 @@ def euclidean_dist(x, y):
   return torch.pow(x - y, 2).sum(2)
 
 
+class OperationalMemory():
+  def __init__(self,
+                per_class,
+                novel_acceptance,
+                selection_method='soft_rand'):
+    self.per_class = per_class
+    self.novel_acceptance = novel_acceptance
+    self.selection_method = selection_method
+    self.class_data = None
+
+  def select(self, data):
+    """
+    Compute ...
+    Args:
+      data: list of (feature, label)
+    Returns:
+      ---
+    """ 
+    features = torch.stack([item[0] for item in data])
+    labels = torch.tensor([item[1] for item in data])
+    seen_labels = torch.unique(labels)
+
+    self.class_data = {
+      l: features[(labels == l).nonzero(as_tuple=True)[0]]
+      for l in seen_labels
+    }
+
+    if self.class_data != None:
+      # should add buffer data 
+      pass
+
+    if self.selection_method == 'rand':
+      self.rand_selection()
+    elif self.selection_method == 'soft_rand':
+      self.soft_rand_selection()
+    
+    for label, features in self.class_data.items():
+      print('{} -> {}'.format(label, features.shape))
+
+  def rand_selection(self):
+    for label, features in self.class_data.items():
+      if features.shape[0] >= self.max_per_class:
+        self.class_data[label] = random.sample(features, self.per_class)
+  
+  def soft_rand_selection(self):
+    for label, features in self.class_data.items():
+      n = features.shape[0]
+      if n >= self.per_class:
+        prototype = features.mean(0).reshape(1, -1)
+
+        dist = euclidean_dist(features, prototype) #[n, 1]
+        dist = np.squeeze(dist.detach().cpu().numpy())
+        score = np.maximum(dist, 1.0001)
+        score = np.log2(score)
+        score /= np.sum(score)
+        idxs = np.random.choice(range(n), size=self.per_class, p=score, replace=False)
+        self.class_data[label] = features[idxs]
+
+  def load(self, pkl_path):
+    self.__dict__.update(torch.load(pkl_path))
+
+  def save(self, pkl_path):
+    torch.save(self.__dict__, pkl_path)
+
+
+
+
+
+
+
 #['rand', 'soft_rand', ]
 class DataSelector():
   def __init__(self,

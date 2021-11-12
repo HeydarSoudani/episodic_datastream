@@ -9,7 +9,9 @@ from datasets.dataset import DatasetFM
 from models.cnn import CNNEncoder, CNNEncoder_2
 from models.densenet import DenseNet
 from models.wrn import WideResNet
+
 from trainers.train_batch import batch_train, batch_test
+from utils.memory_selector import OperationalMemory
 from init_learn import init_learn
 from zeroshot_test import zeroshot_test
 from stream_learn import stream_learn
@@ -83,6 +85,9 @@ parser.add_argument('--best_model_path', type=str, default='saved/model_best.pt'
 parser.add_argument('--last_model_path', type=str, default='saved/model_last.pt', help='')
 parser.add_argument('--best_mclassifier_path', type=str, default='saved/mclassifier_best.pt', help='for l2ac')
 parser.add_argument('--last_mclassifier_path', type=str, default='saved/mclassifier_last.pt', help='for l2ac')
+
+# Utils path
+parser.add_argument('--memory_path', type=str, default='saved/memory.pt', help='')
 parser.add_argument('--detector_path', type=str, default='saved/detector.pt', help='')
 parser.add_argument('--prototypes_path', type=str, default='saved/prototypes.pt', help='')
 
@@ -123,33 +128,34 @@ model = CNNEncoder_2(args)
 # TODO: add init. weight
 # model.apply(weights_init)
 
-## == Load model if exist =========
+## == Load model if exist =============
 if args.which_model == 'best':
-  try:
-    model.load(args.best_model_path)
-  except FileNotFoundError:
-    pass
+  try: model.load(args.best_model_path)
+  except FileNotFoundError: pass
   else:
-    print("Load model from file {}".format(args.best_model_path))
+    print("Load model from {}".format(args.best_model_path))
 elif args.which_model == 'last':
-  try:
-    model.load(args.last_model_path)
-  except FileNotFoundError:
-    pass
+  try: model.load(args.last_model_path)
+  except FileNotFoundError: pass
   else:
-    print("Load model from file {}".format(args.last_model_path))
+    print("Load model from {}".format(args.last_model_path))
 model.to(device)
 
-
-## == load train data from file ===
+## == load train data from file =======
 train_data = read_csv(args.train_path, sep=',', header=None).values
-train_dataset = DatasetFM(train_data)
-base_labels = train_dataset.label_set
+base_labels = DatasetFM(train_data).label_set
+
+## == Operational Memory Definition ===
+memory = OperationalMemory(per_class=250, novel_acceptance=150)
+try: memory.load(args.memory_path)
+except FileNotFoundError: pass
+else: print("Load Memory from {}.".format(args.memory_path))
+
 
 if __name__ == '__main__':
 
   ## == Batch ===========================
-  # batch_train(model, args, device)
+  # batch_train(model, train_data, args, device)
   # batch_test(model, args, device)
 
   ## == Data Stream =====================
@@ -158,12 +164,11 @@ if __name__ == '__main__':
   elif args.phase == 'zeroshot_test':
     zeroshot_test(model, args, device, known_labels=base_labels)
   elif args.phase == 'stream_learn':
-    stream_learn(model, args, device)
+    stream_learn(model, args, device, base_labels)
 
   ## == incremental learning ============
   # elif args.phase == 'incremental_learn':
   #   increm_learn(model, args, device)
-
   else: 
     raise NotImplementedError()
 

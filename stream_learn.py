@@ -14,36 +14,14 @@ from detectors.pt_detector import PtDetector, pt_detector
 from utils.data_selector import DataSelector
 
 
-def stream_learn(model, args, device):
+def stream_learn(model, args, device, base_labels=[]):
   args.epochs = args.retrain_epochs
   args.meta_iteration = args.retrain_meta_iteration
   
-  ## == Data ===================
-  train_data = read_csv(args.train_path, sep=',', header=None).values
-  
-  train_dataset = DatasetFM(train_data)
-  base_labels = train_dataset.label_set
-
+  ## == Data ==================================
   stream_data = read_csv(args.test_path, sep=',', header=None).values
   stream_dataset = DatasetFM(stream_data)
   dataloader = DataLoader(dataset=stream_dataset, batch_size=1, shuffle=False)
-
-  ## == Load model ============================
-  if args.which_model == 'best':
-    try:
-      model.load(args.best_model_path)
-    except FileNotFoundError:
-      pass
-    else:
-      print("Load model from file {}".format(args.best_model_path))
-  elif args.which_model == 'last':
-    try:
-      model.load(args.last_model_path)
-    except FileNotFoundError:
-      pass
-    else:
-      print("Load model from file {}".format(args.last_model_path))
-  model.to(device)
 
   ## == Load Detector ==========================
   # novelty_detector = ReptileDetector()
