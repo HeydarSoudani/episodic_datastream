@@ -32,6 +32,7 @@ def init_learn(model,
   dataloader = DataLoader(dataset=dataset, batch_size=1, shuffle=False)
 
   features = []
+  samples = []
   intra_distances = []
   with torch.no_grad():
     model.eval()
@@ -39,6 +40,8 @@ def init_learn(model,
       sample, label = data
       sample, label = sample.to(device), label.to(device)
       _, feature = model.forward(sample)
+
+      samples.append((torch.squeeze(sample, 0).detach(), label.item())) #[1, 28, 28]))
       features.append((feature.detach(), label.item()))
 
     prototypes = compute_prototypes(features) #{label: pt, ...}
@@ -51,7 +54,7 @@ def init_learn(model,
 
   ## == Save Memory selector ==========
   print("Creating memory ...")
-  memory.select(data=features)
+  memory.select(data=samples)
   memory.save(args.memory_path)
   print("Memory has been saved in {}.".format(args.memory_path))
 
@@ -62,7 +65,6 @@ def init_learn(model,
   print("Detector Threshold: {}".format(detector.thresholds))  
   detector.save(args.detector_path)
   print("Detector has been saved in {}.".format(args.detector_path))
-
 
 
 if __name__ == '__main__':

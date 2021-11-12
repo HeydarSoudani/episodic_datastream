@@ -3,16 +3,13 @@ from torch.utils.data import DataLoader
 from pandas import read_csv
 
 from datasets.dataset import DatasetFM
-# from detectors.reptile_detector import ReptileDetector
-# from detectors.pt_detector import PtDetector, pt_detector
 from evaluation import evaluate
-
 from utils.preparation import transforms_preparation
 
 def zeroshot_test(model, detector, known_labels, args, device):
   print('================================ Zero-Shot Test ================================')
   
-  # == Stream data ==============================
+  # == Load stream data ==============================
   stream_data = read_csv(args.test_path, sep=',', header=None).values
   if args.use_transform:
     _, test_transform = transforms_preparation()
@@ -23,7 +20,7 @@ def zeroshot_test(model, detector, known_labels, args, device):
 
 
   detection_results = []
-  ## == Test Model ==============================
+  ## == Test Model ===================================
   model.eval()
   with torch.no_grad():
     for i, data in enumerate(dataloader):

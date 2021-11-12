@@ -80,9 +80,9 @@ class PtLearner:
   def evaluate(self, model, dataloader):
     ce = torch.nn.CrossEntropyLoss()
 
+    model.eval()
     with torch.no_grad():
       total_loss = 0.0
-      model.eval()
       for i, batch in enumerate(dataloader):
 
         sample, labels = batch

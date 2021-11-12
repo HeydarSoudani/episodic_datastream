@@ -37,16 +37,16 @@ class OperationalMemory():
     """
     Compute ...
     Args:
-      data: list of (feature, label)
+      data: list of (sample, label)
     Returns:
       ---
     """ 
-    features = torch.cat([item[0] for item in data])
+    samples = torch.stack([item[0] for item in data])
     labels = torch.tensor([item[1] for item in data])
     seen_labels = torch.unique(labels)
 
     self.class_data = {
-      l: features[(labels == l).nonzero(as_tuple=True)[0]]
+      l: samples[(labels == l).nonzero(as_tuple=True)[0]]
       for l in seen_labels
     }
 
@@ -56,16 +56,16 @@ class OperationalMemory():
 
     if self.selection_method == 'rand':
       self.rand_selection()
-    elif self.selection_method == 'soft_rand':
-      self.soft_rand_selection()
+    # elif self.selection_method == 'soft_rand':
+    #   self.soft_rand_selection()
     
-    # for label, features in self.class_data.items():
-    #   print('{} -> {}'.format(label, features.shape))
+    for label, features in self.class_data.items():
+      print('{} -> {}'.format(label, features.shape))
 
   def rand_selection(self):
-    for label, features in self.class_data.items():
-      if features.shape[0] >= self.max_per_class:
-        self.class_data[label] = random.sample(features, self.per_class)
+    for label, samples in self.class_data.items():
+      if samples.shape[0] >= self.max_per_class:
+        self.class_data[label] = random.sample(samples, self.per_class)
   
   def soft_rand_selection(self):
     for label, features in self.class_data.items():
