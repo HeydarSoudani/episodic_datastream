@@ -47,8 +47,9 @@ class PtDetector(object):
   def set_base_labels(self, label_set):
     self.base_labels = set(label_set)
   
-  def threshold_calculation(self, distances, known_labels, std_coefficient=1.0):
+  def threshold_calculation(self, distances, prototypes, known_labels, std_coefficient=1.0):
     self.distances = np.array(distances, dtype=[('label', np.int32), ('distance', np.float32)])
+    self.prototypes = prototypes
     self._known_labels = set(known_labels)
     self.std_coefficient = std_coefficient
 

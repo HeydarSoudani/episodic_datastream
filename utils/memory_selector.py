@@ -42,7 +42,6 @@ class OperationalMemory():
       ---
     """ 
     features = torch.cat([item[0] for item in data])
-    print(features.shape)
     labels = torch.tensor([item[1] for item in data])
     seen_labels = torch.unique(labels)
 
@@ -60,8 +59,8 @@ class OperationalMemory():
     elif self.selection_method == 'soft_rand':
       self.soft_rand_selection()
     
-    for label, features in self.class_data.items():
-      print('{} -> {}'.format(label, features.shape))
+    # for label, features in self.class_data.items():
+    #   print('{} -> {}'.format(label, features.shape))
 
   def rand_selection(self):
     for label, features in self.class_data.items():
@@ -74,8 +73,6 @@ class OperationalMemory():
       if n >= self.per_class:
         prototype = features.mean(0).reshape(1, -1)
 
-        print(features.shape)
-        print(prototype.shape)
         dist = euclidean_dist(features, prototype) #[n, 1]
         dist = np.squeeze(dist.detach().cpu().numpy())
         score = np.maximum(dist, 1.0001)
