@@ -11,7 +11,7 @@ def compute_prototypes(data):
   output: 
   """
   features = torch.cat([item[0] for item in data])
-  labels = torch.cat([item[1] for item in data])
+  labels = torch.tensor([item[1] for item in data])
   seen_labels = torch.unique(labels)
 
   prototypes = {
