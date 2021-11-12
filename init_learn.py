@@ -2,7 +2,7 @@ import torch
 
 from trainers import train
 # from detectors.reptile_detector import replite_detector
-from detectors.pt_detector import pt_detector
+# from detectors.pt_detector import pt_detector
 
 from datasets.dataset import DatasetFM
 from torch.utils.data import DataLoader
