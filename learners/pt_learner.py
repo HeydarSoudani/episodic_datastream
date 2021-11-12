@@ -78,7 +78,6 @@ class PtLearner:
 
   #TODO: classification with distance metric
   def evaluate(self, model, dataloader):
-    
     ce = torch.nn.CrossEntropyLoss()
 
     with torch.no_grad():
@@ -96,5 +95,5 @@ class PtLearner:
         loss = loss.mean()
         total_loss += loss.item()
 
-      total_loss /= len(dataloader)
-      return total_loss
+    total_loss /= len(dataloader)
+    return total_loss

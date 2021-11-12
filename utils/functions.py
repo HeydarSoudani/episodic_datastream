@@ -1,9 +1,27 @@
-from pandas import read_csv
-import pandas as pd 
-import numpy as np
-import matplotlib.pyplot as plt
+import torch
 import torchvision
-import time
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+def compute_prototypes(data):
+  """
+  data: list of tuples (feature, label)
+  output: 
+  """
+  features = torch.cat([item[0] for item in data])
+  labels = torch.cat([item[1] for item in data])
+  seen_labels = torch.unique(labels)
+
+  prototypes = {
+    l.item(): features[(labels == l).nonzero(as_tuple=True)[0]].mean(0).reshape(1, -1)
+    for l in seen_labels
+  }
+
+  return prototypes
+
+
 
 def imshow(imgs):
   img = torchvision.utils.make_grid(imgs)
@@ -11,7 +29,6 @@ def imshow(imgs):
   npimg = img.detach().cpu().numpy()
   plt.imshow(np.transpose(npimg, (1, 2, 0)))
   plt.show()
-
 
 def mean_std_calculator(nb_samples, dataloader):
   mean = 0.
@@ -26,12 +43,11 @@ def mean_std_calculator(nb_samples, dataloader):
 
   return mean, std
 
-
 def set_novel_label(args):
-  stream_data = read_csv(args.train_path, sep=',', header=None).values
+  stream_data = pd.read_csv(args.train_path, sep=',', header=None).values
   train_labels = stream_data[:, -1]
   seen_label = set(train_labels)
-  stream_data = read_csv(args.test_path, sep=',', header=None).values
+  stream_data = pd.read_csv(args.test_path, sep=',', header=None).values
 
   for idx, data in enumerate(stream_data):
     label = data[-1]
@@ -39,7 +55,6 @@ def set_novel_label(args):
       stream_data[idx, -1] = 1
 
   pd.DataFrame(stream_data).to_csv('./data/cifar10_stream_novel.csv', header=None, index=None)
-
 
 def mapping_text2int(data):
   samples = data[:, :-1].astype(int)
@@ -55,5 +70,4 @@ def mapping_text2int(data):
 
 
 if __name__ == '__main__':
-  # set_novel_label()
   pass

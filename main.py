@@ -12,6 +12,7 @@ from models.wrn import WideResNet
 
 from trainers.train_batch import batch_train, batch_test
 from utils.memory_selector import OperationalMemory
+from detectors.pt_detector import PtDetector
 from init_learn import init_learn
 from zeroshot_test import zeroshot_test
 from stream_learn import stream_learn
@@ -45,7 +46,7 @@ parser.add_argument('--use_transform', action='store_true')
 
 # Prototypical algorithm
 parser.add_argument('--beta', type=float, default=1.0, help='Update Prototype in Prototypical algorithm')
-parser.add_argument('--std_coefficient', type=float, default=1.0, help='for Prototype algorithm')
+parser.add_argument('--std_coefficient', type=float, default=1.0, help='for Pt detector')
 
 # Reptile algorithm
 parser.add_argument('--update_step', type=int, default=5, help='for Reptile algorithm')
@@ -74,6 +75,7 @@ parser.add_argument('--hidden_dims', type=int, default=128, help='') #768
 # Device and Randomness
 parser.add_argument('--cuda', action='store_true',help='use CUDA')
 parser.add_argument('--seed', type=int, default=2, help='')
+
 
 # Save and load model
 parser.add_argument('--save', type=str, default='saved/', help='')
@@ -104,7 +106,7 @@ parser.add_argument('--r1', default=0.2, type=float, help='aspect of erasing are
 
 args = parser.parse_args()
 
-## == Device =====================
+## == Device ==========================
 if torch.cuda.is_available():
   if not args.cuda:
     args.cuda = True
@@ -112,15 +114,15 @@ if torch.cuda.is_available():
 device = torch.device("cuda" if args.cuda else "cpu")
 print('Device: {}'.format(device))
 
-## == Apply seed =================
+## == Apply seed ======================
 torch.manual_seed(args.seed)
 np.random.seed(args.seed)
 
-## == Save dir ===================
+## == Save dir ========================
 if not os.path.exists(args.save):
   os.makedirs(args.save)
 
-## == Model Definition ===========
+## == Model Definition ================
 # model = CNNEncoder(args)
 model = CNNEncoder_2(args)
 # model = DenseNet(args, tensor_view=(3, 32, 32))
@@ -141,9 +143,11 @@ elif args.which_model == 'last':
     print("Load model from {}".format(args.last_model_path))
 model.to(device)
 
+
 ## == load train data from file =======
 train_data = read_csv(args.train_path, sep=',', header=None).values
 base_labels = DatasetFM(train_data).label_set
+
 
 ## == Operational Memory Definition ===
 memory = OperationalMemory(per_class=250, novel_acceptance=150)
@@ -151,6 +155,12 @@ try: memory.load(args.memory_path)
 except FileNotFoundError: pass
 else: print("Load Memory from {}.".format(args.memory_path))
 
+
+## == Novelty Detector Definition ======
+detector = PtDetector(base_labels)
+try: detector.load(args.detector_path)
+except FileNotFoundError: pass
+else: print("Load Detector from {}.".format(args.detector_path))
 
 if __name__ == '__main__':
 
@@ -160,9 +170,19 @@ if __name__ == '__main__':
 
   ## == Data Stream =====================
   if args.phase == 'init_learn':
-    init_learn(model, train_data, base_labels, args, device)
+    init_learn(model,
+               memory,
+               detector,
+               train_data,
+               base_labels,
+               args,
+               device)
   elif args.phase == 'zeroshot_test':
-    zeroshot_test(model, args, device, known_labels=base_labels)
+    zeroshot_test(model,
+                  detector,
+                  base_labels,
+                  args,
+                  device)
   elif args.phase == 'stream_learn':
     stream_learn(model, args, device, base_labels)
 
