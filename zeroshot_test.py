@@ -3,8 +3,8 @@ from torch.utils.data import DataLoader
 from pandas import read_csv
 
 from datasets.dataset import DatasetFM
-from detectors.reptile_detector import ReptileDetector
-from detectors.pt_detector import PtDetector, pt_detector
+# from detectors.reptile_detector import ReptileDetector
+# from detectors.pt_detector import PtDetector, pt_detector
 from evaluation import evaluate
 
 from utils.preparation import transforms_preparation
