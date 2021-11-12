@@ -50,12 +50,14 @@ def init_learn(model,
 
 
   ## == Save Memory selector ==========
+  print("Creating memory ...")
   memory.select(data=features)
   memory.save(args.memory_path)
   print("Memory has been saved in {}.".format(args.memory_path))
 
 
   ## == Save Novel detector ===========
+  print("Calculating detector ...")
   detector.threshold_calculation(intra_distances, base_labels, args.std_coefficient)
   print("Detector Threshold: {}".format(detector.thresholds))  
   detector.save(args.detector_path)

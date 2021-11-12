@@ -73,6 +73,8 @@ class OperationalMemory():
       if n >= self.per_class:
         prototype = features.mean(0).reshape(1, -1)
 
+        print(features.shape)
+        print(prototype.shape)
         dist = euclidean_dist(features, prototype) #[n, 1]
         dist = np.squeeze(dist.detach().cpu().numpy())
         score = np.maximum(dist, 1.0001)
