@@ -119,13 +119,6 @@ if not os.path.exists(args.save):
 # model = CNNEncoder(args)
 model = CNNEncoder_2(args)
 # model = DenseNet(args, tensor_view=(3, 32, 32))
-# model = WideResNet(
-#           args,
-#           num_classes=10,
-#           depth=args.depth,
-#           widen_factor=args.widen_factor,
-#           dropRate=args.dropout,
-#         )
 
 # TODO: add init. weight
 # model.apply(weights_init)
@@ -136,19 +129,24 @@ if __name__ == '__main__':
   # batch_train(model, args, device)
   # batch_test(model, args, device)
 
-  ## == Train & test ====================
-  if __name__ == '__main__':
-    if args.phase == 'init_learn':
-      init_learn(model, args, device)
-    elif args.phase == 'zeroshot_test':
-      zeroshot_test(model, args, device)
-    elif args.phase == 'stream_learn':
-      stream_learn(model, args, device)
+  ## == Data Stream =====================
+  if args.phase == 'init_learn':
+    init_learn(model, args, device)
+  elif args.phase == 'zeroshot_test':
+    zeroshot_test(model, args, device)
+  elif args.phase == 'stream_learn':
+    stream_learn(model, args, device)
+
+  ## == incremental learning ============
+  # elif args.phase == 'incremental_learn':
+  #   increm_learn(model, args, device)
+
+  else: 
+    raise NotImplementedError()
 
   ## == Data Visualization ==============
   # set_novel_label(args)
   # plot_tsne(args, device)
-
 
 
 

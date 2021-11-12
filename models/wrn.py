@@ -6,6 +6,15 @@ import torch.nn.functional as F
 
 __all__ = ['wrn']
 
+# model = WideResNet(
+#           args,
+#           num_classes=10,
+#           depth=args.depth,
+#           widen_factor=args.widen_factor,
+#           dropRate=args.dropout,
+#         )
+
+
 class BasicBlock(nn.Module):
     def __init__(self, in_planes, out_planes, stride, dropRate=0.0):
         super(BasicBlock, self).__init__()

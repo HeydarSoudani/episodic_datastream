@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-class CNNEncoder(nn.Module):    
+class CNNEncoder(nn.Module):
 	def __init__(self, args):
 		super(CNNEncoder, self).__init__()
 		self.args = args
@@ -55,8 +55,6 @@ class CNNEncoder(nn.Module):
 		state_dict = torch.load(path)
 		self.load_state_dict(state_dict)
   
-
-
 class CNNEncoder_2(nn.Module):
 	def __init__(self, args):
 		super(CNNEncoder_2, self).__init__()

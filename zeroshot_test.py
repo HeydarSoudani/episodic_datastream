@@ -5,6 +5,7 @@ from pandas import read_csv
 from datasets.dataset import DatasetFM
 from detectors.reptile_detector import ReptileDetector
 from detectors.pt_detector import PtDetector, pt_detector
+from evaluation import evaluate
 
 from utils.preparation import transforms_preparation
 
@@ -58,27 +59,17 @@ def zeroshot_test(model, args, device, known_labels=None):
       real_novelty = label.item() not in novelty_detector.base_labels
       detection_results.append((label.item(), predicted_label, real_novelty, detected_novelty))
 
-      if (i+1) % 500 == 0:
+      if (i+1) % 1000 == 0:
         print("[stream %5d]: %d, %d, %7.4f, %5s, %5s"%
           (i+1, label, predicted_label, prob, real_novelty, detected_novelty))
-
-    tp, fp, fn, tn, cm, acc, acc_all = novelty_detector.evaluate(detection_results)
-    precision = tp / (tp + fp + 1)
-    recall = tp / (tp + fn + 1)
-    M_new = fn / (tp + fn + 1)
-    F_new = fp / (fp + tn + 1)
-
-    print("true positive: %d"% tp)
-    print("false positive: %d"% fp)
-    print("false negative: %d"% fn)
-    print("true negative: %d"% tn)
-    print("precision: %7.4f"% precision)
-    print("recall: %7.4f"% recall)
+    
+    M_new, F_new, CwCA, OwCA, cm = evaluate(detection_results, known_labels)
     print("M_new: %7.4f"% M_new)
     print("F_new: %7.4f"% F_new)
-    print("Accuracy: %7.4f"% acc)
-    print("Accuracy All: %7.4f"% acc_all)
+    print("CwCA: %7.4f"% CwCA)
+    print("OwCA: %7.4f"% OwCA)
     print("confusion matrix: \n%s"% cm)
+    
 
 
 

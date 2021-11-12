@@ -15,13 +15,12 @@ from utils.data_selector import DataSelector
 
 
 def stream_learn(model, args, device):
-  
   args.epochs = args.retrain_epochs
   args.meta_iteration = args.retrain_meta_iteration
-  # class_weights = [1., 1., 1., 1., 1.]
   
   ## == Data ===================
   train_data = read_csv(args.train_path, sep=',', header=None).values
+  
   train_dataset = DatasetFM(train_data)
   base_labels = train_dataset.label_set
 
