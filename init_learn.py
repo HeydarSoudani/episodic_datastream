@@ -39,7 +39,6 @@ def init_learn(model,
       sample, label = data
       sample, label = sample.to(device), label.to(device)
       _, feature = model.forward(sample)
-      print(feature.shape)
       features.append((feature.detach(), label.item()))
 
     prototypes = compute_prototypes(features) #{label: pt, ...}
