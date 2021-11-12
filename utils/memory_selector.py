@@ -42,6 +42,7 @@ class OperationalMemory():
       ---
     """ 
     features = torch.stack([item[0] for item in data])
+    print(features.shape)
     labels = torch.tensor([item[1] for item in data])
     seen_labels = torch.unique(labels)
 
