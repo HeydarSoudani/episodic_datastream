@@ -5,7 +5,7 @@ import argparse
 import numpy as np
 from pandas import read_csv
 
-# CNNEncoder, DenseNet,
+from datasets.dataset import DatasetFM
 from models.cnn import CNNEncoder, CNNEncoder_2
 from models.densenet import DenseNet
 from models.wrn import WideResNet
@@ -123,6 +123,29 @@ model = CNNEncoder_2(args)
 # TODO: add init. weight
 # model.apply(weights_init)
 
+## == Load model if exist =========
+if args.which_model == 'best':
+  try:
+    model.load(args.best_model_path)
+  except FileNotFoundError:
+    pass
+  else:
+    print("Load model from file {}".format(args.best_model_path))
+elif args.which_model == 'last':
+  try:
+    model.load(args.last_model_path)
+  except FileNotFoundError:
+    pass
+  else:
+    print("Load model from file {}".format(args.last_model_path))
+model.to(device)
+
+
+## == load train data from file ===
+train_data = read_csv(args.train_path, sep=',', header=None).values
+train_dataset = DatasetFM(train_data)
+base_labels = train_dataset.label_set
+
 if __name__ == '__main__':
 
   ## == Batch ===========================
@@ -131,9 +154,9 @@ if __name__ == '__main__':
 
   ## == Data Stream =====================
   if args.phase == 'init_learn':
-    init_learn(model, args, device)
+    init_learn(model, train_data, base_labels, args, device)
   elif args.phase == 'zeroshot_test':
-    zeroshot_test(model, args, device)
+    zeroshot_test(model, args, device, known_labels=base_labels)
   elif args.phase == 'stream_learn':
     stream_learn(model, args, device)
 

@@ -20,23 +20,6 @@ def zeroshot_test(model, args, device, known_labels=None):
     stream_dataset = DatasetFM(stream_data)
   dataloader = DataLoader(dataset=stream_dataset, batch_size=1, shuffle=False)
 
-  ## == Load model ============================
-  if args.which_model == 'best':
-    try:
-      model.load(args.best_model_path)
-    except FileNotFoundError:
-      pass
-    else:
-      print("Load model from file {}".format(args.best_model_path))
-  elif args.which_model == 'last':
-    try:
-      model.load(args.last_model_path)
-    except FileNotFoundError:
-      pass
-    else:
-      print("Load model from file {}".format(args.last_model_path))
-  model.to(device)
-
   ## == Load Detector ==========================
   # novelty_detector = ReptileDetector()
   novelty_detector = PtDetector()
@@ -60,7 +43,7 @@ def zeroshot_test(model, args, device, known_labels=None):
       detection_results.append((label.item(), predicted_label, real_novelty, detected_novelty))
 
       if (i+1) % 1000 == 0:
-        print("[stream %5d]: %d, %d, %7.4f, %5s, %5s"%
+        print("[stream %5d]: %d, %2d, %7.4f, %5s, %5s"%
           (i+1, label, predicted_label, prob, real_novelty, detected_novelty))
     
     M_new, F_new, CwCA, OwCA, cm = evaluate(detection_results, known_labels)
