@@ -41,7 +41,7 @@ def init_learn(model,
       _, feature = model.forward(sample)
       features.append((feature.detach(), label.item()))
 
-    prototypes = compute_prototypes(data) #{label: pt, ...}
+    prototypes = compute_prototypes(features) #{label: pt, ...}
    
     for (feature, label) in features:
       prototype = prototypes[label]

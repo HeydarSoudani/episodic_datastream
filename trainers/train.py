@@ -70,7 +70,7 @@ def train(model,
           val_loss_total = pt_learner.evaluate(model, val_dataloader)  # For Pt.
           
           # print losses
-          print('Time: %f, Step: %d, Train Loss: %f, Val Loss: %f' % (
+          print('Time: %.2f, Step: %d, Train Loss: %f, Val Loss: %f' % (
             time.time()-global_time, miteration_item+1, train_loss_total, val_loss_total))
           print('===============================================')
           global_time = time.time()
