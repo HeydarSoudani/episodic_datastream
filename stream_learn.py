@@ -1,20 +1,13 @@
 import torch
-import torch.nn as nn
 from torch.utils.data import DataLoader
 import time
-import random
-import numpy as np
 from pandas import read_csv
-from collections import Counter
 
 from trainers.train import train
 from datasets.dataset import DatasetFM
-from detectors.reptile_detector import ReptileDetector, replite_detector
-from detectors.pt_detector import PtDetector, pt_detector
-from utils.data_selector import DataSelector
 
 
-def stream_learn(model, args, device, base_labels=[]):
+def stream_learn(model, selector, detector, args, device, base_labels=[]):
   args.epochs = args.retrain_epochs
   args.meta_iteration = args.retrain_meta_iteration
   
@@ -23,18 +16,6 @@ def stream_learn(model, args, device, base_labels=[]):
   stream_dataset = DatasetFM(stream_data)
   dataloader = DataLoader(dataset=stream_dataset, batch_size=1, shuffle=False)
 
-  ## == Load Detector ==========================
-  # novelty_detector = ReptileDetector()
-  novelty_detector = PtDetector(base_labels)
-  if args.detector_path != '':
-    novelty_detector.load(args.detector_path)
-    print("Load detector from file {}".format(args.detector_path))
-
-  ## == Selector ==============================
-  retrain_data_selector = DataSelector(
-                            init_data=train_data,
-                            model=model,
-                            device=device)
 
   ## == Stream ================================
   buffer = [] 
@@ -48,8 +29,8 @@ def stream_learn(model, args, device, base_labels=[]):
     with torch.no_grad():
       _, feature = model.forward(sample)
 
-    real_novelty = label.item() not in novelty_detector.base_labels
-    detected_novelty, predicted_label, prob = novelty_detector(feature)
+    real_novelty = label.item() not in detector.base_labels
+    detected_novelty, predicted_label, prob = detector(feature)
     
     if detected_novelty:
       sample = torch.squeeze(sample, 0)
@@ -60,26 +41,26 @@ def stream_learn(model, args, device, base_labels=[]):
     
     if len(buffer) == args.buffer_size:
 
-      new_train_data = retrain_data_selector.renew(buffer)
-      # time.sleep(5)
+      # new_train_data = retrain_data_selector.renew(buffer)
+      # # time.sleep(5)
       
-      new_label_set = set([int(item[-1]) for item in new_train_data])
-      print(new_label_set)
+      # new_label_set = set([int(item[-1]) for item in new_train_data])
+      # print(new_label_set)
     
-      # 3) Retrain Model =================
-      train(model, new_train_data, args, device)
+      # # 3) Retrain Model =================
+      # train(model, new_train_data, args, device)
 
-      # 3.1) Update model params. with best model
-      model.load(args.best_model_path)
+      # # 3.1) Update model params. with best model
+      # model.load(args.best_model_path)
 
-      # 4) Update Novel detector =========
-      # novelty_detector = replite_detector(model, new_train_data, args, device)
-      novelty_detector = pt_detector(
-                          model,
-                          new_train_data,
-                          base_labels,
-                          args,
-                          device)
+      # # 4) Update Novel detector =========
+      # # novelty_detector = replite_detector(model, new_train_data, args, device)
+      # novelty_detector = pt_detector(
+      #                     model,
+      #                     new_train_data,
+      #                     base_labels,
+      #                     args,
+      #                     device)
       time.sleep(3)
       buffer.clear()
 
