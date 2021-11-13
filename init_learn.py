@@ -19,7 +19,7 @@ def init_learn(model,
   train(model, train_data, args, device)
 
   # = Extract features for updating selector and detector ===
-  samples, prototypes, intra_distances = detector_preparation(model, train_data, args, device)
+  
   # if args.which_model == 'best':
   #   model.load(args.best_model_path)
 
@@ -50,7 +50,16 @@ def init_learn(model,
   #     distance = torch.cdist(feature.reshape(1, -1), prototype.reshape(1, -1))
   #     intra_distances.append((label, distance))
 
-
+  ## == Save Novel detector ===========
+  print("Calculating detector ...")
+  samples, prototypes, intra_distances = detector_preparation(model, train_data, args, device)
+  
+  detector.threshold_calculation(intra_distances, prototypes, base_labels, args.std_coefficient)
+  print("Detector Threshold: {}".format(detector.thresholds))  
+  detector.save(args.detector_path)
+  print("Detector has been saved in {}.".format(args.detector_path))
+  
+  
   ## == Save Memory selector ==========
   print("Creating memory ...")
   memory.select(data=samples)
@@ -58,12 +67,7 @@ def init_learn(model,
   print("Memory has been saved in {}.".format(args.memory_path))
 
 
-  ## == Save Novel detector ===========
-  print("Calculating detector ...")
-  detector.threshold_calculation(intra_distances, prototypes, base_labels, args.std_coefficient)
-  print("Detector Threshold: {}".format(detector.thresholds))  
-  detector.save(args.detector_path)
-  print("Detector has been saved in {}.".format(args.detector_path))
+  
 
 
 if __name__ == '__main__':

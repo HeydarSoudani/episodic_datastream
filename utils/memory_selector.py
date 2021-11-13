@@ -91,7 +91,7 @@ class OperationalMemory():
 
   def rand_selection(self):
     for label, samples in self.class_data.items():
-      if samples.shape[0] >= self.max_per_class:
+      if samples.shape[0] >= self.per_class:
         self.class_data[label] = random.sample(samples, self.per_class)
   
   def soft_rand_selection(self):

@@ -153,14 +153,14 @@ base_labels = DatasetFM(train_data).label_set
 memory = OperationalMemory(per_class=250, novel_acceptance=150)
 try: memory.load(args.memory_path)
 except FileNotFoundError: pass
-else: print("Load Memory from {}.".format(args.memory_path))
+else: print("Load Memory from {}".format(args.memory_path))
 
 
 ## == Novelty Detector Definition ======
 detector = PtDetector(base_labels)
 try: detector.load(args.detector_path)
 except FileNotFoundError: pass
-else: print("Load Detector from {}.".format(args.detector_path))
+else: print("Load Detector from {}".format(args.detector_path))
 
 if __name__ == '__main__':
 
@@ -184,7 +184,11 @@ if __name__ == '__main__':
                   args,
                   device)
   elif args.phase == 'stream_learn':
-    stream_learn(model, args, device, base_labels)
+    stream_learn(model,
+                 memory,
+                 detector,
+                 args,
+                 device)
 
   ## == incremental learning ============
   # elif args.phase == 'incremental_learn':

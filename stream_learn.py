@@ -12,8 +12,7 @@ def stream_learn(model,
                  memory,
                  detector,
                  args,
-                 device,
-                 base_labels=[]):
+                 device):
   args.epochs = args.retrain_epochs
   args.meta_iteration = args.retrain_meta_iteration
   
@@ -52,7 +51,7 @@ def stream_learn(model,
       
       ## == Save Novel detector ===========
       samples, prototypes, intra_distances = detector_preparation(model, new_train_data, args, device)
-      new_labels = prototypes.keys()
+      new_labels = list(prototypes.keys())
 
       print("Calculating detector ...")
       detector.threshold_calculation(intra_distances,
