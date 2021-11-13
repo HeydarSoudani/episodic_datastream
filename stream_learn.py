@@ -58,7 +58,7 @@ def stream_learn(model,
       for label , data in known_buffer.items():
         n = len(data)
         idxs = np.random.choice(range(n), size=args.known_per_class, replace=False)
-        known_buffer_list.expand([data[i] for i in idxs])
+        known_buffer_list.extend([data[i] for i in idxs])
       
       
       ## 2) Preparing retrain data
