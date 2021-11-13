@@ -49,7 +49,7 @@ class OperationalMemory():
     print(seen_labels)
 
     new_class_data = {
-      l: samples[(labels == l).nonzero(as_tuple=True)[0]]
+      l.item(): samples[(labels == l).nonzero(as_tuple=True)[0]]
       for l in seen_labels
     }
 
@@ -69,8 +69,8 @@ class OperationalMemory():
       for key in keys:
         if key in known_keys:
           print(key)
-          print(self.class_data)
-          print(new_class_data)
+          print(self.class_data[key].shape)
+          print(new_class_data[key].shape)
           self.class_data[key] = torch.cat((self.class_data[key], new_class_data[key]), 0)
         else:
           self.class_data[key] = new_class_data[key]
