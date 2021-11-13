@@ -70,7 +70,7 @@ def train(model,
           val_loss_total = pt_learner.evaluate(model, val_dataloader)  # For Pt.
           
           # print losses
-          print('= Time: %.2f, Step: %d, Train Loss: %f, Val Loss: %f' % (
+          print('=== Time: %.2f, Step: %d, Train Loss: %f, Val Loss: %f' % (
             time.time()-global_time, miteration_item+1, train_loss_total, val_loss_total))
           # print('===============================================')
           global_time = time.time()
@@ -79,7 +79,7 @@ def train(model,
           if val_loss_total < min_loss:
             model.save(os.path.join(args.save, "model_best.pt"))
             min_loss = val_loss_total
-            print("Saving new best model")
+            print("= Saving new best model")
     
       if args.scheduler:
         scheduler.step()
@@ -89,7 +89,7 @@ def train(model,
   
   # save last model
   model.save(os.path.join(args.save, "model_last.pt"))
-  print("Saving new last model")
+  print("= Saving new last model")
 
 
 
