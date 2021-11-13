@@ -65,16 +65,11 @@ def stream_learn(model,
       ## 3) Retrain
       train(model, new_train_data, args, device)
       
-      ## == Save Novel detector ===========
-      new_labels = list(prototypes.keys())
-
-      print('pt new_labels: {}'.format(new_labels))
-      # for key, pt in prototypes.items():
-      #   print('label: {} -> pt:{}'.format(key, pt.shape))
-
       ## 4) Detector
       print("Calculating detector ...")
       samples, prototypes, intra_distances = detector_preparation(model, new_train_data, args, device)
+      new_labels = list(prototypes.keys())
+      
       detector.threshold_calculation(intra_distances,
                                      prototypes,
                                      new_labels,
@@ -83,6 +78,13 @@ def stream_learn(model,
       detector.save(args.detector_path)
       print("Detector has been saved in {}.".format(args.detector_path))
       
+       ## == Save Novel detector ===========
+      
+
+      print('pt new_labels: {}'.format(new_labels))
+      # for key, pt in prototypes.items():
+      #   print('label: {} -> pt:{}'.format(key, pt.shape))
+
 
  
 
