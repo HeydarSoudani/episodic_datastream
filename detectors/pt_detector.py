@@ -34,7 +34,7 @@ class PtDetector(object):
       prob = 0.0
       predicted_label = -1
     else:
-      if sel_label in self.base_labels:
+      if sel_label in self._known_labels:
         detected_novelty = False
       else:
         detected_novelty = True  
