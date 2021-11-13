@@ -1,6 +1,7 @@
 import torch
 from torch.utils.data import DataLoader
 import time
+import numpy as np
 from pandas import read_csv
 
 from trainers.train import train
@@ -24,6 +25,8 @@ def stream_learn(model,
 
   ## == Stream ================================
   unknown_buffer = [] 
+  known_buffer = {i:[] for i in detector._known_labels}
+
   detection_results = []
   total_results = []
   last_idx = 0
@@ -34,38 +37,37 @@ def stream_learn(model,
       sample, label = data
       sample, label = sample.to(device), label.to(device)
       _, feature = model.forward(sample)
-
       real_novelty = label.item() not in detector._known_labels
-      detected_novelty, predicted_label, prob = detector(feature)
-      
+      detected_novelty, predicted_label, prob = detector(feature)      
       detection_results.append((label.item(), predicted_label, real_novelty, detected_novelty))
 
+      sample = torch.squeeze(sample, 0) #[1, 28, 28]
       if detected_novelty:
-        sample = torch.squeeze(sample, 0) #[1, 28, 28]
         unknown_buffer.append((sample, label))
-      
+      else:
+        known_buffer[predicted_label].append((sample, label))
+
       if (i+1) % 100 == 0:
         print("[stream %5d]: %d, %2d, %7.4f, %5s, %5s, %d"%
           (i+1, label, predicted_label, prob, real_novelty, detected_novelty, len(unknown_buffer)))
     
 
-    if len(unknown_buffer) == args.buffer_size:
+    if (i+1) % args.known_retrain_interval == 0:
       
-      ## 1) evaluation
-      M_new, F_new, CwCA, OwCA, cm = evaluate(detection_results, detector._known_labels)
-      print("M_new: %7.4f"% M_new)
-      print("F_new: %7.4f"% F_new)
-      print("CwCA: %7.4f"% CwCA)
-      print("OwCA: %7.4f"% OwCA)
-      print("confusion matrix: \n%s"% cm)
-
-      ## 2) Paper retrain data
-      new_train_data = memory.select(unknown_buffer, return_data=True)
+      known_buffer = []
+      for label , data in known_buffer.items():
+        n = len(data)
+        idxs = np.random.choice(range(n), size=args.known_per_class, replace=False)
+        known_buffer.append([data[i] for i in idxs])
       
-      ## 3) Retrain
+      
+      ## 2) Preparing retrain data
+      new_train_data = memory.select(known_buffer, return_data=True)
+      
+      ## 3) Retraining Model
       train(model, new_train_data, args, device)
       
-      ## 4) Detector
+      ## 4) Recalculating Detector
       print("Calculating detector ...")
       samples, prototypes, intra_distances = detector_preparation(model, new_train_data, args, device)
       new_labels = list(prototypes.keys())
@@ -77,16 +79,37 @@ def stream_learn(model,
       print("Detector Threshold: {}".format(detector.thresholds))  
       detector.save(args.detector_path)
       print("Detector has been saved in {}.".format(args.detector_path))
+    
+      known_buffer = {i:[] for i in detector._known_labels}
+
+    if len(unknown_buffer) == args.buffer_size:
+      sample_num = i-last_idx
+
+      ## 1) evaluation
+      M_new, F_new, CwCA, OwCA, cm = evaluate(detection_results, detector._known_labels)
+      print("[On %5d samples]: %7.4f, %7.4f, %7.4f, %7.4f"%
+        (sample_num, CwCA, OwCA, M_new, F_new))
+      print("confusion matrix: \n%s"% cm)
+
+      ## 2) Preparing retrain data
+      new_train_data = memory.select(unknown_buffer, return_data=True)
       
-       ## == Save Novel detector ===========
+      ## 3) Retraining Model
+      train(model, new_train_data, args, device)
       
+      ## 4) Recalculating Detector
+      print("Calculating detector ...")
+      samples, prototypes, intra_distances = detector_preparation(model, new_train_data, args, device)
+      new_labels = list(prototypes.keys())
 
-      print('pt new_labels: {}'.format(new_labels))
-      # for key, pt in prototypes.items():
-      #   print('label: {} -> pt:{}'.format(key, pt.shape))
-
-
- 
+      detector.threshold_calculation(intra_distances,
+                                     prototypes,
+                                     new_labels,
+                                     args.std_coefficient)
+      print("Detector Threshold: {}".format(detector.thresholds))  
+      detector.save(args.detector_path)
+      print("Detector has been saved in {}.".format(args.detector_path))
+    
 
       unknown_buffer.clear()
       detection_results.clear()

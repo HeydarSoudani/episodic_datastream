@@ -17,36 +17,16 @@ class PtDetector(object):
 
   def __call__(self, feature):
     
-    # sel_label = -1
-    # min_dist = inf
-    # for label, prototype in self.prototypes.items():
-    #   dist = torch.cdist(feature.reshape(1, -1), prototype.reshape(1, -1))
-    #   if dist < min_dist:
-    #     min_dist = dist
-    #     sel_label = label
     detected_novelty = False
     pts = torch.cat(list(self.prototypes.values()))
     labels = torch.tensor(list(self.prototypes.keys()))
-    # dists = euclidean_dist(feature.reshape(1, -1), pts).flatten()
     dists = torch.cdist(feature.reshape(1, -1), pts).flatten()
     probs = torch.nn.functional.softmax(-dists)
-
-    # print("pts: {}".format(pts.shape))
-    # print("labels: {}".format(labels))
-    # print("dists: {}".format(dists))
-    # print("probs: {}".format(probs))
 
     idx = torch.argmin(dists)
     min_dist = torch.min(dists)
     predicted_label = labels[idx].item()
     prob = probs[idx]
-
-    # print("idx: {}".format(idx))
-    # print("min_dist: {}".format(min_dist))
-    # print("prob: {}".format(prob))
-    # print("predicted_label: {}".format(predicted_label))
-    # print(self.thresholds)
-    # print(self.thresholds[predicted_label])
 
     if min_dist > self.thresholds[predicted_label]:
       detected_novelty = True

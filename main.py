@@ -40,6 +40,12 @@ parser.add_argument('--batch_size', type=int, default=64, help='')
 # retrain
 parser.add_argument('--retrain_epochs', type=int, default=1, help='')
 parser.add_argument('--retrain_meta_iteration', type=int, default=1000, help='')
+parser.add_argument('--known_retrain_interval', type=int, default=5000, help='')
+parser.add_argument('--known_per_class', type=int, default=100, help='')
+
+# memory
+parser.add_argument('--memory_per_class', type=int, default=250, help='')
+parser.add_argument('--memory_novel_acceptance', type=int, default=150, help='')
 
 # Transform
 parser.add_argument('--use_transform', action='store_true')
@@ -150,7 +156,9 @@ base_labels = DatasetFM(train_data).label_set
 
 
 ## == Operational Memory Definition ===
-memory = OperationalMemory(per_class=250, novel_acceptance=150, device=device)
+memory = OperationalMemory(per_class=args.memory_per_class,
+                           novel_acceptance=args.memory_novel_acceptance,
+                           device=device)
 try: memory.load(args.memory_path)
 except FileNotFoundError: pass
 else: print("Load Memory from {}".format(args.memory_path))
