@@ -60,19 +60,12 @@ class OperationalMemory():
 
     if self.class_data != None:
       # should add buffer data
-      print(new_class_data.keys())
-      print(self.class_data.keys())
-
       keys = set(torch.tensor(list(new_class_data.keys())).tolist() + \
       torch.tensor(list(new_class_data.keys())).tolist())
       known_keys = set(torch.tensor(list(new_class_data.keys())).tolist())
-      print(keys)
-      print(known_keys)
+  
       for key in keys:
         if key in known_keys:
-          print(key)
-          print(self.class_data[key].shape)
-          print(new_class_data[key].shape)
           self.class_data[key] = torch.cat((self.class_data[key], new_class_data[key]), 0)
         else:
           self.class_data[key] = new_class_data[key]
@@ -85,12 +78,10 @@ class OperationalMemory():
     # elif self.selection_method == 'soft_rand':
     #   self.soft_rand_selection()
     
-    for label, features in self.class_data.items():
-      print('{} -> {}'.format(label, features.shape))
-
+    # for label, features in self.class_data.items():
+    #   print('{} -> {}'.format(label, features.shape))
 
     if return_data:
-      # اونایی که بین 150 تا 250 هست 
       returned_data_list = []
       for label, samples in self.class_data.items():
         n = samples.shape[0]
@@ -101,6 +92,9 @@ class OperationalMemory():
           returned_data_list.append(data)
       
       returned_data = torch.cat(returned_data_list, 0)
+      returned_data = returned_data.detach().cpu().numpy()
+      np.random.shuffle(returned_data)
+      
       print(returned_data.shape)
       return returned_data
 
