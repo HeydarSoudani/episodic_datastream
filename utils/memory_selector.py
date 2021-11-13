@@ -49,7 +49,7 @@ class OperationalMemory():
     print(seen_labels)
 
     new_class_data = {
-      l: samples[(labels == l).nonzero(as_tuple=True)[0]]
+      int(l): samples[(labels == l).nonzero(as_tuple=True)[0]]
       for l in seen_labels
     }
 
