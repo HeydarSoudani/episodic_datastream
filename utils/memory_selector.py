@@ -59,9 +59,6 @@ class OperationalMemory():
       known_keys = set(torch.tensor(list(self.class_data.keys())).tolist())
       new_keys = set(torch.tensor(list(new_class_data.keys())).tolist())
 
-      print(keys)
-      print(known_keys)
-
       for key in keys:
         if key in known_keys:
           if key in new_keys:
@@ -70,11 +67,6 @@ class OperationalMemory():
           self.class_data[key] = new_class_data[key]
     else:
       self.class_data = new_class_data  
-    
-
-    for label, features in self.class_data.items():
-      print('{} -> {}'.format(label, features.shape))
-
 
     if self.selection_method == 'rand':
       self.rand_selection()

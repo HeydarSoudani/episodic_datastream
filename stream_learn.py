@@ -58,9 +58,9 @@ def stream_learn(model,
       samples, prototypes, intra_distances = detector_preparation(model, new_train_data, args, device)
       new_labels = list(prototypes.keys())
 
-      print('new_labels: {}'.format(new_labels))
-      for key, pt in prototypes.items():
-        print('label: {} -> pt:{}'.format(key, pt.shape))
+      print('pt new_labels: {}'.format(new_labels))
+      # for key, pt in prototypes.items():
+      #   print('label: {} -> pt:{}'.format(key, pt.shape))
 
       print("Calculating detector ...")
       detector.threshold_calculation(intra_distances,
