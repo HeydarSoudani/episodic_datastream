@@ -54,9 +54,9 @@ class OperationalMemory():
 
     if self.class_data != None:
       # should add buffer data
-      keys = set(torch.tensor(list(new_class_data.keys())).tolist() + \
+      keys = set(torch.tensor(list(self.class_data.keys())).tolist() + \
       torch.tensor(list(new_class_data.keys())).tolist())
-      known_keys = set(torch.tensor(list(new_class_data.keys())).tolist())
+      known_keys = set(torch.tensor(list(self.class_data.keys())).tolist())
 
       print(keys)
       print(known_keys)

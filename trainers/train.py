@@ -48,7 +48,7 @@ def train(model,
 
   try:
     for epoch_item in range(args.start_epoch, args.epochs):
-      print('===================================== Epoch %d =====================================' % epoch_item)
+      print('=== Epoch %d ===' % epoch_item)
       train_loss = 0.
       trainloader = iter(train_dataloader)
 
@@ -70,9 +70,9 @@ def train(model,
           val_loss_total = pt_learner.evaluate(model, val_dataloader)  # For Pt.
           
           # print losses
-          print('Time: %.2f, Step: %d, Train Loss: %f, Val Loss: %f' % (
+          print('= Time: %.2f, Step: %d, Train Loss: %f, Val Loss: %f' % (
             time.time()-global_time, miteration_item+1, train_loss_total, val_loss_total))
-          print('===============================================')
+          # print('===============================================')
           global_time = time.time()
     
           # save best model
