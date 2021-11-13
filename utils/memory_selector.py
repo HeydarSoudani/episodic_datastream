@@ -33,7 +33,7 @@ class OperationalMemory():
     self.selection_method = selection_method
     self.class_data = None
 
-  def select(self, data):
+  def select(self, data, return_data=False):
     """
     Compute ...
     Args:
@@ -45,14 +45,23 @@ class OperationalMemory():
     labels = torch.tensor([item[1] for item in data])
     seen_labels = torch.unique(labels)
 
-    self.class_data = {
+    new_class_data = {
       l: samples[(labels == l).nonzero(as_tuple=True)[0]]
       for l in seen_labels
     }
 
     if self.class_data != None:
-      # should add buffer data 
-      pass
+      # should add buffer data
+      keys = set(list(new_class_data.keys())+list(self.class_data.keys()))
+      known_keys = set(list(self.class_data.keys()))
+      for key in keys:
+        if key in known_keys:
+          self.class_data[key] = torch.cat((self.class_data[key], new_class_data[key]), 0)
+        else:
+          self.class_data[key] = new_class_data[key]
+    else:
+      self.class_data = new_class_data  
+    
 
     if self.selection_method == 'rand':
       self.rand_selection()
@@ -61,6 +70,24 @@ class OperationalMemory():
     
     for label, features in self.class_data.items():
       print('{} -> {}'.format(label, features.shape))
+
+
+    if return_data:
+      # اونایی که بین 150 تا 250 هست 
+      returned_data_list = []
+      for label, samples in self.class_data.items():
+        n = samples.shape[0]
+        if n >= self.novel_acceptance:
+          samples = samples.reshape(samples.shape[0], -1)*255
+          labels = torch.full((n, 1), label, dtype=torch.float) #[200, 1]
+          data = torch.cat((samples, labels), axis=1)
+          returned_data_list.append(data)
+      
+      returned_data = torch.cat(returned_data_list, 0)
+      print(returned_data.shape)
+      return returned_data
+
+
 
   def rand_selection(self):
     for label, samples in self.class_data.items():

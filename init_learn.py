@@ -1,13 +1,11 @@
 import torch
 
 from trainers import train
+from detectors.pt_detector import detector_preparation
 # from detectors.reptile_detector import replite_detector
 # from detectors.pt_detector import pt_detector
 
-from datasets.dataset import DatasetFM
-from torch.utils.data import DataLoader
-from utils.preparation import transforms_preparation
-from utils.functions import compute_prototypes
+
 
 def init_learn(model,
                memory,
@@ -21,35 +19,36 @@ def init_learn(model,
   train(model, train_data, args, device)
 
   # = Extract features for updating selector and detector ===
-  if args.which_model == 'best':
-    model.load(args.best_model_path)
+  samples, prototypes, intra_distances = detector_preparation(model, train_data, args, device)
+  # if args.which_model == 'best':
+  #   model.load(args.best_model_path)
 
-  _, test_transform = transforms_preparation()
-  if args.use_transform:
-    dataset = DatasetFM(train_data, transforms=test_transform)
-  else:
-    dataset = DatasetFM(train_data)
-  dataloader = DataLoader(dataset=dataset, batch_size=1, shuffle=False)
+  # _, test_transform = transforms_preparation()
+  # if args.use_transform:
+  #   dataset = DatasetFM(train_data, transforms=test_transform)
+  # else:
+  #   dataset = DatasetFM(train_data)
+  # dataloader = DataLoader(dataset=dataset, batch_size=1, shuffle=False)
 
-  features = []
-  samples = []
-  intra_distances = []
-  with torch.no_grad():
-    model.eval()
-    for i, data in enumerate(dataloader):
-      sample, label = data
-      sample, label = sample.to(device), label.to(device)
-      _, feature = model.forward(sample)
+  # features = []
+  # samples = []
+  # intra_distances = []
+  # model.eval()
+  # with torch.no_grad():
+  #   for i, data in enumerate(dataloader):
+  #     sample, label = data
+  #     sample, label = sample.to(device), label.to(device)
+  #     _, feature = model.forward(sample)
 
-      samples.append((torch.squeeze(sample, 0).detach(), label.item())) #[1, 28, 28]))
-      features.append((feature.detach(), label.item()))
+  #     samples.append((torch.squeeze(sample, 0).detach(), label.item())) #[1, 28, 28]))
+  #     features.append((feature.detach(), label.item()))
 
-    prototypes = compute_prototypes(features) #{label: pt, ...}
+  #   prototypes = compute_prototypes(features) #{label: pt, ...}
    
-    for (feature, label) in features:
-      prototype = prototypes[label]
-      distance = torch.cdist(feature.reshape(1, -1), prototype.reshape(1, -1))
-      intra_distances.append((label, distance))
+  #   for (feature, label) in features:
+  #     prototype = prototypes[label]
+  #     distance = torch.cdist(feature.reshape(1, -1), prototype.reshape(1, -1))
+  #     intra_distances.append((label, distance))
 
 
   ## == Save Memory selector ==========

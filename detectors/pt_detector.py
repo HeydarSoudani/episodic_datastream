@@ -3,6 +3,11 @@ import torch.nn as nn
 import numpy as np
 from math import inf
 
+from datasets.dataset import DatasetFM
+from torch.utils.data import DataLoader
+from utils.preparation import transforms_preparation
+from utils.functions import compute_prototypes
+
 compute_distance = nn.PairwiseDistance(p=2, eps=1e-6)
 compute_multi_distance = nn.PairwiseDistance(p=2, eps=1e-6, keepdim=True)
 
@@ -110,6 +115,42 @@ class PtDetector(object):
   #   # )
     
   #   return self.prototypes
+
+
+def detector_preparation(model, data, args, device):
+  # = Extract features for updating selector and detector ===
+  if args.which_model == 'best':
+    model.load(args.best_model_path)
+
+  _, test_transform = transforms_preparation()
+  if args.use_transform:
+    dataset = DatasetFM(data, transforms=test_transform)
+  else:
+    dataset = DatasetFM(data)
+  dataloader = DataLoader(dataset=dataset, batch_size=1, shuffle=False)
+
+  features = []
+  samples = []
+  intra_distances = []
+  model.eval()
+  with torch.no_grad():
+    for i, data in enumerate(dataloader):
+      sample, label = data
+      sample, label = sample.to(device), label.to(device)
+      _, feature = model.forward(sample)
+
+      samples.append((torch.squeeze(sample, 0).detach(), label.item())) #[1, 28, 28]))
+      features.append((feature.detach(), label.item()))
+
+    prototypes = compute_prototypes(features) #{label: pt, ...}
+   
+    for (feature, label) in features:
+      prototype = prototypes[label]
+      distance = torch.cdist(feature.reshape(1, -1), prototype.reshape(1, -1))
+      intra_distances.append((label, distance))
+
+  return samples, prototypes, intra_distances
+
 
 # def pt_detector(
 #   model,
