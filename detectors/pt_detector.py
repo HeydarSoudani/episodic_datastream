@@ -27,7 +27,7 @@ class PtDetector(object):
     detected_novelty = False
     pts = torch.cat(list(self.prototypes.values()))
     labels = torch.tensor(list(self.prototypes.keys()))
-    dists = euclidean_dist(feature.reshape(1, -1), pts)
+    dists = euclidean_dist(feature.reshape(1, -1), pts).flatten()
     probs = torch.nn.functional.softmax(-dists, dim=1)
 
     print("pts: {}".format(pts.shape))
