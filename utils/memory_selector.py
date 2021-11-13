@@ -68,6 +68,9 @@ class OperationalMemory():
       print(known_keys)
       for key in keys:
         if key in known_keys:
+          print(key)
+          print(self.class_data[key].shape)
+          print(new_class_data[key].shape)
           self.class_data[key] = torch.cat((self.class_data[key], new_class_data[key]), 0)
         else:
           self.class_data[key] = new_class_data[key]
