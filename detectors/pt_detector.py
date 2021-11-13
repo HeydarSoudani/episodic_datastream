@@ -35,13 +35,15 @@ class PtDetector(object):
     print("dists: {}".format(dists))
     print("probs: {}".format(probs))
 
-    idx = torch.argmin(dists, dim=1)
-    min_dist = torch.min(dists, dim=1)
+    idx = torch.argmin(dists)
+    min_dist = torch.min(dists)
     predicted_label = labels[idx].item()
     prob = probs[idx]
 
+    print("idx: {}".format(idx))
     print("min_dist: {}".format(min_dist))
-    print(predicted_label)
+    print("prob: {}".format(prob))
+    print("predicted_label: {}".format(predicted_label))
     print(self.thresholds)
     print(self.thresholds[predicted_label])
 
