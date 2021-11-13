@@ -47,16 +47,10 @@ class OperationalMemory():
     labels = torch.tensor([item[1] for item in data])
     seen_labels = torch.unique(labels)
 
-    print(labels)
-    print(seen_labels)
-
     new_class_data = {
       l.item(): samples[(labels == l).nonzero(as_tuple=True)[0]]
       for l in seen_labels
     }
-
-    for label, features in new_class_data.items():
-      print('{} -> {}'.format(label, features.shape))
 
     if self.class_data != None:
       # should add buffer data
@@ -95,7 +89,6 @@ class OperationalMemory():
       returned_data = returned_data.detach().cpu().numpy()
       np.random.shuffle(returned_data)
       
-      print(returned_data.shape)
       return returned_data
 
 

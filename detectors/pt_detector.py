@@ -118,7 +118,6 @@ class PtDetector(object):
 
 
 def detector_preparation(model, data, args, device):
-  # = Extract features for updating selector and detector ===
   if args.which_model == 'best':
     model.load(args.best_model_path)
 
