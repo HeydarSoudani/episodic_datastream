@@ -15,7 +15,7 @@ def stream_learn(model,
                  device):
   args.epochs = args.retrain_epochs
   args.meta_iteration = args.retrain_meta_iteration
-  
+  print('================================ Stream Learning ================================')
   ## == Data ==================================
   stream_data = read_csv(args.test_path, sep=',', header=None).values
   stream_dataset = DatasetFM(stream_data)
@@ -63,6 +63,9 @@ def stream_learn(model,
       detector.save(args.detector_path)
       print("Detector has been saved in {}.".format(args.detector_path))
       
+
+      ## validation
+
       
       
       # new_train_data = retrain_data_selector.renew(buffer)

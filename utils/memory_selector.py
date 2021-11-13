@@ -27,7 +27,7 @@ class OperationalMemory():
   def __init__(self,
                 per_class,
                 novel_acceptance,
-                selection_method='soft_rand'):
+                selection_method='rand'):
     self.per_class = per_class
     self.novel_acceptance = novel_acceptance
     self.selection_method = selection_method
@@ -44,6 +44,9 @@ class OperationalMemory():
     samples = torch.stack([item[0] for item in data])
     labels = torch.tensor([item[1] for item in data])
     seen_labels = torch.unique(labels)
+
+    print(labels)
+    print(seen_labels)
 
     new_class_data = {
       l: samples[(labels == l).nonzero(as_tuple=True)[0]]
