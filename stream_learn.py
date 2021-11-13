@@ -35,7 +35,7 @@ def stream_learn(model,
       sample, label = sample.to(device), label.to(device)
       _, feature = model.forward(sample)
 
-      real_novelty = label.item() not in detector.base_labels
+      real_novelty = label.item() not in detector._known_labels
       detected_novelty, predicted_label, prob = detector(feature)
       
       detection_results.append((label.item(), predicted_label, real_novelty, detected_novelty))
@@ -51,18 +51,30 @@ def stream_learn(model,
 
     if len(buffer) == args.buffer_size:
       
+      ## 1) evaluation
+      M_new, F_new, CwCA, OwCA, cm = evaluate(detection_results, detector._known_labels)
+      print("M_new: %7.4f"% M_new)
+      print("F_new: %7.4f"% F_new)
+      print("CwCA: %7.4f"% CwCA)
+      print("OwCA: %7.4f"% OwCA)
+      print("confusion matrix: \n%s"% cm)
+
+      ## 2) Paper retrain data
       new_train_data = memory.select(buffer, return_data=True)
+      
+      ## 3) Retrain
       train(model, new_train_data, args, device)
       
       ## == Save Novel detector ===========
-      samples, prototypes, intra_distances = detector_preparation(model, new_train_data, args, device)
       new_labels = list(prototypes.keys())
 
       print('pt new_labels: {}'.format(new_labels))
       # for key, pt in prototypes.items():
       #   print('label: {} -> pt:{}'.format(key, pt.shape))
 
+      ## 4) Detector
       print("Calculating detector ...")
+      samples, prototypes, intra_distances = detector_preparation(model, new_train_data, args, device)
       detector.threshold_calculation(intra_distances,
                                      prototypes,
                                      new_labels,
@@ -72,13 +84,7 @@ def stream_learn(model,
       print("Detector has been saved in {}.".format(args.detector_path))
       
 
-      ## evaluation
-      M_new, F_new, CwCA, OwCA, cm = evaluate(detection_results, new_labels)
-      print("M_new: %7.4f"% M_new)
-      print("F_new: %7.4f"% F_new)
-      print("CwCA: %7.4f"% CwCA)
-      print("OwCA: %7.4f"% OwCA)
-      print("confusion matrix: \n%s"% cm)
+ 
 
       buffer.clear()
       detection_results.clear()
