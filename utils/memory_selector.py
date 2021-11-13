@@ -61,8 +61,9 @@ class OperationalMemory():
       print(new_class_data.keys())
       print(self.class_data.keys())
 
-      keys = set(list(new_class_data.keys())+list(self.class_data.keys()))
-      known_keys = set(list(self.class_data.keys()))
+      keys = set(torch.tensor(list(new_class_data.keys())).tolist() + \
+      torch.tensor(list(new_class_data.keys())).tolist())
+      known_keys = set(torch.tensor(list(new_class_data.keys())).tolist())
       print(keys)
       print(known_keys)
       for key in keys:
