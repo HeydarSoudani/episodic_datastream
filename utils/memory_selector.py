@@ -27,9 +27,11 @@ class OperationalMemory():
   def __init__(self,
                 per_class,
                 novel_acceptance,
+                device,
                 selection_method='rand'):
     self.per_class = per_class
     self.novel_acceptance = novel_acceptance
+    self.device = device
     self.selection_method = selection_method
     self.class_data = None
 
@@ -94,7 +96,7 @@ class OperationalMemory():
         n = samples.shape[0]
         if n >= self.novel_acceptance:
           samples = samples.reshape(samples.shape[0], -1)*255
-          labels = torch.full((n, 1), label, dtype=torch.float) #[200, 1]
+          labels = torch.full((n, 1), label, device=self.device, dtype=torch.float) #[200, 1]
           data = torch.cat((samples, labels), axis=1)
           returned_data_list.append(data)
       

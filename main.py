@@ -150,7 +150,7 @@ base_labels = DatasetFM(train_data).label_set
 
 
 ## == Operational Memory Definition ===
-memory = OperationalMemory(per_class=250, novel_acceptance=150)
+memory = OperationalMemory(per_class=250, novel_acceptance=150, device=device)
 try: memory.load(args.memory_path)
 except FileNotFoundError: pass
 else: print("Load Memory from {}".format(args.memory_path))
