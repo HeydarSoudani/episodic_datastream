@@ -44,9 +44,9 @@ def stream_learn(model,
         sample = torch.squeeze(sample, 0) #[1, 28, 28]
         buffer.append((sample, label))
       
-      # if (i+1) % 500 == 0:
-      print("[stream %5d]: %d, %2d, %7.4f, %5s, %5s, %d"%
-        (i+1, label, predicted_label, prob, real_novelty, detected_novelty, len(buffer)))
+      if (i+1) % 100 == 0:
+        print("[stream %5d]: %d, %2d, %7.4f, %5s, %5s, %d"%
+          (i+1, label, predicted_label, prob, real_novelty, detected_novelty, len(buffer)))
     
 
     if len(buffer) == args.buffer_size:
