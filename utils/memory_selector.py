@@ -106,8 +106,10 @@ class OperationalMemory():
 
   def rand_selection(self):
     for label, samples in self.class_data.items():
-      if samples.shape[0] >= self.per_class:
-        self.class_data[label] = random.sample(samples, self.per_class)
+      n = samples.shape[0]
+      if n >= self.per_class:
+        idxs = np.random.choice(range(n), size=self.per_class, replace=False)
+        self.class_data[label] = samples[idxs]
   
   def soft_rand_selection(self):
     for label, features in self.class_data.items():
