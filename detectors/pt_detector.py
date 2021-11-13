@@ -40,6 +40,7 @@ class PtDetector(object):
     predicted_label = labels[idx].item()
     prob = probs[idx]
 
+    print("min_dist: {}".format(min_dist))
     print(predicted_label)
     print(self.thresholds)
     print(self.thresholds[predicted_label])
