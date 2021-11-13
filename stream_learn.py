@@ -23,7 +23,7 @@ def stream_learn(model,
   dataloader = DataLoader(dataset=stream_dataset, batch_size=1, shuffle=False)
 
   ## == Stream ================================
-  buffer = [] 
+  unknown_buffer = [] 
   detection_results = []
   total_results = []
   last_idx = 0
@@ -42,14 +42,14 @@ def stream_learn(model,
 
       if detected_novelty:
         sample = torch.squeeze(sample, 0) #[1, 28, 28]
-        buffer.append((sample, label))
+        unknown_buffer.append((sample, label))
       
       if (i+1) % 100 == 0:
         print("[stream %5d]: %d, %2d, %7.4f, %5s, %5s, %d"%
-          (i+1, label, predicted_label, prob, real_novelty, detected_novelty, len(buffer)))
+          (i+1, label, predicted_label, prob, real_novelty, detected_novelty, len(unknown_buffer)))
     
 
-    if len(buffer) == args.buffer_size:
+    if len(unknown_buffer) == args.buffer_size:
       
       ## 1) evaluation
       M_new, F_new, CwCA, OwCA, cm = evaluate(detection_results, detector._known_labels)
@@ -60,7 +60,7 @@ def stream_learn(model,
       print("confusion matrix: \n%s"% cm)
 
       ## 2) Paper retrain data
-      new_train_data = memory.select(buffer, return_data=True)
+      new_train_data = memory.select(unknown_buffer, return_data=True)
       
       ## 3) Retrain
       train(model, new_train_data, args, device)
@@ -69,7 +69,7 @@ def stream_learn(model,
       print("Calculating detector ...")
       samples, prototypes, intra_distances = detector_preparation(model, new_train_data, args, device)
       new_labels = list(prototypes.keys())
-      
+
       detector.threshold_calculation(intra_distances,
                                      prototypes,
                                      new_labels,
@@ -88,7 +88,7 @@ def stream_learn(model,
 
  
 
-      buffer.clear()
+      unknown_buffer.clear()
       detection_results.clear()
       total_results.append((i-last_idx, M_new, F_new, CwCA, OwCA))
       last_idx = i
