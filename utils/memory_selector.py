@@ -58,6 +58,9 @@ class OperationalMemory():
 
     if self.class_data != None:
       # should add buffer data
+      print(new_class_data.keys())
+      print(self.class_data.keys())
+
       keys = set(list(new_class_data.keys())+list(self.class_data.keys()))
       known_keys = set(list(self.class_data.keys()))
       print(keys)
