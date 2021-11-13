@@ -53,6 +53,9 @@ class OperationalMemory():
       for l in seen_labels
     }
 
+    for label, features in new_class_data.items():
+      print('{} -> {}'.format(label, features.shape))
+
     if self.class_data != None:
       # should add buffer data
       keys = set(list(new_class_data.keys())+list(self.class_data.keys()))
