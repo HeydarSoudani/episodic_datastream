@@ -30,9 +30,14 @@ class PtDetector(object):
     dists = euclidean_dist(feature.reshape(1, -1), pts)
     probs = torch.nn.functional.softmax(-dists)
 
+    print("pts: {}".format(pts.shape))
+    print("labels: {}".format(labels))
+    print("dists: {}".format(dists))
+    print("probs: {}".format(probs))
+
     idx = torch.argmin(dists, dim=1)
     min_dist = torch.min(dists, dim=1)
-    predicted_label = labels[idx]
+    predicted_label = labels[idx].item()
     prob = probs[idx]
 
     if min_dist > self.thresholds[predicted_label]:
