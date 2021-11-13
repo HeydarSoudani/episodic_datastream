@@ -54,15 +54,15 @@ def stream_learn(model,
 
     if (i+1) % args.known_retrain_interval == 0:
       
-      known_buffer = []
+      known_buffer_list = []
       for label , data in known_buffer.items():
         n = len(data)
         idxs = np.random.choice(range(n), size=args.known_per_class, replace=False)
-        known_buffer.append([data[i] for i in idxs])
+        known_buffer_list.append([data[i] for i in idxs])
       
       
       ## 2) Preparing retrain data
-      new_train_data = memory.select(known_buffer, return_data=True)
+      new_train_data = memory.select(known_buffer_list, return_data=True)
       
       ## 3) Retraining Model
       train(model, new_train_data, args, device)
