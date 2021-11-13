@@ -205,7 +205,7 @@ def evaluate(results, known_labels, k=(1, 5,), eps=1e-8):
     ('real_novelty', np.bool),
     ('detected_novelty', np.bool)
   ])
-
+  print('in eval new_labels: {}'.format(known_labels))
   # == Unknown Detection ==========
   real_novelties = results[results['real_novelty']]
   detected_novelties = results[results['detected_novelty']]
