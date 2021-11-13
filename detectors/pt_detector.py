@@ -30,22 +30,22 @@ class PtDetector(object):
     dists = euclidean_dist(feature.reshape(1, -1), pts).flatten()
     probs = torch.nn.functional.softmax(-dists)
 
-    print("pts: {}".format(pts.shape))
-    print("labels: {}".format(labels))
-    print("dists: {}".format(dists))
-    print("probs: {}".format(probs))
+    # print("pts: {}".format(pts.shape))
+    # print("labels: {}".format(labels))
+    # print("dists: {}".format(dists))
+    # print("probs: {}".format(probs))
 
     idx = torch.argmin(dists)
     min_dist = torch.min(dists)
     predicted_label = labels[idx].item()
     prob = probs[idx]
 
-    print("idx: {}".format(idx))
-    print("min_dist: {}".format(min_dist))
-    print("prob: {}".format(prob))
-    print("predicted_label: {}".format(predicted_label))
-    print(self.thresholds)
-    print(self.thresholds[predicted_label])
+    # print("idx: {}".format(idx))
+    # print("min_dist: {}".format(min_dist))
+    # print("prob: {}".format(prob))
+    # print("predicted_label: {}".format(predicted_label))
+    # print(self.thresholds)
+    # print(self.thresholds[predicted_label])
 
     if min_dist > self.thresholds[predicted_label]:
       detected_novelty = True
