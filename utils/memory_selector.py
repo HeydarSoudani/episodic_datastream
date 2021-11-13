@@ -54,6 +54,8 @@ class OperationalMemory():
       # should add buffer data
       keys = set(list(new_class_data.keys())+list(self.class_data.keys()))
       known_keys = set(list(self.class_data.keys()))
+      print(keys)
+      print(known_keys)
       for key in keys:
         if key in known_keys:
           self.class_data[key] = torch.cat((self.class_data[key], new_class_data[key]), 0)
