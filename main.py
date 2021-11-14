@@ -160,7 +160,7 @@ model.to(device)
 if args.phase != 'incremental_learn':
   train_data = read_csv(args.train_path, sep=',', header=None).values
   base_labels = DatasetFM(train_data).label_set
-  
+
 
   ## == Operational Memory Definition ====
   memory = OperationalMemory(per_class=args.memory_per_class,
@@ -207,7 +207,6 @@ if __name__ == '__main__':
   ## == incremental learning ============
   elif args.phase == 'incremental_learn':
     increm_learn(model,
-                 memory,
                  args,
                  device)
   else: 

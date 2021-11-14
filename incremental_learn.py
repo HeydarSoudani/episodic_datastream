@@ -36,7 +36,6 @@ def evaluate(model, dataloader, device):
 
 
 def increm_learn(model,
-                 memory,
                  args,
                  device):
   print('================================ Incremental Learning =========================')
