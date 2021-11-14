@@ -119,7 +119,7 @@ def stream_learn(model,
       last_idx = i
       
       print('=== Streaming... =================')
-      time.sleep(3)
+      time.sleep(2)
   f.close()
   
   print(total_results)
