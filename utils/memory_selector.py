@@ -139,12 +139,13 @@ class IncrementalMemory():
 
   def update(self, data):
     
-    samples = np.array(data)
+    new_samples = np.array(data)
     labels = np.array(data[:, -1]).flatten()
     unique_labels = list(np.unique(labels))
+    print('unique_labels: {}'.format(unique_labels))
 
     new_class_data = {
-      l: samples[np.where(labels == l)[0]]
+      l: new_samples[np.where(labels == l)[0]]
       for l in unique_labels
     }
 
@@ -163,7 +164,7 @@ class IncrementalMemory():
     for label in unique_labels:
       n = new_class_data[label].shape[0]
       idxs = np.random.choice(range(n), size=class_size, replace=False)
-      self.class_data[label] = samples[idxs]
+      self.class_data[label] = new_samples[idxs]
 
 
 
