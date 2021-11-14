@@ -55,12 +55,15 @@ def increm_learn(model,
     print('train data: {}'.format(train_data.shape))
     if task != 0:
       replay_mem = memory()
-      train_data = np.concatenate((train_data, replay_mem))
+      new_train_data = np.concatenate((train_data, replay_mem))
       print('replay_mem: {}'.format(replay_mem.shape))
-      print('train_data (new): {}'.format(train_data.shape))
+      print('train_data (new): {}'.format(new_train_data.shape))
 
-    # = train ===========
-    train(model, train_data, args, device)
+      # = train ===========
+      train(model, new_train_data, args, device)
+    
+    else:
+      train(model, train_data, args, device)
     
     
     # = Update memory ===
