@@ -160,22 +160,22 @@ model.to(device)
 if args.phase != 'incremental_learn':
   train_data = read_csv(args.train_path, sep=',', header=None).values
   base_labels = DatasetFM(train_data).label_set
+  
+
+  ## == Operational Memory Definition ====
+  memory = OperationalMemory(per_class=args.memory_per_class,
+                            novel_acceptance=args.memory_novel_acceptance,
+                            device=device)
+  try: memory.load(args.memory_path)
+  except FileNotFoundError: pass
+  else: print("Load Memory from {}".format(args.memory_path))
 
 
-## == Operational Memory Definition ====
-memory = OperationalMemory(per_class=args.memory_per_class,
-                           novel_acceptance=args.memory_novel_acceptance,
-                           device=device)
-try: memory.load(args.memory_path)
-except FileNotFoundError: pass
-else: print("Load Memory from {}".format(args.memory_path))
-
-
-## == Novelty Detector Definition =======
-detector = PtDetector(base_labels)
-try: detector.load(args.detector_path)
-except FileNotFoundError: pass
-else: print("Load Detector from {}".format(args.detector_path))
+  ## == Novelty Detector Definition =======
+  detector = PtDetector(base_labels)
+  try: detector.load(args.detector_path)
+  except FileNotFoundError: pass
+  else: print("Load Detector from {}".format(args.detector_path))
 
 if __name__ == '__main__':
 
