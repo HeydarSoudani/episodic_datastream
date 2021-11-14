@@ -2,6 +2,7 @@ import torch
 from torch.utils.data import DataLoader
 import os
 import pandas as pd
+import numpy as np
 
 from trainers.train import train
 from datasets.dataset import DatasetFM
@@ -38,6 +39,7 @@ def evaluate(model, dataloader, device):
 
 
 def increm_learn(model,
+                 memory,
                  args,
                  device):
   print('================================ Incremental Learning =========================')
@@ -50,12 +52,19 @@ def increm_learn(model,
                   os.path.join(args.split_train_path, "task_{}.csv".format(task)),
                   sep=',', header=None).values
     
+    print('train data: {}'.format(train_data.shape))
+    if task != 0:
+      replay_mem = memory()
+      train_data = np.concatenate((train_data, replay_mem))
+      print('replay_mem: {}'.format(replay_mem.shape))
+      print('train_data (new): {}'.format(train_data.shape))
+
     # = train ===========
     train(model, train_data, args, device)
     
     
     # = Update memory ===
-
+    memory.update(train_data)
     
     # = evaluation ======
     print('=== Testing ... ===')

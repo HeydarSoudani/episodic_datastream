@@ -92,8 +92,6 @@ class OperationalMemory():
       
       return returned_data
 
-
-
   def rand_selection(self):
     for label, samples in self.class_data.items():
       n = samples.shape[0]
@@ -125,128 +123,47 @@ class OperationalMemory():
 
 
 
+class IncrementalMemory():
+  def __init__(self,
+              total_size,
+              device,
+              selection_method='rand'):
+    self.total_size = total_size
+    self.device = device
+    self.selection_method = selection_method
 
-
-# #['rand', 'soft_rand', ]
-# class DataSelector():
-#   def __init__(self,
-#                 init_data,
-#                 model,
-#                 min_per_class=125,
-#                 max_per_class=250,
-#                 device='cpu',
-#                 selection_method='soft_rand'):
-#     self.min_per_class = min_per_class
-#     self.max_per_class = max_per_class
-#     self.selection_method = selection_method
-#     self.model = model
-#     self.device = device
-
-#     init_dataset = DatasetFM(init_data)
-#     data = init_dataset.data
-#     self.labels_set = set(init_dataset.labels)
-
-#     ## == split data by classes =================
-#     self.data_class = {}
-#     for class_label in self.labels_set:
-#       self.data_class[class_label] = []
-#     for idx, (sample, label) in enumerate(data):
-#       self.data_class[label.item()].append(sample)
-
-#     ## == select data from pool data ============
-#     if self.selection_method == 'rand':
-#       self.rand_selection()
-#     elif self.selection_method == 'soft_rand':
-#       self.soft_rand_selection()
+    self.class_data = None
   
-#     # for class_label in labels_set:
-#     #   print('label: {}, {}'.format(class_label, len(data_class[class_label])))
-#   def rand_selection(self):
-#     for class_label in self.labels_set:
-#       data_len = len(self.data_class[class_label])
-      
-#       if data_len >= self.max_per_class:
-#         self.data_class[class_label] = random.sample(self.data_class[class_label], self.max_per_class)
-     
-#   def soft_rand_selection(self):
-#     for class_label in self.labels_set:
-#       n = len(self.data_class[class_label])
+  def __call__(self):
+    return np.concatenate(list(self.class_data.values()), axis=0)
 
-#       if n >= self.max_per_class:
-        
-#         data = torch.stack(self.data_class[class_label])
-#         with torch.no_grad():
-#           _, features = self.model(data.to(self.device))
-#         prototype = features.mean(0).reshape(1, -1)
-        
-#         dist = euclidean_dist(features, prototype) #[n, 1]
-#         dist = np.squeeze(dist.detach().cpu().numpy())
-#         score = np.maximum(dist, 1.0001)
-#         score = np.log2(score)
-#         score /= np.sum(score)
-
-#         idxs = np.random.choice(range(n), size=self.max_per_class, p=score, replace=False)
-#         self.data_class[class_label] = [self.data_class[class_label][idx] for idx in idxs]
-        
-  
-#   def renew(self, new_data):
-#     """
-#     model: 
-#     new_data: list of tuples [(sample, label)]
-#     """
-#     new_data = [(item[0].to('cpu'), item[1].to('cpu')) for item in new_data]
-#     new_labels = [item[1].item() for item in new_data]
-#     new_labels_set = set(new_labels)
-#     print('buffer labels_set: {}'.format(new_labels_set))
+  def update(self, data):
     
-#     ## == split data by classes =================
-#     new_data_class = {}
-#     for class_label in new_labels_set:
-#       new_data_class[class_label] = []
-#     for idx, (sample, label) in enumerate(new_data):
-#       new_data_class[label.item()].append(sample)
+    samples = np.array(data)
+    labels = np.array(data[:, -1]).flatten()
+    unique_labels = list(np.unique(labels))
 
-    
-#     ## == New data added to store list ==========
-#     for new_label in new_labels_set:
-#       if new_label in self.labels_set:
-#         self.data_class[new_label].extend(new_data_class[new_label])
-#       else:
-#         self.labels_set.add(new_label)
-#         self.data_class[new_label] = new_data_class[new_label]
-    
-#     print('== All data ====')
-#     for class_label in self.labels_set:
-#       print('label:{}, {}'.format(class_label, len(self.data_class[class_label])))
+    new_class_data = {
+      l: samples[np.where(labels == l)[0]]
+      for l in unique_labels
+    }
 
-#     ## == Renew lists ===========================
-#     if self.selection_method == 'rand':
-#       self.rand_selection()
-#     elif self.selection_method == 'soft_rand':
-#       self.soft_rand_selection()
-    
-#     ## == Create output =========================
-#     return_data = []
-#     for class_label in self.labels_set:
-#       n = len(self.data_class[class_label])
+    if self.class_data != None:
+      known_labels = list(self.class_data.keys())
+      all_labels = unique_labels + known_labels
+      class_size = int(self.total_size / len(all_labels))
 
-#       if n >= self.min_per_class:
-#         samples = self.data_class[class_label]
-#         samples = torch.cat([item.flatten().reshape(1, -1)*255 for item in samples], axis=0) #[200, 784]
-#         labels = torch.full((n, 1), class_label, dtype=torch.float) #[200, 1]
-#         data = torch.cat((samples, labels), axis=1)
-#         return_data.append(data)
-    
-#     return_data = torch.cat(return_data, axis=0)
-#     return_data = return_data.detach().cpu().numpy()
-#     np.random.shuffle(return_data)
+      for label, samples in self.class_data.items():
+        n = samples.shape[0]
+        idxs = np.random.choice(range(n), size=class_size, replace=False)
+        self.class_data[label] = samples[idxs]
+    else:
+      class_size = int(self.total_size / len(unique_labels))
 
-#     # np.savetxt("foo.csv", return_data, delimiter=",")
-#     # print('write in file')
-#     time.sleep(3)
-
-#     return return_data
- 
+    for label in unique_labels:
+      n = new_class_data[label].shape[0]
+      idxs = np.random.choice(range(n), size=class_size, replace=False)
+      self.class_data[label] = samples[idxs]
 
 
 

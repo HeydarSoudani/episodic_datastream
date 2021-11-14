@@ -11,7 +11,7 @@ from models.densenet import DenseNet
 from models.wrn import WideResNet
 
 from trainers.train_batch import batch_train, batch_test
-from utils.memory_selector import OperationalMemory
+from utils.memory_selector import OperationalMemory, IncrementalMemory
 from detectors.pt_detector import PtDetector
 from init_learn import init_learn
 from zeroshot_test import zeroshot_test
@@ -171,6 +171,10 @@ if args.phase != 'incremental_learn':
   else: print("Load Memory from {}".format(args.memory_path))
 
 
+  ## == Incremental memory ===============
+  memory = IncrementalMemory(2000, device)
+
+
   ## == Novelty Detector Definition =======
   detector = PtDetector(base_labels)
   try: detector.load(args.detector_path)
@@ -207,6 +211,7 @@ if __name__ == '__main__':
   ## == incremental learning ============
   elif args.phase == 'incremental_learn':
     increm_learn(model,
+                 memory,
                  args,
                  device)
   else: 
