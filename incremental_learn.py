@@ -30,6 +30,8 @@ def evaluate(model, dataloader, device):
       loss = loss.mean()
       total_loss += loss.item()
 
+  print('correct: {}'.format(correct))
+  print('total: {}'.format(total))
   acc = 100 * correct / total  
   total_loss /= len(dataloader)
   return acc, total_loss
@@ -75,10 +77,12 @@ def increm_learn(model,
         test_dataset = DatasetFM(test_data, transforms=test_transform)
       else:
         test_dataset = DatasetFM(test_data)
-      test_dataloader = DataLoader(dataset=test_dataset, batch_size=args.batch_size, shuffle=True)
+      test_dataloader = DataLoader(dataset=test_dataset, batch_size=args.batch_size, shuffle=False)
 
       acc, _ = evaluate(model, test_dataloader, device)
       prev_tasks_acc[prev_task] = acc
+      print('list: {}'.format(prev_tasks_acc))
+
     
     print("%7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(prev_tasks_acc))
     f.write("%7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(prev_tasks_acc))
