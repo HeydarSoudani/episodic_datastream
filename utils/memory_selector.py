@@ -132,7 +132,7 @@ class IncrementalMemory():
     self.device = device
     self.selection_method = selection_method
 
-    self.class_data = None
+    self.class_data = {}
   
   def __call__(self):
     return np.concatenate(list(self.class_data.values()), axis=0)
@@ -148,7 +148,9 @@ class IncrementalMemory():
       for l in unique_labels
     }
 
-    if self.class_data != None:
+    if not self.class_data:
+      class_size = int(self.total_size / len(unique_labels))
+    else:
       known_labels = list(self.class_data.keys())
       all_labels = unique_labels + known_labels
       class_size = int(self.total_size / len(all_labels))
@@ -157,9 +159,7 @@ class IncrementalMemory():
         n = samples.shape[0]
         idxs = np.random.choice(range(n), size=class_size, replace=False)
         self.class_data[label] = samples[idxs]
-    else:
-      class_size = int(self.total_size / len(unique_labels))
-
+      
     for label in unique_labels:
       n = new_class_data[label].shape[0]
       idxs = np.random.choice(range(n), size=class_size, replace=False)
