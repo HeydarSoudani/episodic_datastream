@@ -30,8 +30,8 @@ def evaluate(model, dataloader, device):
       loss = loss.mean()
       total_loss += loss.item()
 
-  print('correct: {}'.format(correct))
-  print('total: {}'.format(total))
+  # print('correct: {}'.format(correct))
+  # print('total: {}'.format(total))
   acc = 100 * correct / total  
   total_loss /= len(dataloader)
   return acc, total_loss
@@ -66,7 +66,7 @@ def increm_learn(model,
       model.load(args.best_model_path)
     
     prev_tasks_acc = [0.0 for _ in range(args.n_tasks)]
-    for prev_task in range(task):
+    for prev_task in range(task+1):
       
       test_data = pd.read_csv(
                   os.path.join(args.split_test_path, "task_{}.csv".format(prev_task)),
@@ -81,7 +81,7 @@ def increm_learn(model,
 
       acc, _ = evaluate(model, test_dataloader, device)
       prev_tasks_acc[prev_task] = acc
-      print('list: {}'.format(prev_tasks_acc))
+      # print('list: {}'.format(prev_tasks_acc))
 
     
     print("%7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(prev_tasks_acc))
