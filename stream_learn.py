@@ -26,11 +26,9 @@ def stream_learn(model,
   ## == Stream ================================
   unknown_buffer = [] 
   known_buffer = {i:[] for i in detector._known_labels}
-
   detection_results = []
   last_idx = 0
 
-  # with open('output.txt', 'w') as f:
   f = open('output.txt','w')
   for i, data in enumerate(dataloader):
     
@@ -119,7 +117,7 @@ def stream_learn(model,
       print('=== Streaming... =================')
       time.sleep(2)
   
-  ### == Last evaluation ======================
+  ### == Last evaluation ===
   sample_num = i-last_idx
   M_new, F_new, CwCA, OwCA, cm = evaluate(detection_results, detector._known_labels)
   print("[On %5d samples]: %7.4f, %7.4f, %7.4f, %7.4f"%

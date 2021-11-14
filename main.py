@@ -16,6 +16,7 @@ from detectors.pt_detector import PtDetector
 from init_learn import init_learn
 from zeroshot_test import zeroshot_test
 from stream_learn import stream_learn
+from incremental_learn import increm_learn
 from utils.plot_tsne import plot_tsne
 
 
@@ -35,13 +36,18 @@ parser.add_argument('--ways', type=int, default=5, help='')
 parser.add_argument('--shot', type=int, default=5, help='')
 parser.add_argument('--query_num', type=int, default=5, help='')
 parser.add_argument('--buffer_size', type=int, default=1000, help='')
-parser.add_argument('--batch_size', type=int, default=64, help='')
 
 # retrain
 parser.add_argument('--retrain_epochs', type=int, default=1, help='')
 parser.add_argument('--retrain_meta_iteration', type=int, default=1000, help='')
 parser.add_argument('--known_retrain_interval', type=int, default=5000, help='')
 parser.add_argument('--known_per_class', type=int, default=100, help='')
+
+# incremental learning
+parser.add_argument('--n_tasks', type=int, default=5, help='')
+parser.add_argument('--split_train_path', type=str, default='data/split_mnist/train', help='')
+parser.add_argument('--split_test_path', type=str, default='data/split_mnist/test', help='')
+parser.add_argument('--batch_size', type=int, default=16, help='')
 
 # memory
 parser.add_argument('--memory_per_class', type=int, default=250, help='')
@@ -112,7 +118,7 @@ parser.add_argument('--r1', default=0.2, type=float, help='aspect of erasing are
 
 args = parser.parse_args()
 
-## == Device ==========================
+## == Device ===========================
 if torch.cuda.is_available():
   if not args.cuda:
     args.cuda = True
@@ -120,15 +126,15 @@ if torch.cuda.is_available():
 device = torch.device("cuda" if args.cuda else "cpu")
 print('Device: {}'.format(device))
 
-## == Apply seed ======================
+## == Apply seed =======================
 torch.manual_seed(args.seed)
 np.random.seed(args.seed)
 
-## == Save dir ========================
+## == Save dir =========================
 if not os.path.exists(args.save):
   os.makedirs(args.save)
 
-## == Model Definition ================
+## == Model Definition =================
 # model = CNNEncoder(args)
 model = CNNEncoder_2(args)
 # model = DenseNet(args, tensor_view=(3, 32, 32))
@@ -136,7 +142,7 @@ model = CNNEncoder_2(args)
 # TODO: add init. weight
 # model.apply(weights_init)
 
-## == Load model if exist =============
+## == Load model if exist ==============
 if args.which_model == 'best':
   try: model.load(args.best_model_path)
   except FileNotFoundError: pass
@@ -150,12 +156,12 @@ elif args.which_model == 'last':
 model.to(device)
 
 
-## == load train data from file =======
+## == load train data from file ========
 train_data = read_csv(args.train_path, sep=',', header=None).values
 base_labels = DatasetFM(train_data).label_set
 
 
-## == Operational Memory Definition ===
+## == Operational Memory Definition ====
 memory = OperationalMemory(per_class=args.memory_per_class,
                            novel_acceptance=args.memory_novel_acceptance,
                            device=device)
@@ -164,7 +170,7 @@ except FileNotFoundError: pass
 else: print("Load Memory from {}".format(args.memory_path))
 
 
-## == Novelty Detector Definition ======
+## == Novelty Detector Definition =======
 detector = PtDetector(base_labels)
 try: detector.load(args.detector_path)
 except FileNotFoundError: pass
@@ -172,7 +178,7 @@ else: print("Load Detector from {}".format(args.detector_path))
 
 if __name__ == '__main__':
 
-  ## == Batch ===========================
+  ## == Non-episodic ====================
   # batch_train(model, train_data, args, device)
   # batch_test(model, args, device)
 
@@ -197,10 +203,12 @@ if __name__ == '__main__':
                  detector,
                  args,
                  device)
-
   ## == incremental learning ============
-  # elif args.phase == 'incremental_learn':
-  #   increm_learn(model, args, device)
+  elif args.phase == 'incremental_learn':
+    increm_learn(model,
+                 memory,
+                 args,
+                 device)
   else: 
     raise NotImplementedError()
 

@@ -1,12 +1,9 @@
-import os
-import pickle
 import pandas as pd 
+import numpy as np
+import argparse
 import random
 import gzip
-import numpy as np
-from pandas import read_csv
-import time
-import argparse
+import os
 
 def load_mnist(path, kind='train'):
   """Load MNIST data from `path`"""
@@ -42,8 +39,8 @@ if __name__ == '__main__':
   ## ========================================
   # == Get MNIST dataset ====================
   if args.dataset == 'mnist':
-    train_data = read_csv(os.path.join(args.data_path, "mnist_train.csv"), sep=',').values
-    test_data = read_csv(os.path.join(args.data_path, "mnist_test.csv"), sep=',').values
+    train_data = pd.read_csv(os.path.join(args.data_path, "mnist_train.csv"), sep=',').values
+    test_data = pd.read_csv(os.path.join(args.data_path, "mnist_test.csv"), sep=',').values
 
     X_train, y_train = train_data[:, 1:], train_data[:, 0]
     X_test, y_test = test_data[:, 1:], test_data[:, 0]
@@ -53,8 +50,8 @@ if __name__ == '__main__':
   ## ========================================
   # == Get Fashion-MNIST dataset ============
   if args.dataset == 'fmnist':
-    train_data = read_csv(os.path.join(args.data_path, "fashion-mnist_train.csv"), sep=',').values
-    test_data = read_csv(os.path.join(args.data_path, "fashion-mnist_test.csv"), sep=',').values
+    train_data = pd.read_csv(os.path.join(args.data_path, "fashion-mnist_train.csv"), sep=',').values
+    test_data = pd.read_csv(os.path.join(args.data_path, "fashion-mnist_test.csv"), sep=',').values
     X_train, y_train = train_data[:, 1:], train_data[:, 0]
     X_test, y_test = test_data[:, 1:], test_data[:, 0]
     # X_train, y_train = load_mnist(path, kind='train') #(60000, 784), (60000,)
@@ -65,8 +62,8 @@ if __name__ == '__main__':
   ## ========================================
   # == Get Cifar10 dataset ==================
   if args.dataset == 'c10':
-    train_data = read_csv(os.path.join(args.data_path, 'cifar10_train.csv'), sep=',', header=None).values
-    test_data = read_csv(os.path.join(args.data_path, 'cifar10_test.csv'), sep=',', header=None).values
+    train_data = pd.read_csv(os.path.join(args.data_path, 'cifar10_train.csv'), sep=',', header=None).values
+    test_data = pd.read_csv(os.path.join(args.data_path, 'cifar10_test.csv'), sep=',', header=None).values
     X_train, y_train = train_data[:, :-1], train_data[:, -1]
     X_test, y_test = test_data[:, :-1], test_data[:, -1]
 
