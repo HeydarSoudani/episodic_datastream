@@ -28,7 +28,6 @@ def stream_learn(model,
   known_buffer = {i:[] for i in detector._known_labels}
 
   detection_results = []
-  total_results = []
   last_idx = 0
 
   # with open('output.txt', 'w') as f:
@@ -114,12 +113,20 @@ def stream_learn(model,
     
       f.write("[On %5d samples]: %7.4f, %7.4f, %7.4f, %7.4f \n"%
         (sample_num, CwCA, OwCA, M_new, F_new))
-      total_results.append((i-last_idx, M_new, F_new, CwCA, OwCA))
       detection_results.clear()
       last_idx = i
       
       print('=== Streaming... =================')
       time.sleep(2)
+  
+  ### == Last evaluation ======================
+  sample_num = i-last_idx
+  M_new, F_new, CwCA, OwCA, cm = evaluate(detection_results, detector._known_labels)
+  print("[On %5d samples]: %7.4f, %7.4f, %7.4f, %7.4f"%
+    (sample_num, CwCA, OwCA, M_new, F_new))
+  print("confusion matrix: \n%s"% cm)
+  f.write("[On %5d samples]: %7.4f, %7.4f, %7.4f, %7.4f \n"%
+    (sample_num, CwCA, OwCA, M_new, F_new))
+  
   f.close()
   
-  print(total_results)
