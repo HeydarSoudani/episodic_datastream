@@ -171,15 +171,17 @@ if args.phase != 'incremental_learn':
   else: print("Load Memory from {}".format(args.memory_path))
 
 
-  ## == Incremental memory ===============
-  memory = IncrementalMemory(2000, device)
-
-
   ## == Novelty Detector Definition =======
   detector = PtDetector(base_labels)
   try: detector.load(args.detector_path)
   except FileNotFoundError: pass
   else: print("Load Detector from {}".format(args.detector_path))
+
+
+if args.phase == 'incremental_learn':
+  ## == Incremental memory ===============
+  memory = IncrementalMemory(2000, device)
+
 
 if __name__ == '__main__':
 
