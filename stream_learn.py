@@ -51,53 +51,35 @@ def stream_learn(model,
         print("[stream %5d]: %d, %2d, %7.4f, %5s, %5s, %d"%
           (i+1, label, predicted_label, prob, real_novelty, detected_novelty, len(unknown_buffer)))
     
+    if (i+1) % args.known_retrain_interval == 0 \
+       or len(unknown_buffer) == args.buffer_size:
+      print('=== Retraining... ===')
+      ### == Preparing buffer ==================
+      if (i+1) % args.known_retrain_interval == 0:
+        buffer = []
+        for label , data in known_buffer.items():
+          n = len(data)
+          idxs = np.random.choice(range(n), size=args.known_per_class, replace=False)
+          buffer.extend([data[i] for i in idxs])
+      
+      elif len(unknown_buffer) == args.buffer_size:
+        buffer = unknown_buffer
 
-    if (i+1) % args.known_retrain_interval == 0:
-      
-      known_buffer_list = []
-      for label , data in known_buffer.items():
-        n = len(data)
-        idxs = np.random.choice(range(n), size=args.known_per_class, replace=False)
-        known_buffer_list.extend([data[i] for i in idxs])
-      
-      
-      ## 2) Preparing retrain data
-      new_train_data = memory.select(known_buffer_list, return_data=True)
-      
-      ## 3) Retraining Model
-      train(model, new_train_data, args, device)
-      
-      ## 4) Recalculating Detector
-      print("Calculating detector ...")
-      samples, prototypes, intra_distances = detector_preparation(model, new_train_data, args, device)
-      new_labels = list(prototypes.keys())
-
-      detector.threshold_calculation(intra_distances,
-                                     prototypes,
-                                     new_labels,
-                                     args.std_coefficient)
-      print("Detector Threshold: {}".format(detector.thresholds))  
-      detector.save(args.detector_path)
-      print("Detector has been saved in {}.".format(args.detector_path))
-    
-      known_buffer = {i:[] for i in detector._known_labels}
-
-    if len(unknown_buffer) == args.buffer_size:
+      ### == 1) evaluation ======================
       sample_num = i-last_idx
-
-      ## 1) evaluation
+      
       M_new, F_new, CwCA, OwCA, cm = evaluate(detection_results, detector._known_labels)
       print("[On %5d samples]: %7.4f, %7.4f, %7.4f, %7.4f"%
         (sample_num, CwCA, OwCA, M_new, F_new))
       print("confusion matrix: \n%s"% cm)
-
-      ## 2) Preparing retrain data
-      new_train_data = memory.select(unknown_buffer, return_data=True)
       
-      ## 3) Retraining Model
+      ### == 2) Preparing retrain data ==========
+      new_train_data = memory.select(buffer, return_data=True)
+      
+      ### == 3) Retraining Model ================
       train(model, new_train_data, args, device)
       
-      ## 4) Recalculating Detector
+      ### == 4) Recalculating Detector ==========
       print("Calculating detector ...")
       samples, prototypes, intra_distances = detector_preparation(model, new_train_data, args, device)
       new_labels = list(prototypes.keys())
@@ -109,11 +91,25 @@ def stream_learn(model,
       print("Detector Threshold: {}".format(detector.thresholds))  
       detector.save(args.detector_path)
       print("Detector has been saved in {}.".format(args.detector_path))
-    
 
-      unknown_buffer.clear()
-      detection_results.clear()
+      ### == 5) Update parameters ===============
+      if len(unknown_buffer) == args.buffer_size:
+        known_labels = list(known_buffer.keys())
+        labels_diff = list(set(new_labels)-set(known_labels))
+        if len(labels_diff) != 0:
+          for label in labels_diff:
+            known_buffer[label] = []
+        
+        unknown_buffer.clear()
+
+      if (i+1) % args.known_retrain_interval == 0:
+        known_buffer = {i:[] for i in detector._known_labels}
+      
+      with open('output.txt', 'w') as f:
+        f.write("[On %5d samples]: %7.4f, %7.4f, %7.4f, %7.4f \n"%
+          (sample_num, CwCA, OwCA, M_new, F_new))
       total_results.append((i-last_idx, M_new, F_new, CwCA, OwCA))
+      detection_results.clear()
       last_idx = i
       time.sleep(3)
   
