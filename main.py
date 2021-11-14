@@ -157,8 +157,9 @@ model.to(device)
 
 
 ## == load train data from file ========
-train_data = read_csv(args.train_path, sep=',', header=None).values
-base_labels = DatasetFM(train_data).label_set
+if args.phase != 'incremental_learn':
+  train_data = read_csv(args.train_path, sep=',', header=None).values
+  base_labels = DatasetFM(train_data).label_set
 
 
 ## == Operational Memory Definition ====
