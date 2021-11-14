@@ -51,17 +51,18 @@ class PtLearner:
       features[:support_len], support_labels
     )
 
-    beta = args.beta * iteration / args.meta_iteration
-    if iteration > 1 and beta > 0.0:
-      self.prototypes = beta * self.prototypes + (1 - beta) * new_prototypes
-    else:
-      self.prototypes = new_prototypes
+    # beta = args.beta * iteration / args.meta_iteration
+    # if iteration > 1 and beta > 0.0:
+    #   self.prototypes = beta * self.prototypes + (1 - beta) * new_prototypes
+    # else:
+    #   self.prototypes = new_prototypes
 
     loss = self.criterion(
       features[support_len:],
       outputs[support_len:],
       query_labels,
-      self.prototypes,
+      # self.prototypes,
+      new_prototypes,
       n_query=args.query_num,
       n_classes=args.ways,
     )
@@ -69,10 +70,10 @@ class PtLearner:
     torch.nn.utils.clip_grad_norm_(model.parameters(), args.grad_clip)
     optimizer.step()
 
-    if beta > 0.0:
-      self.prototypes = self.prototypes.detach()
-    else:
-      self.prototypes = None
+    # if beta > 0.0:
+    #   self.prototypes = self.prototypes.detach()
+    # else:
+    #   self.prototypes = None
 
     return loss.detach().item()
 
