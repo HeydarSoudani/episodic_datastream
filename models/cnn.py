@@ -58,8 +58,8 @@ class CNNEncoder(nn.Module):
 class CNNEncoder_2(nn.Module):
 	def __init__(self, args):
 		super(CNNEncoder_2, self).__init__()
-		img_channels = 1		# 1 for fmnist, 3 for cifar10
-		self.last_layer = 3 # 3 for fmnist, 4or2 for cifar10
+		img_channels = 3		# 1 for fmnist, 3 for cifar10
+		self.last_layer = 4 # 3 for fmnist, 4or2 for cifar10
 
 		self.layer1 = nn.Sequential(
 			nn.Conv2d(img_channels, 32, kernel_size=5, padding=2), #input: 28 * 28 * 3, output: 28 * 28 * 32

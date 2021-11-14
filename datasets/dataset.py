@@ -8,8 +8,8 @@ import numpy as np
 from PIL import Image
 
 class DatasetFM(Dataset):
-  tensor_view = (1, 28, 28) #For FashionMnist
-  # tensor_view = (3, 32, 32)   #For Cifar10
+  # tensor_view = (1, 28, 28) #For FashionMnist
+  tensor_view = (3, 32, 32)   #For Cifar10
 
   def __init__(self, dataset, transforms=None):
 		# dataset = read_csv(path, sep=',', header=None).values
