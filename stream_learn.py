@@ -6,7 +6,7 @@ from pandas import read_csv
 
 from trainers.train import train
 from detectors.pt_detector import detector_preparation
-from datasets.dataset import DatasetFM
+from datasets.dataset import SimpleDataset
 from evaluation import evaluate
 
 
@@ -20,7 +20,7 @@ def stream_learn(model,
   print('================================ Stream Learning ================================')
   ## == Data ==================================
   stream_data = read_csv(args.test_path, sep=',', header=None).values
-  stream_dataset = DatasetFM(stream_data)
+  stream_dataset = SimpleDataset(stream_data, args)
   dataloader = DataLoader(dataset=stream_dataset, batch_size=1, shuffle=False)
 
   ## == Stream ================================

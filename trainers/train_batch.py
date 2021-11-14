@@ -11,7 +11,7 @@ import numpy as np
 from pandas import read_csv
 # from pytorch_metric_learning import distances, losses, miners
 
-from datasets.dataset import DatasetFM
+from datasets.dataset import SimpleDataset
 from augmentation import transforms
 from utils.functions import imshow, mean_std_calculator
 from augmentation.autoaugment.autoaugment import CIFAR10Policy
@@ -42,7 +42,7 @@ def batch_train(model, args, device):
 
 
   train_data = read_csv(args.train_path, sep=',', header=None).values
-  trainset = DatasetFM(train_data, transforms=transform)
+  trainset = SimpleDataset(train_data, args, transforms=transform)
   trainset_, valaset = torch.utils.data.random_split(trainset, dataset_split)
   train_dataloader = torch.utils.data.DataLoader(trainset_, batch_size=batch_size,
                                             shuffle=True)
@@ -128,8 +128,8 @@ def batch_test(model, args, device):
   # ])
   
   # test_data = read_csv(args.test_path, sep=',', header=None).values
-  # # test_dataset = DatasetFM(test_data, transforms=transform_test)
-  # test_dataset = DatasetFM(test_data)
+  # # test_dataset = SimpleDataset(test_data, transforms=transform_test)
+  # test_dataset = SimpleDataset(test_data)
   # test_dataloader = DataLoader(dataset=test_dataset, batch_size=1, shuffle=False)
 
   transform = transforms.Compose([
@@ -140,7 +140,7 @@ def batch_test(model, args, device):
   # testset = torchvision.datasets.CIFAR10(root='./data', train=False,
   #                                       download=True, transform=transform)
   test_data = read_csv(args.test_path, sep=',', header=None).values
-  testset = DatasetFM(test_data, transforms=transform)
+  testset = SimpleDataset(test_data, args, transforms=transform)
   test_dataloader = torch.utils.data.DataLoader(testset, batch_size=64,
                                           shuffle=False)
 

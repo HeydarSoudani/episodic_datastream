@@ -2,7 +2,7 @@ from torch.utils.data import DataLoader
 import numpy as np
 
 from augmentation import transforms
-from datasets.dataset import DatasetFM
+from datasets.dataset import SimpleDataset
 from sampler import DataSampler
 
 # from torchvision.transforms.transforms import RandomRotation
@@ -21,11 +21,11 @@ def dataloader_preparation(train_data, args):
   train_transform, test_transform = transforms_preparation()
   
   if args.use_transform:
-    train_dataset = DatasetFM(train_data, transforms=train_transform)
-    val_dataset = DatasetFM(val_data, transforms=test_transform)
+    train_dataset = SimpleDataset(train_data, args, transforms=train_transform)
+    val_dataset = SimpleDataset(val_data, args, transforms=test_transform)
   else:
-    train_dataset = DatasetFM(train_data)
-    val_dataset = DatasetFM(val_data)
+    train_dataset = SimpleDataset(train_data, args)
+    val_dataset = SimpleDataset(val_data, args)
     
   train_sampler = DataSampler(
     train_dataset,

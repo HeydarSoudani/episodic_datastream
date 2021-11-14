@@ -2,7 +2,7 @@ import torch
 from torch.utils.data import DataLoader
 from pandas import read_csv
 
-from datasets.dataset import DatasetFM
+from datasets.dataset import SimpleDataset
 from evaluation import evaluate
 from utils.preparation import transforms_preparation
 
@@ -13,9 +13,9 @@ def zeroshot_test(model, detector, known_labels, args, device):
   stream_data = read_csv(args.test_path, sep=',', header=None).values
   if args.use_transform:
     _, test_transform = transforms_preparation()
-    stream_dataset = DatasetFM(stream_data, transforms=test_transform)
+    stream_dataset = SimpleDataset(stream_data, args, transforms=test_transform)
   else:
-    stream_dataset = DatasetFM(stream_data)
+    stream_dataset = SimpleDataset(stream_data, args)
   dataloader = DataLoader(dataset=stream_dataset, batch_size=1, shuffle=False)
 
 

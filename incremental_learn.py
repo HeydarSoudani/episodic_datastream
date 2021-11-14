@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 
 from trainers.train import train
-from datasets.dataset import DatasetFM
+from datasets.dataset import SimpleDataset
 from utils.preparation import transforms_preparation
 
 
@@ -88,9 +88,9 @@ def increm_learn(model,
 
       if args.use_transform:
         _, test_transform = transforms_preparation()
-        test_dataset = DatasetFM(test_data, transforms=test_transform)
+        test_dataset = SimpleDataset(test_data, args, transforms=test_transform)
       else:
-        test_dataset = DatasetFM(test_data)
+        test_dataset = SimpleDataset(test_data, args)
       test_dataloader = DataLoader(dataset=test_dataset, batch_size=args.batch_size, shuffle=False)
 
       acc, _ = evaluate(model, test_dataloader, device)

@@ -5,7 +5,7 @@ import argparse
 import numpy as np
 from pandas import read_csv
 
-from datasets.dataset import DatasetFM
+from datasets.dataset import SimpleDataset
 from models.cnn import CNNEncoder, CNNEncoder_2
 from models.densenet import DenseNet
 from models.wrn import WideResNet
@@ -26,6 +26,7 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument('--phase', type=str, default='init_learn', help='')
 parser.add_argument('--which_model', type=str, default='best', help='')
+parser.add_argument('--dataset', type=str, default='mnist', help='') #[mnist, fmnist, cifar10]
 
 # init train
 parser.add_argument('--start_epoch', type=int, default=0, help='')
@@ -159,7 +160,7 @@ model.to(device)
 ## == load train data from file ========
 if args.phase != 'incremental_learn':
   train_data = read_csv(args.train_path, sep=',', header=None).values
-  base_labels = DatasetFM(train_data).label_set
+  base_labels = SimpleDataset(train_data, args).label_set
 
 
   ## == Operational Memory Definition ====

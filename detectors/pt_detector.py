@@ -3,7 +3,7 @@ import torch.nn as nn
 import numpy as np
 from math import inf
 
-from datasets.dataset import DatasetFM
+from datasets.dataset import SimpleDataset
 from torch.utils.data import DataLoader
 from utils.preparation import transforms_preparation
 from utils.functions import compute_prototypes, euclidean_dist
@@ -65,9 +65,9 @@ def detector_preparation(model, data, args, device):
 
   _, test_transform = transforms_preparation()
   if args.use_transform:
-    dataset = DatasetFM(data, transforms=test_transform)
+    dataset = SimpleDataset(data, args, transforms=test_transform)
   else:
-    dataset = DatasetFM(data)
+    dataset = SimpleDataset(data, args)
   dataloader = DataLoader(dataset=dataset, batch_size=1, shuffle=False)
 
   features = []

@@ -8,7 +8,7 @@ from pandas import read_csv
 from models.cnn import CNNEncoder, CNNEncoder_2
 from models.densenet import DenseNet
 from augmentation import transforms
-from datasets.dataset import DatasetFM
+from datasets.dataset import SimpleDataset
 
 
 def plot_tsne(args, device):
@@ -20,8 +20,8 @@ def plot_tsne(args, device):
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
   ])
   stream_data = read_csv(args.test_path, sep=',', header=None).values
-  stream_dataset = DatasetFM(stream_data)
-  # stream_dataset = DatasetFM(stream_data, transforms=transform)
+  stream_dataset = SimpleDataset(stream_data, args)
+  # stream_dataset = SimpleDataset(stream_data, transforms=transform)
  
   ## == Load model ==============
   # model = CNNEncoder(args)

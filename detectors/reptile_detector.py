@@ -6,7 +6,7 @@ import numpy as np
 from math import inf
 from sklearn.metrics import confusion_matrix
 
-from datasets.dataset import DatasetFM
+from datasets.dataset import SimpleDataset
 
 
 class ReptileDetector(object):
@@ -95,7 +95,7 @@ def replite_detector(model, train_data, args, device):
   print('===================================== Detector =====================================')
   model.to(device)
   
-  train_dataset = DatasetFM(train_data)
+  train_dataset = SimpleDataset(train_data, args)
   dataloader = DataLoader(dataset=train_dataset, batch_size=1, shuffle=False)
 
   novelty_detector = ReptileDetector()
