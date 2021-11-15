@@ -12,14 +12,16 @@ compute_distance = nn.PairwiseDistance(p=2, eps=1e-6)
 compute_multi_distance = nn.PairwiseDistance(p=2, eps=1e-6, keepdim=True)
 
 class PtDetector(object):
-  def __init__(self, base_labels):
-    self.base_labels = base_labels
+  def __init__(self):
+    pass
 
   def __call__(self, feature):
     
+    pts_dict = { label: self.prototypes[label] for label in self._known_labels }
+
     detected_novelty = False
-    pts = torch.cat(list(self.prototypes.values()))
-    labels = torch.tensor(list(self.prototypes.keys()))
+    pts = torch.cat(list(pts_dict.values()))
+    labels = torch.tensor(list(pts_dict.keys()))
     dists = torch.cdist(feature.reshape(1, -1), pts).flatten()
     probs = torch.nn.functional.softmax(-dists)
 
@@ -35,8 +37,8 @@ class PtDetector(object):
       
     return detected_novelty, predicted_label, prob
   
-  def set_base_labels(self, label_set):
-    self.base_labels = set(label_set)
+  def set_known_labels(self, label_set):
+    self._known_labels = set(label_set)
   
   def threshold_calculation(self, distances, prototypes, known_labels, std_coefficient=1.0):
     self.distances = np.array(distances, dtype=[('label', np.int32), ('distance', np.float32)])

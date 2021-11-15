@@ -6,7 +6,7 @@ from datasets.dataset import SimpleDataset
 from evaluation import evaluate
 from utils.preparation import transforms_preparation
 
-def zeroshot_test(model, detector, known_labels, args, device):
+def zeroshot_test(model, detector, args, device, known_labels=None):
   print('================================ Zero-Shot Test ================================')
   
   # == Load stream data ==============================
@@ -18,6 +18,9 @@ def zeroshot_test(model, detector, known_labels, args, device):
     stream_dataset = SimpleDataset(stream_data, args)
   dataloader = DataLoader(dataset=stream_dataset, batch_size=1, shuffle=False)
 
+  # == 
+  if known_labels != None:
+    detector.set_known_labels(known_labels)
 
   detection_results = []
   ## == Test Model ===================================
@@ -30,14 +33,14 @@ def zeroshot_test(model, detector, known_labels, args, device):
       out, feature = model.forward(sample)
 
       detected_novelty, predicted_label, prob = detector(feature)
-      real_novelty = label.item() not in detector.base_labels
+      real_novelty = label.item() not in detector._known_labels
       detection_results.append((label.item(), predicted_label, real_novelty, detected_novelty))
 
       if (i+1) % 1000 == 0:
         print("[stream %5d]: %d, %2d, %7.4f, %5s, %5s"%
           (i+1, label, predicted_label, prob, real_novelty, detected_novelty))
     
-    M_new, F_new, CwCA, OwCA, cm = evaluate(detection_results, known_labels)
+    M_new, F_new, CwCA, OwCA, cm = evaluate(detection_results, detector._known_labels)
     print("M_new: %7.4f"% M_new)
     print("F_new: %7.4f"% F_new)
     print("CwCA: %7.4f"% CwCA)

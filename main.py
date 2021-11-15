@@ -156,9 +156,9 @@ elif args.which_model == 'last':
     print("Load model from {}".format(args.last_model_path))
 model.to(device)
 
-
-## == load train data from file ========
 if args.phase != 'incremental_learn':
+
+  ## == load train data from file ========
   train_data = read_csv(args.train_path, sep=',', header=None).values
   base_labels = SimpleDataset(train_data, args).label_set
 
@@ -173,15 +173,11 @@ if args.phase != 'incremental_learn':
 
 
   ## == Novelty Detector Definition =======
-  detector = PtDetector(base_labels)
+  detector = PtDetector()
   try: detector.load(args.detector_path)
   except FileNotFoundError: pass
   else: print("Load Detector from {}".format(args.detector_path))
 
-
-if args.phase == 'incremental_learn':
-  ## == Incremental memory ===============
-  memory = IncrementalMemory(2000, device)
 
 
 if __name__ == '__main__':
@@ -196,13 +192,11 @@ if __name__ == '__main__':
                memory,
                detector,
                train_data,
-               base_labels,
                args,
                device)
   elif args.phase == 'zeroshot_test':
     zeroshot_test(model,
                   detector,
-                  base_labels,
                   args,
                   device)
   elif args.phase == 'stream_learn':
@@ -211,8 +205,15 @@ if __name__ == '__main__':
                  detector,
                  args,
                  device)
+  elif args.phase == 'zeroshot_test_base':
+    zeroshot_test(model,
+                  detector,
+                  args,
+                  device,
+                  known_labels=base_labels)
   ## == incremental learning ============
   elif args.phase == 'incremental_learn':
+    memory = IncrementalMemory(2000, device)
     increm_learn(model,
                  memory,
                  args,

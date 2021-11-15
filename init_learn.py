@@ -11,7 +11,6 @@ def init_learn(model,
                memory,
                detector,
                train_data,
-               base_labels,
                args,
                device):
 
@@ -22,8 +21,12 @@ def init_learn(model,
   ## == Save Novel detector ===========
   print("Calculating detector ...")
   samples, prototypes, intra_distances = detector_preparation(model, train_data, args, device)
-  
-  detector.threshold_calculation(intra_distances, prototypes, base_labels, args.std_coefficient)
+  labels = list(prototypes.keys())
+
+  detector.threshold_calculation(intra_distances,
+                                 prototypes,
+                                 labels,
+                                 args.std_coefficient)
   print("Detector Threshold: {}".format(detector.thresholds))  
   detector.save(args.detector_path)
   print("Detector has been saved in {}.".format(args.detector_path))
