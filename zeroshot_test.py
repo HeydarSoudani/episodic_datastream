@@ -41,10 +41,7 @@ def zeroshot_test(model, detector, args, device, known_labels=None):
           (i+1, label, predicted_label, prob, real_novelty, detected_novelty))
     
     M_new, F_new, CwCA, OwCA, cm = evaluate(detection_results, detector._known_labels)
-    print("M_new: %7.4f"% M_new)
-    print("F_new: %7.4f"% F_new)
-    print("CwCA: %7.4f"% CwCA)
-    print("OwCA: %7.4f"% OwCA)
+    print("Evaluation: %7.4f, %7.4f, %7.4f, %7.4f"%(CwCA, OwCA, M_new, F_new))
     print("confusion matrix: \n%s"% cm)
     
 
