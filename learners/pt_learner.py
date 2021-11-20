@@ -70,8 +70,8 @@ class PtLearner:
     )
 
     beta = args.beta * iteration / args.meta_iteration
-    if iteration > 1 and beta > 0.0:
-      new_prototypes = beta * old_prototypes + (1 - beta) * episode_prototypes
+    # if iteration > 1 and beta > 0.0:
+    new_prototypes = beta * old_prototypes + (1 - beta) * episode_prototypes
     # else:
     #   self.prototypes = episode_prototypes
 
