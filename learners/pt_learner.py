@@ -39,6 +39,8 @@ class PtLearner:
       for l in range(class_num)
     }
 
+    print(self.prototypes)
+
   def train(self, model, batch, optimizer, iteration, args):
     model.train()  
     optimizer.zero_grad()
