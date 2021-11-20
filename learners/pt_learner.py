@@ -39,8 +39,6 @@ class PtLearner:
       for l in range(class_num)
     }
 
-    print(self.prototypes)
-
   def train(self, model, batch, optimizer, iteration, args):
     model.train()  
     optimizer.zero_grad()
@@ -67,9 +65,11 @@ class PtLearner:
       features[:support_len], support_labels
     )
 
+    print('a')
     old_prototypes = torch.cat(
       [self.prototypes[l] for l in unique_label]
     )
+    print(old_prototypes.shape)
 
     beta = args.beta * iteration / args.meta_iteration
     if iteration > 1 and beta > 0.0:
