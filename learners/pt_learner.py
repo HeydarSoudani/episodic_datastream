@@ -35,9 +35,11 @@ class PtLearner:
       class_num = 0
 
     self.prototypes = {
-      l: torch.zeros(1, args.hidden_dims)
+      l: torch.zeros(1, args.hidden_dims, device=device)
       for l in range(class_num)
     }
+
+
 
   def train(self, model, batch, optimizer, iteration, args):
     model.train()  
