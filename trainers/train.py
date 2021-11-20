@@ -44,7 +44,7 @@ def train(model,
   global_time = time.time()
   min_loss = float('inf')
  
-  pt_learner = PtLearner(criterion, device)
+  pt_learner = PtLearner(criterion, device, args)
 
   try:
     for epoch_item in range(args.start_epoch, args.epochs):

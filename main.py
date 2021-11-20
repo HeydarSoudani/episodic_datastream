@@ -50,6 +50,10 @@ parser.add_argument('--split_train_path', type=str, default='data/split_mnist/tr
 parser.add_argument('--split_test_path', type=str, default='data/split_mnist/test', help='')
 parser.add_argument('--batch_size', type=int, default=16, help='')
 
+# Network
+parser.add_argument('--dropout', type=float, default=0.2, help='')
+parser.add_argument('--hidden_dims', type=int, default=128, help='') #768
+
 # memory
 parser.add_argument('--memory_per_class', type=int, default=250, help='')
 parser.add_argument('--memory_novel_acceptance', type=int, default=150, help='')
@@ -80,10 +84,6 @@ parser.add_argument('--grad_clip', type=float, default=5.0)
 parser.add_argument("--scheduler", action="store_true", help="use scheduler")
 parser.add_argument("--step_size", default=3000, type=int)
 parser.add_argument('--gamma', type=float, default=0.5, help='for lr step')
-
-# Network
-parser.add_argument('--dropout', type=float, default=0.2, help='')
-parser.add_argument('--hidden_dims', type=int, default=128, help='') #768
 
 # Device and Randomness
 parser.add_argument('--cuda', action='store_true',help='use CUDA')
