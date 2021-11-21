@@ -15,9 +15,9 @@ class PtDetector(object):
   def __init__(self):
     pass
 
-  def __call__(self, feature):
+  def __call__(self, feature, prototypes):
     
-    pts_dict = { label: self.prototypes[label] for label in self._known_labels }
+    pts_dict = { label: prototypes[label] for label in self._known_labels }
 
     detected_novelty = False
     pts = torch.cat(list(pts_dict.values()))
@@ -40,9 +40,8 @@ class PtDetector(object):
   def set_known_labels(self, label_set):
     self._known_labels = set(label_set)
   
-  def threshold_calculation(self, distances, prototypes, known_labels, std_coefficient=1.0):
+  def threshold_calculation(self, distances, known_labels, std_coefficient=1.0):
     self.distances = np.array(distances, dtype=[('label', np.int32), ('distance', np.float32)])
-    self.prototypes = prototypes
     self._known_labels = set(known_labels)
     self.std_coefficient = std_coefficient
 
@@ -61,18 +60,20 @@ class PtDetector(object):
     torch.save(self.__dict__, pkl_path)
 
 
-def detector_preparation(model, data, args, device):
+def detector_preparation(model, prototypes, data, args, device):
   if args.which_model == 'best':
     model.load(args.best_model_path)
 
-  _, test_transform = transforms_preparation()
   if args.use_transform:
+    _, test_transform = transforms_preparation()
     dataset = SimpleDataset(data, args, transforms=test_transform)
   else:
     dataset = SimpleDataset(data, args)
+  
   dataloader = DataLoader(dataset=dataset, batch_size=1, shuffle=False)
+  known_labels = dataset.label_set
 
-  features = []
+
   samples = []
   intra_distances = []
   model.eval()
@@ -81,16 +82,23 @@ def detector_preparation(model, data, args, device):
       sample, label = data
       sample, label = sample.to(device), label.to(device)
       _, feature = model.forward(sample)
-
       samples.append((torch.squeeze(sample, 0).detach(), label.item())) #[1, 28, 28]))
-      features.append((feature.detach(), label.item()))
-
-    prototypes = compute_prototypes(features) #{label: pt, ...}
-   
-    for (feature, label) in features:
-      prototype = prototypes[label]
-      distance = torch.cdist(feature.reshape(1, -1), prototype.reshape(1, -1))
+      
+      # features.append((feature.detach(), label.item()))
+      prototype = prototypes[label.item()]
+      distance = torch.cdist(feature.detach().reshape(1, -1), prototype.reshape(1, -1))
       intra_distances.append((label, distance))
 
-  return samples, prototypes, intra_distances
+  return samples, known_labels, intra_distances
+
+
+
+    
+      
+  # prototypes = compute_prototypes(features) #{label: pt, ...}
+  
+  # for (feature, label) in features:
+  #   prototype = prototypes[label]
+  #   distance = torch.cdist(feature.reshape(1, -1), prototype.reshape(1, -1))
+  #   intra_distances.append((label, distance))
 

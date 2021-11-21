@@ -7,21 +7,32 @@ from pandas import read_csv
 from trainers.train import train
 from detectors.pt_detector import detector_preparation
 from datasets.dataset import SimpleDataset
+from utils.preparation import transforms_preparation
 from evaluation import evaluate
 
 
 def stream_learn(model,
+                 pt_learner,
                  memory,
                  detector,
                  args,
                  device):
+  print('================================ Stream Learning ================================') 
+  
+  ## == Set retrain params ====================
   args.epochs = args.retrain_epochs
   args.meta_iteration = args.retrain_meta_iteration
-  print('================================ Stream Learning ================================')
+ 
+
   ## == Data ==================================
   stream_data = read_csv(args.test_path, sep=',', header=None).values
-  stream_dataset = SimpleDataset(stream_data, args)
+  if args.use_transform:
+    _, test_transform = transforms_preparation()
+    stream_dataset = SimpleDataset(stream_data, args, transforms=test_transform)
+  else:
+    stream_dataset = SimpleDataset(stream_data, args)
   dataloader = DataLoader(dataset=stream_dataset, batch_size=1, shuffle=False)
+
 
   ## == Stream ================================
   unknown_buffer = [] 
@@ -38,7 +49,7 @@ def stream_learn(model,
       sample, label = sample.to(device), label.to(device)
       _, feature = model.forward(sample)
       real_novelty = label.item() not in detector._known_labels
-      detected_novelty, predicted_label, prob = detector(feature)      
+      detected_novelty, predicted_label, prob = detector(feature, pt_learner.prototypes)      
       detection_results.append((label.item(), predicted_label, real_novelty, detected_novelty))
 
       sample = torch.squeeze(sample, 0) #[1, 28, 28]
@@ -54,6 +65,7 @@ def stream_learn(model,
     if (i+1) % args.known_retrain_interval == 0 \
       or len(unknown_buffer) == args.buffer_size:
       print('=== Retraining... =================')
+      
       ### == Preparing buffer ==================
       if (i+1) % args.known_retrain_interval == 0:
         buffer = []
@@ -80,17 +92,19 @@ def stream_learn(model,
       new_train_data = memory.select(buffer, return_data=True)
       
       ### == 3) Retraining Model ================
-      train(model, new_train_data, args, device)
+      train(model, pt_learner, new_train_data, args, device)
       
       ### == 4) Recalculating Detector ==========
       print("Calculating detector ...")
-      samples, prototypes, intra_distances = detector_preparation(model, new_train_data, args, device)
-      new_labels = list(prototypes.keys())
+      _, new_known_labels, intra_distances\
+        = detector_preparation(model,
+                               pt_learner.prototypes,
+                               new_train_data,
+                               args, device)
 
       detector.threshold_calculation(intra_distances,
-                                    prototypes,
-                                    new_labels,
-                                    args.std_coefficient)
+                                     new_known_labels,
+                                     args.std_coefficient)
       print("Detector Threshold: {}".format(detector.thresholds))  
       detector.save(args.detector_path)
       print("Detector has been saved in {}.".format(args.detector_path))
@@ -98,7 +112,7 @@ def stream_learn(model,
       ### == 5) Update parameters ===============
       if len(unknown_buffer) == args.buffer_size:
         known_labels = list(known_buffer.keys())
-        labels_diff = list(set(new_labels)-set(known_labels))
+        labels_diff = list(set(new_known_labels)-set(known_labels))
         if len(labels_diff) != 0:
           for label in labels_diff:
             known_buffer[label] = []
@@ -117,7 +131,7 @@ def stream_learn(model,
       print('=== Streaming... =================')
       time.sleep(2)
   
-  ### == Last evaluation ===
+  ### == Last evaluation ========================
   sample_num = i-last_idx
   M_new, F_new, CwCA, OwCA, cm = evaluate(detection_results, detector._known_labels)
   print("[On %5d samples]: %7.4f, %7.4f, %7.4f, %7.4f"%

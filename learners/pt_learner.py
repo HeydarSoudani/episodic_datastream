@@ -39,8 +39,6 @@ class PtLearner:
       for l in range(class_num)
     }
 
-
-
   def train(self, model, batch, optimizer, iteration, args):
     model.train()  
     optimizer.zero_grad()
@@ -121,7 +119,6 @@ class PtLearner:
 
     total_loss /= len(dataloader)
     return total_loss
-
 
   def load(self, pkl_path):
     self.__dict__.update(torch.load(pkl_path))

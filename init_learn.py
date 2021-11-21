@@ -8,6 +8,7 @@ from detectors.pt_detector import detector_preparation
 
 
 def init_learn(model,
+               pt_learner,
                memory,
                detector,
                train_data,
@@ -15,17 +16,19 @@ def init_learn(model,
                device):
 
   ### == Train Model =================
-  train(model, train_data, args, device)
+  train(model, pt_learner, train_data, args, device)
 
 
   ## == Save Novel detector ===========
   print("Calculating detector ...")
-  samples, prototypes, intra_distances = detector_preparation(model, train_data, args, device)
-  labels = list(prototypes.keys())
+  samples, known_labels, intra_distances\
+    = detector_preparation(model,
+                           pt_learner.prototypes,
+                           train_data,
+                           args, device)
 
   detector.threshold_calculation(intra_distances,
-                                 prototypes,
-                                 labels,
+                                 known_labels,
                                  args.std_coefficient)
   print("Detector Threshold: {}".format(detector.thresholds))  
   detector.save(args.detector_path)

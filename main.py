@@ -13,6 +13,9 @@ from models.wrn import WideResNet
 from trainers.train_batch import batch_train, batch_test
 from utils.memory_selector import OperationalMemory, IncrementalMemory
 from detectors.pt_detector import PtDetector
+from learners.pt_learner import PtLearner
+from losses import TotalLoss
+# from pytorch_metric_learning import distances, losses, miners
 from init_learn import init_learn
 from zeroshot_test import zeroshot_test
 from stream_learn import stream_learn
@@ -179,6 +182,18 @@ if args.phase != 'incremental_learn':
   else: print("Load Detector from {}".format(args.detector_path))
 
 
+  ## == Learner Definition ================
+  criterion = TotalLoss(device, args)
+  ## = Model Update config.
+  # criterion  = nn.CrossEntropyLoss()
+  # criterion_mt = losses.NTXentLoss(temperature=0.07)
+  # criterion = PrototypicalLoss(n_support=args.shot)
+
+  pt_learner = PtLearner(criterion, device, args)
+  try: pt_learner.load(args.prototypes_path)
+  except FileNotFoundError: pass
+  else: print("Load Prototypes from {}".format(args.prototypes_path))
+
 
 if __name__ == '__main__':
 
@@ -189,6 +204,7 @@ if __name__ == '__main__':
   ## == Data Stream =====================
   if args.phase == 'init_learn':
     init_learn(model,
+               pt_learner,
                memory,
                detector,
                train_data,
@@ -196,17 +212,20 @@ if __name__ == '__main__':
                device)
   elif args.phase == 'zeroshot_test':
     zeroshot_test(model,
+                  pt_learner.prototypes,
                   detector,
                   args,
                   device)
   elif args.phase == 'stream_learn':
     stream_learn(model,
+                 pt_learner,
                  memory,
                  detector,
                  args,
                  device)
   elif args.phase == 'zeroshot_test_base':
     zeroshot_test(model,
+                  pt_learner.prototypes,
                   detector,
                   args,
                   device,

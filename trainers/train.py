@@ -4,15 +4,11 @@ from torch.optim.lr_scheduler import StepLR
 import os
 import time
 
-# from pytorch_metric_learning import distances, losses, miners
-# from utils.functions import imshow
-
 from utils.preparation import dataloader_preparation
-from learners.pt_learner import PtLearner
-from losses import TotalLoss
 
 
 def train(model,
+          pt_learner,
           train_data,
           args,
           device):
@@ -20,12 +16,6 @@ def train(model,
 
   train_dataloader,\
   val_dataloader=  dataloader_preparation(train_data, args)
-
-  ## = Model Update config.
-  # criterion  = nn.CrossEntropyLoss()
-  # criterion_mt = losses.NTXentLoss(temperature=0.07)
-  # criterion = PrototypicalLoss(n_support=args.shot)
-  criterion = TotalLoss(device, args)
   
   optim = SGD(model.parameters(),
               lr=args.lr,
@@ -39,13 +29,10 @@ def train(model,
     step_size=args.step_size,
     gamma=args.gamma,
   )
-
+ 
   ## == 2) Learn model
   global_time = time.time()
   min_loss = float('inf')
- 
-  pt_learner = PtLearner(criterion, device, args)
-
   try:
     for epoch_item in range(args.start_epoch, args.epochs):
       print('=== Epoch %d ===' % epoch_item)
@@ -53,9 +40,7 @@ def train(model,
       trainloader = iter(train_dataloader)
 
       for miteration_item in range(args.meta_iteration):
-  
         batch = next(trainloader)
-      
         loss = pt_learner.train(model,batch,optim,miteration_item,args)
         train_loss += loss
 
@@ -79,7 +64,7 @@ def train(model,
           if val_loss_total < min_loss:
             model.save(os.path.join(args.save, "model_best.pt"))
             min_loss = val_loss_total
-            print("= Saving new best model")
+            print("= New best model saved")
     
       if args.scheduler:
         scheduler.step()
@@ -89,9 +74,11 @@ def train(model,
   
   # save last model
   model.save(os.path.join(args.save, "model_last.pt"))
-  print("= Saving new last model")
+  print("= New last model saved")
 
-
+  # save pt_learner
+  pt_learner.save(os.path.join(args.save, "prototypes.pt"))
+  print("= Pts saved")
 
 
 if __name__ == '__main__':

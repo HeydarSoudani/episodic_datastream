@@ -6,7 +6,12 @@ from datasets.dataset import SimpleDataset
 from evaluation import evaluate
 from utils.preparation import transforms_preparation
 
-def zeroshot_test(model, detector, args, device, known_labels=None):
+def zeroshot_test(model,
+                  prototypes,
+                  detector,
+                  args,
+                  device,
+                  known_labels=None):
   print('================================ Zero-Shot Test ================================')
   
   # == Load stream data ==============================
@@ -18,12 +23,14 @@ def zeroshot_test(model, detector, args, device, known_labels=None):
     stream_dataset = SimpleDataset(stream_data, args)
   dataloader = DataLoader(dataset=stream_dataset, batch_size=1, shuffle=False)
 
-  # == 
+
+  # == =============================================== 
   if known_labels != None:
     detector.set_known_labels(known_labels)
 
-  detection_results = []
+
   ## == Test Model ===================================
+  detection_results = []
   model.eval()
   with torch.no_grad():
     for i, data in enumerate(dataloader):
@@ -32,7 +39,7 @@ def zeroshot_test(model, detector, args, device, known_labels=None):
       sample, label = sample.to(device), label.to(device)
       out, feature = model.forward(sample)
 
-      detected_novelty, predicted_label, prob = detector(feature)
+      detected_novelty, predicted_label, prob = detector(feature, prototypes)
       real_novelty = label.item() not in detector._known_labels
       detection_results.append((label.item(), predicted_label, real_novelty, detected_novelty))
 
