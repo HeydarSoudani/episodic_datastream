@@ -91,11 +91,9 @@ class PtLearner:
     #   self.prototypes = self.prototypes.detach()
     # else:
     #   self.prototypes = None
-
     for idx, l in enumerate(unique_label):
-      self.prototypes[l] = beta * old_prototypes[idx].detach()\
-                           + (1 - beta) * episode_prototypes[idx].detach()
-
+      self.prototypes[l.item()] = new_prototypes[idx].reshape(1, -1).detach()
+    
     return loss.detach().item()
 
   #TODO: classification with distance metric
