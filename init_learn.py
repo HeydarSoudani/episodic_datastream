@@ -24,7 +24,8 @@ def init_learn(model,
 
   for label, item in pt_learner.prototypes.items():
     print('label: {} -> {}'.format(label, item.shape))
-    
+  print(pt_learner.prototypes)
+
   samples, known_labels, intra_distances\
     = detector_preparation(model,
                            pt_learner.prototypes,
