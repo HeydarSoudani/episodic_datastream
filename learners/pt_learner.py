@@ -64,16 +64,12 @@ class PtLearner:
     episode_prototypes = compute_prototypes(
       features[:support_len], support_labels
     )
-
     old_prototypes = torch.cat(
       [self.prototypes[l.item()] for l in unique_label]
     )
 
     beta = args.beta * iteration / args.meta_iteration
-    # if iteration > 1 and beta > 0.0:
     new_prototypes = beta * old_prototypes + (1 - beta) * episode_prototypes
-    # else:
-    #   self.prototypes = episode_prototypes
 
     loss = self.criterion(
       features[support_len:],
@@ -87,10 +83,6 @@ class PtLearner:
     torch.nn.utils.clip_grad_norm_(model.parameters(), args.grad_clip)
     optimizer.step()
 
-    # if beta > 0.0:
-    #   self.prototypes = self.prototypes.detach()
-    # else:
-    #   self.prototypes = None
     for idx, l in enumerate(unique_label):
       self.prototypes[l.item()] = new_prototypes[idx].reshape(1, -1).detach()
     

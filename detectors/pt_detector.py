@@ -73,7 +73,6 @@ def detector_preparation(model, prototypes, data, args, device):
   dataloader = DataLoader(dataset=dataset, batch_size=1, shuffle=False)
   known_labels = dataset.label_set
 
-
   samples = []
   intra_distances = []
   model.eval()
@@ -84,21 +83,10 @@ def detector_preparation(model, prototypes, data, args, device):
       _, feature = model.forward(sample)
       samples.append((torch.squeeze(sample, 0).detach(), label.item())) #[1, 28, 28]))
       
-      # features.append((feature.detach(), label.item()))
       prototype = prototypes[label.item()]
       distance = torch.cdist(feature.detach().reshape(1, -1), prototype.reshape(1, -1))
       intra_distances.append((label, distance))
 
   return samples, known_labels, intra_distances
 
-
-
-    
-      
-  # prototypes = compute_prototypes(features) #{label: pt, ...}
-  
-  # for (feature, label) in features:
-  #   prototype = prototypes[label]
-  #   distance = torch.cdist(feature.reshape(1, -1), prototype.reshape(1, -1))
-  #   intra_distances.append((label, distance))
 

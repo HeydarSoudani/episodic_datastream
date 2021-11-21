@@ -64,7 +64,7 @@ def train(model,
           if val_loss_total < min_loss:
             model.save(os.path.join(args.save, "model_best.pt"))
             min_loss = val_loss_total
-            print("= New best model saved")
+            print("= ...New best model saved")
     
       if args.scheduler:
         scheduler.step()
@@ -74,11 +74,11 @@ def train(model,
   
   # save last model
   model.save(os.path.join(args.save, "model_last.pt"))
-  print("= New last model saved")
+  print("= ...New last model saved")
 
   # save pt_learner
   pt_learner.save(os.path.join(args.save, "prototypes.pt"))
-  print("= Pts saved")
+  print("= ..Pts saved")
 
 
 if __name__ == '__main__':
