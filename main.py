@@ -13,8 +13,8 @@ from models.wrn import WideResNet
 from trainers.train_batch import batch_train, batch_test
 from utils.memory_selector import OperationalMemory, IncrementalMemory
 from detectors.pt_detector import PtDetector
-from learners.pt_learner import PtLearner
-from losses import TotalLoss
+from learners.pt_learner import PtLearner, PtLearner_inc
+from losses import TotalLoss, TotalLoss_inc
 # from pytorch_metric_learning import distances, losses, miners
 from init_learn import init_learn
 from zeroshot_test import zeroshot_test
@@ -146,7 +146,7 @@ model = CNNEncoder_2(args)
 # TODO: add init. weight
 # model.apply(weights_init)
 
-## == Load model if exist ==============
+## == Load model if exist ================
 if args.which_model == 'best':
   try: model.load(args.best_model_path)
   except FileNotFoundError: pass
@@ -184,24 +184,29 @@ if args.phase != 'incremental_learn':
 
   ## == Learner Definition ================
   criterion = TotalLoss(device, args)
-  ## = Model Update config.
-  # criterion  = nn.CrossEntropyLoss()
-  # criterion_mt = losses.NTXentLoss(temperature=0.07)
-  # criterion = PrototypicalLoss(n_support=args.shot)
+## = Model Update config.
+# criterion  = nn.CrossEntropyLoss()
+# criterion_mt = losses.NTXentLoss(temperature=0.07)
+# criterion = PrototypicalLoss(n_support=args.shot)
 
-  pt_learner = PtLearner(criterion, device, args)
+
+elif args.phase == 'incremental_learn':
+  criterion = TotalLoss_inc(device, args)
+  pt_learner = PtLearner_inc(criterion, device, args)
   try: pt_learner.load(args.prototypes_path)
   except FileNotFoundError: pass
   else: print("Load Prototypes from {}".format(args.prototypes_path))
+  
+  memory = IncrementalMemory(2000, device)
 
 
 if __name__ == '__main__':
 
-  ## == Non-episodic ====================
+  ## == Non-episodic ======================
   # batch_train(model, train_data, args, device)
   # batch_test(model, args, device)
 
-  ## == Data Stream =====================
+  ## == Data Stream =======================
   if args.phase == 'init_learn':
     init_learn(model,
                pt_learner,
@@ -232,8 +237,8 @@ if __name__ == '__main__':
                   known_labels=base_labels)
   ## == incremental learning ============
   elif args.phase == 'incremental_learn':
-    memory = IncrementalMemory(2000, device)
     increm_learn(model,
+                 pt_learner,
                  memory,
                  args,
                  device)

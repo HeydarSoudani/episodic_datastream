@@ -39,13 +39,14 @@ def evaluate(model, dataloader, device):
 
 
 def increm_learn(model,
+                 pt_learner,
                  memory,
                  args,
                  device):
   print('================================ Incremental Learning =========================')
   f = open('inc_output.txt','w')
-  for task in range(args.n_tasks):
-    
+  
+  for task in range(args.n_tasks):  
     print('=== Training ... ===')
     ## = Data ===========
     train_data = pd.read_csv(
@@ -62,16 +63,16 @@ def increm_learn(model,
       print('train_data (new): {}'.format(new_train_data.shape))
 
       # = train ===========
-      train(model, new_train_data, args, device)
+      train(model, pt_learner, new_train_data, args, device)
     
     else:
-      train(model, train_data, args, device)
+      train(model, pt_learner, train_data, args, device)
     
     
-    # = Update memory ===
+    # = Update memory =====
     memory.update(train_data)
     
-    # = evaluation ======
+    # = evaluation ========
     print('=== Testing ... ===')
     # 1) average performance on all the samples regardless of their task.
     # 2) average performance up till current task.
@@ -95,7 +96,6 @@ def increm_learn(model,
 
       acc, _ = evaluate(model, test_dataloader, device)
       prev_tasks_acc[prev_task] = acc
-      # print('list: {}'.format(prev_tasks_acc))
 
     
     print("%7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(prev_tasks_acc))
