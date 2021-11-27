@@ -5,7 +5,7 @@ from sklearn.manifold import TSNE
 from matplotlib import pyplot as plt
 from pandas import read_csv
 
-from models.cnn import CNNEncoder, CNNEncoder_2
+from models.cnn import Conv_4
 from models.densenet import DenseNet
 from augmentation import transforms
 from datasets.dataset import SimpleDataset
@@ -25,7 +25,7 @@ def plot_tsne(args, device):
  
   ## == Load model ==============
   # model = CNNEncoder(args)
-  model = CNNEncoder_2(args)
+  model = Conv_4(args)
   # model = DenseNet(args, tensor_view=(3, 32, 32))
   if args.which_model == 'best':
     try:
