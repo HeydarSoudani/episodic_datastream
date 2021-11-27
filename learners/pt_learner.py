@@ -164,7 +164,7 @@ class PtLearner_inc:
     print(outputs[support_len:])
     print(query_labels)
 
-    outputs = torch.randn(10, 10, requires_grad=True)
+    outputs = torch.randn(10, 10, requires_grad=True, device=self.device)
 
     loss = self.criterion(
       features[support_len:],
