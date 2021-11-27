@@ -161,6 +161,9 @@ class PtLearner_inc:
     beta = args.beta * iteration / args.meta_iteration
     self.prototypes[unique_labels] = beta * self.prototypes[unique_labels] + (1 - beta) * episode_prototypes
 
+    print(outputs[support_len:])
+    print(query_labels)
+
     loss = self.criterion(
       features[support_len:],
       outputs[support_len:],
