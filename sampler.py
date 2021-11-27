@@ -54,17 +54,35 @@ class DataSampler(Sampler):
                 [
                     # pylint: disable=not-callable
                     torch.tensor(
-                        random.choices(
-                            self.items_per_label[label], k=self.n_shot + self.n_query
-                        )
-                        # random.sample(
-                        #     self.items_per_label[label], self.n_shot + self.n_query
+                        # random.choices(
+                        #     self.items_per_label[label], k=self.n_shot + self.n_query
                         # )
+                        random.sample(
+                            self.items_per_label[label], self.n_shot + self.n_query
+                        )
                     )
                     # pylint: enable=not-callable
                     for label in random.sample(self.items_per_label.keys(), self.n_way)
                 ]
             )
+    # def __iter__(self):
+    #     for _ in range(self.n_tasks):
+    #         yield torch.cat(
+    #             [
+    #                 torch.tensor(
+    #                     random.sample(
+    #                         self.items_per_label[label], (self.n_shot + self.n_query)
+    #                     )
+    #                 )
+    #                 for label in (
+    #                     random.choices(
+    #                         list(self.items_per_label.keys()), k=self.n_way
+    #                     )
+    #                     if self.replacement
+    #                     else random.sample(self.items_per_label.keys(), self.n_way)
+    #                 )
+    #             ]
+    #         )
 
     def episodic_collate_fn(
         self, input_data: List[Tuple[torch.Tensor, int]]

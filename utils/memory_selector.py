@@ -162,7 +162,8 @@ class IncrementalMemory():
       self.class_data[label] = new_samples[idxs]
 
 
-
+  def update_with_pt(self, pts):
+    self.class_data = pts    
 
 
   

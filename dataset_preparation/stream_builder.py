@@ -61,7 +61,7 @@ if __name__ == '__main__':
 
   ## ========================================
   # == Get Cifar10 dataset ==================
-  if args.dataset == 'c10':
+  if args.dataset == 'cifar10':
     train_data = pd.read_csv(os.path.join(args.data_path, 'cifar10_train.csv'), sep=',', header=None).values
     test_data = pd.read_csv(os.path.join(args.data_path, 'cifar10_test.csv'), sep=',', header=None).values
     X_train, y_train = train_data[:, :-1], train_data[:, -1]
