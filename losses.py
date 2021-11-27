@@ -132,17 +132,21 @@ class TotalLoss_inc(nn.Module):
     self.lambda_2 = args.lambda_2
     
     self.dce = DCELoss_inc(device, gamma=args.temp_scale)
-    self.ce = torch.nn.CrossEntropyLoss()
+    self.ce = nn.CrossEntropyLoss()
 
   def forward(self, features, outputs, labels, prototypes, n_query, n_classes):
     dce_loss = self.dce(features, labels, prototypes, n_query, n_classes)
-    cls_loss = self.ce(outputs, labels.long())
+    # cls_loss = self.ce(outputs, labels.long())
+    cls_loss = self.ce(outputs, labels)
 
     print(cls_loss)
 
     return self.lambda_1 * dce_loss +\
            self.lambda_2 * cls_loss
 
+
+
+# [[ 0.3376,  0.1666,  0.4220, -0.2586, -0.4544, -0.1168, -0.0924, -0.1531, -0.1256,  0.0411],[ 0.1952, -0.1048,  0.1441,  0.2189,  0.2905,  0.1015, -0.1399,  0.1302, -0.1257, -0.4267],[ 0.1458,  0.0853, -0.2644, -0.1576,  0.3733, -0.4543,  0.2643,  0.2575, -0.0775, -0.2474],[ 0.0910, -0.2113,  0.0527,  0.0694,  0.1918,  0.0861, -0.3315,  0.3087, -0.0867, -0.4285],[-0.3097,  0.1893,  0.1407, -0.0733,  0.0801, -0.2575, -0.1383, -0.0491, -0.1611,  0.1225], [ 0.8789, -0.3240, -0.1081,  0.5345, -0.1371, -0.0021, -0.4708,  0.2020, -0.1247, -0.6271], [ 0.8085,  0.3487,  0.8757,  0.7693,  0.1428, -0.2935, -0.8466, -0.1159, 0.0895, -0.8519], [ 0.7342,  0.0839,  0.3560, -0.1353,  0.1620, -0.5205, -0.4481, -0.4177, -0.2518, -0.1628], [ 0.9350, -0.0174,  0.2055,  0.3977,  0.1364, -0.4179, -0.6404,  0.0733, 0.0872, -0.1912], [ 0.4602, -0.1357,  0.4494,  0.0367,  0.4061, -0.0883, -0.1529, -0.3360, -0.1723, -0.2766]]
 
 
 
