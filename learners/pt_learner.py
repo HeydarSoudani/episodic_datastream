@@ -118,7 +118,6 @@ class PtLearner:
 
 
 
-
 class PtLearner_inc:
   def __init__(self, criterion, device, args):
     self.criterion = criterion
@@ -131,10 +130,6 @@ class PtLearner_inc:
     else:
       class_num = 0
 
-    # self.prototypes = {
-    #   l: torch.zeros(1, args.hidden_dims, device=device)
-    #   for l in range(class_num)
-    # }
     self.prototypes = torch.zeros(class_num, args.hidden_dims, device=device)
 
   def train(self, model, batch, optimizer, iteration, args):

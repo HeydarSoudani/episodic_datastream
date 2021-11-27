@@ -120,6 +120,9 @@ class DCELoss_inc(nn.Module):
       .expand(n_classes, n_query, 1)
     )
 
+    print(target_inds.shape)
+    print(target_inds)
+
     loss_val = -log_p_y.gather(2, target_inds).mean()
     return loss_val
 
