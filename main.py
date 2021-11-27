@@ -184,6 +184,10 @@ if args.phase != 'incremental_learn':
 
   ## == Learner Definition ================
   criterion = TotalLoss(device, args)
+  pt_learner = PtLearner(criterion, device, args)
+  try: pt_learner.load(args.prototypes_path)
+  except FileNotFoundError: pass
+  else: print("Load Prototypes from {}".format(args.prototypes_path))
 ## = Model Update config.
 # criterion  = nn.CrossEntropyLoss()
 # criterion_mt = losses.NTXentLoss(temperature=0.07)
