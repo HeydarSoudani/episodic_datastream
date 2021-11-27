@@ -120,6 +120,7 @@ class DCELoss_inc(nn.Module):
       .expand(n_classes, n_query, 1)
     )
 
+    print(log_p_y.shape)
     print(target_inds.shape)
     print(target_inds)
 
