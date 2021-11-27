@@ -13,8 +13,8 @@ from models.wrn import WideResNet
 from trainers.train_batch import batch_train, batch_test
 from utils.memory_selector import OperationalMemory, IncrementalMemory
 from detectors.pt_detector import PtDetector
-from learners.pt_learner import PtLearner, PtLearner_inc
-from losses import TotalLoss, TotalLoss_inc
+from learners.pt_learner import PtLearner
+from losses import TotalLoss
 # from pytorch_metric_learning import distances, losses, miners
 from init_learn import init_learn
 from zeroshot_test import zeroshot_test
