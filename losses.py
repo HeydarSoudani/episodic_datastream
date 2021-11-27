@@ -135,8 +135,10 @@ class TotalLoss_inc(nn.Module):
     self.ce = nn.CrossEntropyLoss()
 
   def forward(self, features, outputs, labels, prototypes, n_query, n_classes):
+    print('a')
     dce_loss = self.dce(features, labels, prototypes, n_query, n_classes)
     # cls_loss = self.ce(outputs, labels.long())
+    print('b')
     print(dce_loss)
     cls_loss = self.ce(outputs, labels)
 
