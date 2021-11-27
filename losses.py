@@ -125,6 +125,7 @@ class DCELoss_inc(nn.Module):
     print(target_inds)
 
     loss_val = -log_p_y.gather(2, target_inds).mean()
+    print('a')
     return loss_val
 
 
