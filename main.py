@@ -6,7 +6,7 @@ import numpy as np
 from pandas import read_csv
 
 from datasets.dataset import SimpleDataset
-from models.cnn import CNNEncoder, CNNEncoder_2
+from models.cnn import Conv_4
 from models.densenet import DenseNet
 from models.wrn import WideResNet
 
@@ -139,14 +139,13 @@ if not os.path.exists(args.save):
   os.makedirs(args.save)
 
 ## == Model Definition =================
-# model = CNNEncoder(args)
-model = CNNEncoder_2(args)
+model = Conv_4(args)
 # model = DenseNet(args, tensor_view=(3, 32, 32))
 
 # TODO: add init. weight
 # model.apply(weights_init)
 
-## == Load model if exist ================
+## == Load model if exist ==============
 if args.which_model == 'best':
   try: model.load(args.best_model_path)
   except FileNotFoundError: pass
@@ -158,6 +157,19 @@ elif args.which_model == 'last':
   else:
     print("Load model from {}".format(args.last_model_path))
 model.to(device)
+
+
+## == Loss & Learner Definition ========
+# criterion  = nn.CrossEntropyLoss()
+# criterion_mt = losses.NTXentLoss(temperature=0.07)
+# criterion = PrototypicalLoss(n_support=args.shot)
+criterion = TotalLoss(device, args)
+
+pt_learner = PtLearner(criterion, device, args)
+try: pt_learner.load(args.prototypes_path)
+except FileNotFoundError: pass
+else: print("Load Prototypes from {}".format(args.prototypes_path))
+
 
 if args.phase != 'incremental_learn':
 
@@ -180,21 +192,6 @@ if args.phase != 'incremental_learn':
   try: detector.load(args.detector_path)
   except FileNotFoundError: pass
   else: print("Load Detector from {}".format(args.detector_path))
-
-
-## == Learner Definition ================
-# criterion  = nn.CrossEntropyLoss()
-# criterion_mt = losses.NTXentLoss(temperature=0.07)
-# criterion = PrototypicalLoss(n_support=args.shot)
-criterion = TotalLoss(device, args)
-
-pt_learner = PtLearner(criterion, device, args)
-try: pt_learner.load(args.prototypes_path)
-except FileNotFoundError: pass
-else: print("Load Prototypes from {}".format(args.prototypes_path))
-
-
-## = Model Update config.
 
 
 if __name__ == '__main__':
