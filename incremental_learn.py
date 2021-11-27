@@ -68,8 +68,8 @@ def increm_learn(model,
     else:
       train(model, pt_learner, train_data, args, device)
     
-    
     # = Update memory =====
+    memory.update(pt_learner.prototypes)
     memory.update(train_data)
     
     # = evaluation ========
@@ -97,7 +97,6 @@ def increm_learn(model,
       acc, _ = evaluate(model, test_dataloader, device)
       prev_tasks_acc[prev_task] = acc
 
-    
     print("%7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(prev_tasks_acc))
     f.write("%7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(prev_tasks_acc))
     

@@ -1,6 +1,4 @@
 
-
-import numpy as np
 import random
 from typing import List, Tuple
 
@@ -18,7 +16,6 @@ class DataSampler(Sampler):
         self,
         dataset: Dataset,
         n_way: int,
-        # n_query_way: int,
         n_shot: int,
         n_query: int,
         n_tasks: int
@@ -34,7 +31,6 @@ class DataSampler(Sampler):
         """
         super().__init__(data_source=None)
         self.n_way = n_way
-        # self.n_query_way = n_query_way
         self.n_shot = n_shot
         self.n_query = n_query
         self.n_tasks = n_tasks

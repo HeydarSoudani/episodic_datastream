@@ -118,9 +118,6 @@ class OperationalMemory():
     torch.save(self.__dict__, pkl_path)
 
 
-
-
-
 class IncrementalMemory():
   def __init__(self,
               total_size,
