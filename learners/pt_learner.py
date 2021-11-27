@@ -164,9 +164,12 @@ class PtLearner_inc:
     print(outputs[support_len:])
     print(query_labels)
 
+    outputs = torch.randn(10, 10, requires_grad=True)
+
     loss = self.criterion(
       features[support_len:],
-      outputs[support_len:],
+      # outputs[support_len:],
+      outputs,
       query_labels,
       self.prototypes[:torch.max(unique_labels).item()],
       n_query=args.query_num,
