@@ -161,19 +161,17 @@ class PtLearner_inc:
     beta = args.beta * iteration / args.meta_iteration
     self.prototypes[unique_labels] = beta * self.prototypes[unique_labels] + (1 - beta) * episode_prototypes
 
-    print(outputs[support_len:])
-    print(query_labels)
-
-    outputs = torch.randn(10, 10, requires_grad=True, device=self.device)
+    # print(outputs[support_len:])
+    # print(query_labels)
+    # outputs = torch.randn(10, 10, requires_grad=True, device=self.device)
 
     loss = self.criterion(
       features[support_len:],
-      # outputs[support_len:],
-      outputs,
+      outputs[support_len:],
       query_labels,
       self.prototypes[:torch.max(unique_labels).item()],
       n_query=args.query_num,
-      n_classes=10,
+      n_classes=args.ways,
     )
     print('d')
     loss.backward()
