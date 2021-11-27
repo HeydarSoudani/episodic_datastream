@@ -182,26 +182,19 @@ if args.phase != 'incremental_learn':
   else: print("Load Detector from {}".format(args.detector_path))
 
 
-  ## == Learner Definition ================
-  criterion = TotalLoss(device, args)
-  pt_learner = PtLearner(criterion, device, args)
-  try: pt_learner.load(args.prototypes_path)
-  except FileNotFoundError: pass
-  else: print("Load Prototypes from {}".format(args.prototypes_path))
-## = Model Update config.
+## == Learner Definition ================
 # criterion  = nn.CrossEntropyLoss()
 # criterion_mt = losses.NTXentLoss(temperature=0.07)
 # criterion = PrototypicalLoss(n_support=args.shot)
+criterion = TotalLoss(device, args)
+
+pt_learner = PtLearner(criterion, device, args)
+try: pt_learner.load(args.prototypes_path)
+except FileNotFoundError: pass
+else: print("Load Prototypes from {}".format(args.prototypes_path))
 
 
-elif args.phase == 'incremental_learn':
-  criterion = TotalLoss_inc(device, args)
-  pt_learner = PtLearner_inc(criterion, device, args)
-  try: pt_learner.load(args.prototypes_path)
-  except FileNotFoundError: pass
-  else: print("Load Prototypes from {}".format(args.prototypes_path))
-  
-  memory = IncrementalMemory(2000, device)
+## = Model Update config.
 
 
 if __name__ == '__main__':
@@ -241,6 +234,7 @@ if __name__ == '__main__':
                   known_labels=base_labels)
   ## == incremental learning ============
   elif args.phase == 'incremental_learn':
+    memory = IncrementalMemory(2000, device)
     increm_learn(model,
                  pt_learner,
                  memory,
