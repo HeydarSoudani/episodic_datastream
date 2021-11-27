@@ -175,12 +175,15 @@ class PtLearner_inc:
       n_query=args.query_num,
       n_classes=torch.max(unique_labels).item()+1,
     )
-    loss.backward()
-    torch.nn.utils.clip_grad_norm_(model.parameters(), args.grad_clip)
-    optimizer.step()
-
-    self.prototypes = self.prototypes.detach()
     print('d')
+    loss.backward()
+    print('e')
+    torch.nn.utils.clip_grad_norm_(model.parameters(), args.grad_clip)
+    print('f')
+    optimizer.step()
+    print('g')
+    self.prototypes = self.prototypes.detach()
+    print('h')
     print(loss.detach().item())
 
     return loss.detach().item()
