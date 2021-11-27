@@ -180,6 +180,8 @@ class PtLearner_inc:
     optimizer.step()
 
     self.prototypes = self.prototypes.detach()
+    print('d')
+    print(loss.detach().item())
 
     return loss.detach().item()
 
