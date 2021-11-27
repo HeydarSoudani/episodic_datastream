@@ -138,6 +138,8 @@ class TotalLoss_inc(nn.Module):
     dce_loss = self.dce(features, labels, prototypes, n_query, n_classes)
     cls_loss = self.ce(outputs, labels.long())
 
+    print(cls_loss)
+
     return self.lambda_1 * dce_loss +\
            self.lambda_2 * cls_loss
 
