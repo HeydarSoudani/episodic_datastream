@@ -173,7 +173,7 @@ class PtLearner_inc:
       query_labels,
       self.prototypes[:torch.max(unique_labels).item()],
       n_query=args.query_num,
-      n_classes=torch.max(unique_labels).item()+1,
+      n_classes=10,
     )
     print('d')
     loss.backward()
