@@ -1,5 +1,6 @@
 import torch
 from torch.utils.data import DataLoader
+import os
 from pandas import read_csv
 
 from datasets.dataset import SimpleDataset
@@ -15,7 +16,10 @@ def zeroshot_test(model,
   print('================================ Zero-Shot Test ================================')
   
   # == Load stream data ==============================
-  stream_data = read_csv(args.test_path, sep=',', header=None).values
+  stream_data = read_csv(
+    os.path.join(args.data_path, args.test_file),
+    sep=',',
+    header=None).values
   if args.use_transform:
     _, test_transform = transforms_preparation()
     stream_dataset = SimpleDataset(stream_data, args, transforms=test_transform)

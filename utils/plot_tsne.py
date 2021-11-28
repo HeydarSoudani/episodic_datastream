@@ -1,5 +1,6 @@
 
 import torch
+import os
 import seaborn as sns
 from sklearn.manifold import TSNE
 from matplotlib import pyplot as plt
@@ -19,7 +20,10 @@ def plot_tsne(args, device):
     transforms.ToTensor(),
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
   ])
-  stream_data = read_csv(args.test_path, sep=',', header=None).values
+  stream_data = read_csv(
+    os.path.join(args.data_path, args.test_file),
+    sep=',',
+    header=None).values
   stream_dataset = SimpleDataset(stream_data, args)
   # stream_dataset = SimpleDataset(stream_data, transforms=transform)
  

@@ -1,5 +1,6 @@
 import torch
 import torchvision
+import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -67,7 +68,7 @@ def set_novel_label(args):
   stream_data = pd.read_csv(args.train_path, sep=',', header=None).values
   train_labels = stream_data[:, -1]
   seen_label = set(train_labels)
-  stream_data = pd.read_csv(args.test_path, sep=',', header=None).values
+  stream_data = pd.read_csv(os.path.join(args.data_path, args.test_file),, sep=',', header=None).values
 
   for idx, data in enumerate(stream_data):
     label = data[-1]

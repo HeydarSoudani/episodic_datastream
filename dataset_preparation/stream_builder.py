@@ -23,13 +23,16 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--class_num', type=int, default=10, help='')
 parser.add_argument('--seen_class_num', type=int, default=5, help='')
 parser.add_argument('--spc', type=int, default=1200, help='samples per class')
-parser.add_argument('--data_path', type=str, default='./data/', help='')
-parser.add_argument('--saved', type=str, default='./data/', help='')
 parser.add_argument('--dataset', type=str, default='mnist', help='') #[mnist, fmnist, cifar10]
-parser.add_argument('--train_file', type=str, default='m_train.csv', help='')
-parser.add_argument('--stream_file', type=str, default='m_stream.csv', help='')
+parser.add_argument('--saved', type=str, default='./data/', help='')
 parser.add_argument('--seed', type=int, default=2, help='')
 args = parser.parse_args()
+
+# = Add some variables to args ===
+args.data_path = 'data/{}'.format(args.dataset)
+args.train_file = '{}_train.csv'.format(args.dataset)
+args.stream_file = '{}_stream.csv'.format(args.dataset)
+
 
 ## == Apply seed =================
 np.random.seed(args.seed)

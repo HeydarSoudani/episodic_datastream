@@ -40,8 +40,11 @@ def batch_train(model, args, device):
   trainset = torchvision.datasets.SVHN(root='./data', train=True,
                                           download=True, transform=transform)
 
-
-  train_data = read_csv(args.train_path, sep=',', header=None).values
+  train_data = read_csv(
+    os.path.join(args.data_path, args.train_file),
+    sep=',',
+    header=None).values
+  
   trainset = SimpleDataset(train_data, args, transforms=transform)
   trainset_, valaset = torch.utils.data.random_split(trainset, dataset_split)
   train_dataloader = torch.utils.data.DataLoader(trainset_, batch_size=batch_size,
@@ -127,7 +130,7 @@ def batch_test(model, args, device):
   #                       (0.2675, 0.2565, 0.2761)),
   # ])
   
-  # test_data = read_csv(args.test_path, sep=',', header=None).values
+  # test_data = read_csv(os.path.join(args.data_path, args.test_file), sep=',', header=None).values
   # # test_dataset = SimpleDataset(test_data, transforms=transform_test)
   # test_dataset = SimpleDataset(test_data)
   # test_dataloader = DataLoader(dataset=test_dataset, batch_size=1, shuffle=False)
@@ -139,7 +142,7 @@ def batch_test(model, args, device):
   
   # testset = torchvision.datasets.CIFAR10(root='./data', train=False,
   #                                       download=True, transform=transform)
-  test_data = read_csv(args.test_path, sep=',', header=None).values
+  test_data = read_csv(os.path.join(args.data_path, args.test_file), sep=',', header=None).values
   testset = SimpleDataset(test_data, args, transforms=transform)
   test_dataloader = torch.utils.data.DataLoader(testset, batch_size=64,
                                           shuffle=False)

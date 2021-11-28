@@ -49,8 +49,6 @@ parser.add_argument('--known_per_class', type=int, default=100, help='')
 
 # incremental learning
 parser.add_argument('--n_tasks', type=int, default=5, help='')
-parser.add_argument('--split_train_path', type=str, default='data/split_mnist/train', help='')
-parser.add_argument('--split_test_path', type=str, default='data/split_mnist/test', help='')
 parser.add_argument('--batch_size', type=int, default=16, help='')
 
 # Network
@@ -92,13 +90,8 @@ parser.add_argument('--gamma', type=float, default=0.5, help='for lr step')
 parser.add_argument('--cuda', action='store_true',help='use CUDA')
 parser.add_argument('--seed', type=int, default=2, help='')
 
-
 # Save and load model
 parser.add_argument('--save', type=str, default='saved/', help='')
-parser.add_argument('--train_path', type=str, default='data/fm_train.csv', help='')
-parser.add_argument('--test_path', type=str, default='data/fm_stream.csv', help='')
-# parser.add_argument('--train_path', type=str, default='data/cifar10_train_batch.csv', help='')
-# parser.add_argument('--test_path', type=str, default='data/cifar10_test_batch.csv', help='')
 parser.add_argument('--best_model_path', type=str, default='saved/model_best.pt', help='')
 parser.add_argument('--last_model_path', type=str, default='saved/model_last.pt', help='')
 parser.add_argument('--best_mclassifier_path', type=str, default='saved/mclassifier_best.pt', help='for l2ac')
@@ -121,6 +114,13 @@ parser.add_argument('--sh', default=0.4, type=float, help='max erasing area')
 parser.add_argument('--r1', default=0.2, type=float, help='aspect of erasing area')
 
 args = parser.parse_args()
+
+## == Add some variables to args
+args.data_path = 'data/{}'.format(args.dataset)
+args.train_file = '{}_train.csv'.format(args.dataset)
+args.stream_file = '{}_stream.csv'.format(args.dataset)
+args.split_train_path = 'data/split_{}/train'.format(args.dataset)
+args.split_test_path = 'data/split_{}/test'.format(args.dataset)
 
 ## == Device ===========================
 if torch.cuda.is_available():
@@ -174,7 +174,10 @@ else: print("Load Prototypes from {}".format(args.prototypes_path))
 if args.phase != 'incremental_learn':
 
   ## == load train data from file ========
-  train_data = read_csv(args.train_path, sep=',', header=None).values
+  train_data = read_csv(
+    os.path.join(args.data_path, args.train_file),
+    sep=',',
+    header=None).values
   base_labels = SimpleDataset(train_data, args).label_set
 
 
