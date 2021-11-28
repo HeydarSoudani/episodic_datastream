@@ -12,8 +12,8 @@ args = parser.parse_args()
 
 # = Add some variables to args ===
 args.data_path = 'data/{}'.format(args.dataset)
-args.train_file = '{}_train.csv'.format(args.dataset)
-args.test_file = '{}_test.csv'.format(args.dataset)
+args.train_path = 'train'
+args.test_path = 'test'
 args.saved = './data/split_{}'.format(args.dataset)
 
 
