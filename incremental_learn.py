@@ -70,7 +70,6 @@ def increm_learn(model,
     
     # = Update memory =====
     memory.update(train_data)
-    memory.update_with_pt(pt_learner.prototypes)
     
     # = evaluation ========
     print('=== Testing ... ===')
