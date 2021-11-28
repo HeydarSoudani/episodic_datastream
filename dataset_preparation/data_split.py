@@ -22,10 +22,10 @@ np.random.seed(args.seed)
 
 
 ## == Save dir ========================
-if not os.path.exists(os.path.join(args.saved, args.train_file)):
-  os.makedirs(os.path.join(args.saved, args.train_file))
-if not os.path.exists(os.path.join(args.saved, args.test_file)):
-  os.makedirs(os.path.join(args.saved, args.test_file))
+if not os.path.exists(os.path.join(args.saved, args.train_path)):
+  os.makedirs(os.path.join(args.saved, args.train_path))
+if not os.path.exists(os.path.join(args.saved, args.test_path)):
+  os.makedirs(os.path.join(args.saved, args.test_path))
 
 if __name__ == '__main__':
   ## ========================================
@@ -72,11 +72,11 @@ if __name__ == '__main__':
     i_tr = np.where((y_train >= c1) & (y_train < c2))[0]
     i_te = np.where((y_test >= c1) & (y_test < c2))[0]
     
-    pd.DataFrame(train_data[i_tr]).to_csv(os.path.join(args.saved, args.train_file, 'task_{}.csv'.format(t)),
+    pd.DataFrame(train_data[i_tr]).to_csv(os.path.join(args.saved, args.train_path, 'task_{}.csv'.format(t)),
       header=None,
       index=None
     )
-    pd.DataFrame(test_data[i_te]).to_csv(os.path.join(args.saved, args.test_file, 'task_{}.csv'.format(t)),
+    pd.DataFrame(test_data[i_te]).to_csv(os.path.join(args.saved, args.test_path, 'task_{}.csv'.format(t)),
       header=None,
       index=None
     )
