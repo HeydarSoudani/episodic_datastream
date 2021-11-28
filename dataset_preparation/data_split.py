@@ -7,12 +7,15 @@ import os
 parser = argparse.ArgumentParser()
 parser.add_argument('--n_tasks', type=int, default=5, help='')
 parser.add_argument('--dataset', type=str, default='mnist', help='') #[mnist, fmnist, cifar10]
-parser.add_argument('--data_path', type=str, default='./data/mnist', help='')
-parser.add_argument('--saved', type=str, default='./data/split_mnist', help='')
-parser.add_argument('--train_file', type=str, default='train', help='')
-parser.add_argument('--test_file', type=str, default='test', help='')
 parser.add_argument('--seed', type=int, default=2, help='')
 args = parser.parse_args()
+
+# = Add some variables to args ===
+args.data_path = 'data/{}'.format(args.dataset)
+args.train_file = '{}_train.csv'.format(args.dataset)
+args.test_file = '{}_test.csv'.format(args.dataset)
+args.saved = './data/split_{}'.format(args.dataset)
+
 
 ## == Apply seed ======================
 np.random.seed(args.seed)
