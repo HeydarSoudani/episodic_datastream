@@ -49,6 +49,9 @@ class DataSampler(Sampler):
         return self.n_tasks
 
     def __iter__(self):
+        
+        for key, value in self.items_per_label.items():
+            print('{} -> {}'.format(key, len(value)))   
         print(self.items_per_label.keys())
         print(self.n_way)
         for _ in range(self.n_tasks):
