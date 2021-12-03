@@ -57,8 +57,8 @@ def increm_learn(model,
 
     if task != 0:
 
-      # if task == 2: 
-      args.ways += 1 
+      if task == 2: 
+        args.ways = 5 
       
 
       replay_mem = memory()
