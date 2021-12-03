@@ -64,7 +64,7 @@ def increm_learn(model,
       replay_mem = memory()
       new_train_data = np.concatenate((train_data, replay_mem))
       print('replay_mem: {}'.format(replay_mem.shape))
-      print('train_data (new): {}'.format(new_train_data.shape))
+      # print('train_data (new): {}'.format(new_train_data.shape))
 
       # = train ===========
       train(model, pt_learner, new_train_data, args, device)
@@ -99,8 +99,10 @@ def increm_learn(model,
 
       acc, _ = evaluate(model, test_dataloader, device)
       prev_tasks_acc[prev_task] = acc
-
+    
+    mean_acc = np.mean(prev_tasks_acc)
     print("%7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(prev_tasks_acc))
+    print('Acc. mean: {}'.format(round(mean_acc, 3)))
     f.write("%7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(prev_tasks_acc))
     
 
