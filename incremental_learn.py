@@ -57,9 +57,8 @@ def increm_learn(model,
 
     if task != 0:
 
-      # if task == 2: 
-      #   args.ways = 5 
-      
+      if task == 2: 
+        args.ways = 5
 
       replay_mem = memory()
       new_train_data = np.concatenate((train_data, replay_mem))
