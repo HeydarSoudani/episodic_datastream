@@ -100,7 +100,7 @@ def increm_learn(model,
       acc, _ = evaluate(model, test_dataloader, device)
       prev_tasks_acc[prev_task] = acc
     
-    mean_acc = np.mean(prev_tasks_acc)
+    mean_acc = np.mean(prev_tasks_acc[:task+1])
     print("%7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(prev_tasks_acc))
     print('Acc. mean: {}'.format(round(mean_acc, 3)))
     f.write("%7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(prev_tasks_acc))

@@ -12,7 +12,7 @@ from augmentation import transforms
 from datasets.dataset import SimpleDataset
 
 
-def plot_tsne(args, device):
+def tsne(args, device):
   
   ## == Load data ==============
   transform = transforms.Compose([

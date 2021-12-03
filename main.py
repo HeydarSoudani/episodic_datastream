@@ -20,7 +20,6 @@ from init_learn import init_learn
 from zeroshot_test import zeroshot_test
 from stream_learn import stream_learn
 from incremental_learn import increm_learn
-from utils.plot_tsne import plot_tsne
 
 
 
