@@ -120,11 +120,14 @@ class OperationalMemory():
 
 class IncrementalMemory():
   def __init__(self,
-              total_size,
-              device,
+              selection_type='fixed_mem',   # ['fixed_mem', 'pre_class']
+              total_size=1000,
+              per_class=100,
               selection_method='rand'):
+    
+    self.selection_type = selection_type
     self.total_size = total_size
-    self.device = device
+    self.per_class = per_class
     self.selection_method = selection_method
 
     self.class_data = {}
@@ -144,26 +147,30 @@ class IncrementalMemory():
       for l in unique_labels
     }
 
-    if not self.class_data:
-      class_size = int(self.total_size / len(unique_labels))
-    else:
-      known_labels = list(self.class_data.keys())
-      all_labels = unique_labels + known_labels
-      class_size = int(self.total_size / len(all_labels))
+    if self.selection_type == 'fixed_mem':
 
-      for label, samples in self.class_data.items():
-        n = samples.shape[0]
+      if not self.class_data:
+        class_size = int(self.total_size / len(unique_labels))
+      else:
+        known_labels = list(self.class_data.keys())
+        all_labels = unique_labels + known_labels
+        class_size = int(self.total_size / len(all_labels))
+
+        for label, samples in self.class_data.items():
+          n = samples.shape[0]
+          idxs = np.random.choice(range(n), size=class_size, replace=False)
+          self.class_data[label] = samples[idxs]
+        
+      for label in unique_labels:
+        n = new_class_data[label].shape[0]
         idxs = np.random.choice(range(n), size=class_size, replace=False)
-        self.class_data[label] = samples[idxs]
-      
-    for label in unique_labels:
-      n = new_class_data[label].shape[0]
-      idxs = np.random.choice(range(n), size=class_size, replace=False)
-      self.class_data[label] = new_samples[idxs]
-
-
-  def update_with_pt(self, pts):
-    self.class_data = pts    
+        self.class_data[label] = new_samples[idxs]
+    
+    elif self.selection_type == 'pre_class':
+      for label in unique_labels:
+        n = new_class_data[label].shape[0]
+        idxs = np.random.choice(range(n), size=self.per_class, replace=False)
+        self.class_data[label] = new_samples[idxs]
 
 
   

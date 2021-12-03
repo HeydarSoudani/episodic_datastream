@@ -49,7 +49,10 @@ parser.add_argument('--known_per_class', type=int, default=100, help='')
 # incremental learning
 parser.add_argument('--n_tasks', type=int, default=5, help='')
 parser.add_argument('--batch_size', type=int, default=16, help='')
-parser.add_argument('--inc_memory', type=int, default=2000, help='')
+parser.add_argument('--mem_sel_type', type=str, default='fixed_mem', choices=['fixed_mem', 'pre_class'], help='')
+parser.add_argument('--mem_total_size', type=int, default=1000, help='')
+parser.add_argument('--mem_per_class', type=int, default=100, help='')
+parser.add_argument('--mem_sel_method', type=str, default='rand', choices=['rand'], help='')
 
 # Network
 parser.add_argument('--dropout', type=float, default=0.2, help='')
@@ -234,7 +237,11 @@ if __name__ == '__main__':
                   known_labels=base_labels)
   ## == incremental learning ============
   elif args.phase == 'incremental_learn':
-    memory = IncrementalMemory(args.inc_memory, device)
+    memory = IncrementalMemory(
+              selection_type=args.mem_sel_type, 
+              total_size=args.mem_total_size,
+              per_class=args.mem_per_class,
+              selection_method=args.mem_sel_method)
     increm_learn(model,
                  pt_learner,
                  memory,
@@ -246,6 +253,9 @@ if __name__ == '__main__':
   ## == Data Visualization ==============
   # set_novel_label(args)
   # plot_tsne(args, device)
+
+
+
 
 
 
