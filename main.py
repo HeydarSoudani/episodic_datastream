@@ -50,6 +50,7 @@ parser.add_argument('--known_per_class', type=int, default=100, help='')
 # incremental learning
 parser.add_argument('--n_tasks', type=int, default=5, help='')
 parser.add_argument('--batch_size', type=int, default=16, help='')
+parser.add_argument('--inc_memory', type=int, default=2000, help='')
 
 # Network
 parser.add_argument('--dropout', type=float, default=0.2, help='')
@@ -234,7 +235,7 @@ if __name__ == '__main__':
                   known_labels=base_labels)
   ## == incremental learning ============
   elif args.phase == 'incremental_learn':
-    memory = IncrementalMemory(2000, device)
+    memory = IncrementalMemory(args.inc_memory, device)
     increm_learn(model,
                  pt_learner,
                  memory,
