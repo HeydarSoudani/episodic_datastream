@@ -56,7 +56,10 @@ def increm_learn(model,
     print('train data: {}'.format(train_data.shape))
 
     if task != 0:
-      args.ways += 1 
+
+      if args.ways < 5: 
+        args.ways += 1 
+      
       replay_mem = memory()
       new_train_data = np.concatenate((train_data, replay_mem))
       print('replay_mem: {}'.format(replay_mem.shape))
