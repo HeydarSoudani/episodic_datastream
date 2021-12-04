@@ -137,6 +137,7 @@ if __name__ == '__main__':
     header=None,
     index=None
   )
+  print('train data saved in {}'.format(os.path.join(args.saved, args.train_file)))
 
   # == Preparing test(stream) dataset ================
   test_data_seen = np.array(test_data_seen) #(30000, 785)
@@ -173,7 +174,7 @@ if __name__ == '__main__':
     header=None,
     index=None
   )
-
+  print('stream data saved in {}'.format(os.path.join(args.saved, args.stream_file)))
   # dataset = np.concatenate((train_data, test_data), axis=0)
   # file_path = './dataset/fashion-mnist_stream.csv'
   # pd.DataFrame(dataset).to_csv(file_path, header=None, index=None)
