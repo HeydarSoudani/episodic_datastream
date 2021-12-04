@@ -18,11 +18,11 @@ def main():
   icarl_data = [49.21, 51.61, 50.38, 50.93] #[49.213±1.739, 51.613±2.696, 50.380±2.098, 50.933±1.401]
   icarl_err  = [1.73, 2.69, 2.09, 1.40]
   
-  rvr_data   = [10.00, 10.00, 10.00, 10.00] #[00.000±0.000, 79.723±3.010, 83.627±1.220, 83.247±0.540]
-  rvr_err    = [0.10, 3.01, 1.22, 0.54]
+  rvr_data   = [72.61, 79.72, 83.62, 83.24] #[72.613±1.161, 79.723±3.010, 83.627±1.220, 83.247±0.540]
+  rvr_err    = [1.16, 3.01, 1.22, 0.54]
   
-  gem_data   = [10.00, 10.00, 10.00, 10.00] #[00.000±0.000, 00.000±0.000, 00.000±0.000, 00.000±0.000] blueviolet
-  gem_err    = [0.10, 0.10, 0.10, 0.10]
+  gem_data   = [39.69, 35.46, 30.00, 30.00] #[39.693±14.881, 35.463±0.638, 00.000±0.000, 00.000±0.000] blueviolet
+  gem_err    = [14.88, 0.63, 0.10, 0.10]
   
   gss_data   = [10.00, 10.00, 10.00, 10.00] #[00.000±0.000, 00.000±0.000, 00.000±0.000, 00.000±0.000]
   gss_err    = [0.10, 0.10, 0.10, 0.10]
@@ -36,56 +36,67 @@ def main():
   ax = fig.add_subplot(111)
   
   ax.bar(
-    ind - 2.0*width,
+    ind - 2.5*width,
     our_data,
     yerr=our_err,
-    color='forestgreen',
+    color='royalblue', #cornflowerblue
     width=width,
     align='center',
     label='OUR: 84.19±2.09'
   )
   ax.bar(
-    ind - 1.0*width,
+    ind - 1.5*width,
     our_ce_data,
     yerr=our_ce_err,
-    color='gold',
+    color='hotpink',
     width=width,
     align='center',
     label='OUR-CE: 84.73±2.30'
   )
   ax.bar(
-    ind - 0.0*width,
+    ind - 0.5*width,
     cope_data,
     yerr=cope_err,
-    color='orchid',
+    color='blueviolet',
     width=width,
     align='center',
     label='CoPE: 80.16±2.95'
   )
   ax.bar(
-    ind + 1.0*width,
+    ind + 0.5*width,
     icarl_data,
     yerr=icarl_err,
-    color='dodgerblue',
+    color='gold',
     width=width,
     align='center',
     label='iCaRL: 50.53±0.87'
   )
   ax.bar(
-    ind + 2.0*width,
+    ind + 1.5*width,
     rvr_data,
     yerr=rvr_err,
-    color='salmon',
+    color='darkorange',
     width=width,
     align='center',
-    label='reservoir: 00.00±0.00'
+    label='reservoir: 79.79±4.41'
   )
+  ax.bar(
+    ind + 2.5*width,
+    gem_data,
+    yerr=gem_err,
+    color='limegreen',
+    width=width,
+    align='center',
+    label='GEM: 00.00±0.00'
+  )
+
 
   ax.set_xticks(ind)
   # ax.set_xticks(ind+width)
   ax.set_xticklabels(['0.2k', '0.5k', '1k', '2k'])
   ax.set_xlabel('Memory size')
   ax.set_ylabel('Accuracy (%)')
+  ax.set_ylim([20, 100])
 
   ax.legend()
   ax.legend(loc='lower left', bbox_to_anchor=(0, 1.0, 1.2, 0.2),

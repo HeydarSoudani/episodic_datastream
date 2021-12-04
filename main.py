@@ -119,7 +119,7 @@ parser.add_argument('--r1', default=0.2, type=float, help='aspect of erasing are
 args = parser.parse_args()
 
 ## == Add some variables to args
-args.data_path = 'data/{}'.format(args.dataset)
+args.data_path = 'saved/'
 args.train_file = '{}_train.csv'.format(args.dataset)
 args.stream_file = '{}_stream.csv'.format(args.dataset)
 args.split_train_path = 'data/split_{}/train'.format(args.dataset)
