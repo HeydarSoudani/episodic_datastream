@@ -17,7 +17,7 @@ def zeroshot_test(model,
   
   # == Load stream data ==============================
   stream_data = read_csv(
-    os.path.join(args.data_path, args.test_file),
+    os.path.join(args.data_path, args.stream_file),
     sep=',',
     header=None).values
   if args.use_transform:
