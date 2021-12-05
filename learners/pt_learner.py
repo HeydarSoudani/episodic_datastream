@@ -76,8 +76,8 @@ class PtLearner:
       features[support_len:],
       outputs[support_len:],
       query_labels,
-      new_prototypes,
-      # episode_prototypes,
+      # new_prototypes,
+      episode_prototypes,
       n_query=args.query_num,
       n_classes=args.ways,
     )
