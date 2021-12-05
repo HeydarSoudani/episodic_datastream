@@ -66,6 +66,7 @@ parser.add_argument('--memory_novel_acceptance', type=int, default=150, help='')
 parser.add_argument('--use_transform', action='store_true')
 
 # Prototypical algorithm
+parser.add_argument('--beta_type', type=str, choices=['fixed', 'evolving'], default='evolving', help='Update Prototype in Prototypical algorithm')
 parser.add_argument('--beta', type=float, default=1.0, help='Update Prototype in Prototypical algorithm')
 parser.add_argument('--std_coefficient', type=float, default=1.0, help='for Pt detector')
 

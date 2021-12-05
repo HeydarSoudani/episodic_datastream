@@ -69,15 +69,19 @@ class PtLearner:
       [self.prototypes[l.item()] for l in unique_label]
     )
 
-    beta = args.beta * iteration / args.meta_iteration
+    if args.beta_type == 'evolving':
+      beta = args.beta * iteration / args.meta_iteration
+    elif args.beta_type == 'fixed':
+      beta = args.beta
+
     new_prototypes = beta * old_prototypes + (1 - beta) * episode_prototypes
 
     loss = self.criterion(
       features[support_len:],
       outputs[support_len:],
       query_labels,
-      # new_prototypes,
-      episode_prototypes,
+      new_prototypes,
+      # episode_prototypes,
       n_query=args.query_num,
       n_classes=args.ways,
     )
