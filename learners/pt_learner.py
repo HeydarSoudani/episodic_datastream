@@ -125,9 +125,9 @@ class PtLearner:
         loss = loss.mean()
         total_loss += loss.item()
       
-      print('pred: {}'.format(pred_labels))
-      print('true: {}'.format(labels))
-      print('len: {}'.format(len(dataloader)))
+      # print('pred: {}'.format(pred_labels))
+      # print('true: {}'.format(labels))
+      # print('len: {}'.format(len(dataloader)))
       total_loss /= len(dataloader)
       total_acc /= len(dataloader)
       return total_loss, total_acc
