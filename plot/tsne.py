@@ -20,7 +20,7 @@ def tsne(model, args, device):
   test_data = read_csv(
     os.path.join(args.data_path, args.dataset, '{}_test.csv'.format(args.dataset)),
     sep=',').values
-  X_test, y_test = test_data[:, :-1], test_data[:, -1]
+  X_test, y_test = test_data[:, 1:], test_data[:, 0]
   test_data = np.concatenate((X_test, y_test.reshape(-1, 1)), axis=1)
 
 
