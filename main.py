@@ -22,6 +22,7 @@ from zeroshot_test import zeroshot_test
 from stream_learn import stream_learn
 from incremental_learn import increm_learn
 
+from plot.tsne import tsne
 
 
 ## == Params ===========
@@ -257,7 +258,7 @@ if __name__ == '__main__':
 
   ## == Data Visualization ==============
   # set_novel_label(args)
-  # plot_tsne(args, device)
+  tsne(model, args, device)
 
 
 

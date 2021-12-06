@@ -1,52 +1,46 @@
 
 import torch
+from torch.utils.data import DataLoader
 import os
 import seaborn as sns
 from sklearn.manifold import TSNE
 from matplotlib import pyplot as plt
 from pandas import read_csv
 
-from models.cnn import Conv_4
-from models.densenet import DenseNet
-from augmentation import transforms
 from datasets.dataset import SimpleDataset
+from utils.preparation import transforms_preparation
+from samplers.pt_sampler import PtSampler
+from samplers.reptile_sampler import ReptileSampler
 
 
-def tsne(args, device):
+def tsne(model, args, device):
   
-  ## == Load data ==============
-  transform = transforms.Compose([
-    transforms.ToPILImage(),
-    transforms.ToTensor(),
-    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-  ])
-  stream_data = read_csv(
-    os.path.join(args.data_path, args.test_file),
+  # == Load stream data ==============================
+  test_data = read_csv(
+    os.path.join(args.data_path, args.stream_file),
     sep=',',
     header=None).values
-  stream_dataset = SimpleDataset(stream_data, args)
-  # stream_dataset = SimpleDataset(stream_data, transforms=transform)
- 
-  ## == Load model ==============
-  # model = CNNEncoder(args)
-  model = Conv_4(args)
-  # model = DenseNet(args, tensor_view=(3, 32, 32))
-  if args.which_model == 'best':
-    try:
-      model.load(args.best_model_path)
-    except FileNotFoundError:
-      pass
-    else:
-      print("Load model from file {}".format(args.best_model_path))
-  elif args.which_model == 'last':
-    try:
-      model.load(args.last_model_path)
-    except FileNotFoundError:
-      pass
-    else:
-      print("Load model from file {}".format(args.last_model_path))
-  # model.to(device)
+  if args.use_transform:
+    _, test_transform = transforms_preparation()
+    test_dataset = SimpleDataset(test_data, args, transforms=test_transform)
+  else:
+    test_dataset = SimpleDataset(test_data, args)
   
+  sampler = PtSampler(
+    test_dataset,
+    n_way=10,
+    n_shot=100,
+    n_query=0,
+    n_tasks=1
+  )
+  test_dataloader = DataLoader(
+    test_dataset,
+    batch_sampler=sampler,
+    num_workers=1,
+    pin_memory=True,
+    collate_fn=sampler.episodic_collate_fn,
+  )
+
   ### ======================================
   ### == Feature space visualization =======
   ### ======================================
@@ -55,16 +49,25 @@ def tsne(args, device):
   palette = sns.color_palette("bright", 10)
 
   with torch.no_grad():
-    batches, batch_labels = stream_dataset.get_sample_per_class(n_samples=600)
-    # batches, batch_labels = batches.to(device), batch_labels.to(device)
-    out, feature = model.forward(batches)
-    feature = feature.cpu().detach().numpy()
-    # batches = batches.view(batches.size(0), -1)
-    # batches = batches.cpu().detach().numpy()
-    batch_labels = batch_labels.cpu().detach().numpy()
+    batch = next(iter(test_dataloader))
+    support_images, support_labels, _, _ = batch
+    support_images = support_images.reshape(-1, *support_images.shape[2:])
+    support_labels = support_labels.flatten()
+    support_images = support_images.to(device)
+    support_labels = support_labels.to(device)
+
+    outputs, features = model.forward(support_images)
+    features = features.cpu().detach().numpy()
+    support_labels = support_labels.cpu().detach().numpy()
 
   tsne = TSNE()
-  X_embedded = tsne.fit_transform(feature)
-  sns.scatterplot(x=X_embedded[:,0], y=X_embedded[:,1], hue=batch_labels, legend='full', palette=palette)
+  X_embedded = tsne.fit_transform(features)
+  sns.scatterplot(
+    x=X_embedded[:,0],
+    y=X_embedded[:,1],
+    hue=support_labels,
+    legend='full',
+    palette=palette
+  )
   plt.show()
   ### ======================================
