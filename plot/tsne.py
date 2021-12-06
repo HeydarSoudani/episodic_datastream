@@ -69,5 +69,7 @@ def tsne(model, args, device):
     legend='full',
     palette=palette
   )
+
+  plt.savefig('tsne.png')
   plt.show()
   ### ======================================
