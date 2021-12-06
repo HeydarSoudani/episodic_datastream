@@ -6,7 +6,7 @@ import torch
 from torch.utils.data import Sampler, Dataset
 
 
-class DataSampler(Sampler):
+class PtSampler(Sampler):
     """
     Samples batches in the shape of few-shot classification tasks. At each iteration, it will sample
     n_way classes, and then sample support and query images from these classes.
@@ -65,24 +65,6 @@ class DataSampler(Sampler):
                     for label in random.sample(self.items_per_label.keys(), self.n_way)
                 ]
             )
-    # def __iter__(self):
-    #     for _ in range(self.n_tasks):
-    #         yield torch.cat(
-    #             [
-    #                 torch.tensor(
-    #                     random.sample(
-    #                         self.items_per_label[label], (self.n_shot + self.n_query)
-    #                     )
-    #                 )
-    #                 for label in (
-    #                     random.choices(
-    #                         list(self.items_per_label.keys()), k=self.n_way
-    #                     )
-    #                     if self.replacement
-    #                     else random.sample(self.items_per_label.keys(), self.n_way)
-    #                 )
-    #             ]
-    #         )
 
     def episodic_collate_fn(
         self, input_data: List[Tuple[torch.Tensor, int]]

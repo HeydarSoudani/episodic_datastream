@@ -3,7 +3,8 @@ import numpy as np
 
 from augmentation import transforms
 from datasets.dataset import SimpleDataset
-from sampler import DataSampler
+from samplers.pt_sampler import PtSampler
+from samplers.reptile_sampler import ReptileSampler
 
 # from torchvision.transforms.transforms import RandomRotation
 # from augmentation.autoaugment.autoaugment import CIFAR10Policy
@@ -26,20 +27,30 @@ def dataloader_preparation(train_data, args):
   else:
     train_dataset = SimpleDataset(train_data, args)
     val_dataset = SimpleDataset(val_data, args)
-    
-  train_sampler = DataSampler(
-    train_dataset,
-    n_way=args.ways,
-    n_shot=args.shot,
-    n_query=args.query_num,
-    n_tasks=args.meta_iteration
-  )
+  
+  if args.meta_algorithm == 'prototype':
+    sampler = PtSampler(
+      train_dataset,
+      n_way=args.ways,
+      n_shot=args.shot,
+      n_query=args.query_num,
+      n_tasks=args.meta_iteration
+    )
+  elif args.meta_algorithm == 'reptile':
+    sampler = ReptileSampler(
+      train_dataset,
+      n_way=args.ways,
+      n_shot=args.shot,
+      n_tasks=args.meta_iteration,
+      reptile_step=args.update_step
+    )
+
   train_dataloader = DataLoader(
     train_dataset,
-    batch_sampler=train_sampler,
+    batch_sampler=sampler,
     num_workers=1,
     pin_memory=True,
-    collate_fn=train_sampler.episodic_collate_fn,
+    collate_fn=sampler.episodic_collate_fn,
   )
 
   val_dataloader = DataLoader(dataset=val_dataset, batch_size=8, shuffle=False)

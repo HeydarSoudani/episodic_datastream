@@ -14,6 +14,7 @@ from trainers.train_batch import batch_train, batch_test
 from utils.memory_selector import OperationalMemory, IncrementalMemory
 from detectors.pt_detector import PtDetector
 from learners.pt_learner import PtLearner
+from learners.reptile_learner import ReptileLearner
 from losses import TotalLoss
 # from pytorch_metric_learning import distances, losses, miners
 from init_learn import init_learn
@@ -28,7 +29,8 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument('--phase', type=str, default='init_learn', help='')
 parser.add_argument('--which_model', type=str, default='best', help='')
-parser.add_argument('--dataset', type=str, default='mnist', help='') #[mnist, fmnist, cifar10]
+parser.add_argument('--dataset', type=str, choices=['mnist', 'fmnist', 'cifar10'], default='mnist', help='') 
+parser.add_argument('--meta_algorithm', type=str, choices=['prototype', 'reptile'], default='prototype', help='')
 
 # init train
 parser.add_argument('--start_epoch', type=int, default=0, help='')
@@ -164,13 +166,15 @@ model.to(device)
 
 
 ## == Loss & Learner Definition ========
-# criterion  = nn.CrossEntropyLoss()
 # criterion_mt = losses.NTXentLoss(temperature=0.07)
-# criterion = PrototypicalLoss(n_support=args.shot)
-criterion = TotalLoss(device, args)
+if args.meta_algorithm == 'prototype':
+  criterion = TotalLoss(device, args)
+  learner = PtLearner(criterion, device, args)
+elif args.meta_algorithm == 'reptile':
+  criterion = torch.nn.CrossEntropyLoss()
+  learner = ReptileLearner(criterion, device, args)
 
-pt_learner = PtLearner(criterion, device, args)
-try: pt_learner.load(args.prototypes_path)
+try: learner.load(args.prototypes_path)
 except FileNotFoundError: pass
 else: print("Load Prototypes from {}".format(args.prototypes_path))
 
@@ -210,7 +214,7 @@ if __name__ == '__main__':
   ## == Data Stream =======================
   if args.phase == 'init_learn':
     init_learn(model,
-               pt_learner,
+               learner,
                memory,
                detector,
                train_data,
@@ -218,20 +222,20 @@ if __name__ == '__main__':
                device)
   elif args.phase == 'zeroshot_test':
     zeroshot_test(model,
-                  pt_learner.prototypes,
+                  learner.prototypes,
                   detector,
                   args,
                   device)
   elif args.phase == 'stream_learn':
     stream_learn(model,
-                 pt_learner,
+                 learner,
                  memory,
                  detector,
                  args,
                  device)
   elif args.phase == 'zeroshot_test_base':
     zeroshot_test(model,
-                  pt_learner.prototypes,
+                  learner.prototypes,
                   detector,
                   args,
                   device,
@@ -244,7 +248,7 @@ if __name__ == '__main__':
               per_class=args.mem_per_class,
               selection_method=args.mem_sel_method)
     increm_learn(model,
-                 pt_learner,
+                 learner,
                  memory,
                  args,
                  device)
