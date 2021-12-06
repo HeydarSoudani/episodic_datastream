@@ -117,9 +117,6 @@ class PtLearner:
         argmin_dists = torch.min(dists, dim=1).indices
         pred_labels = known_labels[argmin_dists]
         
-        print(pred_labels)
-        print(labels)
-        
         acc = (labels==pred_labels).sum().item() / labels.size(0)
         total_acc += acc
 
@@ -128,6 +125,8 @@ class PtLearner:
         loss = loss.mean()
         total_loss += loss.item()
       
+      print('pred: {}'.format(pred_labels))
+      print('true: {}'.format(labels))
       print('len: {}'.format(len(dataloader)))
       total_loss /= len(dataloader)
       total_acc /= len(dataloader)
