@@ -10,7 +10,6 @@ from samplers.reptile_sampler import ReptileSampler
 # from augmentation.autoaugment.autoaugment import CIFAR10Policy
 
 def dataloader_preparation(train_data, val_data, args):
-  print(train_data.shape)
 
   if val_data == []: 
     n, _ = train_data.shape
