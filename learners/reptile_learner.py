@@ -100,3 +100,9 @@ class ReptileLearner:
 
     total_loss /= len(dataloader)
     return total_loss
+
+  def load(self, pkl_path):
+    self.__dict__.update(torch.load(pkl_path))
+
+  def save(self, pkl_path):
+    torch.save(self.__dict__, pkl_path)
