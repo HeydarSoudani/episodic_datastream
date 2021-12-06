@@ -28,7 +28,12 @@ from plot.tsne import tsne
 ## == Params ===========
 parser = argparse.ArgumentParser()
 
-parser.add_argument('--phase', type=str, default='init_learn', help='')
+parser.add_argument(
+  '--phase',
+  type=str,
+  default='init_learn',
+  choices=['init_learn', 'zeroshot_test', 'stream_learn', 'zeroshot_test_base', 'plot'],
+  help='')
 parser.add_argument('--which_model', type=str, default='best', help='')
 parser.add_argument('--dataset', type=str, choices=['mnist', 'fmnist', 'cifar10'], default='mnist', help='') 
 parser.add_argument('--meta_algorithm', type=str, choices=['prototype', 'reptile'], default='prototype', help='')
@@ -253,12 +258,14 @@ if __name__ == '__main__':
                  memory,
                  args,
                  device)
+  elif args.phase == 'plot':
+    tsne(model, args, device)
   else: 
     raise NotImplementedError()
 
   ## == Data Visualization ==============
   # set_novel_label(args)
-  # tsne(model, args, device)
+
 
 
 
