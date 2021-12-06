@@ -2,6 +2,7 @@
 import torch
 from torch.utils.data import DataLoader
 import os
+import numpy as np
 import seaborn as sns
 from sklearn.manifold import TSNE
 from matplotlib import pyplot as plt
@@ -19,6 +20,10 @@ def tsne(model, args, device):
   test_data = read_csv(
     os.path.join(args.data_path, args.dataset, '{}_test.csv'.format(args.dataset)),
     sep=',').values
+  X_test, y_test = test_data[:, :-1], test_data[:, -1]
+  test_data = np.concatenate((X_test, y_test.reshape(-1, 1)), axis=1)
+
+
   if args.use_transform:
     _, test_transform = transforms_preparation()
     test_dataset = SimpleDataset(test_data, args, transforms=test_transform)

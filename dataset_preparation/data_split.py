@@ -64,7 +64,7 @@ if __name__ == '__main__':
 
   train_data = np.concatenate((X_train, y_train.reshape(-1, 1)), axis=1)
   test_data = np.concatenate((X_test, y_test.reshape(-1, 1)), axis=1)
-
+  
   cpt = int(10 / args.n_tasks)
   for t in range(args.n_tasks):
     c1 = t * cpt
