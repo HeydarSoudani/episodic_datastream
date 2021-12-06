@@ -98,8 +98,8 @@ class PtLearner:
   def evaluate(self, model, dataloader, known_labels):
     model.eval()
     ce = torch.nn.CrossEntropyLoss()
-    
-    known_labels = torch.tensor(list(known_labels))
+
+    known_labels = torch.tensor(list(known_labels), device=self.device)
     pts = torch.cat(
       [self.prototypes[l.item()] for l in known_labels]
     )

@@ -102,7 +102,7 @@ class ReptileLearner:
     model.eval()
     ce = torch.nn.CrossEntropyLoss()
     
-    known_labels = torch.tensor(list(known_labels))
+    known_labels = torch.tensor(list(known_labels), device=self.device)
     pts = torch.cat(
       [self.prototypes[l.item()] for l in known_labels]
     )
