@@ -185,7 +185,7 @@ except FileNotFoundError: pass
 else: print("Load Prototypes from {}".format(args.prototypes_path))
 
 
-if args.phase != 'incremental_learn' or args.phase != 'plot':
+if args.phase not in ['incremental_learn', 'plot']:
 
   ## == load train data from file ========
   train_data = read_csv(
