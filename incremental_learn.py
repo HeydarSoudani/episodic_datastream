@@ -39,7 +39,7 @@ def evaluate(model, dataloader, device):
 
 
 def increm_learn(model,
-                 pt_learner,
+                 learner,
                  memory,
                  args,
                  device):
@@ -51,25 +51,25 @@ def increm_learn(model,
     ## = Data ===========
     train_data = pd.read_csv(
                   os.path.join(args.split_train_path, "task_{}.csv".format(task)),
+                  sep=',', header=None).values 
+    test_data = pd.read_csv(
+                  os.path.join(args.split_test_path, "task_{}.csv".format(task)),
                   sep=',', header=None).values
-    
     print('train data: {}'.format(train_data.shape))
 
     if task != 0:
-
-      if task == 2: 
-        args.ways = 5
+      if task == 2: args.ways = 5
 
       replay_mem = memory()
-      new_train_data = np.concatenate((train_data, replay_mem))
+      train_data = np.concatenate((train_data, replay_mem))
       print('replay_mem: {}'.format(replay_mem.shape))
-      # print('train_data (new): {}'.format(new_train_data.shape))
-
-      # = train ===========
-      train(model, pt_learner, new_train_data, args, device)
-    
-    else:
-      train(model, pt_learner, train_data, args, device)
+      
+    # = train ==============
+    train(model,
+          learner,
+          train_data,
+          args, device,
+          val_data=test_data)
     
     # = Update memory =====
     memory.update(train_data)

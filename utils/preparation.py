@@ -9,14 +9,15 @@ from samplers.reptile_sampler import ReptileSampler
 # from torchvision.transforms.transforms import RandomRotation
 # from augmentation.autoaugment.autoaugment import CIFAR10Policy
 
-def dataloader_preparation(train_data, args):
+def dataloader_preparation(train_data, val_data, args):
   print(train_data.shape)
 
-  n, _ = train_data.shape
-  np.random.shuffle(train_data)
-  train_val_data = np.split(train_data, [int(n*0.9), n])
-  train_data = train_val_data[0]
-  val_data = train_val_data[1]
+  if val_data == None: 
+    n, _ = train_data.shape
+    np.random.shuffle(train_data)
+    train_val_data = np.split(train_data, [int(n*0.9), n])
+    train_data = train_val_data[0]
+    val_data = train_val_data[1]
 
   ## ==========================
   train_transform, test_transform = transforms_preparation()

@@ -9,13 +9,13 @@ from utils.preparation import dataloader_preparation
 def train(model,
           learner,
           train_data,
-          args,
-          device):
+          args, device,
+          val_data=None):
   model.to(device)
 
   train_dataloader,\
   val_dataloader, \
-  known_labels =  dataloader_preparation(train_data, args)
+  known_labels =  dataloader_preparation(train_data, val_data, args)
   
   optim = SGD(model.parameters(),
               lr=args.lr,
