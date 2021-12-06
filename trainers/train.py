@@ -7,7 +7,7 @@ from utils.preparation import dataloader_preparation
 
 
 def train(model,
-          pt_learner,
+          learner,
           train_data,
           args,
           device):
@@ -40,8 +40,7 @@ def train(model,
 
       for miteration_item in range(args.meta_iteration):
         batch = next(trainloader)
-        loss = pt_learner.train(model,batch,optim,miteration_item,args)
-        loss = reptile_learner.train(model,batch,optim,miteration_item,args)
+        loss = learner.train(model,batch,optim,miteration_item,args)
         train_loss += loss
 
         ## == validation ==============
@@ -52,7 +51,7 @@ def train(model,
 
           # evalute on val_dataset
           # val_loss_total = reptile_evaluate(model, val_dataloader) # For Reptile
-          val_loss_total = pt_learner.evaluate(model, val_dataloader)  # For Pt.
+          val_loss_total = learner.evaluate(model, val_dataloader)  # For Pt.
           
           # print losses
           print('=== Time: %.2f, Step: %d, Train Loss: %f, Val Loss: %f' % (
@@ -76,8 +75,8 @@ def train(model,
   model.save(os.path.join(args.save, "model_last.pt"))
   print("= ...New last model saved")
 
-  # save pt_learner
-  pt_learner.save(os.path.join(args.save, "prototypes.pt"))
+  # save learner
+  learner.save(os.path.join(args.save, "prototypes.pt"))
   print("= ..Pts saved")
 
 
