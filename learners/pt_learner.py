@@ -116,6 +116,10 @@ class PtLearner:
         dists = torch.cdist(features, pts)  #[]
         argmin_dists = torch.min(dists, dim=1).indices
         pred_labels = known_labels[argmin_dists]
+        
+        print(pred_labels)
+        print(labels)
+        
         acc = (labels==pred_labels).sum().item() / labels.size(0)
         total_acc += acc
 
