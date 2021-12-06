@@ -258,7 +258,7 @@ if __name__ == '__main__':
 
   ## == Data Visualization ==============
   # set_novel_label(args)
-  tsne(model, args, device)
+  # tsne(model, args, device)
 
 
 

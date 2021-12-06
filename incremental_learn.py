@@ -96,7 +96,8 @@ def increm_learn(model,
         test_dataset = SimpleDataset(test_data, args)
       test_dataloader = DataLoader(dataset=test_dataset, batch_size=args.batch_size, shuffle=False)
 
-      known_labels = test_dataset.label_set
+      # known_labels = test_dataset.label_set
+      known_labels = set(range((task+1)*2))
       _, acc = learner.evaluate(model, test_dataloader, known_labels)
       # acc, _ = evaluate(model, test_dataloader, device)
 
