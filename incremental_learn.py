@@ -52,10 +52,6 @@ def increm_learn(model,
     train_data = pd.read_csv(
                   os.path.join(args.split_train_path, "task_{}.csv".format(task)),
                   sep=',', header=None).values 
-    test_data = pd.read_csv(
-                  os.path.join(args.split_test_path, "task_{}.csv".format(task)),
-                  sep=',', header=None).values
-    print('train data: {}'.format(train_data.shape))
 
     if task != 0:
       if task == 2: args.ways = 5
@@ -68,8 +64,7 @@ def increm_learn(model,
     train(model,
           learner,
           train_data,
-          args, device,
-          val_data=test_data)
+          args, device)
     
     # = Update memory =====
     memory.update(train_data)
@@ -96,7 +91,10 @@ def increm_learn(model,
         test_dataset = SimpleDataset(test_data, args)
       test_dataloader = DataLoader(dataset=test_dataset, batch_size=args.batch_size, shuffle=False)
 
-      acc, _ = evaluate(model, test_dataloader, device)
+      known_labels = test_dataset.label_set
+      _, acc = learner.evaluate(model, test_dataloader, known_labels)
+
+      # acc, _ = evaluate(model, test_dataloader, device)
       prev_tasks_acc[prev_task] = acc
     
     mean_acc = np.mean(prev_tasks_acc[:task+1])
