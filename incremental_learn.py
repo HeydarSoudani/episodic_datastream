@@ -52,14 +52,16 @@ def increm_learn(model,
     train_data = pd.read_csv(
                   os.path.join(args.split_train_path, "task_{}.csv".format(task)),
                   sep=',', header=None).values 
-
+    print('train_data: {}'.format(train_data.shape))
     if task != 0:
       if task == 2: args.ways = 5
 
       replay_mem = memory()
       train_data = np.concatenate((train_data, replay_mem))
-      print('replay_mem: {}'.format(replay_mem.shape))
       
+      print('replay_mem: {}'.format(replay_mem.shape))
+      print('train_data(new): {}'.format(train_data.shape))
+
     # = train ==============
     train(model,
           learner,
