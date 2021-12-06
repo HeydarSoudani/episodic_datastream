@@ -17,7 +17,7 @@ def tsne(model, args, device):
   
   # == Load stream data ==============================
   test_data = read_csv(
-    os.path.join(args.data_path, 'cifar10_test.csv'),
+    os.path.join(args.data_path, 'cifar10/cifar10_test.csv'),
     sep=',',
     header=None).values
   if args.use_transform:
