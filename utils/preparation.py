@@ -28,6 +28,8 @@ def dataloader_preparation(train_data, args):
     train_dataset = SimpleDataset(train_data, args)
     val_dataset = SimpleDataset(val_data, args)
   
+  known_labels = train_dataset.label_set
+
   if args.meta_algorithm == 'prototype':
     sampler = PtSampler(
       train_dataset,
@@ -55,11 +57,10 @@ def dataloader_preparation(train_data, args):
 
   val_dataloader = DataLoader(dataset=val_dataset, batch_size=8, shuffle=False)
   
-  return train_dataloader, val_dataloader
+  return train_dataloader, val_dataloader, known_labels
 
 
 def transforms_preparation():
-
   train_transform = transforms.Compose([
     transforms.ToPILImage(),
     # transforms.RandomCrop(32, padding=4, fill=128),

@@ -14,7 +14,8 @@ def train(model,
   model.to(device)
 
   train_dataloader,\
-  val_dataloader=  dataloader_preparation(train_data, args)
+  val_dataloader, \
+  known_labels =  dataloader_preparation(train_data, args)
   
   optim = SGD(model.parameters(),
               lr=args.lr,
@@ -50,12 +51,12 @@ def train(model,
           train_loss = 0.
 
           # evalute on val_dataset
-          # val_loss_total = reptile_evaluate(model, val_dataloader) # For Reptile
-          val_loss_total = learner.evaluate(model, val_dataloader)  # For Pt.
+          val_loss_total, \
+          val_acc_total = learner.evaluate(model, val_dataloader, known_labels)  # For Pt.
           
           # print losses
-          print('=== Time: %.2f, Step: %d, Train Loss: %f, Val Loss: %f' % (
-            time.time()-global_time, miteration_item+1, train_loss_total, val_loss_total))
+          print('=== Time: %.2f, Step: %d, Train Loss: %f, Val Loss: %f, , Val Acc: %.4f' % (
+            time.time()-global_time, miteration_item+1, train_loss_total, val_loss_total, val_acc_total))
           # print('===============================================')
           global_time = time.time()
     

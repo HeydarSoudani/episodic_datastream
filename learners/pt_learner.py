@@ -95,26 +95,58 @@ class PtLearner:
     return loss.detach().item()
 
   #TODO: classification with distance metric
-  def evaluate(self, model, dataloader):
-    ce = torch.nn.CrossEntropyLoss()
-
+  def evaluate(self, model, dataloader, known_labels):
     model.eval()
+    ce = torch.nn.CrossEntropyLoss()
+    pts = torch.cat(
+      [self.prototypes[l.item()] for l in known_labels]
+    )
+    
     with torch.no_grad():
       total_loss = 0.0
+      total_acc = 0.0
       for i, batch in enumerate(dataloader):
+        samples, labels = batch
+        samples, labels = samples.to(self.device), labels.to(self.device)
+        logits, features = model.forward(samples)
 
-        sample, labels = batch
-        sample, labels = sample.to(self.device), labels.to(self.device)
-        
-        logits, features = model.forward(sample)
-        # loss = criterion(features, logits, labels, prototypes)
+        ## == Acc. 
+        dists = torch.cdist(features, pts)  #[]
+        argmin_dists = torch.min(dists, dim=1).indices
+        pred_labels = known_labels[argmin_dists]
+        acc = (labels==pred_labels).sum().item() / labels.size(0)
+        total_acc += acc
+
+        ## == loss
         loss = ce(logits, labels)
-        # loss, acc = criterion(features, target=labels)
         loss = loss.mean()
         total_loss += loss.item()
+      
+      total_loss /= len(dataloader)
+      total_acc /= len(dataloader)
+      return total_loss, total_acc
 
-    total_loss /= len(dataloader)
-    return total_loss
+
+  # def evaluate(self, model, dataloader):
+  #   ce = torch.nn.CrossEntropyLoss()
+
+  #   model.eval()
+  #   with torch.no_grad():
+  #     total_loss = 0.0
+  #     for i, batch in enumerate(dataloader):
+
+  #       sample, labels = batch
+  #       sample, labels = sample.to(self.device), labels.to(self.device)
+        
+  #       logits, features = model.forward(sample)
+  #       # loss = criterion(features, logits, labels, prototypes)
+  #       loss = ce(logits, labels)
+  #       # loss, acc = criterion(features, target=labels)
+  #       loss = loss.mean()
+  #       total_loss += loss.item()
+
+  #   total_loss /= len(dataloader)
+  #   return total_loss
 
   def load(self, pkl_path):
     self.__dict__.update(torch.load(pkl_path))
