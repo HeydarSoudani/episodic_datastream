@@ -12,7 +12,7 @@ from samplers.reptile_sampler import ReptileSampler
 def dataloader_preparation(train_data, val_data, args):
   print(train_data.shape)
 
-  if val_data == None: 
+  if val_data == []: 
     n, _ = train_data.shape
     np.random.shuffle(train_data)
     train_val_data = np.split(train_data, [int(n*0.9), n])

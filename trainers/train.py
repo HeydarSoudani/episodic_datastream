@@ -10,7 +10,7 @@ def train(model,
           learner,
           train_data,
           args, device,
-          val_data=None):
+          val_data=[]):
   model.to(device)
 
   train_dataloader,\
