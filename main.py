@@ -243,17 +243,16 @@ if __name__ == '__main__':
                   known_labels=base_labels)
   ## == incremental learning ============
   elif args.phase == 'incremental_learn':
-    # memory = IncrementalMemory(
-    #           selection_type=args.mem_sel_type, 
-    #           total_size=args.mem_total_size,
-    #           per_class=args.mem_per_class,
-    #           selection_method=args.mem_sel_method)
-    # increm_learn(model,
-    #              learner,
-    #              memory,
-    #              args,
-    #              device)
-    pass
+    memory = IncrementalMemory(
+              selection_type=args.mem_sel_type, 
+              total_size=args.mem_total_size,
+              per_class=args.mem_per_class,
+              selection_method=args.mem_sel_method)
+    increm_learn(model,
+                 learner,
+                 memory,
+                 args,
+                 device)
   else: 
     raise NotImplementedError()
 
