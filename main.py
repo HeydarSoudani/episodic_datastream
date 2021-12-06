@@ -32,7 +32,7 @@ parser.add_argument(
   '--phase',
   type=str,
   default='init_learn',
-  choices=['init_learn', 'zeroshot_test', 'stream_learn', 'zeroshot_test_base', 'plot'],
+  choices=['init_learn', 'zeroshot_test', 'stream_learn', 'zeroshot_test_base', 'incremental_learn', 'plot'],
   help='')
 parser.add_argument('--which_model', type=str, default='best', help='')
 parser.add_argument('--dataset', type=str, choices=['mnist', 'fmnist', 'cifar10'], default='mnist', help='') 
