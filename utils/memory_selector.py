@@ -172,6 +172,9 @@ class IncrementalMemory():
         n = new_class_data[label].shape[0]
         idxs = np.random.choice(range(n), size=self.per_class, replace=False)
         self.class_data[label] = new_samples[idxs]
+    
+    for key, values in self.class_data.items():
+      print('label: {}, value: {}'.format(key, values.shape)) 
 
 
   
