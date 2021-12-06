@@ -18,7 +18,7 @@ def tsne(model, args, device):
   # == Load stream data ==============================
   test_data = read_csv(
     os.path.join(args.data_path, args.dataset, '{}_test.csv'.format(args.dataset)),
-    sep=',').value
+    sep=',').values
   if args.use_transform:
     _, test_transform = transforms_preparation()
     test_dataset = SimpleDataset(test_data, args, transforms=test_transform)
