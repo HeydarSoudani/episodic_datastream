@@ -98,8 +98,8 @@ def increm_learn(model,
 
       # known_labels = test_dataset.label_set
       known_labels = set(range((task+1)*2))
-      _, acc = learner.evaluate(model, test_dataloader, known_labels)
-      # acc, _ = evaluate(model, test_dataloader, device)
+      # _, acc = learner.evaluate(model, test_dataloader, known_labels)
+      acc, _ = evaluate(model, test_dataloader, device)
 
       prev_tasks_acc[prev_task] = acc
     
