@@ -99,10 +99,10 @@ class PtLearner:
     model.eval()
     ce = torch.nn.CrossEntropyLoss()
 
-    known_labels = torch.tensor(list(known_labels), device=self.device)
-    pts = torch.cat(
-      [self.prototypes[l.item()] for l in known_labels]
-    )
+    # known_labels = torch.tensor(list(known_labels), device=self.device)
+    # pts = torch.cat(
+    #   [self.prototypes[l.item()] for l in known_labels]
+    # )
     
     with torch.no_grad():
       total_loss = 0.0
@@ -118,12 +118,13 @@ class PtLearner:
         logits, features = model.forward(samples)
 
         ## == Distance-based Acc. ============== 
-        dists = torch.cdist(features, pts)  #[]
-        argmin_dists = torch.min(dists, dim=1).indices
-        pred_labels = known_labels[argmin_dists]
+        # dists = torch.cdist(features, pts)  #[]
+        # argmin_dists = torch.min(dists, dim=1).indices
+        # pred_labels = known_labels[argmin_dists]
         
-        acc = (labels==pred_labels).sum().item() / labels.size(0)
-        total_dist_acc += acc
+        # acc = (labels==pred_labels).sum().item() / labels.size(0)
+        # total_dist_acc += acc
+        total_dist_acc = 0
 
         ## == Cls-based Acc. ===================
         _, predicted = torch.max(logits, 1)
