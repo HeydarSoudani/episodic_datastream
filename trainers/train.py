@@ -52,11 +52,12 @@ def train(model,
 
           # evalute on val_dataset
           val_loss_total, \
-          val_acc_total = learner.evaluate(model, val_dataloader, known_labels)  # For Pt.
+          val_acc_dis_total, \
+          val_acc_cls_total = learner.evaluate(model, val_dataloader, known_labels, args)  # For Pt.
           
           # print losses
-          print('=== Time: %.2f, Step: %d, Train Loss: %f, Val Loss: %f, , Val Acc: %.4f' % (
-            time.time()-global_time, miteration_item+1, train_loss_total, val_loss_total, val_acc_total))
+          print('=== Time: %.2f, Step: %d, Train Loss: %f, Val Loss: %f' % (
+            time.time()-global_time, miteration_item+1, train_loss_total, val_loss_total))
           # print('===============================================')
           global_time = time.time()
     

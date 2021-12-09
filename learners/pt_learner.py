@@ -94,7 +94,6 @@ class PtLearner:
     
     return loss.detach().item()
 
-  #TODO: classification with distance metric
   def evaluate(self, model, dataloader, known_labels, args):
     model.eval()
     ce = torch.nn.CrossEntropyLoss()
@@ -150,28 +149,6 @@ class PtLearner:
       total_cls_acc = 100 * correct_cls_acc / total_cls_acc  
 
       return total_loss, total_dist_acc, total_cls_acc
-
-
-  # def evaluate(self, model, dataloader):
-  #   ce = torch.nn.CrossEntropyLoss()
-
-  #   model.eval()
-  #   with torch.no_grad():
-  #     total_loss = 0.0
-  #     for i, batch in enumerate(dataloader):
-
-  #       sample, labels = batch
-  #       sample, labels = sample.to(self.device), labels.to(self.device)
-        
-  #       logits, features = model.forward(sample)
-  #       # loss = criterion(features, logits, labels, prototypes)
-  #       loss = ce(logits, labels)
-  #       # loss, acc = criterion(features, target=labels)
-  #       loss = loss.mean()
-  #       total_loss += loss.item()
-
-  #   total_loss /= len(dataloader)
-  #   return total_loss
 
   def load(self, pkl_path):
     self.__dict__.update(torch.load(pkl_path))
