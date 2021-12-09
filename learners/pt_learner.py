@@ -95,7 +95,7 @@ class PtLearner:
     return loss.detach().item()
 
   #TODO: classification with distance metric
-  def evaluate(self, model, dataloader, known_labels):
+  def evaluate(self, model, dataloader, known_labels, args):
     model.eval()
     ce = torch.nn.CrossEntropyLoss()
 
@@ -106,31 +106,50 @@ class PtLearner:
     
     with torch.no_grad():
       total_loss = 0.0
-      total_acc = 0.0
+      total_dist_acc = 0.0
+      correct_cls_acc = 0.0
+      total_cls_acc = 0
+
       for i, batch in enumerate(dataloader):
         samples, labels = batch
+        labels = labels.flatten()
         samples, labels = samples.to(self.device), labels.to(self.device)
         logits, features = model.forward(samples)
 
-        ## == Acc. 
+        ## == Distance-based Acc. ============== 
         dists = torch.cdist(features, pts)  #[]
         argmin_dists = torch.min(dists, dim=1).indices
         pred_labels = known_labels[argmin_dists]
         
         acc = (labels==pred_labels).sum().item() / labels.size(0)
-        total_acc += acc
+        total_dist_acc += acc
 
-        ## == loss
-        loss = ce(logits, labels)
-        loss = loss.mean()
+        ## == Cls-based Acc. ===================
+        _, predicted = torch.max(logits, 1)
+        correct_cls_acc += labels.size(0)
+        total_cls_acc += (predicted == labels).sum().item()
+
+        ## == loss =============================
+        unique_label = torch.unique(labels)
+        prototypes = torch.cat(
+          [self.prototypes[l.item()] for l in unique_label]
+        )
+
+        loss = self.criterion(
+          features,
+          logits,
+          labels,
+          prototypes,
+          n_query=args.query_num,
+          n_classes=args.ways,
+        )
         total_loss += loss.item()
       
-      # print('pred: {}'.format(pred_labels))
-      # print('true: {}'.format(labels))
-      # print('len: {}'.format(len(dataloader)))
       total_loss /= len(dataloader)
-      total_acc /= len(dataloader)
-      return total_loss, total_acc
+      total_dist_acc /= len(dataloader)
+      total_cls_acc = 100 * correct_cls_acc / total_cls_acc  
+
+      return total_loss, total_dist_acc, total_cls_acc
 
 
   # def evaluate(self, model, dataloader):

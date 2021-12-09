@@ -9,33 +9,33 @@ from datasets.dataset import SimpleDataset
 from utils.preparation import transforms_preparation
 
 
-def evaluate(model, dataloader, device):
-  ce = torch.nn.CrossEntropyLoss()
-  correct = 0
-  total = 0
+# def evaluate(model, dataloader, device):
+#   ce = torch.nn.CrossEntropyLoss()
+#   correct = 0
+#   total = 0
   
-  model.eval()
-  with torch.no_grad():
-    total_loss = 0.0
-    for i, batch in enumerate(dataloader):
-      sample, labels = batch
-      sample, labels = sample.to(device), labels.to(device)
+#   model.eval()
+#   with torch.no_grad():
+#     total_loss = 0.0
+#     for i, batch in enumerate(dataloader):
+#       sample, labels = batch
+#       sample, labels = sample.to(device), labels.to(device)
       
-      logits, _ = model.forward(sample)
+#       logits, _ = model.forward(sample)
       
-      _, predicted = torch.max(logits, 1)
-      total += labels.size(0)
-      correct += (predicted == labels).sum().item()
+#       _, predicted = torch.max(logits, 1)
+#       total += labels.size(0)
+#       correct += (predicted == labels).sum().item()
       
-      loss = ce(logits, labels)
-      loss = loss.mean()
-      total_loss += loss.item()
+#       loss = ce(logits, labels)
+#       loss = loss.mean()
+#       total_loss += loss.item()
 
-  # print('correct: {}'.format(correct))
-  # print('total: {}'.format(total))
-  acc = 100 * correct / total  
-  total_loss /= len(dataloader)
-  return acc, total_loss
+#   # print('correct: {}'.format(correct))
+#   # print('total: {}'.format(total))
+#   acc = 100 * correct / total  
+#   total_loss /= len(dataloader)
+#   return acc, total_loss
 
 
 def increm_learn(model,
@@ -44,7 +44,7 @@ def increm_learn(model,
                  args,
                  device):
   print('================================ Incremental Learning =========================')
-  f = open('inc_output.txt','w')
+  # f = open('inc_output.txt','w')
   
   for task in range(args.n_tasks):  
     print('=== Training ... ===')
@@ -82,7 +82,9 @@ def increm_learn(model,
     if args.which_model == 'best':
       model.load(args.best_model_path)
     
-    prev_tasks_acc = [0.0 for _ in range(args.n_tasks)]
+    tasks_acc_dist = [0.0 for _ in range(args.n_tasks)]
+    tasks_acc_cls = [0.0 for _ in range(args.n_tasks)]
+
     for prev_task in range(task+1):
       
       test_data = pd.read_csv(
@@ -94,19 +96,28 @@ def increm_learn(model,
         test_dataset = SimpleDataset(test_data, args, transforms=test_transform)
       else:
         test_dataset = SimpleDataset(test_data, args)
-      test_dataloader = DataLoader(dataset=test_dataset, batch_size=args.batch_size, shuffle=False)
+      test_dataloader = DataLoader(dataset=test_dataset,
+                                   batch_size=args.batch_size,
+                                   shuffle=False)
 
       # known_labels = test_dataset.label_set
       known_labels = set(range((task+1)*2))
-      _, acc = learner.evaluate(model, test_dataloader, known_labels)
-      # acc, _ = evaluate(model, test_dataloader, device)
+      _, acc_dis, acc_cls = learner.evaluate(model,
+                                             test_dataloader,
+                                             known_labels,
+                                             args)
+      # acc_ce, _ = evaluate(model, test_dataloader, device)
 
-      prev_tasks_acc[prev_task] = acc
+      tasks_acc_dist[prev_task] = acc_dis
+      tasks_acc_cls[prev_task] = acc_cls
     
-    mean_acc = np.mean(prev_tasks_acc[:task+1])
-    print("%7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(prev_tasks_acc))
-    print('Acc. mean: {}'.format(round(mean_acc, 3)))
-    f.write("%7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(prev_tasks_acc))
+    mean_acc_dist = np.mean(tasks_acc_dist[:task+1])
+    mean_acc_cls = np.mean(tasks_acc_cls[:task+1])
+    
+    print("Dist acc.: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(tasks_acc_dist))
+    print("Cls  acc.: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(tasks_acc_cls))
+    print('Mean -> Dist: {}, Cls: {}'.format(round(mean_acc_dist, 3), round(mean_acc_cls, 3)))
+    # f.write("%7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(prev_tasks_acc))
     
 
     

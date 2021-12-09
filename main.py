@@ -16,7 +16,6 @@ from detectors.pt_detector import PtDetector
 from learners.pt_learner import PtLearner
 from learners.reptile_learner import ReptileLearner
 from losses import TotalLoss
-# from pytorch_metric_learning import distances, losses, miners
 from init_learn import init_learn
 from zeroshot_test import zeroshot_test
 from stream_learn import stream_learn
@@ -84,7 +83,7 @@ parser.add_argument('--update_step', type=int, default=5, help='for Reptile algo
 # Loss function
 parser.add_argument("--lambda_1", type=float, default=1.0, help="DCE Coefficient in loss function")
 parser.add_argument("--lambda_2", type=float, default=1.0, help="CE Coefficient in loss function")
-parser.add_argument("--lambda_3", type=float, default=0.001, help="PT Coefficient in loss function")
+parser.add_argument("--lambda_3", type=float, default=0.001, help="Metric Coefficient in loss function")
 parser.add_argument("--temp_scale", type=float, default=0.2, help="Temperature scale for DCE in loss function",)
 
 # Optimizer

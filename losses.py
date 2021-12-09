@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from pytorch_metric_learning import distances, losses, miners
 import time
 
 compute_distance = nn.PairwiseDistance(p=2, eps=1e-6)
@@ -81,18 +82,16 @@ class TotalLoss(nn.Module):
     
     self.dce = DCELoss(device, gamma=args.temp_scale)
     self.ce = torch.nn.CrossEntropyLoss()
-    # self.proto = PrototypeLoss()
+    self.metric = losses.NTXentLoss(temperature=0.07)
 
   def forward(self, features, outputs, labels, prototypes, n_query, n_classes):
     dce_loss = self.dce(features, labels, prototypes, n_query, n_classes)
     cls_loss = self.ce(outputs, labels.long())
-    # pt_loss = self.proto(features, labels, prototypes)
+    metric_loss = self.metric(outputs, labels.long())
 
     return self.lambda_1 * dce_loss +\
-           self.lambda_2 * cls_loss
-    # return self.lambda_1 * dce_loss +\
-    #        self.lambda_2 * cls_loss +\
-    #        self.lambda_3 * pt_loss
+           self.lambda_2 * cls_loss +\
+           self.lambda_3 * metric_loss
 
 
 class PairwiseLoss(nn.Module):
