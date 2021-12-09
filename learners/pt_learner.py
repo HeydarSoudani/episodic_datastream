@@ -126,8 +126,8 @@ class PtLearner:
 
         ## == Cls-based Acc. ===================
         _, predicted = torch.max(logits, 1)
-        correct_cls_acc += labels.size(0)
-        total_cls_acc += (predicted == labels).sum().item()
+        total_cls_acc += labels.size(0)
+        correct_cls_acc += (predicted == labels).sum().item()
 
         ## == loss =============================
         # unique_label = torch.unique(labels)
@@ -150,7 +150,7 @@ class PtLearner:
 
       total_loss /= len(dataloader)
       total_dist_acc /= len(dataloader)
-      total_cls_acc = 100 * correct_cls_acc / total_cls_acc  
+      total_cls_acc = correct_cls_acc / total_cls_acc  
 
       return total_loss, total_dist_acc, total_cls_acc
 
