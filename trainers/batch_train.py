@@ -98,16 +98,8 @@ def train(model,
   print("Saving new last model")
 
 
-def test(model, test_data, args, device):
+def test(model, test_loader, args, device):
   model.to(device)
-
-  ### === load data ================
-  _, test_transform = transforms_preparation()
-  if args.use_transform:
-    test_dataset = SimpleDataset(test_data, args, transforms=test_transform)
-  else:
-    test_dataset = SimpleDataset(test_data, args)
-  test_loader = DataLoader(dataset=test_dataset, batch_size=8, shuffle=False)
 
   correct = 0
   total = 0
@@ -125,7 +117,7 @@ def test(model, test_data, args, device):
       correct += (predicted == labels).sum().item()
     
     print('Accuracy of the network on the 10000 test images: %7.4f %%' % (100 * correct / total))
-
+  return correct / total
   
 
   # prepare to count predictions for each class

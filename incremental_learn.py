@@ -3,7 +3,8 @@ import os
 import numpy as np
 import pandas as pd
 
-from trainers.episodic_train import train
+# from trainers.episodic_train import train
+from trainers.batch_train import train, test
 from datasets.dataset import SimpleDataset
 from utils.preparation import transforms_preparation
 
@@ -31,16 +32,27 @@ def increm_learn(model,
       print('replay_mem: {}'.format(replay_mem.shape))
       print('train_data(new): {}'.format(train_data.shape))
 
-      # = train ==============
+      ### === train ==============
+      # 1) episodic training
+      # train(model,
+      #       learner,
+      #       train_data,
+      #       args, device)
+      # 2) batch training
       train(model,
-            learner,
             train_data,
             args, device)
     else:
+      # 1) episodic training
+      # train(model,
+      #       learner,
+      #       task_data,
+      #       args, device)
+      # 2) batch training
       train(model,
-            learner,
             task_data,
-            args, device)
+            args, device)      
+    
     # = Update memory =====
     memory.update(task_data)
     
@@ -70,13 +82,19 @@ def increm_learn(model,
                                    batch_size=args.batch_size,
                                    shuffle=False)
 
+      
+      ### 1) episodic test
       # known_labels = test_dataset.label_set
-      known_labels = set(range((task+1)*2))
-      _, acc_dis, acc_cls = learner.evaluate(model,
-                                             test_dataloader,
-                                             known_labels,
-                                             args)
+      # known_labels = set(range((task+1)*2))
+      # _, acc_dis, acc_cls = learner.evaluate(model,
+      #                                        test_dataloader,
+      #                                        known_labels,
+      #                                        args)
       # acc_ce, _ = evaluate(model, test_dataloader, device)
+      acc_dis = 0.0
+
+      ### 2) batch test
+      acc_cls = test(model, test_dataloader, args, device)
 
       tasks_acc_dist[prev_task] = acc_dis
       tasks_acc_cls[prev_task] = acc_cls
