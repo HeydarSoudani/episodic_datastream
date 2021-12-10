@@ -1,11 +1,11 @@
 import torch
 from torch.utils.data import DataLoader
-import time
 import os
+import time
 import numpy as np
 from pandas import read_csv
 
-from trainers.train import train
+from trainers.episodic_train import train
 from detectors.pt_detector import detector_preparation
 from datasets.dataset import SimpleDataset
 from utils.preparation import transforms_preparation

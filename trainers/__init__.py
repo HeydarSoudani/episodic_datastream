@@ -1,4 +1,4 @@
 from __future__ import absolute_import
 
-from .train import *
-from .train_batch import *
+from .episodic_train import *
+from .batch_train import *

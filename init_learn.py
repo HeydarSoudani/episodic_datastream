@@ -1,11 +1,5 @@
-import torch
-
-from trainers import train
+from trainers.episodic_train import train
 from detectors.pt_detector import detector_preparation
-# from detectors.reptile_detector import replite_detector
-# from detectors.pt_detector import pt_detector
-
-
 
 def init_learn(model,
                pt_learner,
@@ -21,11 +15,6 @@ def init_learn(model,
 
   ## == Save Novel detector ===========
   print("Calculating detector ...")
-
-  # for label, item in pt_learner.prototypes.items():
-  #   print('label: {} -> {}'.format(label, item.shape))
-  # print(pt_learner.prototypes)
-
   samples, known_labels, intra_distances\
     = detector_preparation(model,
                            pt_learner.prototypes,

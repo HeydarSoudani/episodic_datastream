@@ -10,7 +10,7 @@ from models.cnn import Conv_4
 from models.densenet import DenseNet
 from models.wrn import WideResNet
 
-from trainers.train_batch import batch_train, batch_test
+from trainers.batch_train import batch_train, batch_test
 from utils.memory_selector import OperationalMemory, IncrementalMemory
 from detectors.pt_detector import PtDetector
 from learners.pt_learner import PtLearner

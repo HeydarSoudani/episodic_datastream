@@ -1,41 +1,11 @@
-import torch
 from torch.utils.data import DataLoader
 import os
-import pandas as pd
 import numpy as np
+import pandas as pd
 
-from trainers.train import train
+from trainers.episodic_train import train
 from datasets.dataset import SimpleDataset
 from utils.preparation import transforms_preparation
-
-
-# def evaluate(model, dataloader, device):
-#   ce = torch.nn.CrossEntropyLoss()
-#   correct = 0
-#   total = 0
-  
-#   model.eval()
-#   with torch.no_grad():
-#     total_loss = 0.0
-#     for i, batch in enumerate(dataloader):
-#       sample, labels = batch
-#       sample, labels = sample.to(device), labels.to(device)
-      
-#       logits, _ = model.forward(sample)
-      
-#       _, predicted = torch.max(logits, 1)
-#       total += labels.size(0)
-#       correct += (predicted == labels).sum().item()
-      
-#       loss = ce(logits, labels)
-#       loss = loss.mean()
-#       total_loss += loss.item()
-
-#   # print('correct: {}'.format(correct))
-#   # print('total: {}'.format(total))
-#   acc = 100 * correct / total  
-#   total_loss /= len(dataloader)
-#   return acc, total_loss
 
 
 def increm_learn(model,

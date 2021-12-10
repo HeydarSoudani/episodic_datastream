@@ -36,10 +36,10 @@ class PtLearner:
     else:
       class_num = 0
 
-    # self.prototypes = {
-    #   l: torch.zeros(1, args.hidden_dims, device=device)
-    #   for l in range(class_num)
-    # }
+    self.prototypes = {
+      l: torch.zeros(1, args.hidden_dims, device=device)
+      for l in range(class_num)
+    }
 
   def train(self, model, batch, optimizer, iteration, args):
     model.train()  
@@ -63,35 +63,34 @@ class PtLearner:
     images = torch.cat((support_images, query_images))
     outputs, features = model.forward(images)
     
-    # episode_prototypes = compute_prototypes(
-    #   features[:support_len], support_labels
-    # )
-    # old_prototypes = torch.cat(
-    #   [self.prototypes[l.item()] for l in unique_label]
-    # )
+    episode_prototypes = compute_prototypes(
+      features[:support_len], support_labels
+    )
+    old_prototypes = torch.cat(
+      [self.prototypes[l.item()] for l in unique_label]
+    )
 
-    # if args.beta_type == 'evolving':
-    #   beta = args.beta * iteration / args.meta_iteration
-    # elif args.beta_type == 'fixed':
-    #   beta = args.beta
-    # new_prototypes = beta * old_prototypes + (1 - beta) * episode_prototypes
+    if args.beta_type == 'evolving':
+      beta = args.beta * iteration / args.meta_iteration
+    elif args.beta_type == 'fixed':
+      beta = args.beta
+    new_prototypes = beta * old_prototypes + (1 - beta) * episode_prototypes
 
-    # loss = self.criterion(
-    #   features[support_len:],
-    #   outputs[support_len:],
-    #   query_labels,
-    #   # new_prototypes,
-    #   episode_prototypes,
-    #   n_query=args.query_num,
-    #   n_classes=args.ways,
-    # )
-    loss = self.criterion(outputs, support_labels)
+    loss = self.criterion(
+      features[support_len:],
+      outputs[support_len:],
+      query_labels,
+      # new_prototypes,
+      episode_prototypes,
+      n_query=args.query_num,
+      n_classes=args.ways,
+    )
     loss.backward()
     torch.nn.utils.clip_grad_norm_(model.parameters(), args.grad_clip)
     optimizer.step()
 
-    # for idx, l in enumerate(unique_label):
-    #   self.prototypes[l.item()] = new_prototypes[idx].reshape(1, -1).detach()
+    for idx, l in enumerate(unique_label):
+      self.prototypes[l.item()] = new_prototypes[idx].reshape(1, -1).detach()
     
     return loss.detach().item()
 
@@ -99,10 +98,10 @@ class PtLearner:
     model.eval()
     ce = torch.nn.CrossEntropyLoss()
 
-    # known_labels = torch.tensor(list(known_labels), device=self.device)
-    # pts = torch.cat(
-    #   [self.prototypes[l.item()] for l in known_labels]
-    # )
+    known_labels = torch.tensor(list(known_labels), device=self.device)
+    pts = torch.cat(
+      [self.prototypes[l.item()] for l in known_labels]
+    )
     
     with torch.no_grad():
       total_loss = 0.0
@@ -118,13 +117,12 @@ class PtLearner:
         logits, features = model.forward(samples)
 
         ## == Distance-based Acc. ============== 
-        # dists = torch.cdist(features, pts)  #[]
-        # argmin_dists = torch.min(dists, dim=1).indices
-        # pred_labels = known_labels[argmin_dists]
+        dists = torch.cdist(features, pts)  #[]
+        argmin_dists = torch.min(dists, dim=1).indices
+        pred_labels = known_labels[argmin_dists]
         
-        # acc = (labels==pred_labels).sum().item() / labels.size(0)
-        # total_dist_acc += acc
-        total_dist_acc = 0
+        acc = (labels==pred_labels).sum().item() / labels.size(0)
+        total_dist_acc += acc
 
         ## == Cls-based Acc. ===================
         _, predicted = torch.max(logits, 1)
