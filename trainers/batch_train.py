@@ -1,13 +1,36 @@
 import torch
+from torch.utils.data import DataLoader
 from torch.optim import SGD, Adam
 from torch.optim.lr_scheduler import StepLR
 import os
+import numpy as np
+
+from datasets.dataset import SimpleDataset
+from utils.preparation import transforms_preparation
 
 def train(model,
-          train_loader, val_loader,
-          args, device):
-                
+          train_data,
+          args, device):              
   model.to(device)
+
+  ### === Load data =================
+  n, _ = train_data.shape
+  np.random.shuffle(train_data)
+  train_val_data = np.split(train_data, [int(n*0.9), n])
+  train_data = train_val_data[0]
+  val_data = train_val_data[1]
+
+  train_transform, test_transform = transforms_preparation()
+  if args.use_transform:
+    train_dataset = SimpleDataset(train_data, args, transforms=train_transform)
+    val_dataset = SimpleDataset(val_data, args, transforms=test_transform)
+  else:
+    train_dataset = SimpleDataset(train_data, args)
+    val_dataset = SimpleDataset(val_data, args)
+
+  train_loader = DataLoader(dataset=train_dataset, batch_size=args.batch_size, shuffle=True)
+  val_loader = DataLoader(dataset=val_dataset, batch_size=8, shuffle=False)
+
 
   criterion = torch.nn.CrossEntropyLoss()
   optim = SGD(model.parameters(),
@@ -75,8 +98,16 @@ def train(model,
   print("Saving new last model")
 
 
-def test(model, test_loader, device):
+def test(model, test_data, args, device):
   model.to(device)
+
+  ### === load data ================
+  _, test_transform = transforms_preparation()
+  if args.use_transform:
+    test_dataset = SimpleDataset(test_data, args, transforms=test_transform)
+  else:
+    test_dataset = SimpleDataset(test_data, args)
+  test_loader = DataLoader(dataset=test_dataset, batch_size=8, shuffle=False)
 
   correct = 0
   total = 0
