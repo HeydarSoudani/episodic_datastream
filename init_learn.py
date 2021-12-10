@@ -18,7 +18,7 @@ def init_learn(model,
                device):
 
   ### == Train Model =================
-  # train(model, pt_learner, train_data, args, device)
+  train(model, pt_learner, train_data, args, device)
 
 
   test_data = read_csv(
