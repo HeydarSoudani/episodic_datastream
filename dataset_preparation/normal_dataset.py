@@ -8,13 +8,13 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--n_tasks', type=int, default=5, help='')
 parser.add_argument('--dataset', type=str, default='mnist', help='') #[mnist, fmnist, cifar10]
 parser.add_argument('--seed', type=int, default=2, help='')
+parser.add_argument('--saved', type=str, default='./data/', help='')
 args = parser.parse_args()
 
 # = Add some variables to args ===
 args.data_path = 'data/{}'.format(args.dataset)
-args.train_path = 'train'
-args.test_path = 'test'
-args.saved = './data/split_{}'.format(args.dataset)
+args.train_file = '{}_train.csv'.format(args.dataset)
+args.test_file = '{}_test.csv'.format(args.dataset)
 
 
 ## == Apply seed ======================
@@ -27,14 +27,12 @@ if not os.path.exists(os.path.join(args.saved, args.train_path)):
 if not os.path.exists(os.path.join(args.saved, args.test_path)):
   os.makedirs(os.path.join(args.saved, args.test_path))
 
-
 if __name__ == '__main__':
   ## ========================================
   # == Get MNIST dataset ====================
   if args.dataset == 'mnist':
     train_data = pd.read_csv(os.path.join(args.data_path, "mnist_train.csv"), sep=',').values
     test_data = pd.read_csv(os.path.join(args.data_path, "mnist_test.csv"), sep=',').values
-
     X_train, y_train = train_data[:, 1:], train_data[:, 0]
     X_test, y_test = test_data[:, 1:], test_data[:, 0]
   ## ========================================
@@ -47,8 +45,6 @@ if __name__ == '__main__':
     test_data = pd.read_csv(os.path.join(args.data_path, "fmnist_test.csv"), sep=',').values
     X_train, y_train = train_data[:, 1:], train_data[:, 0]
     X_test, y_test = test_data[:, 1:], test_data[:, 0]
-    # X_train, y_train = load_mnist(path, kind='train') #(60000, 784), (60000,)
-    # X_test, y_test = load_mnist(path, kind='t10k')    #(10000, 784), (10000,)
   ## ========================================
   ## ========================================
 
@@ -62,22 +58,16 @@ if __name__ == '__main__':
   ## ========================================
   ## ========================================
 
-
   train_data = np.concatenate((X_train, y_train.reshape(-1, 1)), axis=1)
   test_data = np.concatenate((X_test, y_test.reshape(-1, 1)), axis=1)
+
+
+  pd.DataFrame(train_data).to_csv(os.path.join(args.saved, args.train_file),
+    header=None,
+    index=None
+  )
+  pd.DataFrame(test_data).to_csv(os.path.join(args.saved, args.test_file),
+    header=None,
+    index=None
+  )
   
-  cpt = int(10 / args.n_tasks)
-  for t in range(args.n_tasks):
-    c1 = t * cpt
-    c2 = (t + 1) * cpt
-    i_tr = np.where((y_train >= c1) & (y_train < c2))[0]
-    i_te = np.where((y_test >= c1) & (y_test < c2))[0]
-    
-    pd.DataFrame(train_data[i_tr]).to_csv(os.path.join(args.saved, args.train_path, 'task_{}.csv'.format(t)),
-      header=None,
-      index=None
-    )
-    pd.DataFrame(test_data[i_te]).to_csv(os.path.join(args.saved, args.test_path, 'task_{}.csv'.format(t)),
-      header=None,
-      index=None
-    )

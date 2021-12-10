@@ -73,25 +73,6 @@ if __name__ == '__main__':
   ## ========================================
   ## ========================================
 
-  ## ========================================
-  # == For batch training ===================
-  # train_data = np.concatenate((X_train, y_train.reshape(-1, 1)), axis=1)   #(60000, 785)
-  # test_data = np.concatenate((X_test, y_test.reshape(-1, 1)), axis=1)   #(10000, 785)
-
-  # pd.DataFrame(train_data).to_csv(os.path.join(data_path,'fm_train_batch.csv'),
-  #   header=None,
-  #   index=None
-  # )
-  # pd.DataFrame(test_data).to_csv(os.path.join(data_path,'fm_test_batch.csv'),
-  #   header=None,
-  #   index=None
-  # )
-  # print('done')
-  # time.sleep(20)
-  ## ========================================
-  ## ========================================
-
-
   data = np.concatenate((X_train, X_test), axis=0)  #(70000, 784)
   labels = np.concatenate((y_train, y_test), axis=0)#(70000,)
 

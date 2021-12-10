@@ -1,5 +1,4 @@
 import os
-import time
 import torch
 import argparse
 import numpy as np
@@ -7,15 +6,14 @@ from pandas import read_csv
 
 from datasets.dataset import SimpleDataset
 from models.cnn import Conv_4
-from models.densenet import DenseNet
-from models.wrn import WideResNet
 
-from trainers.batch_train import batch_train, batch_test
 from utils.memory_selector import OperationalMemory, IncrementalMemory
 from detectors.pt_detector import PtDetector
 from learners.pt_learner import PtLearner
 from learners.reptile_learner import ReptileLearner
 from losses import TotalLoss
+
+from batch_learn import batch_learn
 from init_learn import init_learn
 from zeroshot_test import zeroshot_test
 from stream_learn import stream_learn
@@ -30,12 +28,39 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
   '--phase',
   type=str,
+  choices=[
+    'batch_learn',
+    'init_learn',
+    'zeroshot_test',
+    'stream_learn',
+    'zeroshot_test_base',
+    'incremental_learn',
+    'plot'
+  ],
   default='init_learn',
-  choices=['init_learn', 'zeroshot_test', 'stream_learn', 'zeroshot_test_base', 'incremental_learn', 'plot'],
   help='')
-parser.add_argument('--which_model', type=str, default='best', help='')
-parser.add_argument('--dataset', type=str, choices=['mnist', 'fmnist', 'cifar10'], default='mnist', help='') 
-parser.add_argument('--meta_algorithm', type=str, choices=['prototype', 'reptile'], default='prototype', help='')
+parser.add_argument(
+  '--which_model',
+  type=str,
+  choices=['best', 'last'],
+  default='best',
+  help='')
+parser.add_argument(
+  '--dataset',
+  type=str,
+  choices=[
+    'mnist',
+    'fmnist',
+    'cifar10'
+  ],
+  default='mnist',
+  help='') 
+parser.add_argument(
+  '--meta_algorithm',
+  type=str,
+  choices=['prototype', 'reptile'],
+  default='prototype',
+  help='')
 
 # init train
 parser.add_argument('--start_epoch', type=int, default=0, help='')
@@ -129,6 +154,7 @@ args = parser.parse_args()
 ## == Add some variables to args
 args.data_path = 'data/'
 args.train_file = '{}_train.csv'.format(args.dataset)
+args.test_file = '{}_test.csv'.format(args.dataset)
 args.stream_file = '{}_stream.csv'.format(args.dataset)
 args.split_train_path = 'data/split_{}/train'.format(args.dataset)
 args.split_test_path = 'data/split_{}/test'.format(args.dataset)
@@ -184,7 +210,7 @@ except FileNotFoundError: pass
 else: print("Load Prototypes from {}".format(args.prototypes_path))
 
 
-if args.phase not in ['incremental_learn', 'plot']:
+if args.phase not in ['incremental_learn', 'plot', 'batch_learn']:
 
   ## == load train data from file ========
   train_data = read_csv(
@@ -212,12 +238,10 @@ if args.phase not in ['incremental_learn', 'plot']:
 
 if __name__ == '__main__':
 
-  ## == Non-episodic ======================
-  # batch_train(model, train_data, args, device)
-  # batch_test(model, args, device)
-
   ## == Data Stream =======================
-  if args.phase == 'init_learn':
+  if args.phase == 'batch_learn':
+    batch_learn(model, args, device)
+  elif args.phase == 'init_learn':
     init_learn(model,
                learner,
                memory,

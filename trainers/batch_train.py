@@ -1,57 +1,13 @@
 import torch
-import torchvision
-# import torchvision.transforms as transforms
-
-from torch.utils.data import DataLoader
 from torch.optim import SGD, Adam
 from torch.optim.lr_scheduler import StepLR
 import os
-import time
-import numpy as np
-from pandas import read_csv
-# from pytorch_metric_learning import distances, losses, miners
 
-from datasets.dataset import SimpleDataset
-from augmentation import transforms
-from utils.functions import imshow, mean_std_calculator
-from augmentation.autoaugment.autoaugment import CIFAR10Policy
-from augmentation.autoaugment.cutout import Cutout
-
-def batch_train(model, args, device):
+def train(model,
+          train_loader, val_loader,
+          args, device):
+                
   model.to(device)
-
-  dataset_split =  [45000, 5000] #fmnist:[54000, 6000], cifar10: [45000, 5000]
-
-  transform = transforms.Compose([
-    transforms.ToPILImage(),
-    transforms.RandomCrop(32, padding=4, fill=128),
-    transforms.RandomHorizontalFlip(p=0.5),
-    CIFAR10Policy(),
-    transforms.ToTensor(),
-    # Cutout(n_holes=1, length=16),
-    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
-    transforms.RandomErasing(probability=args.p, sh=args.sh, r1=args.r1, mean=[0.5, 0.5, 0.5]),
-  ])
-
-  batch_size = 64
-
-  # trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
-  #                                         download=True, transform=transform)
-  trainset = torchvision.datasets.SVHN(root='./data', train=True,
-                                          download=True, transform=transform)
-
-  train_data = read_csv(
-    os.path.join(args.data_path, args.train_file),
-    sep=',',
-    header=None).values
-  
-  trainset = SimpleDataset(train_data, args, transforms=transform)
-  trainset_, valaset = torch.utils.data.random_split(trainset, dataset_split)
-  train_dataloader = torch.utils.data.DataLoader(trainset_, batch_size=batch_size,
-                                            shuffle=True)
-  val_dataloader = torch.utils.data.DataLoader(valaset, batch_size=batch_size,
-                                            shuffle=True)
-
 
   criterion = torch.nn.CrossEntropyLoss()
   optim = SGD(model.parameters(),
@@ -72,11 +28,10 @@ def batch_train(model, args, device):
     for epoch_item in range(args.start_epoch, args.epochs):
       print('===================================== Epoch %d =====================================' % epoch_item)
       train_loss = 0.
-      for i, batch in enumerate(train_dataloader):
+      for i, batch in enumerate(train_loader):
         images, labels = batch
-        # imshow(images)
-        
         images, labels = images.to(device), labels.to(device)
+        
         optim.zero_grad()
         outputs, _ = model.forward(images)
         loss = criterion(outputs, labels)
@@ -89,7 +44,7 @@ def batch_train(model, args, device):
           with torch.no_grad():
             total_val_loss = 0.0
             model.eval()
-            for j, data in enumerate(val_dataloader):
+            for j, data in enumerate(val_loader):
               sample, labels = data
               sample, labels = sample.to(device), labels.to(device)
 
@@ -99,7 +54,7 @@ def batch_train(model, args, device):
               loss = loss.mean()
               total_val_loss += loss.item()
 
-            total_val_loss /= len(val_dataloader)
+            total_val_loss /= len(val_loader)
             print('Epoch: %d/%d, Train Loss: %f, Val Loss: %f' % (
               epoch_item, i+1,  train_loss/args.log_interval, total_val_loss))
             print('===============================================')
@@ -121,65 +76,23 @@ def batch_train(model, args, device):
   print("Saving new last model")
 
 
-def batch_test(model, args, device):
-  
-  # transform_test = transforms.Compose([
-  #   transforms.ToPILImage(),
-  #   transforms.ToTensor(),
-  #   transforms.Normalize((0.5071, 0.4867, 0.4408),
-  #                       (0.2675, 0.2565, 0.2761)),
-  # ])
-  
-  # test_data = read_csv(os.path.join(args.data_path, args.test_file), sep=',', header=None).values
-  # # test_dataset = SimpleDataset(test_data, transforms=transform_test)
-  # test_dataset = SimpleDataset(test_data)
-  # test_dataloader = DataLoader(dataset=test_dataset, batch_size=1, shuffle=False)
-
-  transform = transforms.Compose([
-    transforms.ToPILImage(),
-    transforms.ToTensor(),
-    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-  
-  # testset = torchvision.datasets.CIFAR10(root='./data', train=False,
-  #                                       download=True, transform=transform)
-  test_data = read_csv(os.path.join(args.data_path, args.test_file), sep=',', header=None).values
-  testset = SimpleDataset(test_data, args, transforms=transform)
-  test_dataloader = torch.utils.data.DataLoader(testset, batch_size=64,
-                                          shuffle=False)
-
-
-  # == Load model & Detector
-  if args.which_model == 'best':
-    try:
-      model.load(args.best_model_path)
-    except FileNotFoundError:
-      pass
-    else:
-      print("Load model from file {}".format(args.best_model_path))
-  elif args.which_model == 'last':
-    try:
-      model.load(args.last_model_path)
-    except FileNotFoundError:
-      pass
-    else:
-      print("Load model from file {}".format(args.last_model_path))
+def test(model, test_loader, device):
   model.to(device)
-
 
   correct = 0
   total = 0
 
   model.eval()
   with torch.no_grad():
-    for i, data in enumerate(test_dataloader):
+    for i, data in enumerate(test_loader):
   
-      sample, label = data
-      sample, label = sample.to(device), label.to(device)
-      out, feature = model.forward(sample)
+      samples, labels = data
+      samples, labels = samples.to(device), labels.to(device)
+      logits, feature = model.forward(samples)
       
-      _, predicted = torch.max(out.data, 1)
-      total += label.size(0)
-      correct += (predicted == label).sum().item()
+      _, predicted = torch.max(logits, 1)
+      total += labels.size(0)
+      correct += (predicted == labels).sum().item()
     
     print('Accuracy of the network on the 10000 test images: %7.4f %%' % (100 * correct / total))
 
