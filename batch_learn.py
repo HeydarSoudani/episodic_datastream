@@ -38,7 +38,7 @@ def batch_learn(model, args, device):
   val_loader = DataLoader(dataset=val_dataset, batch_size=8, shuffle=False)
   test_loader = DataLoader(dataset=test_dataset, batch_size=8, shuffle=False)
   
-  train(model, train_loader, val_loader, args, device)
+  # train(model, train_loader, val_loader, args, device)
   
   if args.which_model == 'best':
     try: model.load(args.best_model_path)
