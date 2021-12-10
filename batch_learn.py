@@ -1,5 +1,8 @@
 import os
 from pandas import read_csv
+from datasets.dataset import SimpleDataset
+from utils.preparation import transforms_preparation
+from torch.utils.data import DataLoader
 
 from trainers.batch_train import train, test
 
@@ -15,6 +18,15 @@ def batch_learn(model, args, device):
     sep=',',
     header=None).values
   
+  if args.use_transform:
+    _, test_transform = transforms_preparation()
+    test_dataset = SimpleDataset(test_data, args, transforms=test_transform)
+  else:
+    test_dataset = SimpleDataset(test_data, args)
+  test_dataloader = DataLoader(dataset=test_dataset,
+                                batch_size=args.batch_size,
+                                shuffle=False)
+  
   # train(model, train_data, args, device)
   
   if args.which_model == 'best':
@@ -28,7 +40,7 @@ def batch_learn(model, args, device):
     else:
       print("Load model from {}".format(args.last_model_path))
   
-  _ = test(model, test_data, args, device)
+  _ = test(model, test_dataloader, args, device)
 
 
 
