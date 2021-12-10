@@ -57,7 +57,7 @@ def increm_learn(model,
           task_data,
           args, device)   
     # = Update memory =====
-    memory.update(task_data)
+    # memory.update(task_data)
     
     # = evaluation ========
     print('=== Testing ... ===')
