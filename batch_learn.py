@@ -1,8 +1,5 @@
-
 import os
-
 from pandas import read_csv
-
 
 from trainers.batch_train import train, test
 
