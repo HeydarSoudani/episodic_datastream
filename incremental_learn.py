@@ -25,46 +25,39 @@ def increm_learn(model,
                   sep=',', header=None).values 
     print('task_data: {}'.format(task_data.shape))
     
-    # if task != 0:
-    #   if task == 2: args.ways = 5
-    #   replay_mem = memory()
-    #   train_data = np.concatenate((task_data, replay_mem))
-    #   print('replay_mem: {}'.format(replay_mem.shape))
-    #   print('train_data(new): {}'.format(train_data.shape))
+    if task != 0:
+      if task == 2: args.ways = 5
+      replay_mem = memory()
+      train_data = np.concatenate((task_data, replay_mem))
+      print('replay_mem: {}'.format(replay_mem.shape))
+      print('train_data(new): {}'.format(train_data.shape))
 
-    #   ### === train ==============
-    #   # 1) episodic training
-    #   # train(model,
-    #   #       learner,
-    #   #       train_data,
-    #   #       args, device)
-    #   # 2) batch training
-    #   train(model,
-    #         train_data,
-    #         args, device)
-    # else:
-    #   # 1) episodic training
-    #   # train(model,
-    #   #       learner,
-    #   #       task_data,
-    #   #       args, device)
-    #   # 2) batch training
-    #   train(model,
-    #         task_data,
-    #         args, device)      
-
-    train(model,
-          learner,
-          task_data,
-          args, device)
+      ### === train ==============
+      # 1) episodic training
+      train(model,
+            learner,
+            train_data,
+            args, device)
+      # 2) batch training
+      # train(model,
+      #       train_data,
+      #       args, device)
+    else:
+      # 1) episodic training
+      train(model,
+            learner,
+            task_data,
+            args, device)
+      # 2) batch training
+      # train(model,
+      #       task_data,
+      #       args, device)      
     
     # = Update memory =====
-    # memory.update(task_data)
+    memory.update(task_data)
     
     # = evaluation ========
     print('=== Testing ... ===')
-    # 1) average performance on all the samples regardless of their task.
-    # 2) average performance up till current task.
 
     if args.which_model == 'best':
       model.load(args.best_model_path)
@@ -94,9 +87,6 @@ def increm_learn(model,
                                             test_dataloader,
                                             known_labels,
                                             args)
-      # acc_ce, _ = evaluate(model, test_dataloader, device)
-    
-
       ### 2) batch test
       # acc_cls = test(model, test_dataloader, args, device)
 
