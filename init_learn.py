@@ -1,9 +1,13 @@
+from torch.utils.data import DataLoader
 import os
 from pandas import read_csv
 
 from trainers.episodic_train import train
 from trainers.batch_train import test
 from detectors.pt_detector import detector_preparation
+from datasets.dataset import SimpleDataset
+from utils.preparation import transforms_preparation
+
 
 def init_learn(model,
                pt_learner,
@@ -14,7 +18,7 @@ def init_learn(model,
                device):
 
   ### == Train Model =================
-  train(model, pt_learner, train_data, args, device)
+  # train(model, pt_learner, train_data, args, device)
 
 
   test_data = read_csv(
@@ -33,7 +37,16 @@ def init_learn(model,
     else:
       print("Load model from {}".format(args.last_model_path))
   
-  test(model, test_data, args, device)
+  if args.use_transform:
+    _, test_transform = transforms_preparation()
+    test_dataset = SimpleDataset(test_data, args, transforms=test_transform)
+  else:
+    test_dataset = SimpleDataset(test_data, args)
+  test_dataloader = DataLoader(dataset=test_dataset,
+                                batch_size=args.batch_size,
+                                shuffle=False)
+
+  test(model, test_dataloader, args, device)
 
 
 

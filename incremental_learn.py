@@ -87,7 +87,6 @@ def increm_learn(model,
                                    batch_size=args.batch_size,
                                    shuffle=False)
 
-      
       ### 1) episodic test
       # known_labels = test_dataset.label_set
       known_labels = set(range((task+1)*2))
@@ -97,7 +96,7 @@ def increm_learn(model,
                                             args)
       # acc_ce, _ = evaluate(model, test_dataloader, device)
     
-    
+
       ### 2) batch test
       # acc_cls = test(model, test_dataloader, args, device)
 
