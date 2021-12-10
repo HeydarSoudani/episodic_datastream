@@ -22,10 +22,9 @@ np.random.seed(args.seed)
 
 
 ## == Save dir ========================
-if not os.path.exists(os.path.join(args.saved, args.train_path)):
-  os.makedirs(os.path.join(args.saved, args.train_path))
-if not os.path.exists(os.path.join(args.saved, args.test_path)):
-  os.makedirs(os.path.join(args.saved, args.test_path))
+if not os.path.exists(args.saved):
+  os.makedirs(args.saved)
+
 
 if __name__ == '__main__':
   ## ========================================
