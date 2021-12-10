@@ -26,7 +26,7 @@ def train(model,
   min_loss = float('inf')
   try:
     for epoch_item in range(args.start_epoch, args.epochs):
-      print('===================================== Epoch %d =====================================' % epoch_item)
+      print('=== Epoch %d ===' % epoch_item)
       train_loss = 0.
       for i, batch in enumerate(train_loader):
         images, labels = batch
@@ -55,9 +55,8 @@ def train(model,
               total_val_loss += loss.item()
 
             total_val_loss /= len(val_loader)
-            print('Epoch: %d/%d, Train Loss: %f, Val Loss: %f' % (
+            print('=== Epoch: %d/%d, Train Loss: %f, Val Loss: %f' % (
               epoch_item, i+1,  train_loss/args.log_interval, total_val_loss))
-            print('===============================================')
             train_loss = 0.
 
             # save best model
