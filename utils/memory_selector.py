@@ -224,7 +224,8 @@ class IncrementalMemory():
         # for i, data in enumerate(dataloader):
         # sample, _ = data
         sample = dataset[:][0]
-        print(sample.shape)
+        print(len(sample))
+        print(sample[0].shape)
 
         sample = sample.to(self.device)
         _, features = model.forward(sample)
