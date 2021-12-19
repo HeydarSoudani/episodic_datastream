@@ -167,7 +167,7 @@ class IncrementalMemory():
   def __call__(self):
     return np.concatenate(list(self.class_data.values()), axis=0)
 
-  def update(self, data):
+  def update(self, model, data):
     
     new_samples = np.array(data)
     labels = np.array(data[:, -1]).flatten()
