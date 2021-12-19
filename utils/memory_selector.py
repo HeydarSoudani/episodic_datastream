@@ -221,12 +221,14 @@ class IncrementalMemory():
       # === Calculate feature ===========
       model.eval()
       with torch.no_grad():
-        for i, data in enumerate(dataloader):
-          sample, _ = data
+        # for i, data in enumerate(dataloader):
+        # sample, _ = data
+        sample = dataset[:]
+        print(sample)
 
-          sample = sample.to(self.device)
-          _, features = model.forward(sample)
-          features_list.append(features)
+        sample = sample.to(self.device)
+        _, features = model.forward(sample)
+        features_list.append(features)
 
         features = torch.cat(features_list)
       
