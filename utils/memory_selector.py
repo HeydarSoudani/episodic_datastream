@@ -223,9 +223,10 @@ class IncrementalMemory():
       with torch.no_grad():
         # for i, data in enumerate(dataloader):
         # sample, _ = data
-        sample = dataset[:][0]
-        print(len(sample))
-        print(sample[0].shape)
+        data = dataset[:]
+        sample = torch.cat([item[0] for item in data])
+        # print(len(sample))
+        print(sample.shape)
 
         sample = sample.to(self.device)
         _, features = model.forward(sample)
