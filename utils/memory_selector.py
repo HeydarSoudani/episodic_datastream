@@ -2,6 +2,9 @@ import time
 import torch
 import random
 import numpy as np
+from torch.utils.data import DataLoader
+
+from datasets.dataset import SimpleDataset
 
 def euclidean_dist(x, y):
   '''
@@ -26,14 +29,16 @@ class OperationalMemory():
                 per_class,
                 novel_acceptance,
                 device,
-                selection_method='rand'):
+                args,
+                selection_method='soft_rand'):
     self.per_class = per_class
     self.novel_acceptance = novel_acceptance
     self.device = device
+    self.args = args
     self.selection_method = selection_method
     self.class_data = None
 
-  def select(self, data, return_data=False):
+  def select(self, model, data, return_data=False):
     """
     Compute ...
     Args:
@@ -68,8 +73,8 @@ class OperationalMemory():
 
     if self.selection_method == 'rand':
       self.rand_selection()
-    # elif self.selection_method == 'soft_rand':
-    #   self.soft_rand_selection()
+    elif self.selection_method == 'soft_rand':
+      self.soft_rand_selection(model)
     
     # for label, features in self.class_data.items():
     #   print('{} -> {}'.format(label, features.shape))
@@ -97,9 +102,35 @@ class OperationalMemory():
         idxs = np.random.choice(range(n), size=self.per_class, replace=False)
         self.class_data[label] = samples[idxs]
   
-  def soft_rand_selection(self):
-    for label, features in self.class_data.items():
-      n = features.shape[0]
+  def soft_rand_selection(self, model):
+
+
+    for label, samples in self.class_data.items():
+
+      features_list = []
+      # === Preparing data ===============
+      n = samples.shape[0]
+      labels = torch.full((n, 1), label, device=self.device, dtype=torch.float) #[200, 1]
+      data = torch.cat((samples, labels), axis=1)
+      
+      _, test_transform = transforms_preparation()
+      if self.args.use_transform:
+        dataset = SimpleDataset(data, args, transforms=test_transform)
+      else:
+        dataset = SimpleDataset(data, args)     
+  
+      dataloader = DataLoader(dataset=dataset, batch_size=16, shuffle=False)
+      model.eval()
+      with torch.no_grad():
+        for i, data in enumerate(dataloader):
+          samples, _ = data
+          samples, _ = samples.to(device)
+          _, features = model.forward(samples)
+          features_list.append(features)
+
+        features = torch.cat(features_list)
+      
+
       if n >= self.per_class:
         prototype = features.mean(0).reshape(1, -1)
 
@@ -109,7 +140,7 @@ class OperationalMemory():
         score = np.log2(score)
         score /= np.sum(score)
         idxs = np.random.choice(range(n), size=self.per_class, p=score, replace=False)
-        self.class_data[label] = features[idxs]
+        self.class_data[label] = samples[idxs]
 
   def load(self, pkl_path):
     self.__dict__.update(torch.load(pkl_path))
