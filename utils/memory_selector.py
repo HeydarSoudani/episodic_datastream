@@ -232,9 +232,7 @@ class IncrementalMemory():
         dist = euclidean_dist(features, prototype) #[n, 1]
         dist = np.squeeze(dist.detach().cpu().numpy())
         score = np.maximum(dist, 1.0001)
-        print(score)
         score = np.log2(score)
-        print(score)
         score /= np.sum(score)
         idxs = np.random.choice(range(n), size=self.per_class, p=score, replace=False)
         self.class_data[label] = samples[idxs]
