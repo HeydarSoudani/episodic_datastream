@@ -115,16 +115,16 @@ class OperationalMemory():
       
       _, test_transform = transforms_preparation()
       if self.args.use_transform:
-        dataset = SimpleDataset(data, args, transforms=test_transform)
+        dataset = SimpleDataset(data, self.args, transforms=test_transform)
       else:
-        dataset = SimpleDataset(data, args)     
+        dataset = SimpleDataset(data, self.args)     
   
       dataloader = DataLoader(dataset=dataset, batch_size=16, shuffle=False)
       model.eval()
       with torch.no_grad():
         for i, data in enumerate(dataloader):
           samples, _ = data
-          samples, _ = samples.to(device)
+          samples, _ = samples.to(self.device)
           _, features = model.forward(samples)
           features_list.append(features)
 
@@ -158,6 +158,8 @@ class IncrementalMemory():
               per_class=100,
               selection_method='soft_rand'):
     
+    self.device = device
+    self.args = args
     self.selection_type = selection_type
     self.total_size = total_size
     self.per_class = per_class
@@ -209,9 +211,9 @@ class IncrementalMemory():
       
       _, test_transform = transforms_preparation()
       if self.args.use_transform:
-        dataset = SimpleDataset(data, args, transforms=test_transform)
+        dataset = SimpleDataset(data, self.args, transforms=test_transform)
       else:
-        dataset = SimpleDataset(data, args)
+        dataset = SimpleDataset(data, self.args)
       dataloader = DataLoader(dataset=dataset, batch_size=16, shuffle=False)
       
       # === Calculate feature ===========
@@ -219,7 +221,7 @@ class IncrementalMemory():
       with torch.no_grad():
         for i, data in enumerate(dataloader):
           samples, _ = data
-          samples, _ = samples.to(device)
+          samples, _ = samples.to(self.device)
           _, features = model.forward(samples)
           features_list.append(features)
 
