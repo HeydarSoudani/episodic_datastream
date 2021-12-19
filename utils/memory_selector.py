@@ -208,14 +208,14 @@ class IncrementalMemory():
       # === Preparing data ===============
       n = samples.shape[0]
       # labels = torch.full((n, 1), label, device=self.device, dtype=torch.float) #[200, 1]
-      labels = np.full((n, 1), label)
-      data = np.concatenate((samples, labels), axis=1)
+      # labels = np.full((n, 1), label)
+      # data = np.concatenate((samples, labels), axis=1)
       
       _, test_transform = transforms_preparation()
       if self.args.use_transform:
-        dataset = SimpleDataset(data, self.args, transforms=test_transform)
+        dataset = SimpleDataset(samples, self.args, transforms=test_transform)
       else:
-        dataset = SimpleDataset(data, self.args)
+        dataset = SimpleDataset(samples, self.args)
       dataloader = DataLoader(dataset=dataset, batch_size=16, shuffle=False)
       
       # === Calculate feature ===========
