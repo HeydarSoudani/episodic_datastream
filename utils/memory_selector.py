@@ -224,7 +224,7 @@ class IncrementalMemory():
         # for i, data in enumerate(dataloader):
         # sample, _ = data
         data = dataset[:]
-        sample = torch.cat([item[0] for item in data])
+        sample = torch.stack([item[0] for item in data])
         # print(len(sample))
         print(sample.shape)
 
