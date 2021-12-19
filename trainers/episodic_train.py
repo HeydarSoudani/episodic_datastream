@@ -56,6 +56,7 @@ def train(model,
           val_acc_cls_total = learner.evaluate(model, val_dataloader, known_labels, args)  # For Pt.
           
           # print losses
+          print('scheduler: %f' % (optim.param_groups[0]['lr']))
           print('=== Time: %.2f, Step: %d, Train Loss: %f, Val Loss: %f' % (
             time.time()-global_time, miteration_item+1, train_loss_total, val_loss_total))
           # print('===============================================')
