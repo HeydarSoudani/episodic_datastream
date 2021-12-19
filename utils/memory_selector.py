@@ -207,27 +207,18 @@ class IncrementalMemory():
       features_list = []
       # === Preparing data ===============
       n = samples.shape[0]
-      # labels = torch.full((n, 1), label, device=self.device, dtype=torch.float) #[200, 1]
-      # labels = np.full((n, 1), label)
-      # data = np.concatenate((samples, labels), axis=1)
-      
+     
       _, test_transform = transforms_preparation()
       if self.args.use_transform:
         dataset = SimpleDataset(samples, self.args, transforms=test_transform)
       else:
         dataset = SimpleDataset(samples, self.args)
-      dataloader = DataLoader(dataset=dataset, batch_size=16, shuffle=False)
       
       # === Calculate feature ===========
       model.eval()
       with torch.no_grad():
-        # for i, data in enumerate(dataloader):
-        # sample, _ = data
         data = dataset[:]
         sample = torch.stack([item[0] for item in data])
-        # print(len(sample))
-        print(sample.shape)
-
         sample = sample.to(self.device)
         _, features = model.forward(sample)
         features_list.append(features)
