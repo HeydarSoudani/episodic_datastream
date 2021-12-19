@@ -206,7 +206,8 @@ class IncrementalMemory():
       features_list = []
       # === Preparing data ===============
       n = samples.shape[0]
-      labels = torch.full((n, 1), label, device=self.device, dtype=torch.float) #[200, 1]
+      # labels = torch.full((n, 1), label, device=self.device, dtype=torch.float) #[200, 1]
+      labels = np.full((n, 1), label)
       data = np.concatenate((samples, labels), axis=1)
       
       _, test_transform = transforms_preparation()
