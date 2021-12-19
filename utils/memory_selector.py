@@ -5,6 +5,7 @@ import numpy as np
 from torch.utils.data import DataLoader
 
 from datasets.dataset import SimpleDataset
+from utils.preparation import transforms_preparation
 
 def euclidean_dist(x, y):
   '''
