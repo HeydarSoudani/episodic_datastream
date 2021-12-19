@@ -151,16 +151,17 @@ class OperationalMemory():
 
 class IncrementalMemory():
   def __init__(self,
+              device,
+              args,
               selection_type='fixed_mem',   # ['fixed_mem', 'pre_class']
               total_size=1000,
               per_class=100,
-              selection_method='rand'):
+              selection_method='soft_rand'):
     
     self.selection_type = selection_type
     self.total_size = total_size
     self.per_class = per_class
     self.selection_method = selection_method
-
     self.class_data = {}
   
   def __call__(self):
@@ -173,35 +174,94 @@ class IncrementalMemory():
     unique_labels = list(np.unique(labels))
     print('unique_labels: {}'.format(unique_labels))
 
-    new_class_data = {
-      l: new_samples[np.where(labels == l)[0]]
-      for l in unique_labels
-    }
+    for l in unique_labels:
+      self.class_data[l] = new_samples[np.where(labels == l)[0]]
 
-    if self.selection_type == 'fixed_mem':
-
-      if not self.class_data:
-        class_size = int(self.total_size / len(unique_labels))
-      else:
-        known_labels = list(self.class_data.keys())
-        all_labels = unique_labels + known_labels
-        class_size = int(self.total_size / len(all_labels))
-
-        for label, samples in self.class_data.items():
-          n = samples.shape[0]
-          idxs = np.random.choice(range(n), size=class_size, replace=False)
-          self.class_data[label] = samples[idxs]
-        
-      for label in unique_labels:
-        n = new_class_data[label].shape[0]
-        idxs = np.random.choice(range(n), size=class_size, replace=False)
-        self.class_data[label] = new_samples[idxs]
+    # == Calculate class size =====
+    if not self.class_data:
+      class_size = int(self.total_size / len(unique_labels))
+    else:
+      known_labels = list(self.class_data.keys())
+      all_labels = unique_labels + known_labels
+      class_size = int(self.total_size / len(all_labels))
     
-    elif self.selection_type == 'pre_class':
-      for label in unique_labels:
-        n = new_class_data[label].shape[0]
+    # == Selection ================
+    if self.selection_method == 'rand':
+      self.rand_selection()
+    elif self.selection_method == 'soft_rand':
+      self.soft_rand_selection(model)
+    
+  def rand_selection(self):
+    for label, samples in self.class_data.items():
+      n = samples.shape[0]
+      if n >= self.per_class:
         idxs = np.random.choice(range(n), size=self.per_class, replace=False)
-        self.class_data[label] = new_samples[idxs]
-    
-    
+        self.class_data[label] = samples[idxs]
   
+  def soft_rand_selection(self, model):
+
+    for label, samples in self.class_data.items():
+      features_list = []
+      # === Preparing data ===============
+      n = samples.shape[0]
+      labels = torch.full((n, 1), label, device=self.device, dtype=torch.float) #[200, 1]
+      data = torch.cat((samples, labels), axis=1)
+      
+      _, test_transform = transforms_preparation()
+      if self.args.use_transform:
+        dataset = SimpleDataset(data, args, transforms=test_transform)
+      else:
+        dataset = SimpleDataset(data, args)
+      dataloader = DataLoader(dataset=dataset, batch_size=16, shuffle=False)
+      
+      # === Calculate feature ===========
+      model.eval()
+      with torch.no_grad():
+        for i, data in enumerate(dataloader):
+          samples, _ = data
+          samples, _ = samples.to(device)
+          _, features = model.forward(samples)
+          features_list.append(features)
+
+        features = torch.cat(features_list)
+      
+      # === Select data ==================
+      if n >= self.per_class:
+        prototype = features.mean(0).reshape(1, -1)
+
+        dist = euclidean_dist(features, prototype) #[n, 1]
+        dist = np.squeeze(dist.detach().cpu().numpy())
+        score = np.maximum(dist, 1.0001)
+        score = np.log2(score)
+        score /= np.sum(score)
+        idxs = np.random.choice(range(n), size=self.per_class, p=score, replace=False)
+        self.class_data[label] = samples[idxs]
+
+  
+
+
+
+
+
+
+
+
+ # for label in unique_labels:
+    #   n = new_class_data[label].shape[0]
+    #   idxs = np.random.choice(range(n), size=class_size, replace=False)
+    #   self.class_data[label] = new_samples[idxs]
+  
+    # new_class_data = {
+    #   l: new_samples[np.where(labels == l)[0]]
+    #   for l in unique_labels
+    # }
+    # for label, samples in self.class_data.items():
+    #   n = samples.shape[0]
+    #   idxs = np.random.choice(range(n), size=class_size, replace=False)
+    #   self.class_data[label] = samples[idxs]
+    # if self.selection_type == 'fixed_mem':
+    # elif self.selection_type == 'pre_class':
+    #   for label in unique_labels:
+    #     n = new_class_data[label].shape[0]
+    #     idxs = np.random.choice(range(n), size=self.per_class, replace=False)
+    #     self.class_data[label] = new_samples[idxs]
