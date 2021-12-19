@@ -84,7 +84,7 @@ parser.add_argument('--batch_size', type=int, default=16, help='')
 parser.add_argument('--mem_sel_type', type=str, default='fixed_mem', choices=['fixed_mem', 'pre_class'], help='')
 parser.add_argument('--mem_total_size', type=int, default=1000, help='')
 parser.add_argument('--mem_per_class', type=int, default=100, help='')
-parser.add_argument('--mem_sel_method', type=str, default='rand', choices=['rand'], help='')
+parser.add_argument('--mem_sel_method', type=str, default='soft_rand', choices=['rand', 'soft_rand'], help='')
 
 # Network
 parser.add_argument('--dropout', type=float, default=0.2, help='')
