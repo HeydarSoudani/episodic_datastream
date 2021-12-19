@@ -207,7 +207,7 @@ class IncrementalMemory():
       # === Preparing data ===============
       n = samples.shape[0]
       labels = torch.full((n, 1), label, device=self.device, dtype=torch.float) #[200, 1]
-      data = torch.cat((samples, labels), axis=1)
+      data = np.concatenate((samples, labels), axis=1)
       
       _, test_transform = transforms_preparation()
       if self.args.use_transform:
