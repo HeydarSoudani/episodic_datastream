@@ -84,7 +84,7 @@ parser.add_argument('--batch_size', type=int, default=16, help='')
 parser.add_argument('--mem_sel_type', type=str, default='fixed_mem', choices=['fixed_mem', 'pre_class'], help='')
 parser.add_argument('--mem_total_size', type=int, default=1000, help='')
 parser.add_argument('--mem_per_class', type=int, default=100, help='')
-parser.add_argument('--mem_sel_method', type=str, default='soft_rand', choices=['rand', 'soft_rand'], help='')
+parser.add_argument('--mem_sel_method', type=str, default='rand', choices=['rand', 'soft_rand'], help='')
 
 # Network
 parser.add_argument('--dropout', type=float, default=0.2, help='')
@@ -112,7 +112,7 @@ parser.add_argument("--lambda_3", type=float, default=0.001, help="Metric Coeffi
 parser.add_argument("--temp_scale", type=float, default=0.2, help="Temperature scale for DCE in loss function",)
 
 # Optimizer
-parser.add_argument('--lr', type=float, default=0.001, help='')
+parser.add_argument('--lr', type=float, default=0.0001, help='')
 parser.add_argument('--momentum', type=float, default=0.9, help='')
 parser.add_argument('--wd', type=float, default=0.0005, help='')  #l2 regularization
 parser.add_argument('--grad_clip', type=float, default=5.0)
@@ -272,7 +272,6 @@ if __name__ == '__main__':
   ## == incremental learning ============
   elif args.phase == 'incremental_learn':
     memory = IncrementalMemory(
-              device, args,
               selection_type=args.mem_sel_type, 
               total_size=args.mem_total_size,
               per_class=args.mem_per_class,

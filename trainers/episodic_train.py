@@ -68,8 +68,8 @@ def train(model,
             min_loss = val_loss_total
             print("= ...New best model saved")
     
-        if args.scheduler:
-          scheduler.step()
+        # if args.scheduler:
+        #   scheduler.step()
 
   except KeyboardInterrupt:
     print('skipping training')  
