@@ -6,7 +6,7 @@ from pandas import read_csv
 
 from datasets.dataset import SimpleDataset
 from models.cnn import Conv_4
-from models.mlp import MLP, Xavier
+from models.mlp import MLP
 
 from utils.memory_selector import OperationalMemory, IncrementalMemory
 from detectors.pt_detector import PtDetector
@@ -180,9 +180,8 @@ if not os.path.exists(args.save):
 ## == Model Definition =================
 if args.dataset in ['mnist', 'pmnist']:
   # MLP net selected like CoPE
-  n_inputs, n_outputs = 784, 10
-  nh, nl = 100, 2
-  model = MLP(([n_inputs] + [nh] * nl + [n_outputs]))
+  n_inputs, n_feature, n_outputs = 784, args.hidden_dims , 10
+  model = MLP(n_inputs, n_feature, n_outputs)
 else:
   model = Conv_4(args)
 # model = DenseNet(args, tensor_view=(3, 32, 32))

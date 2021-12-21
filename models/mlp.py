@@ -13,24 +13,22 @@ def Xavier(m):
 
 
 class MLP(nn.Module):
-  def __init__(self, sizes, bias=True):
+  def __init__(self, n_input, n_feature, n_output, bias=True):
     super(MLP, self).__init__()
     self.device = None
-    layers = []
 
-    for i in range(0, len(sizes) - 1):
-      if i < (len(sizes) - 2):
-        layers.append(nn.Linear(sizes[i], sizes[i + 1]))
-        layers.append(nn.ReLU())
-      else:
-        layers.append(nn.Linear(sizes[i], sizes[i + 1], bias=bias))
-
-    self.net = nn.Sequential(*layers)
-    self.net.apply(Xavier)
+    self.hidden = nn.Sequential(nn.Linear(n_input, 100),
+                                nn.ReLU(True),
+                                nn.Linear(100, n_feature),
+                                nn.ReLU(True))
+    self.linear = nn.Linear(n_feature, n_output, bias=bias)
+    self.hidden.apply(Xavier)
   
   def forward(self, samples):
     x = samples.view(samples.size(0), -1)
-    return self.net(x)
+    features = self.hidden(x)
+    outputs = self.linear(features)
+    return outputs, features
 
   def to(self, *args, **kwargs):
     self = super().to(*args, **kwargs)
