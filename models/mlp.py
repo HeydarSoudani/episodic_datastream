@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-
+import math
 
 def Xavier(m):
   if m.__class__.__name__ == 'Linear':
