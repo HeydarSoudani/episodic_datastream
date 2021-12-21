@@ -44,14 +44,14 @@ def increm_learn(model,
       #       args, device)
     # else:
       # 1) episodic training
-    train(model,
-          learner,
-          task_data,
-          args, device)
+    # train(model,
+    #       learner,
+    #       task_data,
+    #       args, device)
       # 2) batch training
-      # train(model,
-      #       task_data,
-      #       args, device)      
+    train(model,
+          task_data,
+          args, device)      
     
     # = Update memory =====
     # memory.update(task_data)
@@ -82,23 +82,24 @@ def increm_learn(model,
 
       ### 1) episodic test
       # known_labels = test_dataset.label_set
-      known_labels = set(range((task+1)*2))
-      _, acc_dis, acc_cls = learner.evaluate(model,
-                                            test_dataloader,
-                                            known_labels,
-                                            args)
+      # known_labels = set(range((task+1)*2))
+      # _, acc_dis, acc_cls = learner.evaluate(model,
+      #                                       test_dataloader,
+      #                                       known_labels,
+      #                                       args)
       ### 2) batch test
-      # acc_cls = test(model, test_dataloader, args, device)
+      acc_cls = test(model, test_dataloader, args, device)
 
-      tasks_acc_dist[prev_task] = acc_dis
+      # tasks_acc_dist[prev_task] = acc_dis
       tasks_acc_cls[prev_task] = acc_cls
     
-    mean_acc_dist = np.mean(tasks_acc_dist[:task+1])
+    # mean_acc_dist = np.mean(tasks_acc_dist[:task+1])
     mean_acc_cls = np.mean(tasks_acc_cls[:task+1])
     
-    print("Dist acc.: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(tasks_acc_dist))
+    # print("Dist acc.: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(tasks_acc_dist))
     print("Cls  acc.: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(tasks_acc_cls))
-    print('Mean -> Dist: {}, Cls: {}'.format(round(mean_acc_dist, 3), round(mean_acc_cls, 3)))
+    # print('Mean -> Dist: {}, Cls: {}'.format(round(mean_acc_dist, 3), round(mean_acc_cls, 3)))
+    print('Mean -> Cls: {}'.format(round(mean_acc_cls, 3)))
     # f.write("%7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(prev_tasks_acc))
     
 
