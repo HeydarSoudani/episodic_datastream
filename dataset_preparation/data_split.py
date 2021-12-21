@@ -45,7 +45,6 @@ if __name__ == '__main__':
   if args.dataset in ['mnist', 'pmnist']:
     train_data = pd.read_csv(os.path.join(args.data_path, "mnist_train.csv"), sep=',').values
     test_data = pd.read_csv(os.path.join(args.data_path, "mnist_test.csv"), sep=',').values
-
     X_train, y_train = train_data[:, 1:], train_data[:, 0]
     X_test, y_test = test_data[:, 1:], test_data[:, 0]
   ## ========================================
@@ -58,8 +57,6 @@ if __name__ == '__main__':
     test_data = pd.read_csv(os.path.join(args.data_path, "fmnist_test.csv"), sep=',').values
     X_train, y_train = train_data[:, 1:], train_data[:, 0]
     X_test, y_test = test_data[:, 1:], test_data[:, 0]
-    # X_train, y_train = load_mnist(path, kind='train') #(60000, 784), (60000,)
-    # X_test, y_test = load_mnist(path, kind='t10k')    #(10000, 784), (10000,)
   ## ========================================
   ## ========================================
 
@@ -76,6 +73,7 @@ if __name__ == '__main__':
 
   if args.dataset == 'pmnist':
     for t in range(args.n_tasks):
+      print(X_train.size(-1))
       perm = torch.arange(X_train.size(-1)) if t == 0 else torch.randperm(X_train.size(-1))
       # inv_perm = torch.zeros_like(perm)
       # for i in range(perm.size(0)):
