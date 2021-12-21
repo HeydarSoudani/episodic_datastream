@@ -1,6 +1,18 @@
 import torch
 import torch.nn as nn
 
+
+def Xavier(m):
+  if m.__class__.__name__ == 'Linear':
+    fan_in, fan_out = m.weight.data.size(1), m.weight.data.size(0)
+    std = 1.0 * math.sqrt(2.0 / (fan_in + fan_out))
+    a = math.sqrt(3.0) * std
+    m.weight.data.uniform_(-a, a)
+    if m.bias is not None:
+      m.bias.data.fill_(0.0)
+
+
+
 class MLP(nn.Module):
   def __init__(self, sizes, bias=True):
     super(MLP, self).__init__()
