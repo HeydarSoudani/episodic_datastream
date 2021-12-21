@@ -27,7 +27,9 @@ class MLP(nn.Module):
   def forward(self, samples):
     x = samples.view(samples.size(0), -1)
     features = self.hidden(x)
+    print(features.shape)
     outputs = self.linear(features)
+    print(outputs.shape)
     return outputs, features
 
   def to(self, *args, **kwargs):
