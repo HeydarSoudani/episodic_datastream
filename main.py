@@ -176,7 +176,13 @@ if not os.path.exists(args.save):
   os.makedirs(args.save)
 
 ## == Model Definition =================
-model = Conv_4(args)
+if args.dataset == 'mnist':
+  # MLP net selected like CoPE
+  n_inputs, n_outputs = 784, 10
+  nh, nl = 100, 2
+  model = MLP(([n_inputs] + [nh] * nl + [n_outputs]))
+else:
+  model = Conv_4(args)
 # model = DenseNet(args, tensor_view=(3, 32, 32))
 
 # TODO: add init. weight
