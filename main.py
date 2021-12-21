@@ -50,6 +50,7 @@ parser.add_argument(
   type=str,
   choices=[
     'mnist',
+    'pmnist',
     'fmnist',
     'cifar10'
   ],
@@ -176,7 +177,7 @@ if not os.path.exists(args.save):
   os.makedirs(args.save)
 
 ## == Model Definition =================
-if args.dataset == 'mnist':
+if args.dataset in ['mnist', 'pmnist']:
   # MLP net selected like CoPE
   n_inputs, n_outputs = 784, 10
   nh, nl = 100, 2
