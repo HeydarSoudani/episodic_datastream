@@ -7,7 +7,7 @@ import numpy as np
 class SimpleDataset(Dataset):
   def __init__(self, dataset, args, transforms=None):
   
-    if args.dataset in ['mnist', 'fmnist']:
+    if args.dataset in ['mnist', 'pmnist', 'fmnist']:
       self.tensor_view = (1, 28, 28)
     elif args.dataset in ['cifar10', 'cifar100']:
       self.tensor_view = (3, 32, 32)

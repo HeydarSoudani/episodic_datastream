@@ -12,7 +12,6 @@ def Xavier(m):
       m.bias.data.fill_(0.0)
 
 
-
 class MLP(nn.Module):
   def __init__(self, sizes, bias=True):
     super(MLP, self).__init__()
