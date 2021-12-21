@@ -6,7 +6,7 @@ from pandas import read_csv
 
 from datasets.dataset import SimpleDataset
 from models.cnn import Conv_4
-from models.mlp import MLP
+from models.mlp import MLP, Xavier
 
 from utils.memory_selector import OperationalMemory, IncrementalMemory
 from detectors.pt_detector import PtDetector
