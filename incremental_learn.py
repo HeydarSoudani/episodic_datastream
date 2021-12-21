@@ -3,8 +3,8 @@ import os
 import numpy as np
 import pandas as pd
 
-from trainers.episodic_train import train
-# from trainers.batch_train import train, test
+# from trainers.episodic_train import train
+from trainers.batch_train import train, test
 from datasets.dataset import SimpleDataset
 from utils.preparation import transforms_preparation
 
