@@ -73,10 +73,10 @@ if __name__ == '__main__':
 
   if args.dataset == 'pmnist':
     for t in range(args.n_tasks):
-      print(X_train.shape)
-      print(X_train.shape[-1])
-      print(X_train.size(-1))
-      perm = torch.arange(X_train.size(-1)) if t == 0 else torch.randperm(X_train.size(-1))
+      # print(X_train.shape)
+      # print(X_train.shape[-1])
+      # print(X_train.size(-1))
+      perm = torch.arange(X_train.shape(-1)) if t == 0 else torch.randperm(X_train.shape(-1))
       # inv_perm = torch.zeros_like(perm)
       # for i in range(perm.size(0)):
       #   inv_perm[perm[i]] = i
