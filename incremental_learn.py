@@ -3,8 +3,8 @@ import os
 import numpy as np
 import pandas as pd
 
-from trainers.episodic_train import train
-# from trainers.batch_train import train, test
+# from trainers.episodic_train import train
+from trainers.batch_train import train, test
 from datasets.dataset import SimpleDataset
 from utils.preparation import transforms_preparation
 
@@ -52,25 +52,25 @@ def increm_learn(model,
       #    
     
     if task == 0:
-      # train(model,
-      #   task_data,
-      #   args, device)
       train(model,
-            learner,
-            task_data,
-            args, device)  
+        task_data,
+        args, device)
+      # train(model,
+      #       learner,
+      #       task_data,
+      #       args, device)  
       # = Update memory =====
       memory.update(task_data)
     else:
       replay_mem = memory()
       train_data = np.concatenate((task_data, replay_mem))
-      # train(model,
-      #     train_data,
-      #     args, device)   
       train(model,
-            learner,
-            train_data,
-            args, device) 
+          train_data,
+          args, device)   
+      # train(model,
+      #       learner,
+      #       train_data,
+      #       args, device) 
 
     # = evaluation ========
     print('=== Testing ... ===')
@@ -97,25 +97,25 @@ def increm_learn(model,
                                    shuffle=False)
 
       ### 1) episodic test
-      known_labels = test_dataset.label_set
-      known_labels = set(range((task+1)*2))
-      _, acc_dis, acc_cls = learner.evaluate(model,
-                                            test_dataloader,
-                                            known_labels,
-                                            args)
+      # known_labels = test_dataset.label_set
+      # known_labels = set(range((task+1)*2))
+      # _, acc_dis, acc_cls = learner.evaluate(model,
+      #                                       test_dataloader,
+      #                                       known_labels,
+      #                                       args)
       ### 2) batch test
-      # acc_cls = test(model, test_dataloader, args, device)
+      acc_cls = test(model, test_dataloader, args, device)
 
-      tasks_acc_dist[prev_task] = acc_dis
+      # tasks_acc_dist[prev_task] = acc_dis
       tasks_acc_cls[prev_task] = acc_cls
     
-    mean_acc_dist = np.mean(tasks_acc_dist[:task+1])
+    # mean_acc_dist = np.mean(tasks_acc_dist[:task+1])
     mean_acc_cls = np.mean(tasks_acc_cls[:task+1])
     
-    print("Dist acc.: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(tasks_acc_dist))
+    # print("Dist acc.: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(tasks_acc_dist))
     print("Cls  acc.: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(tasks_acc_cls))
-    print('Mean -> Dist: {}, Cls: {}'.format(round(mean_acc_dist, 3), round(mean_acc_cls, 3)))
-    # print('Mean -> Cls: {}'.format(round(mean_acc_cls, 3)))
+    # print('Mean -> Dist: {}, Cls: {}'.format(round(mean_acc_dist, 3), round(mean_acc_cls, 3)))
+    print('Mean -> Cls: {}'.format(round(mean_acc_cls, 3)))
     # f.write("%7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(prev_tasks_acc))
     
 
