@@ -216,7 +216,6 @@ try: learner.load(args.prototypes_path)
 except FileNotFoundError: pass
 else: print("Load Prototypes from {}".format(args.prototypes_path))
 
-
 if args.phase not in ['incremental_learn', 'plot', 'batch_learn']:
 
   ## == load train data from file ========

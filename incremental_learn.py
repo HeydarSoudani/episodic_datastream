@@ -24,7 +24,7 @@ def increm_learn(model,
                   os.path.join(args.split_train_path, "task_{}.csv".format(task)),
                   sep=',', header=None).values 
     print('task_data: {}'.format(task_data.shape))
-    
+
     # if task != 0:
     #   if task == 2: args.ways = 5
     #   replay_mem = memory()
@@ -49,13 +49,21 @@ def increm_learn(model,
     #       task_data,
     #       args, device)
       # 2) batch training
-    train(model,
-          task_data,
-          args, device)      
+      #    
     
-    # = Update memory =====
-    # memory.update(task_data)
-    
+    if task == 0:
+      train(model,
+        task_data,
+        args, device)     
+      # = Update memory =====
+      memory.update(task_data)
+    else:
+      replay_mem = memory()
+      train_data = np.concatenate((task_data, replay_mem))
+      train(model,
+          train_data,
+          args, device)   
+
     # = evaluation ========
     print('=== Testing ... ===')
 
