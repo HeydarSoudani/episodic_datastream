@@ -39,9 +39,9 @@ def increm_learn(model,
     #         train_data,
     #         args, device)
       # 2) batch training
-    train(model,
-          train_data,
-          args, device)
+    # train(model,
+    #       train_data,
+    #       args, device)
     # else:
       # 1) episodic training
     # train(model,
@@ -49,9 +49,9 @@ def increm_learn(model,
     #       task_data,
     #       args, device)
       # 2) batch training
-    # train(model,
-    #       task_data,
-    #       args, device)      
+    train(model,
+          task_data,
+          args, device)      
     
     # = Update memory =====
     # memory.update(task_data)
