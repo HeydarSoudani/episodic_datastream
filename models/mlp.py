@@ -17,9 +17,9 @@ class MLP(nn.Module):
     super(MLP, self).__init__()
     self.device = None
 
-    self.hidden = nn.Sequential(nn.Linear(n_input, 100),
+    self.hidden = nn.Sequential(nn.Linear(n_input, 128),
                                 nn.ReLU(True),
-                                nn.Linear(100, n_feature),
+                                nn.Linear(128, n_feature),
                                 nn.ReLU(True))
     self.linear = nn.Linear(n_feature, n_output, bias=bias)
     self.hidden.apply(Xavier)
