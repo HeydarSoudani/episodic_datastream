@@ -13,6 +13,7 @@ parser.add_argument(
   choices=[
     'mnist',
     'pmnist',
+    'rmnist',
     'fmnist',
     'cifar10'
   ],
@@ -42,7 +43,7 @@ if not os.path.exists(os.path.join(args.saved, args.test_path)):
 if __name__ == '__main__':
   ## ========================================
   # == Get MNIST dataset ====================
-  if args.dataset in ['mnist', 'pmnist']:
+  if args.dataset in ['mnist', 'pmnist', 'rmnist']:
     train_data = pd.read_csv(os.path.join(args.data_path, "mnist_train.csv"), sep=',').values
     test_data = pd.read_csv(os.path.join(args.data_path, "mnist_test.csv"), sep=',').values
     X_train, y_train = train_data[:, 1:], train_data[:, 0]
@@ -73,9 +74,6 @@ if __name__ == '__main__':
 
   if args.dataset == 'pmnist':
     for t in range(args.n_tasks):
-      # print(X_train.shape)
-      # print(X_train.shape[-1])
-      # print(X_train.size(-1))
       perm = torch.arange(X_train.shape[-1]) if t == 0 else torch.randperm(X_train.shape[-1])
       # inv_perm = torch.zeros_like(perm)
       # for i in range(perm.size(0)):
@@ -91,6 +89,11 @@ if __name__ == '__main__':
         header=None,
         index=None)
 
+  elif args.dataset == 'rmnist':
+    angles = [0, 10, 20, 30, 40]
+    for t in range(args.n_tasks):
+
+      pass
   else:
     train_data = np.concatenate((X_train, y_train.reshape(-1, 1)), axis=1)
     test_data = np.concatenate((X_test, y_test.reshape(-1, 1)), axis=1)

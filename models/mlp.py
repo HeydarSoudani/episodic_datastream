@@ -21,7 +21,7 @@ class MLP(nn.Module):
                                 nn.ReLU(True),
                                 nn.Dropout(args.dropout),
                                 nn.Linear(100, n_feature),
-                                nn.ReLU(True).
+                                nn.ReLU(True),
                                 nn.Dropout(args.dropout))
     self.linear = nn.Linear(n_feature, n_output, bias=bias)
     self.hidden.apply(Xavier)
