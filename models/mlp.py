@@ -13,14 +13,16 @@ def Xavier(m):
 
 
 class MLP(nn.Module):
-  def __init__(self, n_input, n_feature, n_output, bias=True):
+  def __init__(self, n_input, n_feature, n_output, args, bias=True):
     super(MLP, self).__init__()
     self.device = None
 
     self.hidden = nn.Sequential(nn.Linear(n_input, 100),
                                 nn.ReLU(True),
+                                nn.Dropout(args.dropout),
                                 nn.Linear(100, n_feature),
-                                nn.ReLU(True))
+                                nn.ReLU(True).
+                                nn.Dropout(args.dropout))
     self.linear = nn.Linear(n_feature, n_output, bias=bias)
     self.hidden.apply(Xavier)
   
