@@ -22,7 +22,7 @@ parser.add_argument(
 parser.add_argument('--seed', type=int, default=2, help='')
 args = parser.parse_args()
 
-# = Add some variables to args ===
+# = Add some variables to args ========
 args.data_path = 'data/{}'.format('mnist' if args.dataset=='pmnist' else args.dataset)
 args.train_path = 'train'
 args.test_path = 'test'
