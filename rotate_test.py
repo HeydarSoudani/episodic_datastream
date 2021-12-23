@@ -1,6 +1,8 @@
 import torch
 import torchvision
+import torchvision.transforms as transforms
 
+from scipy import ndimage
 import matplotlib.pyplot as plt
 import pandas as pd 
 import numpy as np
@@ -9,10 +11,17 @@ import os
 
 
 def imshow(imgs):
-  img = torchvision.utils.make_grid(imgs)
-  img = img / 2 + 0.5     # unnormalize
-  npimg = img.detach().cpu().numpy()
-  plt.imshow(np.transpose(npimg, (1, 2, 0)))
+
+  grid_imgs = torchvision.utils.make_grid(torch.tensor(imgs), nrow=2)
+  plt.imshow(grid_imgs.permute(1, 2, 0))
+  
+  
+  # # imgs = imgs / 2 + 0.5     # unnormalize
+  # npimg = imgs.detach().cpu().numpy()
+  # print(imgs.shape)
+  # # print(np.transpose(imgs, (1, 2, 0)).shape)
+  # plt.imshow(imgs)
+  # plt.imshow(np.transpose(npimg, (1, 2, 0)))
   plt.show()
 
 
@@ -52,15 +61,15 @@ X_test, y_test = test_data[:, 1:], test_data[:, 0]
 
 
 img_view = (1, 28, 28)
-X_test = train_data.view((X_test.shape[0], *img_view))
+X_test = X_test.reshape((X_test.shape[0], *img_view))
+X_test = torch.tensor(X_test, dtype=torch.float32)
 
-angles = [0, 10, 20, 30, 40]
+topil_trans = transforms.ToPILImage()
+totensor_trans = transforms.ToTensor()
+
+angles = [0, 20, 40, 60, 80]
 for t in range(args.n_tasks):
-  transform = transforms.Compose([
-    transforms.ToPILImage(),
-    transforms.Rotate(angles[t]),
-    transforms.ToTensor()
-  ])
-
-  X_test_aug = transform(X_test[:10])
-  imshow(torch.cat([X_test[:10], X_test_aug]))
+  rotated_xtest = transforms.functional.rotate(topil_trans(X_test[1]), angles[t])
+  rotated_xtest = totensor_trans(rotated_xtest)
+  rotated_xtest = (rotated_xtest*255)
+  imshow(torch.stack([X_test[1], rotated_xtest]))
