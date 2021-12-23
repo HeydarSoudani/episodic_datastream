@@ -90,14 +90,6 @@ if __name__ == '__main__':
         index=None)
 
   elif args.dataset == 'rmnist':
-    img_view = (1, 28, 28)
-    topil_trans = transforms.ToPILImage()
-    totensor_trans = transforms.ToTensor()
-  
-    X_train = X_train.reshape((X_train.shape[0], *img_view))
-    X_train = torch.tensor(X_train, dtype=torch.float32)
-    X_test = X_test.reshape((X_test.shape[0], *img_view))
-    X_test = torch.tensor(X_test, dtype=torch.float32)
     
     angles = [0, 20, 40, 60, 80]
     for t in range(args.n_tasks):
@@ -113,6 +105,15 @@ if __name__ == '__main__':
           index=None)
       
       else:
+        img_view = (1, 28, 28)
+        topil_trans = transforms.ToPILImage()
+        totensor_trans = transforms.ToTensor()
+      
+        X_train = X_train.reshape((X_train.shape[0], *img_view))
+        X_train = torch.tensor(X_train, dtype=torch.float32)
+        X_test = X_test.reshape((X_test.shape[0], *img_view))
+        X_test = torch.tensor(X_test, dtype=torch.float32)
+        
         rotated_xtrain_list = []
         rotated_xtest_list = []
         
