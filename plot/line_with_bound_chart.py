@@ -50,18 +50,8 @@ def get_data(dataset):
     ])
   if dataset == 'rmnist':
     # no-mem
-    mean = np.array([
-      [],
-      [],
-      [],
-      []
-    ])
-    std = np.array([
-      [],
-      [],
-      [],
-      []
-    ])
+    mean = np.array([[], [], [], []])
+    std = np.array([[], [], [], []])
 
     # mem: 5pc
     mean = np.array([
@@ -90,6 +80,8 @@ def get_data(dataset):
       [],
       []
     ])
+
+    # mem: 50pc
 
   return mean, std
 
