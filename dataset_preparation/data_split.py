@@ -142,6 +142,8 @@ if __name__ == '__main__':
           header=None,
           index=None)
 
+      print('task {} dataset done!'.format(t))
+
   else:
     train_data = np.concatenate((X_train, y_train.reshape(-1, 1)), axis=1)
     test_data = np.concatenate((X_test, y_test.reshape(-1, 1)), axis=1)
