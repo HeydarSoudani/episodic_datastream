@@ -18,7 +18,7 @@ parser.add_argument(
     'fmnist',
     'cifar10'
   ],
-  default='rmnist',
+  default='mnist',
   help='')
 parser.add_argument('--seed', type=int, default=2, help='')
 args = parser.parse_args()
@@ -82,7 +82,6 @@ if __name__ == '__main__':
       
       train_data = np.concatenate((X_train[:, perm], y_train.reshape(-1, 1)), axis=1)
       test_data = np.concatenate((X_test[:, perm], y_test.reshape(-1, 1)), axis=1)
-
       pd.DataFrame(train_data).to_csv(os.path.join(args.saved, args.train_path, 'task_{}.csv'.format(t)),
         header=None,
         index=None)
