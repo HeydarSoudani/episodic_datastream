@@ -104,7 +104,7 @@ def increm_learn(model,
                                             known_labels,
                                             args)
       ### 2) batch test
-      acc_cls = test(model, test_dataloader, args, device)
+      # acc_cls = test(model, test_dataloader, args, device)
 
       tasks_acc_dist[prev_task] = acc_dis
       tasks_acc_cls[prev_task] = acc_cls
