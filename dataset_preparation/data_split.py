@@ -19,7 +19,7 @@ parser.add_argument(
     'fmnist',
     'cifar10'
   ],
-  default='rmnist',
+  default='pmnist',
   help='')
 parser.add_argument('--seed', type=int, default=2, help='')
 args = parser.parse_args()
@@ -79,6 +79,7 @@ if __name__ == '__main__':
       # inv_perm = torch.zeros_like(perm)
       # for i in range(perm.size(0)):
       #   inv_perm[perm[i]] = i
+      
       
       train_data = np.concatenate((X_train[:, perm], y_train.reshape(-1, 1)), axis=1)
       test_data = np.concatenate((X_test[:, perm], y_test.reshape(-1, 1)), axis=1)
