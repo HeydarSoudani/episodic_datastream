@@ -3,6 +3,7 @@ import torchvision.transforms as transforms
 import pandas as pd 
 import numpy as np
 import argparse
+import time
 import os
 
 ## == Params ==========================
@@ -18,7 +19,7 @@ parser.add_argument(
     'fmnist',
     'cifar10'
   ],
-  default='mnist',
+  default='rmnist',
   help='')
 parser.add_argument('--seed', type=int, default=2, help='')
 args = parser.parse_args()
@@ -92,6 +93,7 @@ if __name__ == '__main__':
     
     angles = [0, 10, 20, 30, 40]
     for t in range(args.n_tasks):
+    # for t in range(1):
       
       # if t == 0: 
       #   train_data = np.concatenate((X_train, y_train.reshape(-1, 1)), axis=1)
@@ -104,25 +106,17 @@ if __name__ == '__main__':
       #     index=None)
       
       # else:
-      img_view = (1, 28, 28)
-      topil_trans = transforms.ToPILImage()
-      totensor_trans = transforms.Compose([
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.5], std=[0.5])
-      ])
-
-      X_train = X_train.reshape((X_train.shape[0], *img_view))
-      X_train = torch.tensor(X_train, dtype=torch.float32)
-      X_test = X_test.reshape((X_test.shape[0], *img_view))
-      X_test = torch.tensor(X_test, dtype=torch.float32)
-      
+      tensor_view = (1, 28, 28)
       rotated_xtrain_list = []
       rotated_xtest_list = []
       
       for img in X_train:
-        rotated_img = transforms.functional.rotate(topil_trans(img), angles[t])
-        rotated_img = totensor_trans(rotated_img)
+        x_tensor = (torch.tensor(img, dtype=torch.float) / 255).view(tensor_view)
+        pil_img = transforms.ToPILImage()(x_tensor)
+        rotated_pil_img = transforms.functional.rotate(pil_img, angles[t])
+        rotated_img = transforms.ToTensor()(rotated_pil_img)
         rotated_img = rotated_img*255.0
+
         rotated_xtrain_list.append(rotated_img)
       rotated_xtrain = torch.stack(rotated_xtrain_list)
       rotated_xtrain = rotated_xtrain.clone().detach().numpy()
@@ -133,9 +127,12 @@ if __name__ == '__main__':
         index=None)
       
       for img in X_test:
-        rotated_img = transforms.functional.rotate(topil_trans(img), angles[t])
-        rotated_img = totensor_trans(rotated_img)
-        rotated_img = (rotated_img*255)
+        x_tensor = (torch.tensor(img, dtype=torch.float) / 255).view(tensor_view)
+        pil_img = transforms.ToPILImage()(x_tensor)
+        rotated_pil_img = transforms.functional.rotate(pil_img, angles[t])
+        rotated_img = transforms.ToTensor()(rotated_pil_img)
+        rotated_img = rotated_img*255.0
+
         rotated_xtest_list.append(rotated_img)
       rotated_xtest = torch.stack(rotated_xtest_list)
       rotated_xtest = rotated_xtest.clone().detach().numpy()
