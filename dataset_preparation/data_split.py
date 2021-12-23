@@ -25,10 +25,9 @@ args = parser.parse_args()
 
 # = Add some variables to args ========
 args.data_path = 'data/{}'.format('mnist' if args.dataset in ['pmnist', 'rmnist'] else args.dataset)
+args.saved = './data/split_{}'.format(args.dataset)
 args.train_path = 'train'
 args.test_path = 'test'
-args.saved = './data/split_{}'.format(args.dataset)
-
 
 ## == Apply seed ======================
 np.random.seed(args.seed)
@@ -123,7 +122,7 @@ if __name__ == '__main__':
           rotated_img = (rotated_img*255)
           rotated_xtrain_list.append(rotated_img)
         rotated_xtrain = torch.stack(rotated_xtrain_list)
-        rotated_xtrain = rotated_xtrain.cpu().detach().numpy()
+        rotated_xtrain = rotated_xtrain.clone().detach().numpy()
         rotated_xtrain = rotated_xtrain.reshape(rotated_xtrain.shape[0], -1)
         train_data = np.concatenate((rotated_xtrain, y_train.reshape(-1, 1)), axis=1)
         pd.DataFrame(train_data).to_csv(os.path.join(args.saved, args.train_path, 'task_{}.csv'.format(t)),
@@ -136,7 +135,7 @@ if __name__ == '__main__':
           rotated_img = (rotated_img*255)
           rotated_xtest_list.append(rotated_img)
         rotated_xtest = torch.stack(rotated_xtest_list)
-        rotated_xtest = rotated_xtest.cpu().detach().numpy()
+        rotated_xtest = rotated_xtest.clone().detach().numpy()
         rotated_xtest = rotated_xtest.reshape(rotated_xtest.shape[0], -1)
         test_data = np.concatenate((rotated_xtest, y_test.reshape(-1, 1)), axis=1)
         pd.DataFrame(test_data).to_csv(os.path.join(args.saved, args.test_path, 'task_{}.csv'.format(t)),
