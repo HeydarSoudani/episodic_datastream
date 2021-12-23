@@ -36,8 +36,18 @@ def get_data(dataset):
     ])
 
     # mem: 10pc
-
-
+    mean = np.array([
+      [],
+      [],
+      [],
+      []
+    ])
+    std = np.array([
+      [],
+      [],
+      [],
+      []
+    ])
   if dataset == 'rmnist':
     pass
   
