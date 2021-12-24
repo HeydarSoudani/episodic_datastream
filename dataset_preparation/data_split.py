@@ -26,7 +26,15 @@ parser.add_argument('--seed', type=int, default=2, help='')
 args = parser.parse_args()
 
 # = Add some variables to args ========
-args.data_path = 'data/{}'.format('mnist' if args.dataset in ['pmnist', 'rmnist'] else args.dataset)
+
+if args.dataset in ['mnist', 'pmnist', 'rmnist']:
+  data_folder = 'mnist'
+elif args.dataset in ['fmnist', 'pfmnist', 'rfmnist']:
+  data_folder = 'fmnist'
+else:
+  data_folder = args.dataset
+
+args.data_path = 'data/{}'.format(data_folder)
 args.saved = './data/split_{}'.format(args.dataset)
 args.train_path = 'train'
 args.test_path = 'test'
