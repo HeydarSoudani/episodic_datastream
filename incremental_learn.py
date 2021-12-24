@@ -51,24 +51,28 @@ def increm_learn(model,
       # 2) batch training
       #    
     
-    if task == 0:
-      train(model,
+    train(model,
         task_data,
         args, device)
+    
+    if task == 0:
+      # train(model,
+      #   task_data,
+      #   args, device)
       # train(model,
       #       learner,
       #       task_data,
       #       args, device)  
       # = Update memory =====
-      memory.update(task_data)
+      # memory.update(task_data)
       args.beta_type = 'fixed'
       args.beta = 0.999
-    else:
-      replay_mem = memory()
-      train_data = np.concatenate((task_data, replay_mem))
-      train(model,
-          train_data,
-          args, device)   
+    # else:
+    #   replay_mem = memory()
+    #   train_data = np.concatenate((task_data, replay_mem))
+    #   train(model,
+    #       train_data,
+    #       args, device)   
       # train(model,
       #       learner,
       #       train_data,
