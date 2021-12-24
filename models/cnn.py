@@ -63,7 +63,7 @@ class Conv_4(nn.Module):
 	def __init__(self, args):
 		super(Conv_4, self).__init__()
 		
-		if args.dataset in ['mnist', 'fmnist']:
+		if args.dataset in ['mnist', 'fmnist', 'rmnist']:
 			img_channels = 1	  	# 1
 			self.last_layer = 1 	# 3 for 3-layers - 1 for 4-layers
 		elif args.dataset in ['cifar10', 'cifar100']:
