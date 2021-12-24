@@ -54,6 +54,7 @@ parser.add_argument(
     'pmnist',
     'rmnist',
     'fmnist',
+    'rfmnist',
     'cifar10'
   ],
   default='mnist',

@@ -56,14 +56,13 @@ class CNNEncoder(nn.Module):
 		self.load_state_dict(state_dict)
 
 
-
 # Layers 1&2, with kernel_size 5
 # Layers 3&4, with kernel_size 3 
 class Conv_4(nn.Module):
 	def __init__(self, args):
 		super(Conv_4, self).__init__()
 		
-		if args.dataset in ['mnist', 'fmnist', 'rmnist']:
+		if args.dataset in ['mnist', 'rmnist', 'fmnist', 'rfmnist']:
 			img_channels = 1	  	# 1
 			self.last_layer = 1 	# 3 for 3-layers - 1 for 4-layers
 		elif args.dataset in ['cifar10', 'cifar100']:

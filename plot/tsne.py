@@ -26,8 +26,23 @@ def tsne(model, args, device):
     test_dataset = SimpleDataset(test_data, args, transforms=test_transform)
   else:
     test_dataset = SimpleDataset(test_data, args)
-  test_dataloader = DataLoader(dataset=test_dataset, batch_size=8, shuffle=False)
   
+  print(test_dataset.label_set)
+  print(len(test_dataset))
+  sampler = PtSampler(
+    test_dataset,
+    n_way=10,
+    n_shot=100,
+    n_query=0,
+    n_tasks=1
+  )
+  test_dataloader = DataLoader(
+    test_dataset,
+    batch_sampler=sampler,
+    num_workers=1,
+    pin_memory=True,
+    collate_fn=sampler.episodic_collate_fn,
+  )
 
   ### ======================================
   ### == Feature space visualization =======
@@ -38,7 +53,7 @@ def tsne(model, args, device):
 
   with torch.no_grad():
     batch = next(iter(test_dataloader))
-    samples, labels = batch
+    support_images, support_labels, _, _ = batch
     support_images = support_images.reshape(-1, *support_images.shape[2:])
     support_labels = support_labels.flatten()
     support_images = support_images.to(device)

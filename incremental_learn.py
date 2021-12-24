@@ -100,7 +100,7 @@ def increm_learn(model,
 
       ### 1) episodic test
       known_labels = test_dataset.label_set
-      known_labels = set(range((task+1)*2))
+      # known_labels = set(range((task+1)*2))
       _, acc_dis, acc_cls = learner.evaluate(model,
                                             test_dataloader,
                                             known_labels,

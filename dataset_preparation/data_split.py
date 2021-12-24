@@ -17,6 +17,7 @@ parser.add_argument(
     'pmnist',
     'rmnist',
     'fmnist',
+    'rfmnist',
     'cifar10'
   ],
   default='pmnist',
@@ -54,7 +55,7 @@ if __name__ == '__main__':
 
   ## ========================================
   # == Get Fashion-MNIST dataset ============
-  if args.dataset == 'fmnist':
+  if args.dataset in ['fmnist', 'rfmnist']:
     train_data = pd.read_csv(os.path.join(args.data_path, "fmnist_train.csv"), sep=',').values
     test_data = pd.read_csv(os.path.join(args.data_path, "fmnist_test.csv"), sep=',').values
     X_train, y_train = train_data[:, 1:], train_data[:, 0]
@@ -79,8 +80,6 @@ if __name__ == '__main__':
       # inv_perm = torch.zeros_like(perm)
       # for i in range(perm.size(0)):
       #   inv_perm[perm[i]] = i
-      
-      
       train_data = np.concatenate((X_train[:, perm], y_train.reshape(-1, 1)), axis=1)
       test_data = np.concatenate((X_test[:, perm], y_test.reshape(-1, 1)), axis=1)
       pd.DataFrame(train_data).to_csv(os.path.join(args.saved, args.train_path, 'task_{}.csv'.format(t)),
@@ -90,58 +89,57 @@ if __name__ == '__main__':
         header=None,
         index=None)
 
-  elif args.dataset == 'rmnist':
+  elif args.dataset in ['rmnist', 'rfmnist']:
     
     angles = [0, 10, 20, 30, 40]
     for t in range(args.n_tasks):
-    # for t in range(1):
       
-      # if t == 0: 
-      #   train_data = np.concatenate((X_train, y_train.reshape(-1, 1)), axis=1)
-      #   test_data = np.concatenate((X_test, y_test.reshape(-1, 1)), axis=1)
-      #   pd.DataFrame(train_data).to_csv(os.path.join(args.saved, args.train_path, 'task_{}.csv'.format(t)),
-      #     header=None,
-      #     index=None)
-      #   pd.DataFrame(test_data).to_csv(os.path.join(args.saved, args.test_path, 'task_{}.csv'.format(t)),
-      #     header=None,
-      #     index=None)
+      if t == 0: 
+        train_data = np.concatenate((X_train, y_train.reshape(-1, 1)), axis=1)
+        test_data = np.concatenate((X_test, y_test.reshape(-1, 1)), axis=1)
+        pd.DataFrame(train_data).to_csv(os.path.join(args.saved, args.train_path, 'task_{}.csv'.format(t)),
+          header=None,
+          index=None)
+        pd.DataFrame(test_data).to_csv(os.path.join(args.saved, args.test_path, 'task_{}.csv'.format(t)),
+          header=None,
+          index=None)
       
-      # else:
-      tensor_view = (1, 28, 28)
-      rotated_xtrain_list = []
-      rotated_xtest_list = []
-      
-      for img in X_train:
-        x_tensor = (torch.tensor(img, dtype=torch.float) / 255).view(tensor_view)
-        pil_img = transforms.ToPILImage()(x_tensor)
-        rotated_pil_img = transforms.functional.rotate(pil_img, angles[t])
-        rotated_img = transforms.ToTensor()(rotated_pil_img)
-        rotated_img = rotated_img*255.0
+      else:
+        tensor_view = (1, 28, 28)
+        rotated_xtrain_list = []
+        rotated_xtest_list = []
+        
+        for img in X_train:
+          x_tensor = (torch.tensor(img, dtype=torch.float) / 255).view(tensor_view)
+          pil_img = transforms.ToPILImage()(x_tensor)
+          rotated_pil_img = transforms.functional.rotate(pil_img, angles[t])
+          rotated_img = transforms.ToTensor()(rotated_pil_img)
+          rotated_img = rotated_img*255.0
 
-        rotated_xtrain_list.append(rotated_img)
-      rotated_xtrain = torch.stack(rotated_xtrain_list)
-      rotated_xtrain = rotated_xtrain.clone().detach().numpy()
-      rotated_xtrain = rotated_xtrain.reshape(rotated_xtrain.shape[0], -1)
-      train_data = np.concatenate((rotated_xtrain, y_train.reshape(-1, 1)), axis=1)
-      pd.DataFrame(train_data).to_csv(os.path.join(args.saved, args.train_path, 'task_{}.csv'.format(t)),
-        header=None,
-        index=None)
-      
-      for img in X_test:
-        x_tensor = (torch.tensor(img, dtype=torch.float) / 255).view(tensor_view)
-        pil_img = transforms.ToPILImage()(x_tensor)
-        rotated_pil_img = transforms.functional.rotate(pil_img, angles[t])
-        rotated_img = transforms.ToTensor()(rotated_pil_img)
-        rotated_img = rotated_img*255.0
+          rotated_xtrain_list.append(rotated_img)
+        rotated_xtrain = torch.stack(rotated_xtrain_list)
+        rotated_xtrain = rotated_xtrain.clone().detach().numpy()
+        rotated_xtrain = rotated_xtrain.reshape(rotated_xtrain.shape[0], -1)
+        train_data = np.concatenate((rotated_xtrain, y_train.reshape(-1, 1)), axis=1)
+        pd.DataFrame(train_data).to_csv(os.path.join(args.saved, args.train_path, 'task_{}.csv'.format(t)),
+          header=None,
+          index=None)
+        
+        for img in X_test:
+          x_tensor = (torch.tensor(img, dtype=torch.float) / 255).view(tensor_view)
+          pil_img = transforms.ToPILImage()(x_tensor)
+          rotated_pil_img = transforms.functional.rotate(pil_img, angles[t])
+          rotated_img = transforms.ToTensor()(rotated_pil_img)
+          rotated_img = rotated_img*255.0
 
-        rotated_xtest_list.append(rotated_img)
-      rotated_xtest = torch.stack(rotated_xtest_list)
-      rotated_xtest = rotated_xtest.clone().detach().numpy()
-      rotated_xtest = rotated_xtest.reshape(rotated_xtest.shape[0], -1)
-      test_data = np.concatenate((rotated_xtest, y_test.reshape(-1, 1)), axis=1)
-      pd.DataFrame(test_data).to_csv(os.path.join(args.saved, args.test_path, 'task_{}.csv'.format(t)),
-        header=None,
-        index=None)
+          rotated_xtest_list.append(rotated_img)
+        rotated_xtest = torch.stack(rotated_xtest_list)
+        rotated_xtest = rotated_xtest.clone().detach().numpy()
+        rotated_xtest = rotated_xtest.reshape(rotated_xtest.shape[0], -1)
+        test_data = np.concatenate((rotated_xtest, y_test.reshape(-1, 1)), axis=1)
+        pd.DataFrame(test_data).to_csv(os.path.join(args.saved, args.test_path, 'task_{}.csv'.format(t)),
+          header=None,
+          index=None)
 
       print('task {} dataset done!'.format(t))
 
