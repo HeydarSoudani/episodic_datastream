@@ -10,17 +10,17 @@ import argparse
 import os
 
 
-a = [0.6532, 0.6633, 0.6519]
+a = [92.48, 92.47, 87.73, 77.78, 64.38]
 print(np.mean(a))
 print(np.std(a))
 
 # a = [89.67, 86.91, 84.11, 82.12, 82.23]
-# f = 0.0
-# for item in a:
-#   f += a[0] - item
+f = 0.0
+for item in a:
+  f += a[0] - item
 
-# f /= (len(a)-1)
-# print(f)
+f /= (len(a)-1)
+print(f)
 
 
 

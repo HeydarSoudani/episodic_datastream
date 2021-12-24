@@ -27,7 +27,7 @@ class PtLearner:
     # self.criterion = torch.nn.CrossEntropyLoss()
     self.device = device
 
-    if args.dataset in ['mnist', 'pmnist', 'rmnist', 'fmnist', 'rfmnist', 'cifar10']:
+    if args.dataset in ['mnist', 'pmnist', 'rmnist', 'fmnist', 'pfmnist', 'rfmnist', 'cifar10']:
       class_num = 10
     elif args.dataset == 'cifar100':
       class_num = 100

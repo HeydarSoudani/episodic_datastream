@@ -9,7 +9,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-
 sys.path.insert(1, 'D:/uni/MS/_MS_thesis/codes/ml_openset')
 from datasets.dataset import SimpleDataset
 from samplers.pt_sampler import PtSampler
@@ -26,6 +25,7 @@ parser.add_argument(
     'pmnist',
     'rmnist',
     'fmnist',
+    'pfmnist',
     'rfmnist',
     'cifar10'
   ],
