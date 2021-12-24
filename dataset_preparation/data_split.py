@@ -64,7 +64,7 @@ if __name__ == '__main__':
 
   ## ========================================
   # == Get Fashion-MNIST dataset ============
-  if args.dataset in ['fmnist', 'rfmnist']:
+  if args.dataset in ['fmnist', 'pfmnist', 'rfmnist']:
     train_data = pd.read_csv(os.path.join(args.data_path, "fmnist_train.csv"), sep=',').values
     test_data = pd.read_csv(os.path.join(args.data_path, "fmnist_test.csv"), sep=',').values
     X_train, y_train = train_data[:, 1:], train_data[:, 0]
