@@ -20,9 +20,9 @@ parser.add_argument(
     'rfmnist',
     'cifar10'
   ],
-  default='pmnist',
+  default='rfmnist',
   help='')
-parser.add_argument('--seed', type=int, default=2, help='')
+parser.add_argument('--seed', type=int, default=5, help='')
 args = parser.parse_args()
 
 # = Add some variables to args ========
