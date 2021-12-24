@@ -18,7 +18,7 @@ def tsne(model, args, device):
   
   # == Load stream data ==============================
   test_data = read_csv(
-    os.path.join(args.data_path, args.dataset, '{}_test.csv'.format(args.dataset)),
+    os.path.join(args.split_test_path, 'task_0.csv'),
     sep=',').values
   X_test, y_test = test_data[:, 1:], test_data[:, 0]
   test_data = np.concatenate((X_test, y_test.reshape(-1, 1)), axis=1)
