@@ -61,6 +61,8 @@ def increm_learn(model,
       #       args, device)  
       # = Update memory =====
       memory.update(task_data)
+      args.beta_type = 'fixed'
+      args.beta = 0.999
     else:
       replay_mem = memory()
       train_data = np.concatenate((task_data, replay_mem))
