@@ -55,7 +55,7 @@ def get_data(dataset):
       }
     ]
 
-  if dataset == 'rmnist':
+  elif dataset == 'rmnist':
     data = [
       {
         'label': 'Without memory',
@@ -117,6 +117,14 @@ def get_data(dataset):
           [00.23, 00.05, 00.11, 00.19, 01.39]
         ])
       }
+    ]
+
+  elif dataset == 'pfmnist':
+    data = [
+      {
+        'label': 'Without memory',
+
+      },
     ]
 
   return data
