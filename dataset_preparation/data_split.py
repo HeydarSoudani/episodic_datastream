@@ -104,20 +104,29 @@ if __name__ == '__main__':
       xtrain_tensor = torch.tensor(X_train, dtype=torch.float).view((X_train.shape[0], *tensor_view))
       xtest_tensor = torch.tensor(X_test, dtype=torch.float).view((X_test.shape[0], *tensor_view))
       
-      if t % 2 == 0: # for even task -> col permuted
-        perm = torch.arange(xtrain_tensor.shape[3]) if t == 0 else torch.randperm(xtrain_tensor.shape[3])
-        perm_xtrain = xtrain_tensor[:, :, :, perm].clone().detach().numpy()
-        perm_xtest = xtest_tensor[:, :, :, perm].clone().detach().numpy()
-      else: # for odd task -> row permuted
-        perm = torch.randperm(xtrain_tensor.shape[2])
-        perm_xtrain = xtrain_tensor[:, :, perm, :].clone().detach().numpy()
-        perm_xtest = xtest_tensor[:, :, perm, :].clone().detach().numpy()
+      ## col or row permutetion for each task
+      # if t % 2 == 0: # for even task -> col permuted
+      #   perm = torch.arange(xtrain_tensor.shape[3]) if t == 0 else torch.randperm(xtrain_tensor.shape[3])
+      #   perm_xtrain = xtrain_tensor[:, :, :, perm].clone().detach().numpy()
+      #   perm_xtest = xtest_tensor[:, :, :, perm].clone().detach().numpy()
+      # else: # for odd task -> row permuted
+      #   perm = torch.randperm(xtrain_tensor.shape[2])
+      #   perm_xtrain = xtrain_tensor[:, :, perm, :].clone().detach().numpy()
+      #   perm_xtest = xtest_tensor[:, :, perm, :].clone().detach().numpy()
 
+      ## both permutetions 
+      first_perm = torch.arange(xtrain_tensor.shape[3]) if t == 0 else torch.randperm(xtrain_tensor.shape[3])
+      perm_xtrain = xtrain_tensor[:, :, :, first_perm]
+      perm_xtest = xtest_tensor[:, :, :, first_perm]
+      second_perm = torch.arange(xtrain_tensor.shape[2]) if t == 0 else torch.randperm(xtrain_tensor.shape[2])
+      perm_xtrain = perm_xtrain[:, :, second_perm, :].clone().detach().numpy()
+      perm_xtest = perm_xtest[:, :, second_perm, :].clone().detach().numpy()
+
+      # save dataset
       perm_xtrain = perm_xtrain.reshape(perm_xtrain.shape[0], -1)
       train_data = np.concatenate((perm_xtrain, y_train.reshape(-1, 1)), axis=1)
       perm_xtest = perm_xtest.reshape(perm_xtest.shape[0], -1)
       test_data = np.concatenate((perm_xtest, y_test.reshape(-1, 1)), axis=1)
-
       pd.DataFrame(train_data).to_csv(os.path.join(args.saved, args.train_path, 'task_{}.csv'.format(t)),
         header=None,
         index=None)
