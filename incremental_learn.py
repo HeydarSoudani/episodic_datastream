@@ -75,7 +75,6 @@ def episodic_increm_learn(model,
                       args,
                       device):
   print('===== Episodic Incremental Learning =========================')
-  
   for task in range(args.n_tasks):  
     print('=== Training ... ===')
     ## = Data ===========
@@ -112,7 +111,7 @@ def episodic_increm_learn(model,
       #       args, device)  
       # memory.update(task_data)
       args.beta_type = 'fixed'
-      args.beta = 0.999
+      args.beta = 1.0
       tsne(model, args, device)
       pca(model, args, device)
     # else:
