@@ -220,7 +220,8 @@ try: learner.load(args.prototypes_path)
 except FileNotFoundError: pass
 else: print("Load Prototypes from {}".format(args.prototypes_path))
 
-if args.phase not in ['incremental_learn', 'plot', 'batch_learn']:
+
+if args.phase not in ['batch_incremental_learn', 'episodic_incremental_learn', 'plot', 'batch_learn']:
 
   ## == load train data from file ========
   train_data = read_csv(
@@ -228,7 +229,6 @@ if args.phase not in ['incremental_learn', 'plot', 'batch_learn']:
     sep=',',
     header=None).values
   base_labels = SimpleDataset(train_data, args).label_set
-
 
   ## == Operational Memory Definition ====
   memory = OperationalMemory(per_class=args.memory_per_class,
@@ -238,13 +238,11 @@ if args.phase not in ['incremental_learn', 'plot', 'batch_learn']:
   except FileNotFoundError: pass
   else: print("Load Memory from {}".format(args.memory_path))
 
-
   ## == Novelty Detector Definition =======
   detector = PtDetector()
   try: detector.load(args.detector_path)
   except FileNotFoundError: pass
   else: print("Load Detector from {}".format(args.detector_path))
-
 
 if __name__ == '__main__':
 
