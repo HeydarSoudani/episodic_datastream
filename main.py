@@ -18,7 +18,7 @@ from batch_learn import batch_learn
 from init_learn import init_learn
 from zeroshot_test import zeroshot_test
 from stream_learn import stream_learn
-from incremental_learn import increm_learn
+from incremental_learn import batch_increm_learn, episodic_increm_learn
 
 from plot.tsne import tsne
 
@@ -35,7 +35,8 @@ parser.add_argument(
     'zeroshot_test',
     'stream_learn',
     'zeroshot_test_base',
-    'incremental_learn',
+    'batch_incremental_learn',
+    'episodic_incremental_learn',
     'plot'
   ],
   default='init_learn',
@@ -279,17 +280,28 @@ if __name__ == '__main__':
                   device,
                   known_labels=base_labels)
   ## == incremental learning ============
-  elif args.phase == 'incremental_learn':
+  elif args.phase == 'batch_incremental_learn':
     memory = IncrementalMemory(
               selection_type=args.mem_sel_type, 
               total_size=args.mem_total_size,
               per_class=args.mem_per_class,
               selection_method=args.mem_sel_method)
-    increm_learn(model,
-                 learner,
-                 memory,
-                 args,
-                 device)
+    batch_increm_learn(model,
+                      memory,
+                      args,
+                      device)
+  elif args.phase == 'episodic_incremental_learn':
+    memory = IncrementalMemory(
+              selection_type=args.mem_sel_type, 
+              total_size=args.mem_total_size,
+              per_class=args.mem_per_class,
+              selection_method=args.mem_sel_method)
+    episodic_increm_learn(model,
+                        learner,
+                        memory,
+                        args,
+                        device)
+
   elif args.phase == 'plot':
     tsne(model, args, device)
   else: 

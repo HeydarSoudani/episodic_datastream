@@ -123,15 +123,23 @@ def get_data(dataset):
     data = [
       {
         'label': 'Without memory',
-
+        'mean': np.array([
+          [86.80, 79.62, 62.99, 77.13, 73.32], # epis-pt b=0.999
+          [91.33, 74.93, 61.39, 66.89, 57.43], # non-epis
+        ]),
+        'std': np.array([
+          [00.00, 00.00, 00.00, 00.00, 00.00],
+          [00.25, 03.47, 05.31, 05.87, 12.63], 
+        ]),
       },
     ]
 
   return data
 
 def main():
-  dataset = 'rmnist' #['pmnist', 'rmnist']
-  methods = ['epis-rp', 'epis-pt', 'epis-ce', 'non-epis']
+  dataset = 'pfmnist' #['pmnist', 'rmnist', 'pfmnist]
+  # methods = ['epis-rp', 'epis-pt', 'epis-ce', 'non-epis']
+  methods = ['epis-pt:beta0.999', 'non-epis']
   colors = ['royalblue', 'hotpink', 'blueviolet', 'gold', 'darkorange', 'limegreen']
 
   data = get_data(dataset)
@@ -139,28 +147,49 @@ def main():
   x = np.arange(n_task)
 
   fig, axs = plt.subplots(1, len(data))
-  for idx, item in enumerate(data):
-    label = item['label']
-    mean = item['mean']
-    std = item['std']
+  # for idx, item in enumerate(data):
+  #   label = item['label']
+  #   mean = item['mean']
+  #   std = item['std']
+    # for i in range(len(methods)):
+    #   axs[idx].plot(
+    #     x, mean[i],
+    #     '-o', color=colors[i],
+    #     label=methods[i])
+    #   axs[idx].fill_between(
+    #     x, mean[i]-std[i], mean[i]+std[i],
+    #     edgecolor=colors[i], facecolor=colors[i],
+    #     alpha=0.2)
+
+    # axs[idx].legend(loc='lower left')
+    # axs[idx].set_title(label)
+    # axs[idx].set_xlabel('tasks')
+    # axs[idx].set_ylabel('Accuracy')
+    # axs[idx].set_xticks(np.arange(0, 4.1, step=1.))
+    # axs[idx].set_yticks(np.arange(60, 96, step=5))
 
 
-    for i in range(4):
-      axs[idx].plot(
-        x, mean[i],
-        '-o', color=colors[i],
-        label=methods[i])
-      axs[idx].fill_between(
-        x, mean[i]-std[i], mean[i]+std[i],
-        edgecolor=colors[i], facecolor=colors[i],
-        alpha=0.2)
 
-    axs[idx].legend(loc='lower left')
-    axs[idx].set_title(label)
-    axs[idx].set_xlabel('tasks')
-    axs[idx].set_ylabel('Accuracy')
-    axs[idx].set_xticks(np.arange(0, 4.1, step=1.))
-    axs[idx].set_yticks(np.arange(60, 96, step=5))
+  label = data[0]['label']
+  mean = data[0]['mean']
+  std = data[0]['std']
+  for i in range(len(methods)):
+    plt.plot(
+      x, mean[i],
+      '-o', color=colors[i],
+      label=methods[i])
+    plt.fill_between(
+      x, mean[i]-std[i], mean[i]+std[i],
+      edgecolor=colors[i], facecolor=colors[i],
+      alpha=0.2)
+
+  plt.legend(loc='lower left')
+  plt.title(label)
+  plt.xlabel('tasks')
+  plt.ylabel('Accuracy')
+  plt.xticks(np.arange(0, 4.1, step=1.))
+  plt.yticks(np.arange(40, 96, step=5))
+
 
   # fig.savefig('cca.png', format='png', dpi=800)
   plt.show()
