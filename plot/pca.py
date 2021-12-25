@@ -1,11 +1,10 @@
-
 import torch
 from torch.utils.data import DataLoader
 import os
 import numpy as np
 import seaborn as sns
-from sklearn.manifold import TSNE
 from matplotlib import pyplot as plt
+from sklearn.decomposition import PCA
 from pandas import read_csv
 
 from datasets.dataset import SimpleDataset
@@ -13,8 +12,8 @@ from utils.preparation import transforms_preparation
 from samplers.pt_sampler import PtSampler
 
 
-def tsne(model, args, device):
-  
+
+def pca(model, args, device):
   # == Load stream data ==============================
   test_data = read_csv(
     os.path.join(args.split_test_path, 'task_0.csv'),
@@ -46,7 +45,7 @@ def tsne(model, args, device):
   ### ======================================
   ### == Feature space visualization =======
   ### ======================================
-  print('=== Feature-Space visualization (t-SNE) ===')
+  print('=== Feature-Space visualization (PCA) ===')
   with torch.no_grad():
     batch = next(iter(test_dataloader))
     support_images, support_labels, _, _ = batch
@@ -58,9 +57,9 @@ def tsne(model, args, device):
     outputs, features = model.forward(support_images)
     features = features.cpu().detach().numpy()
     support_labels = support_labels.cpu().detach().numpy()
-
-  tsne = TSNE()
-  X_embedded = tsne.fit_transform(features)
+  
+  pca = PCA(n_components=2)
+  X_embedded = pca.fit_transform(features)
 
   sns.set(rc={'figure.figsize':(11.7,8.27)})
   palette = sns.color_palette("bright", 10)
@@ -72,6 +71,5 @@ def tsne(model, args, device):
     palette=palette
   )
 
-  plt.savefig('tsne.png')
+  plt.savefig('pca.png')
   plt.show()
-  ### ======================================

@@ -9,6 +9,7 @@ from datasets.dataset import SimpleDataset
 from utils.preparation import transforms_preparation
 
 from plot.tsne import tsne
+from plot.pca import pca
 
 def increm_learn(model,
                  learner,
@@ -73,6 +74,7 @@ def increm_learn(model,
       args.beta_type = 'fixed'
       args.beta = 1.0
       tsne(model, args, device)
+      pca(model, args, device)
     # else:
     #   replay_mem = memory()
     #   train_data = np.concatenate((task_data, replay_mem))
