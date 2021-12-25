@@ -70,19 +70,29 @@ class PtLearner:
 
     if args.beta_type == 'evolving':
       beta = args.beta * iteration / args.meta_iteration
+      new_prototypes = beta * old_prototypes + (1 - beta) * episode_prototypes
+      loss = self.criterion(
+        features[support_len:],
+        outputs[support_len:],
+        query_labels,
+        # new_prototypes,
+        episode_prototypes,
+        n_query=args.query_num,
+        n_classes=args.ways,
+      )
+
     elif args.beta_type == 'fixed':
       beta = args.beta
-    new_prototypes = beta * old_prototypes + (1 - beta) * episode_prototypes
-
-    loss = self.criterion(
-      features[support_len:],
-      outputs[support_len:],
-      query_labels,
-      new_prototypes,
-      # episode_prototypes,
-      n_query=args.query_num,
-      n_classes=args.ways,
-    )
+      new_prototypes = beta * old_prototypes + (1 - beta) * episode_prototypes
+      loss = self.criterion(
+        features[support_len:],
+        outputs[support_len:],
+        query_labels,
+        new_prototypes,
+        # episode_prototypes,
+        n_query=args.query_num,
+        n_classes=args.ways,
+      )
     # loss = self.criterion(outputs, support_labels)
     loss.backward()
     torch.nn.utils.clip_grad_norm_(model.parameters(), args.grad_clip)
