@@ -10,7 +10,7 @@ import argparse
 import os
 
 
-a = [0.6408, 0.6531, 0.7309]
+a = [0.5876, 0.6554, 0.7126]
 print(np.mean(a))
 print(np.std(a))
 
