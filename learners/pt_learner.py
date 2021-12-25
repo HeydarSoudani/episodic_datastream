@@ -71,7 +71,6 @@ class PtLearner:
     if args.beta_type == 'evolving':
       beta = args.beta * iteration / args.meta_iteration
     elif args.beta_type == 'fixed':
-      print('beta: {}'.format(args.beta))
       beta = args.beta
     new_prototypes = beta * old_prototypes + (1 - beta) * episode_prototypes
 

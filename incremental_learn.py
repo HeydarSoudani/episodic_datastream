@@ -8,6 +8,7 @@ from trainers.episodic_train import train
 from datasets.dataset import SimpleDataset
 from utils.preparation import transforms_preparation
 
+from plot.tsne import tsne
 
 def increm_learn(model,
                  learner,
@@ -70,7 +71,8 @@ def increm_learn(model,
       # = Update memory =====
       # memory.update(task_data)
       args.beta_type = 'fixed'
-      args.beta = 0.999
+      args.beta = 1.0
+      tsne(model, args, device)
     # else:
     #   replay_mem = memory()
     #   train_data = np.concatenate((task_data, replay_mem))
