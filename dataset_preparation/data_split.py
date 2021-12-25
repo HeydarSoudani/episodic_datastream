@@ -105,22 +105,22 @@ if __name__ == '__main__':
       xtest_tensor = torch.tensor(X_test, dtype=torch.float).view((X_test.shape[0], *tensor_view))
       
       ## col or row permutetion for each task
-      # if t % 2 == 0: # for even task -> col permuted
-      #   perm = torch.arange(xtrain_tensor.shape[3]) if t == 0 else torch.randperm(xtrain_tensor.shape[3])
-      #   perm_xtrain = xtrain_tensor[:, :, :, perm].clone().detach().numpy()
-      #   perm_xtest = xtest_tensor[:, :, :, perm].clone().detach().numpy()
-      # else: # for odd task -> row permuted
-      #   perm = torch.randperm(xtrain_tensor.shape[2])
-      #   perm_xtrain = xtrain_tensor[:, :, perm, :].clone().detach().numpy()
-      #   perm_xtest = xtest_tensor[:, :, perm, :].clone().detach().numpy()
+      if t % 2 == 0: # for even task -> col permuted
+        perm = torch.arange(xtrain_tensor.shape[3]) if t == 0 else torch.randperm(xtrain_tensor.shape[3])
+        perm_xtrain = xtrain_tensor[:, :, :, perm].clone().detach().numpy()
+        perm_xtest = xtest_tensor[:, :, :, perm].clone().detach().numpy()
+      else: # for odd task -> row permuted
+        perm = torch.randperm(xtrain_tensor.shape[2])
+        perm_xtrain = xtrain_tensor[:, :, perm, :].clone().detach().numpy()
+        perm_xtest = xtest_tensor[:, :, perm, :].clone().detach().numpy()
 
       ## both permutetions 
-      first_perm = torch.arange(xtrain_tensor.shape[3]) if t == 0 else torch.randperm(xtrain_tensor.shape[3])
-      perm_xtrain = xtrain_tensor[:, :, :, first_perm]
-      perm_xtest = xtest_tensor[:, :, :, first_perm]
-      second_perm = torch.arange(xtrain_tensor.shape[2]) if t == 0 else torch.randperm(xtrain_tensor.shape[2])
-      perm_xtrain = perm_xtrain[:, :, second_perm, :].clone().detach().numpy()
-      perm_xtest = perm_xtest[:, :, second_perm, :].clone().detach().numpy()
+      # first_perm = torch.arange(xtrain_tensor.shape[3]) if t == 0 else torch.randperm(xtrain_tensor.shape[3])
+      # perm_xtrain = xtrain_tensor[:, :, :, first_perm]
+      # perm_xtest = xtest_tensor[:, :, :, first_perm]
+      # second_perm = torch.arange(xtrain_tensor.shape[2]) if t == 0 else torch.randperm(xtrain_tensor.shape[2])
+      # perm_xtrain = perm_xtrain[:, :, second_perm, :].clone().detach().numpy()
+      # perm_xtest = perm_xtest[:, :, second_perm, :].clone().detach().numpy()
 
       # save dataset
       perm_xtrain = perm_xtrain.reshape(perm_xtrain.shape[0], -1)
