@@ -12,7 +12,6 @@ from utils.preparation import transforms_preparation
 from samplers.pt_sampler import PtSampler
 
 
-
 def pca(model, args, device):
   # == Load stream data ==============================
   test_data = read_csv(
@@ -25,8 +24,6 @@ def pca(model, args, device):
   else:
     test_dataset = SimpleDataset(test_data, args)
   
-  print(test_dataset.label_set)
-  print(len(test_dataset))
   sampler = PtSampler(
     test_dataset,
     n_way=10,
