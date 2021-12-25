@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+# [86.48, 72.86, 73.23, 65.18, 63.38], # epis-pt b=0.999 (dist)
 
 def get_data(dataset):
   # methods on rows
@@ -124,8 +125,8 @@ def get_data(dataset):
       {
         'label': 'Without memory',
         'mean': np.array([
-          [86.03, 71.87, 75.84, 68.97, 67.49],
-          # [86.48, 72.86, 73.23, 65.18, 63.38], # epis-pt b=0.999 (dist)
+          [86.03, 71.87, 75.84, 68.97, 67.49], # epis-pt b=1.0 (cls)
+          
           # [86.40, 72.96, 74.28, 64.64, 63.36], # epis-pt b=0.999 (cls)
           [91.26, 77.77, 70.90, 67.28, 56.54], # non-epis
         ]),

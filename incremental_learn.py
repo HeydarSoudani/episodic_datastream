@@ -111,7 +111,7 @@ def episodic_increm_learn(model,
       #       args, device)  
       # memory.update(task_data)
       args.beta_type = 'fixed'
-      args.beta = 1.0
+      args.beta = args.drift_beta
       tsne(model, args, device)
       pca(model, args, device)
     # else:
