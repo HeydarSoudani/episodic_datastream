@@ -25,21 +25,21 @@ def batch_increm_learn(model,
                   os.path.join(args.split_train_path, "task_{}.csv".format(task)),
                   sep=',', header=None).values 
     print('task_data: {}'.format(task_data.shape))
-    # batch_train(model,
-    #   task_data,
-    #   args, device)
+    batch_train(model,
+      task_data,
+      args, device)
 
-    if task == 0:
-      batch_train(model,
-                  task_data,
-                  args, device)
-      memory.update(task_data)
-    else:
-      replay_mem = memory()
-      train_data = np.concatenate((task_data, replay_mem))
-      batch_train(model,
-                  train_data,
-                  args, device)   
+    # if task == 0:
+    #   batch_train(model,
+    #               task_data,
+    #               args, device)
+    #   memory.update(task_data)
+    # else:
+    #   replay_mem = memory()
+    #   train_data = np.concatenate((task_data, replay_mem))
+    #   batch_train(model,
+    #               train_data,
+    #               args, device)   
     
     # = evaluation ========
     print('=== Testing ... ===')
@@ -99,28 +99,28 @@ def episodic_increm_learn(model,
     #       task_data,
     #       args, device)
     
-    # episodic_train(model,
-    #     learner,
-    #     task_data,
-    #     args, device)
+    episodic_train(model,
+        learner,
+        task_data,
+        args, device)
 
     if task == 0:
-      episodic_train(model,
-            learner,
-            task_data,
-            args, device)  
-      memory.update(task_data)
+      # episodic_train(model,
+      #       learner,
+      #       task_data,
+      #       args, device)  
+      # memory.update(task_data)
       args.beta_type = 'fixed'
       args.beta = args.drift_beta
       # tsne(model, args, device)
       # pca(model, args, device)
-    else:
-      replay_mem = memory()
-      train_data = np.concatenate((task_data, replay_mem))
-      episodic_train(model,
-          learner,
-          train_data,
-          args, device) 
+    # else:
+    #   replay_mem = memory()
+    #   train_data = np.concatenate((task_data, replay_mem))
+    #   episodic_train(model,
+    #       learner,
+    #       train_data,
+    #       args, device) 
 
     # = evaluation ========
     print('=== Testing ... ===')
