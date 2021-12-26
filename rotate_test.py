@@ -1,26 +1,24 @@
-import torch
-import torchvision
-import torchvision.transforms as transforms
+# import torch
+# import torchvision
+# import torchvision.transforms as transforms
 
-from scipy import ndimage
-import matplotlib.pyplot as plt
-import pandas as pd 
+# from scipy import ndimage
+# import matplotlib.pyplot as plt
+# import pandas as pd 
 import numpy as np
-import argparse
-import os
+# import argparse
+# import os
 
 
-# a = [0.4152, 0.5941, 0.7062]
+# a = [0.7949, 0.8101, 0.7268, 0.8114, 0.7370, 0.8248]
+a = [91.43, 84.62, 83.26, 81.76, 78.42]
 
-
-a = [91.75, 74.60, 72.70, 65.00, 57.18]
 print(np.mean(a))
 print(np.std(a))
 
 f = 0.0
 for item in a:
   f += a[0] - item
-
 f /= (len(a)-1)
 print(f)
 
