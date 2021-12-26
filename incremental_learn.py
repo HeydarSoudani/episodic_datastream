@@ -114,7 +114,7 @@ def episodic_increm_learn(model,
       args.beta = args.drift_beta
       # tsne(model, args, device)
       # pca(model, args, device)
-    # else:
+    else:
       replay_mem = memory()
       train_data = np.concatenate((task_data, replay_mem))
       episodic_train(model,
