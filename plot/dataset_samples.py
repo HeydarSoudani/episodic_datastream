@@ -29,7 +29,7 @@ parser.add_argument(
     'rfmnist',
     'cifar10'
   ],
-  default='pfmnist',
+  default='cifar10',
   help='')
 parser.add_argument('--seed', type=int, default=5, help='')
 args = parser.parse_args()
@@ -64,7 +64,7 @@ def show_samples():
     dataset = SimpleDataset(task_data[:30], args)
     sampler = PtSampler(
       dataset,
-      n_way=10,
+      n_way=2,
       n_shot=1,
       n_query=0,
       n_tasks=1)

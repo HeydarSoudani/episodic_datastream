@@ -125,23 +125,44 @@ def get_data(dataset):
       {
         'label': 'Without memory',
         'mean': np.array([
-          [], [91.75, 74.60, 72.70, 65.00, 57.18], # reptile
-          [85.66, 77.19, 71.54, 72.71, 64.66], #[85.42, 73.82, 72.99, 66.86, 67.21], # epis-pt b=1.0
-          [88.43, 78.70, 73.96, 73.31, 64.60], #[88.25, 74.87, 75.36, 66.33, 62.57], # epis-ce
-          [90.98, 77.78, 70.89, 70.37, 57.79], #[91.26, 77.77, 70.90, 67.28, 56.54], # non-epis
+          [91.71, 78.81, 72.32, 72.85, 61.40], # reptile
+          [85.66, 77.19, 71.54, 72.71, 64.66], # epis-pt b=1.0
+          [88.43, 78.70, 73.96, 73.31, 64.60], # epis-ce
+          [90.98, 77.78, 70.89, 70.37, 57.79], # non-epis
 
-          [85.62, 72.86, 75.34, 67.29, 65.19], # epis-pt b=0.999
-          [85.16, 72.27, 73.59, 65.47, 62.45], # epis-pt b=0.9
+          # [85.62, 72.86, 75.34, 67.29, 65.19], # epis-pt b=0.999
+          # [85.16, 72.27, 73.59, 65.47, 62.45], # epis-pt b=0.9
         ]),
         'std': np.array([
-          [], [00.20, 02.81, 09.16, 07.71, 11.98],
-          [00.55, 03.95, 06.58, 08.12, 09.53], #[00.61, 01.91, 08.38, 06.55, 03.15],
-          [00.33, 04.31, 05.92, 09.83, 12.86], #[00.29, 01.85, 05.70, 08.44, 08.37],
-          [00.52, 03.27, 03.38, 06.24, 11.67], #[00.22, 00.47, 04.12, 02.83, 04.16],
+          [00.37, 04.93, 07.23, 09.92, 14.02], 
+          [00.55, 03.95, 06.58, 08.12, 09.53],
+          [00.33, 04.31, 05.92, 09.83, 12.86], 
+          [00.52, 03.27, 03.38, 06.24, 11.67],
 
-          [00.29, 01.87, 02.64, 06.12, 05.11],
-          [00.86, 02.61, 07.77, 07.85, 08.43], 
+          # [00.29, 01.87, 02.64, 06.12, 05.11],
+          # [00.86, 02.61, 07.77, 07.85, 08.43], 
+        ])
+      },
+      {
+        'label': 'Memory: 5 samples per class',
+        'mean': np.array([
+          [91.45, 83.70, 82.30, 79.14, 75.08], # reptile
+          [85.71, 78.07, 76.55, 75.03, 73.71], # epis-pt b=1.0
+          [88.27, 80.16, 79.06, 75.84, 74.28], # epis-ce
+          [90.89, 82.05, 77.68, 76.43, 70.10], # non-epis
+
+          # [], # epis-pt b=0.999
+          # [], # epis-pt b=0.9
         ]),
+        'std': np.array([
+          [00.68, 02.16, 01.65, 04.29, 04.34], 
+          [00.18, 04.20, 03.08, 06.96, 03.65],
+          [00.56, 02.42, 01.61, 08.25, 07.07], 
+          [00.57, 01.74, 02.01, 04.01, 04.05],
+
+          # [],
+          # [], 
+        ])
       },
       {
         'label': 'Memory: 10 samples per class',
@@ -151,8 +172,8 @@ def get_data(dataset):
           [88.00, 81.45, 81.76, 76.14, 77.63], # epis-ce
           [90.95, 84.36, 82.12, 79.62, 77.49], # non-epis
 
-          [], # epis-pt b=0.999
-          [], # epis-pt b=0.9
+          # [], # epis-pt b=0.999
+          # [], # epis-pt b=0.9
         ]),
         'std': np.array([
           [00.76, 02.56, 01.52, 04.38, 03.81],
@@ -160,9 +181,9 @@ def get_data(dataset):
           [00.26, 02.70, 01.71, 09.38, 05.88],
           [00.41, 02.18, 02.63, 04.66, 05.61], 
 
-          [],
-          [],
-        ]),
+          # [],
+          # [],
+        ])
       },
     ]
 
@@ -170,8 +191,8 @@ def get_data(dataset):
 
 def main():
   dataset = 'pfmnist' #['pmnist', 'rmnist', 'pfmnist]
-  # methods = ['epis-rp', 'epis-pt', 'epis-ce', 'non-epis']
-  methods = ['epis-pt:beta0.999', 'non-epis']
+  methods = ['epis-rp', 'epis-pt', 'epis-ce', 'non-epis']
+  # methods = ['epis-pt:beta0.999', 'non-epis']
   colors = ['royalblue', 'hotpink', 'blueviolet', 'gold', 'darkorange', 'limegreen']
 
   data = get_data(dataset)
@@ -179,48 +200,48 @@ def main():
   x = np.arange(n_task)
 
   fig, axs = plt.subplots(1, len(data))
-  # for idx, item in enumerate(data):
-  #   label = item['label']
-  #   mean = item['mean']
-  #   std = item['std']
-    # for i in range(len(methods)):
-    #   axs[idx].plot(
-    #     x, mean[i],
-    #     '-o', color=colors[i],
-    #     label=methods[i])
-    #   axs[idx].fill_between(
-    #     x, mean[i]-std[i], mean[i]+std[i],
-    #     edgecolor=colors[i], facecolor=colors[i],
-    #     alpha=0.2)
+  for idx, item in enumerate(data):
+    label = item['label']
+    mean = item['mean']
+    std = item['std']
+    for i in range(len(methods)):
+      axs[idx].plot(
+        x, mean[i],
+        '-o', color=colors[i],
+        label=methods[i])
+      # axs[idx].fill_between(
+      #   x, mean[i]-std[i], mean[i]+std[i],
+      #   edgecolor=colors[i], facecolor=colors[i],
+      #   alpha=0.2)
 
-    # axs[idx].legend(loc='lower left')
-    # axs[idx].set_title(label)
-    # axs[idx].set_xlabel('tasks')
-    # axs[idx].set_ylabel('Accuracy')
-    # axs[idx].set_xticks(np.arange(0, 4.1, step=1.))
-    # axs[idx].set_yticks(np.arange(60, 96, step=5))
+    axs[idx].legend(loc='lower left')
+    axs[idx].set_title(label)
+    axs[idx].set_xlabel('tasks')
+    axs[idx].set_ylabel('Accuracy')
+    axs[idx].set_xticks(np.arange(0, 4.1, step=1.))
+    axs[idx].set_yticks(np.arange(50, 96, step=5))
 
 
 
-  label = data[0]['label']
-  mean = data[0]['mean']
-  std = data[0]['std']
-  for i in range(len(methods)):
-    plt.plot(
-      x, mean[i],
-      '-o', color=colors[i],
-      label=methods[i])
-    plt.fill_between(
-      x, mean[i]-std[i], mean[i]+std[i],
-      edgecolor=colors[i], facecolor=colors[i],
-      alpha=0.2)
+  # label = data[0]['label']
+  # mean = data[0]['mean']
+  # std = data[0]['std']
+  # for i in range(len(methods)):
+  #   plt.plot(
+  #     x, mean[i],
+  #     '-o', color=colors[i],
+  #     label=methods[i])
+  #   plt.fill_between(
+  #     x, mean[i]-std[i], mean[i]+std[i],
+  #     edgecolor=colors[i], facecolor=colors[i],
+  #     alpha=0.2)
 
-  plt.legend(loc='lower left')
-  plt.title(label)
-  plt.xlabel('tasks')
-  plt.ylabel('Accuracy')
-  plt.xticks(np.arange(0, 4.1, step=1.))
-  plt.yticks(np.arange(40, 96, step=5))
+  # plt.legend(loc='lower left')
+  # plt.title(label)
+  # plt.xlabel('tasks')
+  # plt.ylabel('Accuracy')
+  # plt.xticks(np.arange(0, 4.1, step=1.))
+  # plt.yticks(np.arange(40, 96, step=5))
 
 
   # fig.savefig('cca.png', format='png', dpi=800)

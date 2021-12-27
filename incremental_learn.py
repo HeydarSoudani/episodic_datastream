@@ -20,28 +20,47 @@ def batch_increm_learn(model,
   print('===== Batch Incremental Learning =========================')  
   for task in range(args.n_tasks):  
     print('=== Training ... ===')
-    ## = Data ===========
+    ### === Task data loading =====================
     task_data = pd.read_csv(
                   os.path.join(args.split_train_path, "task_{}.csv".format(task)),
                   sep=',', header=None).values 
     print('task_data: {}'.format(task_data.shape))
+    
+    ### === Split setting =========================
+    if task != 0:
+      if task == 2: args.ways = 5
+      replay_mem = memory()
+      train_data = np.concatenate((task_data, replay_mem))
+      print('replay_mem: {}'.format(replay_mem.shape))
+      print('train_data(new): {}'.format(train_data.shape))
+      batch_train(model,
+        train_data,
+        args, device)
+    else:
+      batch_train(model,
+        task_data,
+        args, device)
+    memory.update(task_data)
+    
+    ### === Without Memory ========================
     # batch_train(model,
     #   task_data,
     #   args, device)
 
-    if task == 0:
-      batch_train(model,
-                  task_data,
-                  args, device)
-      memory.update(task_data)
-    else:
-      replay_mem = memory()
-      train_data = np.concatenate((task_data, replay_mem))
-      batch_train(model,
-                  train_data,
-                  args, device)   
+    ### === Drift setting (with memory) ===========
+    # if task == 0:
+    #   batch_train(model,
+    #               task_data,
+    #               args, device)
+    #   memory.update(task_data)
+    # else:
+    #   replay_mem = memory()
+    #   train_data = np.concatenate((task_data, replay_mem))
+    #   batch_train(model,
+    #               train_data,
+    #               args, device)   
     
-    # = evaluation ========
+    ### === After each task evaluation =============
     print('=== Testing ... ===')
     if args.which_model == 'best':
       model.load(args.best_model_path)
@@ -77,54 +96,55 @@ def episodic_increm_learn(model,
   print('===== Episodic Incremental Learning =========================')
   for task in range(args.n_tasks):  
     print('=== Training ... ===')
-    ## = Data ===========
+    ### === Task data loading =====================
     task_data = pd.read_csv(
                   os.path.join(args.split_train_path, "task_{}.csv".format(task)),
                   sep=',', header=None).values 
     print('task_data: {}'.format(task_data.shape))
     
-    # if task != 0:
-    #   if task == 2: args.ways = 5
-    #   replay_mem = memory()
-    #   train_data = np.concatenate((task_data, replay_mem))
-    #   print('replay_mem: {}'.format(replay_mem.shape))
-    #   print('train_data(new): {}'.format(train_data.shape))
-    #   episodic_train(model,
-    #         learner,
-    #         train_data,
-    #         args, device)
-    # else:
-    #   episodic_train(model,
-    #       learner,
-    #       task_data,
-    #       args, device)
+    ### === Split setting =========================
+    if task != 0:
+      if task == 2: args.ways = 5
+      replay_mem = memory()
+      train_data = np.concatenate((task_data, replay_mem))
+      print('replay_mem: {}'.format(replay_mem.shape))
+      print('train_data(new): {}'.format(train_data.shape))
+      episodic_train(model,
+        learner,
+        train_data,
+        args, device)
+    else:
+      episodic_train(model,
+        learner,
+        task_data,
+        args, device)
+    memory.update(task_data)
     
+    ### === Without Memory ========================
     # episodic_train(model,
     #     learner,
     #     task_data,
     #     args, device)
 
-    if task == 0:
-      episodic_train(model,
-            learner,
-            task_data,
-            args, device)  
-      memory.update(task_data)
-      args.beta_type = 'fixed'
-      args.beta = args.drift_beta
-      # tsne(model, args, device)
-      # pca(model, args, device)
-    else:
-      replay_mem = memory()
-      train_data = np.concatenate((task_data, replay_mem))
-      episodic_train(model,
-          learner,
-          train_data,
-          args, device) 
+    ### === Drift setting (with memory) ===========
+    # if task == 0:
+    #   episodic_train(model,
+    #         learner,
+    #         task_data,
+    #         args, device)  
+    #   memory.update(task_data)
+    #   args.beta_type = 'fixed'
+    #   args.beta = args.drift_beta
+    # else:
+    #   replay_mem = memory()
+    #   train_data = np.concatenate((task_data, replay_mem))
+    #   episodic_train(model,
+    #       learner,
+    #       train_data,
+    #       args, device) 
 
-    # = evaluation ========
+    ### === After each task evaluation =============
     print('=== Testing ... ===')
-
     if args.which_model == 'best':
       model.load(args.best_model_path)
     
@@ -132,7 +152,6 @@ def episodic_increm_learn(model,
     tasks_acc_cls = [0.0 for _ in range(args.n_tasks)]
 
     for prev_task in range(task+1):
-      
       test_data = pd.read_csv(
                   os.path.join(args.split_test_path, "task_{}.csv".format(prev_task)),
                   sep=',', header=None).values
