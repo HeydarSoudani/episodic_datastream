@@ -183,12 +183,12 @@ if not os.path.exists(args.save):
   os.makedirs(args.save)
 
 ## == Model Definition =================
-# if args.dataset in ['mnist', 'pmnist', 'rmnist']:
-#   # MLP net selected like CoPE
-#   n_inputs, n_feature, n_outputs = 784, args.hidden_dims , 10
-#   model = MLP(n_inputs, n_feature, n_outputs, args)
-# else:
-model = Conv_4(args)
+if args.dataset in ['mnist', 'pmnist', 'rmnist']:
+  # MLP net selected like CoPE
+  n_inputs, n_feature, n_outputs = 784, args.hidden_dims , 10
+  model = MLP(n_inputs, n_feature, n_outputs, args)
+else:
+  model = Conv_4(args)
 # model = DenseNet(args, tensor_view=(3, 32, 32))
 
 # TODO: add init. weight
