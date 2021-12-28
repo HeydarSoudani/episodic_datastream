@@ -21,6 +21,7 @@ from stream_learn import stream_learn
 from incremental_learn import batch_increm_learn, episodic_increm_learn
 
 from plot.tsne import tsne
+from plot.pca import pca
 
 
 ## == Params ===========
@@ -45,7 +46,7 @@ parser.add_argument(
   '--which_model',
   type=str,
   choices=['best', 'last'],
-  default='best',
+  default='last',
   help='')
 parser.add_argument(
   '--dataset',
@@ -59,7 +60,7 @@ parser.add_argument(
     'rfmnist',
     'cifar10'
   ],
-  default='mnist',
+  default='cifar10',
   help='') 
 parser.add_argument(
   '--meta_algorithm',
@@ -158,7 +159,7 @@ parser.add_argument('--r1', default=0.2, type=float, help='aspect of erasing are
 
 args = parser.parse_args()
 
-## == Add some variables to args
+## == Add some variables to args =======
 args.data_path = 'data/'
 args.train_file = '{}_train.csv'.format(args.dataset)
 args.test_file = '{}_test.csv'.format(args.dataset)
@@ -189,10 +190,6 @@ if args.dataset in ['mnist', 'pmnist', 'rmnist']:
   model = MLP(n_inputs, n_feature, n_outputs, args)
 else:
   model = Conv_4(args)
-# model = DenseNet(args, tensor_view=(3, 32, 32))
-
-# TODO: add init. weight
-# model.apply(weights_init)
 
 ## == Load model if exist ==============
 if args.which_model == 'best':
@@ -207,7 +204,6 @@ elif args.which_model == 'last':
     print("Load model from {}".format(args.last_model_path))
 model.to(device)
 
-
 ## == Loss & Learner Definition ========
 # criterion_mt = losses.NTXentLoss(temperature=0.07)
 if args.meta_algorithm == 'prototype':
@@ -221,8 +217,12 @@ try: learner.load(args.prototypes_path)
 except FileNotFoundError: pass
 else: print("Load Prototypes from {}".format(args.prototypes_path))
 
-
-if args.phase not in ['batch_incremental_learn', 'episodic_incremental_learn', 'plot', 'batch_learn']:
+# == For stream version ================
+if args.phase not in [
+  'batch_learn',
+  'batch_incremental_learn',
+  'episodic_incremental_learn',
+  'plot']:
 
   ## == load train data from file ========
   train_data = read_csv(
@@ -246,10 +246,11 @@ if args.phase not in ['batch_incremental_learn', 'episodic_incremental_learn', '
   else: print("Load Detector from {}".format(args.detector_path))
 
 if __name__ == '__main__':
-
-  ## == Data Stream =======================
+  ## == Batch learning =================
   if args.phase == 'batch_learn':
     batch_learn(model, args, device)
+  
+  ## == Data Stream ====================
   elif args.phase == 'init_learn':
     init_learn(model,
                learner,
@@ -278,6 +279,7 @@ if __name__ == '__main__':
                   args,
                   device,
                   known_labels=base_labels)
+  
   ## == incremental learning ============
   elif args.phase == 'batch_incremental_learn':
     memory = IncrementalMemory(
@@ -300,9 +302,11 @@ if __name__ == '__main__':
                         memory,
                         args,
                         device)
-
+  
+  ## == Plot ===========================
   elif args.phase == 'plot':
-    tsne(model, args, device)
+    # tsne(model, args, device)
+    pca(model, args, device)
   else: 
     raise NotImplementedError()
 

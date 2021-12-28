@@ -15,7 +15,7 @@ from samplers.pt_sampler import PtSampler
 def pca(model, args, device):
   # == Load stream data ==============================
   test_data = read_csv(
-    os.path.join(args.split_test_path, 'task_0.csv'),
+    os.path.join(args.data_path, args.dataset, args.test_file),
     sep=',').values
  
   if args.use_transform:
