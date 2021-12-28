@@ -103,28 +103,28 @@ def episodic_increm_learn(model,
     print('task_data: {}'.format(task_data.shape))
     
     ### === Split setting =========================
-    # if task != 0:
-    #   if task == 2: args.ways = 5
-    #   replay_mem = memory()
-    #   train_data = np.concatenate((task_data, replay_mem))
-    #   print('replay_mem: {}'.format(replay_mem.shape))
-    #   print('train_data(new): {}'.format(train_data.shape))
-    #   episodic_train(model,
-    #     learner,
-    #     train_data,
-    #     args, device)
-    # else:
-    #   episodic_train(model,
-    #     learner,
-    #     task_data,
-    #     args, device)
-    # memory.update(task_data)
+    if task != 0:
+      if task == 2: args.ways = 5
+      replay_mem = memory()
+      train_data = np.concatenate((task_data, replay_mem))
+      print('replay_mem: {}'.format(replay_mem.shape))
+      print('train_data(new): {}'.format(train_data.shape))
+      episodic_train(model,
+        learner,
+        train_data,
+        args, device)
+    else:
+      episodic_train(model,
+        learner,
+        task_data,
+        args, device)
+    memory.update(task_data)
     
     ### === Without Memory ========================
-    episodic_train(model,
-      learner,
-      task_data,
-      args, device)
+    # episodic_train(model,
+    #   learner,
+    #   task_data,
+    #   args, device)
 
     ### === Drift setting (with memory) ===========
     # if task == 0:
