@@ -119,7 +119,6 @@ class PtLearner:
       total_cls_acc = 0
 
       for i, batch in enumerate(dataloader):
-        ce = torch.nn.CrossEntropyLoss()
         samples, labels = batch
         labels = labels.flatten()
         samples, labels = samples.to(self.device), labels.to(self.device)
@@ -143,7 +142,6 @@ class PtLearner:
         # prototypes = torch.cat(
         #   [self.prototypes[l.item()] for l in unique_label]
         # )
-
         # loss = self.criterion(
         #   features,
         #   logits,
@@ -153,6 +151,7 @@ class PtLearner:
         #   n_classes=args.ways,
         # )
         # total_loss += loss.item()
+
         loss = ce(logits, labels)
         loss = loss.mean()
         total_loss += loss.item()

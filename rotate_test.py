@@ -11,16 +11,16 @@ import numpy as np
 
 
 # a = [0.7722, 0.7995, 0.7860, 0.7379, 0.6672, 0.7423]
-a = [91.45, 83.70, 82.30, 79.14, 75.08]
+a = [0.7622, 0.7490, 0.7577]
 
 print(np.mean(a))
 print(np.std(a))
 
-f = 0.0
-for item in a:
-  f += a[0] - item
-f /= (len(a)-1)
-print(f)
+# f = 0.0
+# for item in a:
+#   f += a[0] - item
+# f /= (len(a)-1)
+# print(f)
 
 
 
