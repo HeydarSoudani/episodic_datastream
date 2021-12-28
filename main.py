@@ -234,7 +234,7 @@ if args.phase not in ['batch_incremental_learn', 'episodic_incremental_learn', '
   ## == Operational Memory Definition ====
   memory = OperationalMemory(per_class=args.memory_per_class,
                             novel_acceptance=args.memory_novel_acceptance,
-                            device=device, args=args)
+                            device=device)
   try: memory.load(args.memory_path)
   except FileNotFoundError: pass
   else: print("Load Memory from {}".format(args.memory_path))
