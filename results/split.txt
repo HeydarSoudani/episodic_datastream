@@ -35,13 +35,14 @@ mem: Fixed 2000 samples
 (Mostly dist accuracy -> pts play important rule to achive this result)
 S:5                                        | S:7                                        | S:12                                       | S:39                                       | S:50                                       | S:99
 mem: Fixed 200 samples
+0.9991,  0.0000,  0.0000,  0.0000,  0.0000 |
+
 
 mem: Fixed 500 samples
 0.9991,  0.0000,  0.0000,  0.0000,  0.0000 |
 0.9958,  0.9641,  0.0000,  0.0000,  0.0000 |
 0.9962,  0.9553,  0.9645,  0.0000,  0.0000 |
 0.9925,  0.9511,  0.9841,  0.9885,  0.0000 |
-
 
 mem: Fixed 1000 samples
 

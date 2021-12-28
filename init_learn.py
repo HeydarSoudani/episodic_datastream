@@ -1,3 +1,9 @@
+import os
+from pandas import read_csv
+from torch.utils.data import DataLoader
+
+from datasets.dataset import SimpleDataset
+from utils.preparation import transforms_preparation
 from trainers.episodic_train import train
 from detectors.pt_detector import detector_preparation
 
@@ -35,7 +41,7 @@ def init_learn(model,
 
 
   ## == Test ==========================
-  test_data = pd.read_csv(
+  test_data = read_csv(
             os.path.join(args.data_path, args.test_file),
             sep=',', header=None).values
 
