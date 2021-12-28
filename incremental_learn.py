@@ -165,9 +165,10 @@ def episodic_increm_learn(model,
                                    batch_size=args.batch_size,
                                    shuffle=False)
 
-      known_labels = test_dataset.label_set
-      print('Test on: {}'.format(known_labels))
-      # #known_labels = set(range((task+1)*2))
+      # known_labels = test_dataset.label_set
+      # print('Test on: {}'.format(known_labels))
+      known_labels = set(range((task+1)*2))
+      print('Known_labels for task {} is: {}'.format(task, known_labels))
       _, acc_dis, acc_cls = learner.evaluate(model,
                                             test_dataloader,
                                             known_labels,
