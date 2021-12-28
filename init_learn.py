@@ -15,6 +15,7 @@ def init_learn(model,
                args,
                device):
 
+  print('train_data: {}'.format(train_data.shape))
   ### == Train Model =================
   train(model, pt_learner, train_data, args, device)
 
@@ -44,7 +45,7 @@ def init_learn(model,
   test_data = read_csv(
             os.path.join(args.data_path, args.test_file),
             sep=',', header=None).values
-
+  print('test_data: {}'.format(test_data.shape))
   if args.use_transform:
     _, test_transform = transforms_preparation()
     test_dataset = SimpleDataset(test_data, args, transforms=test_transform)
