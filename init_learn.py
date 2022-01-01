@@ -36,7 +36,7 @@ def init_learn(model,
   
   ## == Save Memory selector ==========
   print("Creating memory ...")
-  memory.select(model, data=samples)
+  memory.select(data=samples)
   memory.save(args.memory_path)
   print("Memory has been saved in {}.".format(args.memory_path))
 
