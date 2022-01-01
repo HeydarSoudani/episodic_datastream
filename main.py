@@ -95,7 +95,7 @@ parser.add_argument('--mem_sel_method', type=str, default='rand', choices=['rand
 
 # Network
 parser.add_argument('--dropout', type=float, default=0.2, help='')
-parser.add_argument('--hidden_dims', type=int, default=100, help='') #768
+parser.add_argument('--hidden_dims', type=int, default=100, help='')
 
 # memory
 parser.add_argument('--memory_per_class', type=int, default=250, help='')
