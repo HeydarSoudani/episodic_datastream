@@ -49,7 +49,7 @@ class ResNet(nn.Module):
         self.ip1 = nn.Linear(nf * 8 * block.expansion, args.hidden_dims)
         self.preluip1 = nn.PReLU()
         self.dropoutip1 = nn.Dropout(args.dropout)
-        self.linear = nn.Linear(nf * 8 * block.expansion, num_classes, bias=bias)
+        self.linear = nn.Linear(args.hidden_dims, num_classes, bias=bias)
 
     def _make_layer(self, block, planes, num_blocks, stride):
         strides = [stride] + [1] * (num_blocks - 1)
