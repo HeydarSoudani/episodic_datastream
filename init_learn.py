@@ -4,7 +4,7 @@ from torch.utils.data import DataLoader
 
 from datasets.dataset import SimpleDataset
 from utils.preparation import transforms_preparation
-from trainers.episodic_train import train
+from trainers.episodic_train import train as episodic_train
 from detectors.pt_detector import detector_preparation
 
 def init_learn(model,
@@ -17,7 +17,7 @@ def init_learn(model,
 
   print('train_data: {}'.format(train_data.shape))
   ### == Train Model =================
-  train(model, pt_learner, train_data, args, device)
+  episodic_train(model, pt_learner, train_data, args, device)
 
   ## == Save Novel detector ===========
   print("Calculating detector ...")

@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 def get_data(dataset):
   # methods on rows
   # tasks on cols.
-
   if dataset == 'pmnist':
     data = [
       {

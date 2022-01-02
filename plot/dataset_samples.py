@@ -27,9 +27,10 @@ parser.add_argument(
     'fmnist',
     'pfmnist',
     'rfmnist',
-    'cifar10'
+    'cifar10',
+    'cifar100'
   ],
-  default='cifar10',
+  default='cifar100',
   help='')
 parser.add_argument('--seed', type=int, default=5, help='')
 args = parser.parse_args()
@@ -53,7 +54,7 @@ def imshow(imgs):
 
 def show_samples():
   
-  fig, axs = plt.subplots(5, 1)
+  fig, axs = plt.subplots(args.n_tasks, 1)
 
   ## incremental version
   for task in range(args.n_tasks):
@@ -61,10 +62,10 @@ def show_samples():
     task_data = pd.read_csv(
       os.path.join(args.split_train_path, "task_{}.csv".format(task)),
       sep=',', header=None).values 
-    dataset = SimpleDataset(task_data[:30], args)
+    dataset = SimpleDataset(task_data[:300], args)
     sampler = PtSampler(
       dataset,
-      n_way=2,
+      n_way=20,
       n_shot=1,
       n_query=0,
       n_tasks=1)

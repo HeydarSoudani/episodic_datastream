@@ -3,8 +3,14 @@ import torchvision.transforms as transforms
 import pandas as pd 
 import numpy as np
 import argparse
+import pickle
 import time
 import os
+
+def unpickle(file):
+  with open(file, 'rb') as fo:
+    dict = pickle.load(fo, encoding='bytes')
+  return dict
 
 ## == Params ==========================
 parser = argparse.ArgumentParser()
@@ -85,12 +91,16 @@ if __name__ == '__main__':
   ## ========================================
   # == Get Cifar100 dataset =================
   if args.dataset == 'cifar100':
-    train_data = pd.read_csv(os.path.join(args.data_path, 'cifar100_train.csv'), sep=',', header=None).values
-    test_data = pd.read_csv(os.path.join(args.data_path, 'cifar100_test.csv'), sep=',', header=None).values
-    print(train_data.shape)
-    print(test_data.shape)
-    # X_train, y_train = train_data[:, :-1], train_data[:, -1]
-    # X_test, y_test = test_data[:, :-1], test_data[:, -1]
+    # train_data = pd.read_csv(os.path.join(args.data_path, 'cifar100_train.csv'), sep=',', header=None).values
+    # test_data = pd.read_csv(os.path.join(args.data_path, 'cifar100_test.csv'), sep=',', header=None).values
+    cifar100_train = unpickle(os.path.join(args.data_path, 'cifar100_train'))
+    cifar100_test = unpickle(os.path.join(args.data_path, 'cifar100_test'))
+ 
+    X_train = np.array(cifar100_train[b'data'])
+    y_train = np.array(cifar100_train[b'fine_labels'])
+    X_test = np.array(cifar100_test[b'data'])
+    y_test = np.array(cifar100_test[b'fine_labels'])
+    
   ## ========================================
   ## ========================================
 
@@ -210,7 +220,9 @@ if __name__ == '__main__':
     train_data = np.concatenate((X_train, y_train.reshape(-1, 1)), axis=1)
     test_data = np.concatenate((X_test, y_test.reshape(-1, 1)), axis=1)
 
-    cpt = int(10 / args.n_tasks)
+    if args.dataset == 'cifar100': cpt = int(100 / args.n_tasks)
+    else: cpt = int(10 / args.n_tasks)
+    
     for t in range(args.n_tasks):
       c1 = t * cpt
       c2 = (t + 1) * cpt

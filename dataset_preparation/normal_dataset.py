@@ -6,7 +6,7 @@ import os
 ## == Params ==========================
 parser = argparse.ArgumentParser()
 parser.add_argument('--n_tasks', type=int, default=5, help='')
-parser.add_argument('--dataset', type=str, default='mnist', help='') #[mnist, fmnist, cifar10]
+parser.add_argument('--dataset', type=str, default='mnist', help='') #[mnist, fmnist, cifar10, cifar100]
 parser.add_argument('--seed', type=int, default=2, help='')
 parser.add_argument('--saved', type=str, default='./data/', help='')
 args = parser.parse_args()
@@ -16,10 +16,8 @@ args.data_path = 'data/{}'.format(args.dataset)
 args.train_file = '{}_train.csv'.format(args.dataset)
 args.test_file = '{}_test.csv'.format(args.dataset)
 
-
 ## == Apply seed ======================
 np.random.seed(args.seed)
-
 
 ## == Save dir ========================
 if not os.path.exists(args.saved):
@@ -56,6 +54,21 @@ if __name__ == '__main__':
     X_test, y_test = test_data[:, :-1], test_data[:, -1]
   ## ========================================
   ## ========================================
+
+  ## ========================================
+  # == Get Cifar100 dataset =================
+  if args.dataset == 'cifar100':
+    cifar100_train = unpickle(os.path.join(args.data_path, 'cifar100_train'))
+    cifar100_test = unpickle(os.path.join(args.data_path, 'cifar100_test'))
+    X_train = np.array(cifar100_train[b'data'])
+    y_train = np.array(cifar100_train[b'fine_labels'])
+    X_test = np.array(cifar100_test[b'data'])
+    y_test = np.array(cifar100_test[b'fine_labels'])
+    
+  ## ========================================
+  ## ========================================
+
+
 
   train_data = np.concatenate((X_train, y_train.reshape(-1, 1)), axis=1)
   test_data = np.concatenate((X_test, y_test.reshape(-1, 1)), axis=1)
