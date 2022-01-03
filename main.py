@@ -47,7 +47,7 @@ parser.add_argument(
   '--which_model',
   type=str,
   choices=['best', 'last'],
-  default='last',
+  default='best',
   help='')
 parser.add_argument(
   '--dataset',
@@ -62,7 +62,7 @@ parser.add_argument(
     'cifar10',
     'cifar100'
   ],
-  default='cifar10',
+  default='cifar100',
   help='') 
 parser.add_argument(
   '--meta_algorithm',
@@ -122,7 +122,7 @@ parser.add_argument("--lambda_3", type=float, default=0.001, help="Metric Coeffi
 parser.add_argument("--temp_scale", type=float, default=0.2, help="Temperature scale for DCE in loss function",)
 
 # Optimizer
-parser.add_argument('--lr', type=float, default=0.001, help='')
+parser.add_argument('--lr', type=float, default=0.01, help='')
 parser.add_argument('--momentum', type=float, default=0.9, help='')
 parser.add_argument('--wd', type=float, default=0.0005, help='')  #l2 regularization
 parser.add_argument('--grad_clip', type=float, default=5.0)

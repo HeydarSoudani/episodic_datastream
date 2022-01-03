@@ -17,7 +17,7 @@ def init_learn(model,
 
   print('train_data: {}'.format(train_data.shape))
   ### == Train Model =================
-  episodic_train(model, pt_learner, train_data, args, device)
+  # episodic_train(model, pt_learner, train_data, args, device)
 
   ## == Save Novel detector ===========
   # print("Calculating detector ...")

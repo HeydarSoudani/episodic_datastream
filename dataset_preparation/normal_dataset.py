@@ -12,7 +12,7 @@ def unpickle(file):
 ## == Params ==========================
 parser = argparse.ArgumentParser()
 parser.add_argument('--n_tasks', type=int, default=5, help='')
-parser.add_argument('--dataset', type=str, default='mnist', help='') #[mnist, fmnist, cifar10, cifar100]
+parser.add_argument('--dataset', type=str, default='cifar100', help='') #[mnist, fmnist, cifar10, cifar100]
 parser.add_argument('--seed', type=int, default=2, help='')
 parser.add_argument('--saved', type=str, default='./data/', help='')
 args = parser.parse_args()
