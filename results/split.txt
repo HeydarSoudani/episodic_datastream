@@ -508,6 +508,6 @@ S:5                                        | S:12                               
 mem: Fixed 200 samples
 
 =========================================================
-=== Episodic+CE | 10-ways(aftr 2nd task 20-ways), 20k_iter
+=== Episodic+CE | 10-ways(aftr 2nd task 20-ways), 4k_iter
 =========================================================
 

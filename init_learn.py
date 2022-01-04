@@ -56,7 +56,7 @@ def init_learn(model,
                                 shuffle=False)
 
   known_labels = test_dataset.label_set
-  print('Test on: {}'.format(known_labels))
+  # print('Test on: {}'.format(known_labels))
   _, acc_dis, acc_cls = pt_learner.evaluate(model,
                                         test_dataloader,
                                         known_labels,
