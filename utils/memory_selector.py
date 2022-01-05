@@ -435,7 +435,7 @@ class IncrementalMemory():
           idxs = np.random.choice(range(n), size=class_size, replace=False)
           self.class_data[label] = new_samples[idxs]
         else:
-          self.class_data[label] = samples
+          self.class_data[label] = new_samples
     
     elif self.selection_type == 'pre_class':
       for label in unique_labels:
