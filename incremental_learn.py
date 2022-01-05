@@ -84,6 +84,7 @@ def batch_increm_learn(model,
     
     mean_acc_cls = np.mean(tasks_acc_cls[:task+1])
     # print("Cls  acc.: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(tasks_acc_cls))
+    print(tasks_acc_cls)
     print("Cls  acc.: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(tasks_acc_cls))
     
     print('Mean -> Cls: {}'.format(round(mean_acc_cls, 3)))
