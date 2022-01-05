@@ -17,9 +17,11 @@ def train(model,
   val_dataloader, \
   known_labels =  dataloader_preparation(train_data, val_data, args)
   
+  # optim = SGD(model.parameters(),
+  #             lr=args.lr,
+  #             momentum=args.momentum)
   optim = SGD(model.parameters(),
-              lr=args.lr,
-              momentum=args.momentum)
+              lr=args.lr)
   # optim = Adam(model.parameters(),
   #               lr=args.lr,
   #               weight_decay=args.wd)
