@@ -28,7 +28,6 @@ def batch_increm_learn(model,
     
     ### === Split setting =========================
     if task != 0:
-      if task == 8: args.ways = 20
       replay_mem = memory()
       train_data = np.concatenate((task_data, replay_mem))
       print('replay_mem: {}'.format(replay_mem.shape))
@@ -84,7 +83,9 @@ def batch_increm_learn(model,
       tasks_acc_cls[prev_task] = acc_cls
     
     mean_acc_cls = np.mean(tasks_acc_cls[:task+1])
-    print("Cls  acc.: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(tasks_acc_cls))
+    # print("Cls  acc.: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(tasks_acc_cls))
+    print("Cls  acc.: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(tasks_acc_cls))
+    
     print('Mean -> Cls: {}'.format(round(mean_acc_cls, 3)))
 
 

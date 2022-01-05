@@ -396,8 +396,8 @@ class IncrementalMemory():
     self.class_data = {}
   
   def __call__(self):
-    # for label, features in self.class_data.items():
-    #   print('{} -> {}'.format(label, features.shape))
+    for label, features in self.class_data.items():
+      print('{} -> {}'.format(label, features.shape))
     return np.concatenate(list(self.class_data.values()), axis=0)
 
   def update(self, data):
@@ -423,13 +423,19 @@ class IncrementalMemory():
 
         for label, samples in self.class_data.items():
           n = samples.shape[0]
-          idxs = np.random.choice(range(n), size=class_size, replace=False)
-          self.class_data[label] = samples[idxs]
-        
+          if n > class_size:
+            idxs = np.random.choice(range(n), size=class_size, replace=False)
+            self.class_data[label] = samples[idxs]
+          else:
+            self.class_data[label] = samples
+
       for label in unique_labels:
         n = new_class_data[label].shape[0]
-        idxs = np.random.choice(range(n), size=class_size, replace=False)
-        self.class_data[label] = new_samples[idxs]
+        if n > class_size:
+          idxs = np.random.choice(range(n), size=class_size, replace=False)
+          self.class_data[label] = new_samples[idxs]
+        else:
+          self.class_data[label] = samples
     
     elif self.selection_type == 'pre_class':
       for label in unique_labels:
