@@ -27,7 +27,7 @@ def batch_learn(model, args, device):
                                 batch_size=args.batch_size,
                                 shuffle=False)
   
-  # train(model, train_data, args, device)
+  train(model, train_data, args, device)
   
   # if args.which_model == 'best':
   #   try: model.load(args.best_model_path)

@@ -59,6 +59,7 @@ def train(model,
         outputs, _ = model.forward(images)
         loss = criterion(outputs, labels)
         loss.backward()
+        torch.nn.utils.clip_grad_norm_(model.parameters(), args.grad_clip)
         optim.step()
 
         train_loss += loss
