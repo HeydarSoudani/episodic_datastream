@@ -129,7 +129,7 @@ parser.add_argument('--grad_clip', type=float, default=0.1)
 
 # Scheduler
 parser.add_argument("--scheduler", action="store_true", help="use scheduler")
-parser.add_argument("--step_size", default=2000, type=int)
+parser.add_argument("--step_size", default=8, type=int)
 parser.add_argument('--gamma', type=float, default=0.5, help='for lr step')
 
 # Device and Randomness

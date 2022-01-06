@@ -44,7 +44,7 @@ def train(model,
   # optim = Adam(model.parameters(),
   #               lr=args.lr,
   #               weight_decay=args.wd)
-  # scheduler = StepLR(optim, step_size=8, gamma=args.gamma)
+  scheduler = StepLR(optim, step_size=8, gamma=args.gamma)
   
   min_loss = float('inf')
   try:
@@ -89,7 +89,7 @@ def train(model,
               min_loss = total_val_loss
               print("Saving new best model")
 
-      # scheduler.step()
+      scheduler.step()
 
   except KeyboardInterrupt:
     print('skipping training')  
