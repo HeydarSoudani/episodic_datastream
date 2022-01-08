@@ -122,7 +122,7 @@ parser.add_argument("--lambda_3", type=float, default=0.001, help="Metric Coeffi
 parser.add_argument("--temp_scale", type=float, default=0.2, help="Temperature scale for DCE in loss function",)
 
 # Optimizer
-parser.add_argument('--lr', type=float, default=0.01, help='')
+parser.add_argument('--lr', type=float, default=0.5, help='')
 parser.add_argument('--momentum', type=float, default=0.9, help='')
 parser.add_argument('--wd', type=float, default=1e-5, help='')  #l2 regularization
 parser.add_argument('--grad_clip', type=float, default=0.1)   # before was 5.0

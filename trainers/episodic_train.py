@@ -20,8 +20,7 @@ def train(model,
   # optim = SGD(model.parameters(),
   #             lr=args.lr,
   #             momentum=args.momentum)
-  optim = SGD(model.parameters(),
-              lr=args.lr)
+  optim = SGD(model.parameters(), lr=args.lr)
   # optim = Adam(model.parameters(),
   #               lr=args.lr,
   #               weight_decay=args.wd)

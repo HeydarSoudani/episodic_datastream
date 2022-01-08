@@ -33,8 +33,7 @@ def train(model,
 
 
   criterion = torch.nn.CrossEntropyLoss()
-  optim = SGD(model.parameters(),
-              lr=args.lr)
+  optim = SGD(model.parameters(), lr=args.lr)
   # optim = SGD(model.parameters(),
   #             lr=args.lr,
   #             momentum=args.momentum,
