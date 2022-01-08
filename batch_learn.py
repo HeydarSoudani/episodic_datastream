@@ -27,7 +27,7 @@ def batch_learn(model, args, device):
                                 batch_size=args.batch_size,
                                 shuffle=False)
   
-  train(model, train_data, args, device)
+  # train(model, train_data, args, device)
   
   print('Test with last model')
   _ = test(model, test_dataloader, args, device)
