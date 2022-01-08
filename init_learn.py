@@ -56,7 +56,19 @@ def init_learn(model,
                                 shuffle=False)
 
   known_labels = test_dataset.label_set
-  # print('Test on: {}'.format(known_labels))
+  
+  print('Test with last model')
+  _, acc_dis, acc_cls = pt_learner.evaluate(model,
+                                        test_dataloader,
+                                        known_labels,
+                                        args)
+  print('Dist: {}, Cls: {}'.format(acc_dis, acc_cls))
+
+
+  print('Test with best model')
+  try: model.load(args.best_model_path)
+  except FileNotFoundError: pass
+  else: print("Load model from {}".format(args.best_model_path))
   _, acc_dis, acc_cls = pt_learner.evaluate(model,
                                         test_dataloader,
                                         known_labels,
