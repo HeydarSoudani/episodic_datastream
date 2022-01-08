@@ -46,7 +46,7 @@ class ResNet(nn.Module):
         self.layer4 = self._make_layer(block, nf * 8, num_blocks[3], stride=2)
         print("BIAS IS", bias)
         
-        self.ip1 = nn.Linear(nf * 8 * block.expansion, args.hidden_dims)
+        # self.ip1 = nn.Linear(nf * 8 * block.expansion, args.hidden_dims)
         # self.preluip1 = nn.PReLU()
         # self.dropoutip1 = nn.Dropout(args.dropout)
         self.linear = nn.Linear(nf * 8 * block.expansion, num_classes, bias=bias)

@@ -125,7 +125,7 @@ parser.add_argument("--temp_scale", type=float, default=0.2, help="Temperature s
 parser.add_argument('--lr', type=float, default=0.01, help='')
 parser.add_argument('--momentum', type=float, default=0.9, help='')
 parser.add_argument('--wd', type=float, default=0.0005, help='')  #l2 regularization
-parser.add_argument('--grad_clip', type=float, default=0.1)
+parser.add_argument('--grad_clip', type=float, default=0.1)   # before was 5.0
 
 # Scheduler
 parser.add_argument("--scheduler", action="store_true", help="use scheduler")
@@ -221,7 +221,7 @@ try: learner.load(args.prototypes_path)
 except FileNotFoundError: pass
 else: print("Load Prototypes from {}".format(args.prototypes_path))
 
-# == For stream version ================
+# == For stream version ==================
 if args.phase not in [
   'batch_learn',
   'batch_incremental_learn',

@@ -44,7 +44,12 @@ def train(model,
   # optim = Adam(model.parameters(),
   #               lr=args.lr,
   #               weight_decay=args.wd)
-  scheduler = StepLR(optim, step_size=8, gamma=args.gamma)
+
+  scheduler = StepLR(
+    optim,
+    step_size=args.step_size,
+    gamma=args.gamma,
+  )
   
   min_loss = float('inf')
   try:
@@ -64,6 +69,7 @@ def train(model,
 
         train_loss += loss
 
+        # evaluation
         if (i+1) % args.log_interval == 0:
           with torch.no_grad():
             total_val_loss = 0.0
