@@ -312,7 +312,7 @@ if __name__ == '__main__':
   
   ## == Plot ===========================
   elif args.phase == 'plot':
-    # set_novel_label(args)
+    set_novel_label(args)
     visualization(model, args, device)
     # tsne(model, args, device)
     # pca(model, args, device)
