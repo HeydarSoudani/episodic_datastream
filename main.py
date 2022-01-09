@@ -196,16 +196,17 @@ else:
   model = Conv_4(args)
 
 ## == Load model if exist ==============
-if args.which_model == 'best':
-  try: model.load(args.best_model_path)
-  except FileNotFoundError: pass
-  else:
-    print("Load model from {}".format(args.best_model_path))
-elif args.which_model == 'last':
-  try: model.load(args.last_model_path)
-  except FileNotFoundError: pass
-  else:
-    print("Load model from {}".format(args.last_model_path))
+if args.dataset != 'plot':
+  if args.which_model == 'best':
+    try: model.load(args.best_model_path)
+    except FileNotFoundError: pass
+    else:
+      print("Load model from {}".format(args.best_model_path))
+  elif args.which_model == 'last':
+    try: model.load(args.last_model_path)
+    except FileNotFoundError: pass
+    else:
+      print("Load model from {}".format(args.last_model_path))
 model.to(device)
 
 ## == Loss & Learner Definition ========

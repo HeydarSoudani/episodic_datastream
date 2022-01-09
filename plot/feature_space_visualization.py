@@ -129,8 +129,8 @@ def visualization(model, args, device):
     features = features.cpu().detach().numpy()
     support_labels = support_labels.cpu().detach().numpy()
 
-  tsne_plot(features, support_labels, file_name='tsne_last')
-  # pca_plot(features, support_labels, file_name='pca_last')
+  # tsne_plot(features, support_labels, file_name='tsne_last')
+  pca_plot(features, support_labels, file_name='pca_last')
   hausdorff_calculate(features, support_labels)
 
 
