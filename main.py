@@ -97,7 +97,7 @@ parser.add_argument('--mem_sel_method', type=str, default='rand', choices=['rand
 
 # Network
 parser.add_argument('--dropout', type=float, default=0.2, help='')
-parser.add_argument('--hidden_dims', type=int, default=160, help='')
+parser.add_argument('--hidden_dims', type=int, default=100, help='')
 
 # memory
 parser.add_argument('--memory_per_class', type=int, default=250, help='')
@@ -188,7 +188,7 @@ if not os.path.exists(args.save):
 ## == Model Definition =================
 if args.dataset in ['mnist', 'pmnist', 'rmnist']:
   # MLP net selected like CoPE
-  n_inputs, n_feature, n_outputs = 784, 100, 10
+  n_inputs, n_feature, n_outputs = 784, args.hidden_dims, 10
   model = MLP(n_inputs, n_feature, n_outputs, args)
 elif args.dataset == 'cifar100':
   model = ResNet18(100, args)
