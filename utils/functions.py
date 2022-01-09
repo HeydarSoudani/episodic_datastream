@@ -65,17 +65,25 @@ def mean_std_calculator(nb_samples, dataloader):
   return mean, std
 
 def set_novel_label(args):
-  stream_data = pd.read_csv(args.train_path, sep=',', header=None).values
-  train_labels = stream_data[:, -1]
+  train_data = pd.read_csv(
+    os.path.join(args.data_path, args.train_file),
+    sep=',', header=None).values
+  train_labels = train_data[:, -1]
   seen_label = set(train_labels)
-  stream_data = pd.read_csv(os.path.join(args.data_path, args.test_file), sep=',', header=None).values
+  
+  stream_data = pd.read_csv(
+    os.path.join(args.data_path, args.stream_file),
+    sep=',', header=None).values
 
   for idx, data in enumerate(stream_data):
     label = data[-1]
     if label not in seen_label:
-      stream_data[idx, -1] = 1
+      stream_data[idx, -1] = 100
 
-  pd.DataFrame(stream_data).to_csv('./data/cifar10_stream_novel.csv', header=None, index=None)
+  new_data_file = './data/{}_stream_novel.csv'.format(args.dataset)
+  pd.DataFrame(stream_data).to_csv(
+    new_data_file,
+    header=None, index=None)
 
 def mapping_text2int(data):
   samples = data[:, :-1].astype(int)

@@ -16,10 +16,13 @@ from samplers.pt_sampler import PtSampler
 def tsne(model, args, device):
   
   # == Load stream data ==============================
+  # test_data = read_csv(
+  #   os.path.join(args.data_path, args.dataset, args.test_file),
+  #   sep=',').values
   test_data = read_csv(
-    os.path.join(args.data_path, args.dataset, args.test_file),
-    sep=',').values
- 
+    './data/{}_stream_novel.csv'.format(args.dataset),
+    sep=',').values 
+
   if args.use_transform:
     _, test_transform = transforms_preparation()
     test_dataset = SimpleDataset(test_data, args, transforms=test_transform)
@@ -30,8 +33,8 @@ def tsne(model, args, device):
   print(len(test_dataset))
   sampler = PtSampler(
     test_dataset,
-    n_way=10,
-    n_shot=500,
+    n_way=6,
+    n_shot=100,
     n_query=0,
     n_tasks=1
   )
@@ -42,11 +45,8 @@ def tsne(model, args, device):
     pin_memory=True,
     collate_fn=sampler.episodic_collate_fn,
   )
-
-  ### ======================================
-  ### == Feature space visualization =======
-  ### ======================================
-  print('=== Feature-Space visualization (t-SNE) ===')
+  
+  # == Get features ==========================
   with torch.no_grad():
     batch = next(iter(test_dataloader))
     support_images, support_labels, _, _ = batch
@@ -59,19 +59,32 @@ def tsne(model, args, device):
     features = features.cpu().detach().numpy()
     support_labels = support_labels.cpu().detach().numpy()
 
-  tsne = TSNE()
-  X_embedded = tsne.fit_transform(features)
+  
+  print('=== Feature-Space visualization (t-SNE) ===')
+  
+  # == Plot t-SNE =============================
+  # tsne = TSNE()
+  # X_embedded = tsne.fit_transform(features)
 
-  sns.set(rc={'figure.figsize':(11.7,8.27)})
-  palette = sns.color_palette("bright", 10)
-  sns.scatterplot(
-    x=X_embedded[:,0],
-    y=X_embedded[:,1],
-    hue=support_labels,
-    legend='full',
-    palette=palette
-  )
+  # sns.set(rc={'figure.figsize':(11.7,8.27)})
+  # palette = sns.color_palette("bright", 6)
+  # sns.scatterplot(
+  #   x=X_embedded[:,0],
+  #   y=X_embedded[:,1],
+  #   hue=support_labels,
+  #   legend='full',
+  #   palette=palette
+  # )
 
-  plt.savefig('tsne.png')
-  plt.show()
+  # plt.savefig('tsne.png')
+  # plt.show()
+  
   ### ======================================
+  
+  print(support_labels)
+  print(np.where(support_labels == 100)[0])
+  features_novel = features[np.where(support_labels == 100)[0]]
+  features_known = features[np.where(support_labels != 100)[0]]
+  
+  dist = hausdorff_distance(features_novel, features_known, distance="cosine")
+  print('Hausdorff distance is {}'.format(dist))

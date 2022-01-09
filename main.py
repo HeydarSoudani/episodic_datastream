@@ -21,6 +21,9 @@ from zeroshot_test import zeroshot_test
 from stream_learn import stream_learn
 from incremental_learn import batch_increm_learn, episodic_increm_learn
 
+from utils.functions import set_novel_label
+from plot.feature_space_visualization import visualization
+
 from plot.tsne import tsne
 from plot.pca import pca
 
@@ -41,7 +44,7 @@ parser.add_argument(
     'episodic_incremental_learn',
     'plot'
   ],
-  default='init_learn',
+  default='plot',
   help='')
 parser.add_argument(
   '--which_model',
@@ -62,7 +65,7 @@ parser.add_argument(
     'cifar10',
     'cifar100'
   ],
-  default='cifar100',
+  default='mnist',
   help='') 
 parser.add_argument(
   '--meta_algorithm',
@@ -309,13 +312,13 @@ if __name__ == '__main__':
   
   ## == Plot ===========================
   elif args.phase == 'plot':
+    # set_novel_label(args)
+    visualization(model, args, device)
     # tsne(model, args, device)
-    pca(model, args, device)
+    # pca(model, args, device)
   else: 
     raise NotImplementedError()
 
-  ## == Data Visualization ==============
-  # set_novel_label(args)
 
 
 
