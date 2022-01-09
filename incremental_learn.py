@@ -9,9 +9,6 @@ from trainers.batch_train import test
 from datasets.dataset import SimpleDataset
 from utils.preparation import transforms_preparation
 
-from plot.tsne import tsne
-from plot.pca import pca
-
 
 def batch_increm_learn(model,
                       memory,

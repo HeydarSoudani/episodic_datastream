@@ -311,8 +311,6 @@ if __name__ == '__main__':
   elif args.phase == 'plot':
     set_novel_label(args)
     visualization(model, args, device)
-    # tsne(model, args, device)
-    # pca(model, args, device)
   else: 
     raise NotImplementedError()
 
