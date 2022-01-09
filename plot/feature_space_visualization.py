@@ -74,6 +74,8 @@ def visualization(model, args, device):
   
   # init plot 
   model.load(os.path.join(args.save, 'model_after_init.pt'))
+  print("Load model from {}".format(os.path.join(args.save, 'model_after_init.pt')))
+
   with torch.no_grad():
     batch = next(iter(test_dataloader))
     support_images, support_labels, _, _ = batch
@@ -91,6 +93,8 @@ def visualization(model, args, device):
   
   # last plot
   model.load(os.path.join(args.save, 'model_last.pt'))
+  print("Load model from {}".format(os.path.join(args.save, 'model_last.pt')))
+
   with torch.no_grad():
     batch = next(iter(test_dataloader))
     support_images, support_labels, _, _ = batch
