@@ -41,7 +41,7 @@ def hausdorff_calculate(features, labels):
   print('Hausdorff distance is {}'.format(dist))
 
 
-def visualization():
+def visualization(model, args, device):
   
   # == Load stream data ==============================
   # test_data = read_csv(
