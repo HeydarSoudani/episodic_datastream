@@ -196,7 +196,7 @@ else:
   model = Conv_4(args)
 
 ## == Load model if exist ==============
-if args.dataset != 'plot':
+if args.phase != 'plot':
   if args.which_model == 'best':
     try: model.load(args.best_model_path)
     except FileNotFoundError: pass

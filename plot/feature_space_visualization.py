@@ -91,31 +91,8 @@ def visualization(model, args, device):
   )
   
   # == init plot =========================== 
-  # model.load(os.path.join(args.save, 'model_after_init.pt'))
-  # print("Load model from {}".format(os.path.join(args.save, 'model_after_init.pt')))
-
-  # with torch.no_grad():
-  #   batch = next(iter(test_dataloader))
-  #   support_images, support_labels, _, _ = batch
-  #   support_images = support_images.reshape(-1, *support_images.shape[2:])
-  #   support_labels = support_labels.flatten()
-  #   support_images = support_images.to(device)
-  #   support_labels = support_labels.to(device)
-
-  #   outputs, features = model.forward(support_images)
-  #   features = features.cpu().detach().numpy()
-  #   support_labels = support_labels.cpu().detach().numpy()
-
-  # print(features.shape)
-  # print(support_labels.shape)
-
-  # tsne_plot(features, support_labels, file_name='tsne_init')
-  # # pca_plot(features, support_labels, file_name='pca_init')
-  # hausdorff_calculate(features, support_labels)
-  
-  # == last plot ============================
-  model.load(os.path.join(args.save, 'model_last.pt'))
-  print("Load model from {}".format(os.path.join(args.save, 'model_last.pt')))
+  model.load(os.path.join(args.save, 'model_after_init.pt'))
+  print("Load model from {}".format(os.path.join(args.save, 'model_after_init.pt')))
 
   with torch.no_grad():
     batch = next(iter(test_dataloader))
@@ -129,9 +106,32 @@ def visualization(model, args, device):
     features = features.cpu().detach().numpy()
     support_labels = support_labels.cpu().detach().numpy()
 
-  # tsne_plot(features, support_labels, file_name='tsne_last')
-  pca_plot(features, support_labels, file_name='pca_last')
+  print(features.shape)
+  print(support_labels.shape)
+
+  tsne_plot(features, support_labels, file_name='tsne_init')
+  # pca_plot(features, support_labels, file_name='pca_init')
   hausdorff_calculate(features, support_labels)
+  
+  # == last plot ============================
+  # model.load(os.path.join(args.save, 'model_last.pt'))
+  # print("Load model from {}".format(os.path.join(args.save, 'model_last.pt')))
+
+  # with torch.no_grad():
+  #   batch = next(iter(test_dataloader))
+  #   support_images, support_labels, _, _ = batch
+  #   support_images = support_images.reshape(-1, *support_images.shape[2:])
+  #   support_labels = support_labels.flatten()
+  #   support_images = support_images.to(device)
+  #   support_labels = support_labels.to(device)
+
+  #   outputs, features = model.forward(support_images)
+  #   features = features.cpu().detach().numpy()
+  #   support_labels = support_labels.cpu().detach().numpy()
+
+  # # tsne_plot(features, support_labels, file_name='tsne_last')
+  # pca_plot(features, support_labels, file_name='pca_last')
+  # hausdorff_calculate(features, support_labels)
 
 
 
