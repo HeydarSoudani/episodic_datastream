@@ -80,9 +80,6 @@ def tsne(model, args, device):
   # plt.show()
   
   ### ======================================
-  
-  print(support_labels)
-  print(np.where(support_labels == 100)[0])
   features_novel = features[np.where(support_labels == 100)[0]]
   features_known = features[np.where(support_labels != 100)[0]]
   
