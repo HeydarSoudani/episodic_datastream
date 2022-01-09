@@ -188,7 +188,7 @@ if not os.path.exists(args.save):
 ## == Model Definition =================
 if args.dataset in ['mnist', 'pmnist', 'rmnist']:
   # MLP net selected like CoPE
-  n_inputs, n_feature, n_outputs = 784, args.hidden_dims , 10
+  n_inputs, n_feature, n_outputs = 784, 100, 10
   model = MLP(n_inputs, n_feature, n_outputs, args)
 elif args.dataset == 'cifar100':
   model = ResNet18(100, args)
