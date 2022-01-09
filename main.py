@@ -24,9 +24,6 @@ from incremental_learn import batch_increm_learn, episodic_increm_learn
 from utils.functions import set_novel_label
 from plot.feature_space_visualization import visualization
 
-from plot.tsne import tsne
-from plot.pca import pca
-
 
 ## == Params ===========
 parser = argparse.ArgumentParser()
