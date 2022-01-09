@@ -7,27 +7,27 @@ def get_data(dataset):
   data = {
     'MNIST': {
       'mean': np.array([
-        [86.80, 91.47, 92.67, 93.27], # epis-pt
-        [86.63, 89.70, 91.07, 91.66], # epis-ce
-        [43.93, 65.97, 79.00, 85.57], # non-epis
+        [82.60, 90.83, 93.27, 94.80], # epis-pt
+        [83.80, 90.60, 93.20, 94.70], # epis-ce
+        [59.30, 78.83, 85.00, 89.07], # non-epis
         [80.37, 86.80, 91.15, 93.00], # cope
         [86.70, 92.70, 94.30, 95.30], # mir
         [79.09, 86.78, 90.24, 91.59], # reservoir
         [71.87, 72.67, 73.18, 73.24], # icarl
       ]),
       'std':  np.array([
-        [0.22, 0.68, 0.21, 0.09], # epis-pt
-        [0.12, 0.29, 0.25, 0.12], # epis-ce
-        [0.58, 1.01, 0.08, 0.34], # non-epis
+        [0.22, 0.56, 0.17, 0.08], # epis-pt
+        [0.14, 0.73, 0.36, 0.24], # epis-ce
+        [1.63, 2.04, 1.13, 0.26], # non-epis
         [1.87, 1.51, 0.72, 0.45], # cope
         [1.60, 0.40, 0.40, 0.40], # mir
         [1.35, 0.87, 0.80, 0.89], # reservoir
         [0.79, 0.50, 0.67, 0.51]  # icarl
       ]),
       'mem_avg': [
-        '91.05±2.54', # epis-pt
-        '89.77±1.94', # epis-ce
-        '68.62±15.9', # non-epis
+        '90.37±4.71', # epis-pt
+        '90.57±4.18', # epis-ce
+        '78.05±11.42', # non-epis
         '87.83±4.86', # cope
         '92.25±3.34', # mir
         '86.93±4.85', # reservoir
@@ -126,11 +126,10 @@ def get_data(dataset):
   return data[dataset]
 
 
-
 def main():
-  dataset = 'FashionMNIST' #[MNIST, FashionMNIST, CIFAR10]
+  dataset = 'MNIST' #[MNIST, FashionMNIST, CIFAR10]
   data = get_data(dataset)
-  methods = ['Epis-PT', 'Epis-CE', 'Non-Epis', 'CoPE', 'MIR', 'reservoir', 'iCaRL']
+  methods = ['FuEPL-PT', 'FuEPL-CE', 'Non-Epis', 'CoPE', 'MIR', 'reservoir', 'iCaRL']
   colors = ['royalblue', 'hotpink', 'blueviolet', 'gold', 'darkorange', 'limegreen', 'brown']
   n_methods = 7
   n_mem = 4
