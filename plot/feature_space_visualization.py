@@ -32,8 +32,6 @@ def tsne_plot(features, labels, file_name='tsne'):
 
 
 def hausdorff_calculate(features, labels):
-  print(labels)
-  print(np.where(labels == 100)[0])
   features_novel = features[np.where(labels == 100)[0]]
   features_known = features[np.where(labels != 100)[0]]
   
