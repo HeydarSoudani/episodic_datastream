@@ -109,8 +109,8 @@ def visualization(model, args, device):
   print(features.shape)
   print(support_labels.shape)
 
-  tsne_plot(features, support_labels, file_name='tsne_init')
-  # pca_plot(features, support_labels, file_name='pca_init')
+  # tsne_plot(features, support_labels, file_name='tsne_init')
+  pca_plot(features, support_labels, file_name='pca_init')
   hausdorff_calculate(features, support_labels)
   
   # == last plot ============================
