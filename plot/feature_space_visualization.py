@@ -114,7 +114,8 @@ def visualization(model, args, device):
   # hausdorff_calculate(features, support_labels)
   
   # == last plot ============================
-  model.load(os.path.join(args.save, 'model_last.pt'))
+  # model.load(os.path.join(args.save, 'model_last.pt'))
+  model.load(os.path.join(args.save, 'model.pkl'))
   print("Load model from {}".format(os.path.join(args.save, 'model_last.pt')))
 
   with torch.no_grad():
