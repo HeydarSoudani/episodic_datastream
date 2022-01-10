@@ -78,7 +78,7 @@ def visualization(model, args, device):
   sampler = PtSampler(
     test_dataset,
     n_way=6,
-    n_shot=400,
+    n_shot=1000,
     n_query=0,
     n_tasks=1
   )
@@ -139,6 +139,7 @@ def visualization(model, args, device):
     # print(features.shape)
     # print(support_labels.shape)
 
+  features += 10e-8
   tsne_plot(features, support_labels, file_name='tsne_last')
   # pca_plot(features, support_labels, file_name='pca_last')
   hausdorff_calculate(features, support_labels)
