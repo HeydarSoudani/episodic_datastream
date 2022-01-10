@@ -134,7 +134,7 @@ def visualization(model, args, device):
     support_labels = support_labels.cpu().detach().numpy()
 
     print(features)
-    print(labels)
+    print(support_labels)
     print(features.shape)
     print(support_labels.shape)
 
