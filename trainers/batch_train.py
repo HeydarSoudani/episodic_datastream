@@ -10,7 +10,7 @@ from utils.preparation import transforms_preparation
 
 def train(model,
           train_data,
-          test_dataloader,
+          test_loader,
           args, device):              
   model.to(device)
 
@@ -94,7 +94,6 @@ def train(model,
               min_loss = total_val_loss
               print("Saving new best model")
 
-      
       _ = test(model, test_loader, args, device)
       if args.scheduler:
         scheduler.step()
