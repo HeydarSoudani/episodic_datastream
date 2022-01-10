@@ -83,7 +83,6 @@ class ResNet(nn.Module):
         self.layer2 = self.layer2.to(*args, **kwargs)
         self.layer3 = self.layer3.to(*args, **kwargs)
         self.layer4 = self.layer4.to(*args, **kwargs)
-
         # self.ip1 = self.ip1.to(*args, **kwargs)
         # self.preluip1 = self.preluip1.to(*args, **kwargs)
         # self.dropoutip1 = self.dropoutip1.to(*args, **kwargs)

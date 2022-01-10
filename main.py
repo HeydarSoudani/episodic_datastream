@@ -62,7 +62,7 @@ parser.add_argument(
     'cifar10',
     'cifar100'
   ],
-  default='mnist',
+  default='cifar100',
   help='') 
 parser.add_argument(
   '--meta_algorithm',

@@ -115,8 +115,8 @@ def visualization(model, args, device):
   
   
   ### == last plot ============================
-  # model.load(os.path.join(args.save, 'model_last.pt'))
-  model.load(os.path.join(args.save, 'model.pt'))
+  model.load(os.path.join(args.save, 'model_last.pt'))
+  # model.load(os.path.join(args.save, 'model.pt'))
   print(model)
 
 
