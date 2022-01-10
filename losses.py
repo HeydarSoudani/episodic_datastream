@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-# from pytorch_metric_learning import distances, losses, miners
+from pytorch_metric_learning import distances, losses, miners
 import time
 
 compute_distance = nn.PairwiseDistance(p=2, eps=1e-6)
