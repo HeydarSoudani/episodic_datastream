@@ -115,8 +115,8 @@ def visualization(model, args, device):
   
   
   ### == last plot ============================
-  # model.load(os.path.join(args.save, 'model_last.pt'))
-  model.load(os.path.join(args.save, 'model.pt'))
+  model.load(os.path.join(args.save, 'model_last.pt'))
+  # model.load(os.path.join(args.save, 'model.pt'))
   print(model)
 
 
@@ -140,7 +140,7 @@ def visualization(model, args, device):
     # print(features.shape)
     # print(support_labels.shape)
   # features += 1e-12
-  
+
   tsne_plot(features, support_labels, file_name='tsne_last')
   # pca_plot(features, support_labels, file_name='pca_last')
   hausdorff_calculate(features, support_labels)
