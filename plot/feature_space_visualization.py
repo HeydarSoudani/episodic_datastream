@@ -133,12 +133,12 @@ def visualization(model, args, device):
     features = features.cpu().detach().numpy()
     support_labels = support_labels.cpu().detach().numpy()
 
-    for feature in features:
-      print(feature)
+    # for feature in features:
+    #   print(feature)
     
-    print(support_labels)
-    print(features.shape)
-    print(support_labels.shape)
+    # print(support_labels)
+    # print(features.shape)
+    # print(support_labels.shape)
 
   # tsne_plot(features, support_labels, file_name='tsne_last')
   pca_plot(features, support_labels, file_name='pca_last')
