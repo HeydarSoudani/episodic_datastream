@@ -1,7 +1,7 @@
 import torch
 from torch.utils.data import DataLoader
 from torch.optim import SGD, Adam
-from torch.optim.lr_scheduler import StepLR
+from torch.optim.lr_scheduler import StepLR, OneCycleLR
 import os
 import numpy as np
 
@@ -17,7 +17,7 @@ def train(model,
   ### === Load data =================
   n, _ = train_data.shape
   np.random.shuffle(train_data)
-  train_val_data = np.split(train_data, [int(n*0.9), n])
+  train_val_data = np.split(train_data, [int(n*0.95), n])
   train_data = train_val_data[0]
   val_data = train_val_data[1]
 
@@ -43,7 +43,10 @@ def train(model,
   #               lr=args.lr,
   #               weight_decay=args.wd)
   scheduler = StepLR(optim, step_size=args.step_size, gamma=args.gamma)
-  
+  scheduler = OneCycleLR(optim, 0.01,
+                        epochs=args.epochs, 
+                        steps_per_epoch=len(train_loader))
+
   min_loss = float('inf')
   try:
     for epoch_item in range(args.start_epoch, args.epochs):
@@ -88,9 +91,10 @@ def train(model,
               min_loss = total_val_loss
               print("Saving new best model")
 
+        if args.scheduler:
+          scheduler.step()
+
       _ = test(model, test_loader, args, device)
-      if args.scheduler:
-        scheduler.step()
 
   except KeyboardInterrupt:
     print('skipping training')  
