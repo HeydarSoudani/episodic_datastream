@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from torch.nn.functional import relu, avg_pool2d
+from torch.nn.functional import relu, leaky_relu, avg_pool2d
 import math
 
 
@@ -27,10 +27,12 @@ class BasicBlock(nn.Module):
             )
 
     def forward(self, x):
-        out = relu(self.bn1(self.conv1(x)))
+        # out = relu(self.bn1(self.conv1(x)))
+        out = leaky_relu(self.bn1(self.conv1(x)))
         out = self.bn2(self.conv2(out))
         out += self.shortcut(x)
-        out = relu(out)
+        # out = relu(out)
+        out = leaky_relu(out)
         return out
 
 class ResNet(nn.Module):
@@ -61,7 +63,8 @@ class ResNet(nn.Module):
 
     def forward(self, x):
         bsz = x.size(0)
-        out = relu(self.bn1(self.conv1(x.view(bsz, 3, 32, 32))))
+        # out = relu(self.bn1(self.conv1(x.view(bsz, 3, 32, 32))))
+        out = leaky_relu(self.bn1(self.conv1(x.view(bsz, 3, 32, 32))))
         out = self.layer1(out)
         out = self.layer2(out)
         out = self.layer3(out)
