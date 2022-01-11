@@ -74,7 +74,7 @@ def train(model,
     
         ## == test ====================
         if (miteration_item + 1) % (5 * args.log_interval) == 0:
-          _, acc_dis, acc_cls = pt_learner.evaluate(model,
+          _, acc_dis, acc_cls = learner.evaluate(model,
                                       test_loader,
                                       known_labels,
                                       args)
