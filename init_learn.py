@@ -34,7 +34,12 @@ def init_learn(model,
   
   
   ### == Train Model =================
-  episodic_train(model, pt_learner, train_data, test_loader, known_labels, args, device)
+  episodic_train(
+    model,
+    pt_learner,
+    train_data,
+    test_dataloader, known_labels,
+    args, device)
 
   # # == save model for plot ===========
   # model.save(os.path.join(args.save, "model_after_init.pt"))
