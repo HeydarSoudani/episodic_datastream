@@ -124,7 +124,7 @@ parser.add_argument("--temp_scale", type=float, default=0.2, help="Temperature s
 # Optimizer
 parser.add_argument('--lr', type=float, default=0.5, help='')
 parser.add_argument('--momentum', type=float, default=0.9, help='')
-parser.add_argument('--wd', type=float, default=1e-5, help='')  #l2 regularization
+parser.add_argument('--wd', type=float, default=1e-4, help='')  #l2 regularization
 parser.add_argument('--grad_clip', type=float, default=0.1)   # before was 5.0
 
 # Scheduler
