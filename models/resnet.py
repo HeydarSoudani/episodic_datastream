@@ -49,7 +49,7 @@ class ResNet(nn.Module):
         print("BIAS IS", bias)
         
         self.ip1 = nn.Linear(nf * 8 * block.expansion, args.hidden_dims)
-        self.preluip1 = leaky_relu()
+        # self.preluip1 = leaky_relu()
         self.dropoutip1 = nn.Dropout(args.dropout)
         self.linear = nn.Linear(args.hidden_dims, num_classes, bias=bias)
 
@@ -71,7 +71,7 @@ class ResNet(nn.Module):
         out = self.layer4(out)
         out = avg_pool2d(out, 4)
         out = out.view(out.size(0), -1)
-        features = self.preluip1(self.ip1(out))
+        features = leaky_relu(self.ip1(out))
         out = self.dropoutip1(features)
         logits = self.linear(features)
         return logits, features
@@ -87,7 +87,7 @@ class ResNet(nn.Module):
         self.layer3 = self.layer3.to(*args, **kwargs)
         self.layer4 = self.layer4.to(*args, **kwargs)
         self.ip1 = self.ip1.to(*args, **kwargs)
-        self.preluip1 = self.preluip1.to(*args, **kwargs)
+        # self.preluip1 = self.preluip1.to(*args, **kwargs)
         self.dropoutip1 = self.dropoutip1.to(*args, **kwargs)
         self.linear = self.linear.to(*args, **kwargs)
         return self
