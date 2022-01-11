@@ -34,20 +34,15 @@ def train(model,
 
 
   criterion = torch.nn.CrossEntropyLoss()
-  # optim = Adam(model.parameters(), lr=args.lr)
-  optim = SGD(model.parameters(),
-              lr=args.lr,
-              momentum=args.momentum,
-              weight_decay=args.wd) #l2 reg
+  optim = Adam(model.parameters(), lr=args.lr)
+  # optim = SGD(model.parameters(),
+  #             lr=args.lr,
+  #             momentum=args.momentum,
+  #             weight_decay=args.wd) #l2 reg
   # optim = Adam(model.parameters(),
   #               lr=args.lr,
   #               weight_decay=args.wd)
-
-  scheduler = StepLR(
-    optim,
-    step_size=args.step_size,
-    gamma=args.gamma,
-  )
+  scheduler = StepLR(optim, step_size=args.step_size, gamma=args.gamma)
   
   min_loss = float('inf')
   try:

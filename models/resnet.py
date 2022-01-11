@@ -27,12 +27,12 @@ class BasicBlock(nn.Module):
             )
 
     def forward(self, x):
-        # out = relu(self.bn1(self.conv1(x)))
-        out = leaky_relu(self.bn1(self.conv1(x)))
+        out = relu(self.bn1(self.conv1(x)))
+        # out = leaky_relu(self.bn1(self.conv1(x)))
         out = self.bn2(self.conv2(out))
         out += self.shortcut(x)
-        # out = relu(out)
-        out = leaky_relu(out)
+        out = relu(out)
+        # out = leaky_relu(out)
         return out
 
 class ResNet(nn.Module):
@@ -48,10 +48,10 @@ class ResNet(nn.Module):
         self.layer4 = self._make_layer(block, nf * 8, num_blocks[3], stride=2)
         print("BIAS IS", bias)
         
-        self.ip1 = nn.Linear(nf * 8 * block.expansion, args.hidden_dims)
-        # self.preluip1 = leaky_relu()
-        self.dropoutip1 = nn.Dropout(args.dropout)
-        self.linear = nn.Linear(args.hidden_dims, num_classes, bias=bias)
+        # self.ip1 = nn.Linear(nf * 8 * block.expansion, args.hidden_dims)
+        # # self.preluip1 = leaky_relu()
+        # self.dropoutip1 = nn.Dropout(args.dropout)
+        self.linear = nn.Linear(nf * 8 * block.expansion, num_classes, bias=bias)
 
     def _make_layer(self, block, planes, num_blocks, stride):
         strides = [stride] + [1] * (num_blocks - 1)
@@ -63,16 +63,16 @@ class ResNet(nn.Module):
 
     def forward(self, x):
         bsz = x.size(0)
-        # out = relu(self.bn1(self.conv1(x.view(bsz, 3, 32, 32))))
-        out = leaky_relu(self.bn1(self.conv1(x.view(bsz, 3, 32, 32))))
+        out = relu(self.bn1(self.conv1(x.view(bsz, 3, 32, 32))))
+        # out = leaky_relu(self.bn1(self.conv1(x.view(bsz, 3, 32, 32))))
         out = self.layer1(out)
         out = self.layer2(out)
         out = self.layer3(out)
         out = self.layer4(out)
         out = avg_pool2d(out, 4)
-        out = out.view(out.size(0), -1)
-        features = leaky_relu(self.ip1(out))
-        out = self.dropoutip1(features)
+        features = out.view(out.size(0), -1)
+        # features = leaky_relu(self.ip1(out))
+        # out = self.dropoutip1(features)
         logits = self.linear(features)
         return logits, features
 
@@ -86,9 +86,9 @@ class ResNet(nn.Module):
         self.layer2 = self.layer2.to(*args, **kwargs)
         self.layer3 = self.layer3.to(*args, **kwargs)
         self.layer4 = self.layer4.to(*args, **kwargs)
-        self.ip1 = self.ip1.to(*args, **kwargs)
+        # self.ip1 = self.ip1.to(*args, **kwargs)
         # self.preluip1 = self.preluip1.to(*args, **kwargs)
-        self.dropoutip1 = self.dropoutip1.to(*args, **kwargs)
+        # self.dropoutip1 = self.dropoutip1.to(*args, **kwargs)
         self.linear = self.linear.to(*args, **kwargs)
         return self
 
