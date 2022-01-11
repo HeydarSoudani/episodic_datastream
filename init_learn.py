@@ -15,9 +15,26 @@ def init_learn(model,
                args,
                device):
 
+  ### == data ========================
   print('train_data: {}'.format(train_data.shape))
+  test_data = read_csv(
+            os.path.join(args.data_path, args.test_file),
+            sep=',', header=None).values
+  print('test_data: {}'.format(test_data.shape))
+  if args.use_transform:
+    _, test_transform = transforms_preparation()
+    test_dataset = SimpleDataset(test_data, args, transforms=test_transform)
+  else:
+    test_dataset = SimpleDataset(test_data, args)
+  test_dataloader = DataLoader(dataset=test_dataset,
+                                batch_size=args.batch_size,
+                                shuffle=False)
+
+  known_labels = test_dataset.label_set
+  
+  
   ### == Train Model =================
-  episodic_train(model, pt_learner, train_data, args, device)
+  episodic_train(model, pt_learner, train_data, test_loader, known_labels, args, device)
 
   # # == save model for plot ===========
   # model.save(os.path.join(args.save, "model_after_init.pt"))
@@ -45,22 +62,7 @@ def init_learn(model,
   # print("Memory has been saved in {}.".format(args.memory_path))
 
 
-  ## == Test ==========================
-  test_data = read_csv(
-            os.path.join(args.data_path, args.test_file),
-            sep=',', header=None).values
-  print('test_data: {}'.format(test_data.shape))
-  if args.use_transform:
-    _, test_transform = transforms_preparation()
-    test_dataset = SimpleDataset(test_data, args, transforms=test_transform)
-  else:
-    test_dataset = SimpleDataset(test_data, args)
-  test_dataloader = DataLoader(dataset=test_dataset,
-                                batch_size=args.batch_size,
-                                shuffle=False)
-
-  known_labels = test_dataset.label_set
-  
+  ## == Test ==========================  
   print('Test with last model')
   _, acc_dis, acc_cls = pt_learner.evaluate(model,
                                         test_dataloader,

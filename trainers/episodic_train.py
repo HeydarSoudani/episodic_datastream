@@ -9,6 +9,8 @@ from utils.preparation import dataloader_preparation
 def train(model,
           learner,
           train_data,
+          test_loader,
+          known_labels,
           args, device,
           val_data=[]):
   model.to(device)
@@ -70,6 +72,15 @@ def train(model,
             min_loss = val_loss_total
             print("= ...New best model saved")
     
+        ## == test ====================
+        if (miteration_item + 1) % (5 * args.log_interval) == 0:
+          _, acc_dis, acc_cls = pt_learner.evaluate(model,
+                                      test_loader,
+                                      known_labels,
+                                      args)
+          print('Dist: {}, Cls: {}'.format(acc_dis, acc_cls))
+          
+
         if args.scheduler:
           scheduler.step()
 
