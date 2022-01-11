@@ -1,4 +1,4 @@
-from torch.optim import SGD
+from torch.optim import SGD, Adam
 from torch.optim.lr_scheduler import StepLR
 import os
 import time
