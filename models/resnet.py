@@ -49,7 +49,7 @@ class ResNet(nn.Module):
         print("BIAS IS", bias)
         
         self.ip1 = nn.Linear(nf * 8 * block.expansion, args.hidden_dims)
-        self.preluip1 = nn.leaky_relu()
+        self.preluip1 = leaky_relu()
         self.dropoutip1 = nn.Dropout(args.dropout)
         self.linear = nn.Linear(args.hidden_dims, num_classes, bias=bias)
 
