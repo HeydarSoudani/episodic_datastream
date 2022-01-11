@@ -38,7 +38,7 @@ def init_learn(model,
     model,
     pt_learner,
     train_data,
-    test_dataloader, known_labels,
+    # test_dataloader, known_labels,
     args, device)
 
   # # == save model for plot ===========
