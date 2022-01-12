@@ -5,6 +5,22 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+def compute_prototypes(data):
+  """
+  data: list of tuples (feature, label)
+  output: 
+  """
+  features = torch.cat([item[0] for item in data])
+  labels = torch.tensor([item[1] for item in data])
+  seen_labels = torch.unique(labels)
+
+  prototypes = {
+    l.item(): features[(labels == l).nonzero(as_tuple=True)[0]].mean(0).reshape(1, -1)
+    for l in seen_labels
+  }
+
+  return prototypes
+
 
 def imshow(imgs):
   img = torchvision.utils.make_grid(imgs)
