@@ -111,8 +111,9 @@ if __name__ == '__main__':
     header=None,
     index=None
   )
-  pd.DataFrame(test_data).to_csv(os.path.join(args.saved, args.test_file),
-    header=None,
-    index=None
-  )
+  print('done')
+  # pd.DataFrame(test_data).to_csv(os.path.join(args.saved, args.test_file),
+  #   header=None,
+  #   index=None
+  # )
   
