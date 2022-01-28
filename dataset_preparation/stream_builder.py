@@ -123,7 +123,7 @@ if __name__ == '__main__':
   
   n_chunk_stream = n_chunk - 6
   print(n_chunk_stream)
-  add_new_class_points = np.random.choice(n_chunk_stream-20, len(unseen_class), replace=False)
+  add_new_class_points = np.random.choice(np.arange(5, n_chunk_stream-20), len(unseen_class), replace=False)
   print(add_new_class_points)
   for i_chunk in range(n_chunk_stream):
 
