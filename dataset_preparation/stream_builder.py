@@ -91,7 +91,7 @@ if __name__ == '__main__':
     # seen_data = np.array([class_data[seen_class_item][i] for i in train_idx])
     print(seen_data.shape)
 
-    class_data[seen_class_item] = np.delete(class_data[seen_class_item], train_idx)
+    class_data[seen_class_item] = np.delete(class_data[seen_class_item], train_idx, axis=0)
 
     # np.random.shuffle(seen_data)
     # last_idx = args.spc
