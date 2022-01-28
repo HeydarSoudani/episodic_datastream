@@ -39,7 +39,6 @@ args = parser.parse_args()
 args.split_train_path = 'data/split_{}/train'.format(args.dataset)
 args.split_test_path = 'data/split_{}/test'.format(args.dataset)
 
-
 ## == Apply seed ======================
 torch.manual_seed(args.seed)
 np.random.seed(args.seed)

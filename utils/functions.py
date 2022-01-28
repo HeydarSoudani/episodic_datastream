@@ -38,8 +38,6 @@ def euclidean_dist(x, y):
 
   return torch.pow(x - y, 2).sum(2)
 
-
-
 def imshow(imgs):
   img = torchvision.utils.make_grid(imgs)
   # img = img / 2 + 0.5     # unnormalize

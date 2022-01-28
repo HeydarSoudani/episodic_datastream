@@ -13,7 +13,7 @@ parser.add_argument('--seen_class_num', type=int, default=5, help='')
 parser.add_argument('--spc', type=int, default=1200, help='samples per class for initial dataset')
 parser.add_argument('--dataset', type=str, default='mnist', help='') #[mnist, fmnist, cifar10]
 parser.add_argument('--saved', type=str, default='./data/', help='')
-parser.add_argument('--seed', type=int, default=2, help='')
+parser.add_argument('--seed', type=int, default=1, help='')
 args = parser.parse_args()
 
 # = Add some variables to args ===
@@ -23,6 +23,10 @@ args.stream_file = '{}_stream.csv'.format(args.dataset)
 
 ## == Apply seed =================
 np.random.seed(args.seed)
+
+## == Add novel points =================
+start_point = 3
+last_point = 35  # for CFAR: 25, for MNIST: 35
 
 if __name__ == '__main__':
   ## ========================================
@@ -60,10 +64,10 @@ if __name__ == '__main__':
   n_data = data.shape[0]
 
   # == Select seen & unseen classes ==========
-  seen_class = np.random.choice(args.class_num, args.seen_class_num, replace=False)
-  unseen_class = [x for x in list(set(labels)) if x not in seen_class]
-  # seen_class = [0, 1, 2, 3, 4] 
-  # unseen_class = [5, 6, 7, 8, 9]
+  # seen_class = np.random.choice(args.class_num, args.seen_class_num, replace=False)
+  # unseen_class = [x for x in list(set(labels)) if x not in seen_class]
+  seen_class = np.array([0, 1, 2, 3, 4]) 
+  unseen_class = [5, 6, 7, 8, 9]
   print('seen: {}'.format(seen_class))
   print('unseen: {}'.format(unseen_class))
 
@@ -89,39 +93,27 @@ if __name__ == '__main__':
     seen_data = class_data[seen_class_item][train_idx]
     class_data[seen_class_item] = np.delete(class_data[seen_class_item], train_idx, axis=0)
 
-    # np.random.shuffle(seen_data)
-    # last_idx = args.spc
-    # test_data_length = seen_data.shape[0] - last_idx
-    # train_part = seen_data[:last_idx]
-    # test_part = seen_data[last_idx:]
-
     train_data_class = np.concatenate((seen_data, np.full((args.spc , 1), seen_class_item)), axis=1)
     train_data.extend(train_data_class)
 
-    # test_data_class = np.concatenate((test_part, np.full((test_data_length , 1), seen_class_item)), axis=1)
-    # test_data_seen.extend(test_data_class)
-
   train_data = np.array(train_data) #(6000, 785)
+  
   np.random.shuffle(train_data)
   print('train data: {}'.format(train_data.shape))
-
-  # pd.DataFrame(train_data).to_csv(os.path.join(args.saved, args.train_file),
-  #   header=None,
-  #   index=None
-  # )
+  pd.DataFrame(train_data).to_csv(os.path.join(args.saved, args.train_file),
+    header=None,
+    index=None
+  )
   print('train data saved in {}'.format(os.path.join(args.saved, args.train_file)))
 
-  
-  ## == 
-  # for label, data in class_data.items():
-  #   print('Label: {} -> {}'.format(label, data.shape)) 
  
-  class_to_select = seen_class.tolist()
+  all_class_to_select = seen_class.tolist()
   chunk_size = 1000
   n_chunk = int(n_data / chunk_size) 
   n_chunk_stream = n_chunk - 6
   chunks = []
-  add_new_class_points = np.random.choice(np.arange(3, n_chunk_stream-15), len(unseen_class), replace=False)
+  add_new_class_points = np.random.choice(np.arange(start_point, n_chunk_stream-last_point), len(unseen_class), replace=False)
+  print('Novel class points: {}'.format(add_new_class_points))
   for i_chunk in range(n_chunk_stream):
     chunk_data = []
     
@@ -129,18 +121,20 @@ if __name__ == '__main__':
     if i_chunk in add_new_class_points:  
       rnd_uns_class = unseen_class[0]
       unseen_class.remove(rnd_uns_class)
-      class_to_select.append(rnd_uns_class)
+      all_class_to_select.append(rnd_uns_class)
     
-    # print('class_to_select: {}'.format(class_to_select))
-
     # Select data from every known class
+    if len(all_class_to_select) > 5:
+      select_class_idx = np.random.choice(len(all_class_to_select), len(all_class_to_select)-1, replace=False)
+      class_to_select = [all_class_to_select[i] for i in select_class_idx]
+    else:
+      class_to_select = all_class_to_select
+
     items_per_class = int(chunk_size / len(class_to_select))
     removed_class = []
 
     for known_class in class_to_select:
       n = class_data[known_class].shape[0]
-      # print('label: {}, size: {}'.format(known_class, n))
-      
       if n > items_per_class:
         idxs = np.random.choice(range(n), size=items_per_class, replace=False)  
         selected_data_class = np.concatenate((class_data[known_class][idxs], np.full((items_per_class , 1), known_class)), axis=1)
@@ -150,22 +144,18 @@ if __name__ == '__main__':
       else:
         selected_data_class = np.concatenate((class_data[known_class], np.full((class_data[known_class].shape[0] , 1), known_class)), axis=1)
         chunk_data.extend(selected_data_class)
-
-        # class_to_select.remove(known_class)
         removed_class.append(known_class)
-        
         del class_data[known_class]
 
     if len(removed_class) > 0:
-      class_to_select = [e for e in class_to_select if e not in removed_class]
-      # print('select class after remove: {}'.format(class_to_select))
+      all_class_to_select = [e for e in all_class_to_select if e not in removed_class]
 
     chunk_data = np.array(chunk_data)
 
     # check if chunk_data < chunk_size
     if chunk_data.shape[0] < chunk_size:
       needed_data = chunk_size - chunk_data.shape[0]
-      helper_class = class_to_select[-1]
+      helper_class = all_class_to_select[-1]
 
       n = class_data[helper_class].shape[0]
       idxs = np.random.choice(range(n), size=needed_data, replace=False)
@@ -177,44 +167,9 @@ if __name__ == '__main__':
     
   stream_data = np.concatenate(chunks, axis=0)
   print('stream_data size: {}'.format(stream_data.shape))
-  
   pd.DataFrame(stream_data).to_csv(os.path.join(args.saved, args.stream_file),
     header=None,
     index=None
   )
+  print('stream data saved in {}'.format(os.path.join(args.saved, args.stream_file)))
   
-  # == Preparing test(stream) dataset ================
-  # test_data_seen = np.array(test_data_seen) #(30000, 785)
-  # all_temp_data = []
-  # add_class_point = 6000
-  
-  # np.random.shuffle(test_data_seen)
-  # all_temp_data = test_data_seen[:add_class_point]
-  # test_data_seen = np.delete(test_data_seen, slice(add_class_point), 0)
-
-  # while True:
-  #   if len(unseen_class) != 0:
-  #     rnd_uns_class = unseen_class[0]
-  #     unseen_class.remove(rnd_uns_class)
-      
-  #     selected_data = np.array(class_data[rnd_uns_class])
-  #     del class_data[rnd_uns_class]
-  #     temp_data_with_label = np.concatenate((selected_data, np.full((selected_data.shape[0] , 1), rnd_uns_class)), axis=1)
-  #     test_data_seen = np.concatenate((test_data_seen, temp_data_with_label), axis=0)
-
-  #   np.random.shuffle(test_data_seen)
-  #   all_temp_data = np.concatenate((all_temp_data, test_data_seen[:add_class_point]), axis=0)
-  #   # all_temp_data.append(test_data_seen[:add_class_point])
-  #   test_data_seen = np.delete(test_data_seen, slice(add_class_point), 0)
-
-  #   if len(unseen_class) == 0:
-  #     np.random.shuffle(test_data_seen)
-  #     all_temp_data = np.concatenate((all_temp_data, test_data_seen), axis=0)
-  #     break
-  
-  # test_data = np.stack(all_temp_data)
-
-  # print('stream data saved in {}'.format(os.path.join(args.saved, args.stream_file)))
-  # dataset = np.concatenate((train_data, test_data), axis=0)
-  # file_path = './dataset/fashion-mnist_stream.csv'
-  # pd.DataFrame(dataset).to_csv(file_path, header=None, index=None)

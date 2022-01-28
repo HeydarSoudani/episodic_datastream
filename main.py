@@ -22,6 +22,7 @@ from stream_learn import stream_learn
 from incremental_learn import batch_increm_learn, episodic_increm_learn
 
 from utils.functions import set_novel_label
+from plot.class_distribution import class_distribution
 from plot.feature_space_visualization import visualization
 
 
@@ -314,8 +315,14 @@ if __name__ == '__main__':
   
   ## == Plot ===========================
   elif args.phase == 'plot':
-    set_novel_label(args)
-    visualization(model, args, device)
+    
+    # = Class distribution in stream dataset
+    class_distribution(args)
+    
+    # # = data in feature-space after training
+    # set_novel_label(args)
+    # visualization(model, args, device)
+
   else: 
     raise NotImplementedError()
 
