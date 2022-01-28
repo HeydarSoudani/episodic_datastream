@@ -57,6 +57,7 @@ if __name__ == '__main__':
 
   data = np.concatenate((X_train, X_test), axis=0)  #(70000, 784)
   labels = np.concatenate((y_train, y_test), axis=0)#(70000,)
+  n_data = data.shape[0]
 
   # == Select seen & unseen classes ==========
   seen_class = np.random.choice(args.class_num, args.seen_class_num, replace=False)
@@ -114,9 +115,7 @@ if __name__ == '__main__':
   ## == 
   for label, data in class_data.items():
     print('Label: {} -> {}'.format(label, data.shape)) 
-  n_data = data.shape[0]
-
-  print(data.shape)
+ 
   print(n_data)
   chunk_size = 1000
   n_chunk = int(n_data / chunk_size)
