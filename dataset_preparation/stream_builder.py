@@ -113,10 +113,10 @@ if __name__ == '__main__':
 
   
   ## == 
-  for label, data in class_data.items():
-    print('Label: {} -> {}'.format(label, data.shape)) 
+  # for label, data in class_data.items():
+  #   print('Label: {} -> {}'.format(label, data.shape)) 
  
-  class_to_select = seen_class
+  class_to_select = seen_class.tolist()
   chunk_size = 1000
   n_chunk = int(n_data / chunk_size) 
   n_chunk_stream = n_chunk - 6
