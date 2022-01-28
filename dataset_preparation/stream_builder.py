@@ -131,6 +131,7 @@ if __name__ == '__main__':
       rnd_uns_class = unseen_class[0]
       unseen_class.remove(rnd_uns_class)
       class_to_select.append(rnd_uns_class)
+      print('class_to_select: {}'.format(class_to_select))
 
     # Select data from every known class
     items_per_class = int(chunk_size / len(class_to_select))
@@ -166,6 +167,8 @@ if __name__ == '__main__':
 
       chunk_data = np.concatenate((chunk_data, selected_data_class), axis=0)
     
+    print(chunk_data.shape)
+
     np.random.shuffle(chunk_data)
     print('chunk size: {}'.format(chunk_data.shape))
 
