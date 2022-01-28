@@ -3,6 +3,7 @@ import numpy as np
 import argparse
 import random
 import gzip
+import time
 import os
 
 ## == Params =====================
@@ -79,7 +80,14 @@ if __name__ == '__main__':
   train_data = []
   test_data_seen = []
   for seen_class_item in seen_class:
-    seen_data = np.array(class_data[seen_class_item])
+    
+    train_idx = np.random.choice(len(class_data[seen_class_item]), args.spc, replace=False)
+    print(train_idx)
+    seen_data = np.array(class_data[seen_class_item][train_idx])
+    print(seen_data.shape)
+
+    time.sleep(5)
+
 
     del class_data[seen_class_item]
 
