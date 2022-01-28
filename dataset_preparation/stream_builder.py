@@ -125,17 +125,17 @@ if __name__ == '__main__':
   print(add_new_class_points)
   for i_chunk in range(n_chunk_stream):
     chunk_data = []
+    
     # add novel class to test data pool
-    if i_chunk in add_new_class_points:
-      
+    if i_chunk in add_new_class_points:  
       rnd_uns_class = unseen_class[0]
       unseen_class.remove(rnd_uns_class)
       class_to_select.append(rnd_uns_class)
-      print('class_to_select: {}'.format(class_to_select))
+    
+    print('class_to_select: {}'.format(class_to_select))
 
     # Select data from every known class
     items_per_class = int(chunk_size / len(class_to_select))
-
     for known_class in class_to_select:
       n = class_data[known_class].shape[0]
       print('label: {}, size: {}'.format(known_class, n))
