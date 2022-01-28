@@ -137,7 +137,8 @@ if __name__ == '__main__':
     items_per_class = int(chunk_size / len(class_to_select))
 
     for known_class in class_to_select:
-      n = class_data[known_class].shape[0] 
+      n = class_data[known_class].shape[0]
+      print('label: {}, size{}'.format(known_class, n))
       if n > items_per_class:
         idxs = np.random.choice(range(n), size=items_per_class, replace=False)
         
@@ -164,14 +165,11 @@ if __name__ == '__main__':
       n = class_data[helper_class].shape[0]
       idxs = np.random.choice(range(n), size=needed_data, replace=False)
       selected_data_class = np.concatenate((class_data[helper_class][idxs], np.full((needed_data , 1), helper_class)), axis=1)
-
       chunk_data = np.concatenate((chunk_data, selected_data_class), axis=0)
-    
-    print(chunk_data.shape)
+
 
     np.random.shuffle(chunk_data)
     print('chunk size: {}'.format(chunk_data.shape))
-
     chunks.append(chunk_data)
     
 
