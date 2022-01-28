@@ -58,16 +58,6 @@ if __name__ == '__main__':
   data = np.concatenate((X_train, X_test), axis=0)  #(70000, 784)
   labels = np.concatenate((y_train, y_test), axis=0)#(70000,)
 
-  # == split data by classes =================
-  class_data = {}
-  for class_label in set(labels):
-    class_data[class_label] = []  
-  for idx, sample in enumerate(data):
-    class_data[labels[idx]].append(sample)
-
-  for label, data in class_data.items():
-    print('Label: {} -> {}'.format(label, len(data)))  
-
   # == Select seen & unseen classes ==========
   seen_class = np.random.choice(args.class_num, args.seen_class_num, replace=False)
   unseen_class = [x for x in list(set(labels)) if x not in seen_class]
@@ -76,22 +66,34 @@ if __name__ == '__main__':
   print('seen: {}'.format(seen_class))
   print('unseen: {}'.format(unseen_class))
 
+  # == split data by classes =================
+  class_data = {}
+  for class_label in set(labels):
+    class_data[class_label] = []  
+  for idx, sample in enumerate(data):
+    class_data[labels[idx]].append(sample)
+  
+  for label in class_data.keys():
+    class_data[label] = np.array(class_data[label])
+
+  for label, data in class_data.items():
+    print('Label: {} -> {}'.format(label, data.shape))  
+
+
   # == Preparing train dataset and test seen data ===
   train_data = []
   test_data_seen = []
   for seen_class_item in seen_class:
     
-    train_idx = np.random.choice(len(class_data[seen_class_item]), args.spc, replace=False)
+    train_idx = np.random.choice(class_data[seen_class_item].shape[0], args.spc, replace=False)
     print(train_idx)
-    # seen_data = np.array(class_data[seen_class_item][train_idx])
-    seen_data = np.array([class_data[seen_class_item][i] for i in train_idx])
-
+    seen_data = class_data[seen_class_item][train_idx]
+    # seen_data = np.array([class_data[seen_class_item][i] for i in train_idx])
     print(seen_data.shape)
 
     time.sleep(5)
 
-
-    del class_data[seen_class_item]
+    del class_data[seen_class_item][train_idx]
 
     np.random.shuffle(seen_data)
     last_idx = args.spc
