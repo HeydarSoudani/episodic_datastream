@@ -175,7 +175,7 @@ if __name__ == '__main__':
     np.random.shuffle(chunk_data)
     chunks.append(chunk_data)
     
-  stream_data = np.stack(chunks)
+  stream_data = np.concatenate(chunks, axis=0)
   print('stream_data size: {}'.format(stream_data.shape))
   
   pd.DataFrame(stream_data).to_csv(os.path.join(args.saved, args.stream_file),
