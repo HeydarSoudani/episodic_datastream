@@ -91,22 +91,26 @@ if __name__ == '__main__':
     # seen_data = np.array([class_data[seen_class_item][i] for i in train_idx])
     print(seen_data.shape)
 
-    time.sleep(5)
+    class_data[seen_class_item] = np.delete(class_data[seen_class_item], train_idx)
 
-    del class_data[seen_class_item][train_idx]
+    # np.random.shuffle(seen_data)
+    # last_idx = args.spc
+    # test_data_length = seen_data.shape[0] - last_idx
+    # train_part = seen_data[:last_idx]
+    # test_part = seen_data[last_idx:]
 
-    np.random.shuffle(seen_data)
-    last_idx = args.spc
-    test_data_length = seen_data.shape[0] - last_idx
-    train_part = seen_data[:last_idx]
-    test_part = seen_data[last_idx:]
+    # train_data_class = np.concatenate((train_part, np.full((last_idx , 1), seen_class_item)), axis=1)
+    # train_data.extend(train_data_class)
 
-    train_data_class = np.concatenate((train_part, np.full((last_idx , 1), seen_class_item)), axis=1)
-    train_data.extend(train_data_class)
+    # test_data_class = np.concatenate((test_part, np.full((test_data_length , 1), seen_class_item)), axis=1)
+    # test_data_seen.extend(test_data_class)
 
-    test_data_class = np.concatenate((test_part, np.full((test_data_length , 1), seen_class_item)), axis=1)
-    test_data_seen.extend(test_data_class)
-  
+  for label, data in class_data.items():
+    print('Label: {} -> {}'.format(label, data.shape)) 
+
+  time.sleep(5)
+
+
   train_data = np.array(train_data) #(6000, 785)
   np.random.shuffle(train_data)
   print('train data: {}'.format(train_data.shape))
@@ -120,7 +124,7 @@ if __name__ == '__main__':
   
   ## == 
   for label, data in class_data.items():
-    print('Label: {} -> {}'.format(label, len(data))) 
+    print('Label: {} -> {}'.format(label, data.shape)) 
   n_data = data.shape[0]
   chunk_size = 1000
   n_chunk = int(n_data / chunk_size)
