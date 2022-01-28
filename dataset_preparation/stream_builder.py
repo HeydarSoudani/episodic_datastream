@@ -83,7 +83,9 @@ if __name__ == '__main__':
     
     train_idx = np.random.choice(len(class_data[seen_class_item]), args.spc, replace=False)
     print(train_idx)
-    seen_data = np.array(class_data[seen_class_item][train_idx])
+    # seen_data = np.array(class_data[seen_class_item][train_idx])
+    seen_data = np.array([class_data[seen_class_item][i] for i in train_idx])
+
     print(seen_data.shape)
 
     time.sleep(5)
