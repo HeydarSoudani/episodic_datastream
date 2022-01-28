@@ -122,7 +122,6 @@ if __name__ == '__main__':
   n_chunk_stream = n_chunk - 6
   chunks = []
   add_new_class_points = np.random.choice(np.arange(3, n_chunk_stream-15), len(unseen_class), replace=False)
-  print(add_new_class_points)
   for i_chunk in range(n_chunk_stream):
     chunk_data = []
     
@@ -162,11 +161,9 @@ if __name__ == '__main__':
       # print('select class after remove: {}'.format(class_to_select))
 
     chunk_data = np.array(chunk_data)
-    print(chunk_data.shape)
 
     # check if chunk_data < chunk_size
     if chunk_data.shape[0] < chunk_size:
-      print(class_to_select)
       needed_data = chunk_size - chunk_data.shape[0]
       helper_class = class_to_select[-1]
 
@@ -176,10 +173,9 @@ if __name__ == '__main__':
       chunk_data = np.concatenate((chunk_data, selected_data_class), axis=0)
 
     np.random.shuffle(chunk_data)
-    print('chunk size: {}'.format(chunk_data.shape))
     chunks.append(chunk_data)
     
-  stream_data = np.array(chunks)
+  stream_data = np.stack(chunks)
   print('stream_data size: {}'.format(stream_data.shape))
   
   pd.DataFrame(stream_data).to_csv(os.path.join(args.saved, args.stream_file),
