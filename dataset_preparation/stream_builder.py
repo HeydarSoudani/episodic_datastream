@@ -147,6 +147,7 @@ if __name__ == '__main__':
         class_data[known_class] = np.delete(class_data[known_class], idxs, axis=0)
       
       else:
+        print('aaa: {}'.format(known_class))
         selected_data_class = np.concatenate((class_data[known_class], np.full((class_data[known_class].shape[0] , 1), known_class)), axis=1)
         chunk_data.extend(selected_data_class)
 
