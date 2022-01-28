@@ -121,7 +121,7 @@ if __name__ == '__main__':
   n_chunk = int(n_data / chunk_size) 
   n_chunk_stream = n_chunk - 6
   chunks = []
-  add_new_class_points = np.random.choice(np.arange(5, n_chunk_stream-20), len(unseen_class), replace=False)
+  add_new_class_points = np.random.choice(np.arange(3, n_chunk_stream-15), len(unseen_class), replace=False)
   print(add_new_class_points)
   for i_chunk in range(n_chunk_stream):
     chunk_data = []
