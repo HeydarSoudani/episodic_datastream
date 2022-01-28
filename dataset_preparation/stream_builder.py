@@ -115,8 +115,13 @@ if __name__ == '__main__':
   for label, data in class_data.items():
     print('Label: {} -> {}'.format(label, data.shape)) 
   n_data = data.shape[0]
+
+  print(data.shape)
+  print(n_data)
   chunk_size = 1000
   n_chunk = int(n_data / chunk_size)
+  print(n_chunk)
+  
   n_chunk_stream = n_chunk - 6
   print(n_chunk_stream)
   add_new_class_points = np.random.choice(n_chunk_stream-20, len(unseen_class), replace=False)
