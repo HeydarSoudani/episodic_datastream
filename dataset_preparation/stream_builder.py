@@ -5,24 +5,11 @@ import random
 import gzip
 import os
 
-def load_mnist(path, kind='train'):
-  """Load MNIST data from `path`"""
-  labels_path = os.path.join(path,'%s-labels-idx1-ubyte.gz'% kind)
-  images_path = os.path.join(path,'%s-images-idx3-ubyte.gz'% kind)
-
-  with gzip.open(labels_path, 'rb') as lbpath:
-      labels = np.frombuffer(lbpath.read(), dtype=np.uint8,offset=8)
-  with gzip.open(images_path, 'rb') as imgpath:
-      images = np.frombuffer(imgpath.read(), dtype=np.uint8, offset=16).reshape(len(labels), 784)
-
-  return images, labels
-
-
 ## == Params =====================
 parser = argparse.ArgumentParser()
 parser.add_argument('--class_num', type=int, default=10, help='')
 parser.add_argument('--seen_class_num', type=int, default=5, help='')
-parser.add_argument('--spc', type=int, default=1200, help='samples per class')
+parser.add_argument('--spc', type=int, default=1200, help='samples per class for initial dataset')
 parser.add_argument('--dataset', type=str, default='mnist', help='') #[mnist, fmnist, cifar10]
 parser.add_argument('--saved', type=str, default='./data/', help='')
 parser.add_argument('--seed', type=int, default=2, help='')
@@ -33,10 +20,8 @@ args.data_path = 'data/{}'.format(args.dataset)
 args.train_file = '{}_train.csv'.format(args.dataset)
 args.stream_file = '{}_stream.csv'.format(args.dataset)
 
-
 ## == Apply seed =================
 np.random.seed(args.seed)
-
 
 if __name__ == '__main__':
   ## ========================================
@@ -44,32 +29,28 @@ if __name__ == '__main__':
   if args.dataset == 'mnist':
     train_data = pd.read_csv(os.path.join(args.data_path, "mnist_train.csv"), sep=',').values
     test_data = pd.read_csv(os.path.join(args.data_path, "mnist_test.csv"), sep=',').values
-
     X_train, y_train = train_data[:, 1:], train_data[:, 0]
     X_test, y_test = test_data[:, 1:], test_data[:, 0]
   ## ========================================
   ## ========================================
 
   ## ========================================
-  # == Get Fashion-MNIST dataset ============
+  # == Get FashionMNIST dataset =============
   if args.dataset == 'fmnist':
     train_data = pd.read_csv(os.path.join(args.data_path, "fmnist_train.csv"), sep=',').values
     test_data = pd.read_csv(os.path.join(args.data_path, "fmnist_test.csv"), sep=',').values
     X_train, y_train = train_data[:, 1:], train_data[:, 0]
     X_test, y_test = test_data[:, 1:], test_data[:, 0]
-    # X_train, y_train = load_mnist(path, kind='train') #(60000, 784), (60000,)
-    # X_test, y_test = load_mnist(path, kind='t10k')    #(10000, 784), (10000,)
   ## ========================================
   ## ========================================
 
   ## ========================================
-  # == Get Cifar10 dataset ==================
+  # == Get CIFAR10 dataset ==================
   if args.dataset == 'cifar10':
     train_data = pd.read_csv(os.path.join(args.data_path, 'cifar10_train.csv'), sep=',', header=None).values
     test_data = pd.read_csv(os.path.join(args.data_path, 'cifar10_test.csv'), sep=',', header=None).values
     X_train, y_train = train_data[:, :-1], train_data[:, -1]
     X_test, y_test = test_data[:, :-1], test_data[:, -1]
-
   ## ========================================
   ## ========================================
 
@@ -82,6 +63,9 @@ if __name__ == '__main__':
     class_data[class_label] = []  
   for idx, sample in enumerate(data):
     class_data[labels[idx]].append(sample)
+
+  for label, data in class_data.items():
+    print('Label: {} -> {}'.format(label, len(data)))  
 
   # == Select seen & unseen classes ==========
   seen_class = np.random.choice(args.class_num, args.seen_class_num, replace=False)
@@ -113,13 +97,40 @@ if __name__ == '__main__':
   
   train_data = np.array(train_data) #(6000, 785)
   np.random.shuffle(train_data)
-  
+  print('train data: {}'.format(train_data.shape))
+
   pd.DataFrame(train_data).to_csv(os.path.join(args.saved, args.train_file),
     header=None,
     index=None
   )
   print('train data saved in {}'.format(os.path.join(args.saved, args.train_file)))
 
+  
+  ## == 
+  for label, data in class_data.items():
+    print('Label: {} -> {}'.format(label, len(data))) 
+  n_data = data.shape[0]
+  chunk_size = 1000
+  n_chunk = int(n_data / chunk_size)
+  n_chunk_stream = n_chunk - 6
+
+  add_new_class_points = np.random.choice(n_chunk_stream-20, len(unseen_class), replace=False)
+  print(novel_class_adding)
+  for i_chunk in range(n_chunk_stream):
+
+    # add novel class to test data pool
+    if i_chunk in add_new_class_points:
+      pass
+
+    
+    
+
+
+
+
+
+  
+  
   # == Preparing test(stream) dataset ================
   test_data_seen = np.array(test_data_seen) #(30000, 785)
   all_temp_data = []
@@ -130,7 +141,6 @@ if __name__ == '__main__':
   test_data_seen = np.delete(test_data_seen, slice(add_class_point), 0)
 
   while True:
-
     if len(unseen_class) != 0:
       rnd_uns_class = unseen_class[0]
       unseen_class.remove(rnd_uns_class)

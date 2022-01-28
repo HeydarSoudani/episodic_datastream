@@ -57,7 +57,7 @@ def hausdorff_calculate(features, labels):
   print('Hausdorff distance is {}'.format(dist))
 
 
-def visualization(model, args, device):
+def visualization(model, args, device):  
   
   # == Load stream data ==============================
   # test_data = read_csv(
@@ -129,6 +129,11 @@ def visualization(model, args, device):
     support_labels = support_labels.flatten()
     support_images = support_images.to(device)
     support_labels = support_labels.to(device)
+
+    # model.fc3.register_forward_hook(get_activation('fc3'))
+    # output = model(x)
+    # activation['fc3']
+
 
     outputs, features = model.forward(support_images)
     features = features.cpu().detach().numpy()

@@ -70,7 +70,6 @@ if __name__ == '__main__':
     y_train = np.array(cifar100_train[b'fine_labels'])
     X_test = np.array(cifar100_test[b'data'])
     y_test = np.array(cifar100_test[b'fine_labels'])
-    
   ## ========================================
   ## ========================================
 

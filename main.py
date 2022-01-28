@@ -183,7 +183,7 @@ torch.manual_seed(args.seed)
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 if args.cuda:
-  torch.cuda.manual_seed_all(seed)
+  torch.cuda.manual_seed_all(args.seed)
 
 ## == Save dir =========================
 if not os.path.exists(args.save):

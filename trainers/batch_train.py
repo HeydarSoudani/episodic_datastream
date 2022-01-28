@@ -103,7 +103,6 @@ def train(model,
   model.save(os.path.join(args.save, "model_last.pt"))
   print("Saving new last model")
 
-
 def test(model, test_loader, args, device):
   model.to(device)
 
