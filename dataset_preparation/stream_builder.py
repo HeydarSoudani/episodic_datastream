@@ -104,10 +104,10 @@ if __name__ == '__main__':
   np.random.shuffle(train_data)
   print('train data: {}'.format(train_data.shape))
 
-  pd.DataFrame(train_data).to_csv(os.path.join(args.saved, args.train_file),
-    header=None,
-    index=None
-  )
+  # pd.DataFrame(train_data).to_csv(os.path.join(args.saved, args.train_file),
+  #   header=None,
+  #   index=None
+  # )
   print('train data saved in {}'.format(os.path.join(args.saved, args.train_file)))
 
   
