@@ -136,6 +136,8 @@ if __name__ == '__main__':
 
     # Select data from every known class
     items_per_class = int(chunk_size / len(class_to_select))
+    removed_class = []
+
     for known_class in class_to_select:
       n = class_data[known_class].shape[0]
       print('label: {}, size: {}'.format(known_class, n))
@@ -151,9 +153,14 @@ if __name__ == '__main__':
         selected_data_class = np.concatenate((class_data[known_class], np.full((class_data[known_class].shape[0] , 1), known_class)), axis=1)
         chunk_data.extend(selected_data_class)
 
-        class_to_select.remove(known_class)
-        print('select class after remove: {}'.format(class_to_select))
+        # class_to_select.remove(known_class)
+        removed_class.append(known_class)
+        
         del class_data[known_class]
+
+    if len(removed_class) > 0:
+      class_to_select = [e for e in class_to_select if e not in removed_class]
+      print('select class after remove: {}'.format(class_to_select))
 
     chunk_data = np.array(chunk_data)
     print(chunk_data.shape)
@@ -162,13 +169,12 @@ if __name__ == '__main__':
     if chunk_data.shape[0] < chunk_size:
       print(class_to_select)
       needed_data = chunk_size - chunk_data.shape[0]
-      helper_class = class_to_select[0]
+      helper_class = class_to_select[-1]
 
       n = class_data[helper_class].shape[0]
       idxs = np.random.choice(range(n), size=needed_data, replace=False)
       selected_data_class = np.concatenate((class_data[helper_class][idxs], np.full((needed_data , 1), helper_class)), axis=1)
       chunk_data = np.concatenate((chunk_data, selected_data_class), axis=0)
-
 
     np.random.shuffle(chunk_data)
     print('chunk size: {}'.format(chunk_data.shape))
