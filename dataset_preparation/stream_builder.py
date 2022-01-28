@@ -116,22 +116,60 @@ if __name__ == '__main__':
   for label, data in class_data.items():
     print('Label: {} -> {}'.format(label, data.shape)) 
  
-  print(n_data)
+  class_to_select = seen_class
   chunk_size = 1000
-  n_chunk = int(n_data / chunk_size)
-  print(n_chunk)
-  
+  n_chunk = int(n_data / chunk_size) 
   n_chunk_stream = n_chunk - 6
-  print(n_chunk_stream)
+  chunks = []
   add_new_class_points = np.random.choice(np.arange(5, n_chunk_stream-20), len(unseen_class), replace=False)
   print(add_new_class_points)
   for i_chunk in range(n_chunk_stream):
-
+    chunk_data = []
     # add novel class to test data pool
     if i_chunk in add_new_class_points:
-      pass
+      
+      rnd_uns_class = unseen_class[0]
+      unseen_class.remove(rnd_uns_class)
+      class_to_select.append(rnd_uns_class)
 
+    # Select data from every known class
+    items_per_class = int(chunk_size / len(class_to_select))
+
+    for known_class in class_to_select:
+      n = class_data[known_class].shape[0] 
+      if n > items_per_class:
+        idxs = np.random.choice(range(n), size=items_per_class, replace=False)
+        
+        selected_data_class = np.concatenate((class_data[known_class][idxs], np.full((items_per_class , 1), known_class)), axis=1)
+        chunk_data.extend(selected_data_class)
+        
+        class_data[known_class] = np.delete(class_data[known_class], idxs, axis=0)
+      
+      else:
+        selected_data_class = np.concatenate((class_data[known_class], np.full((class_data[known_class].shape[0] , 1), known_class)), axis=1)
+        chunk_data.extend(selected_data_class)
+
+        class_to_select.remove(known_class)
+        del class_data[known_class]
+
+    chunk_data = np.array(chunk_data)
+    print(chunk_data.shape)
+
+    # check if chunk_data < chunk_size
+    if chunk_data.shape[0] < chunk_size:
+      needed_data = chunk_size - chunk_data.shape[0]
+      helper_class = class_to_select[0]
+
+      n = class_data[helper_class].shape[0]
+      idxs = np.random.choice(range(n), size=needed_data, replace=False)
+      selected_data_class = np.concatenate((class_data[helper_class][idxs], np.full((needed_data , 1), helper_class)), axis=1)
+
+      chunk_data = np.concatenate((chunk_data, selected_data_class), axis=0)
     
+    np.random.shuffle(chunk_data)
+    print('chunk size: {}'.format(chunk_data.shape))
+
+    chunks.append(chunk_data)
     
 
 
@@ -141,40 +179,40 @@ if __name__ == '__main__':
   
   
   # == Preparing test(stream) dataset ================
-  test_data_seen = np.array(test_data_seen) #(30000, 785)
-  all_temp_data = []
-  add_class_point = 6000
+  # test_data_seen = np.array(test_data_seen) #(30000, 785)
+  # all_temp_data = []
+  # add_class_point = 6000
   
-  np.random.shuffle(test_data_seen)
-  all_temp_data = test_data_seen[:add_class_point]
-  test_data_seen = np.delete(test_data_seen, slice(add_class_point), 0)
+  # np.random.shuffle(test_data_seen)
+  # all_temp_data = test_data_seen[:add_class_point]
+  # test_data_seen = np.delete(test_data_seen, slice(add_class_point), 0)
 
-  while True:
-    if len(unseen_class) != 0:
-      rnd_uns_class = unseen_class[0]
-      unseen_class.remove(rnd_uns_class)
+  # while True:
+  #   if len(unseen_class) != 0:
+  #     rnd_uns_class = unseen_class[0]
+  #     unseen_class.remove(rnd_uns_class)
       
-      selected_data = np.array(class_data[rnd_uns_class])
-      del class_data[rnd_uns_class]
-      temp_data_with_label = np.concatenate((selected_data, np.full((selected_data.shape[0] , 1), rnd_uns_class)), axis=1)
-      test_data_seen = np.concatenate((test_data_seen, temp_data_with_label), axis=0)
+  #     selected_data = np.array(class_data[rnd_uns_class])
+  #     del class_data[rnd_uns_class]
+  #     temp_data_with_label = np.concatenate((selected_data, np.full((selected_data.shape[0] , 1), rnd_uns_class)), axis=1)
+  #     test_data_seen = np.concatenate((test_data_seen, temp_data_with_label), axis=0)
 
-    np.random.shuffle(test_data_seen)
-    all_temp_data = np.concatenate((all_temp_data, test_data_seen[:add_class_point]), axis=0)
-    # all_temp_data.append(test_data_seen[:add_class_point])
-    test_data_seen = np.delete(test_data_seen, slice(add_class_point), 0)
+  #   np.random.shuffle(test_data_seen)
+  #   all_temp_data = np.concatenate((all_temp_data, test_data_seen[:add_class_point]), axis=0)
+  #   # all_temp_data.append(test_data_seen[:add_class_point])
+  #   test_data_seen = np.delete(test_data_seen, slice(add_class_point), 0)
 
-    if len(unseen_class) == 0:
-      np.random.shuffle(test_data_seen)
-      all_temp_data = np.concatenate((all_temp_data, test_data_seen), axis=0)
-      break
+  #   if len(unseen_class) == 0:
+  #     np.random.shuffle(test_data_seen)
+  #     all_temp_data = np.concatenate((all_temp_data, test_data_seen), axis=0)
+  #     break
   
-  test_data = np.stack(all_temp_data)
-  pd.DataFrame(test_data).to_csv(os.path.join(args.saved, args.stream_file),
-    header=None,
-    index=None
-  )
-  print('stream data saved in {}'.format(os.path.join(args.saved, args.stream_file)))
+  # test_data = np.stack(all_temp_data)
+  # pd.DataFrame(test_data).to_csv(os.path.join(args.saved, args.stream_file),
+  #   header=None,
+  #   index=None
+  # )
+  # print('stream data saved in {}'.format(os.path.join(args.saved, args.stream_file)))
   # dataset = np.concatenate((train_data, test_data), axis=0)
   # file_path = './dataset/fashion-mnist_stream.csv'
   # pd.DataFrame(dataset).to_csv(file_path, header=None, index=None)
