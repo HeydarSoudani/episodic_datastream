@@ -132,7 +132,7 @@ if __name__ == '__main__':
       unseen_class.remove(rnd_uns_class)
       class_to_select.append(rnd_uns_class)
     
-    print('class_to_select: {}'.format(class_to_select))
+    # print('class_to_select: {}'.format(class_to_select))
 
     # Select data from every known class
     items_per_class = int(chunk_size / len(class_to_select))
@@ -140,7 +140,7 @@ if __name__ == '__main__':
 
     for known_class in class_to_select:
       n = class_data[known_class].shape[0]
-      print('label: {}, size: {}'.format(known_class, n))
+      # print('label: {}, size: {}'.format(known_class, n))
       
       if n > items_per_class:
         idxs = np.random.choice(range(n), size=items_per_class, replace=False)  
@@ -149,7 +149,6 @@ if __name__ == '__main__':
         class_data[known_class] = np.delete(class_data[known_class], idxs, axis=0)
       
       else:
-        print('aaa: {}'.format(known_class))
         selected_data_class = np.concatenate((class_data[known_class], np.full((class_data[known_class].shape[0] , 1), known_class)), axis=1)
         chunk_data.extend(selected_data_class)
 
@@ -160,7 +159,7 @@ if __name__ == '__main__':
 
     if len(removed_class) > 0:
       class_to_select = [e for e in class_to_select if e not in removed_class]
-      print('select class after remove: {}'.format(class_to_select))
+      # print('select class after remove: {}'.format(class_to_select))
 
     chunk_data = np.array(chunk_data)
     print(chunk_data.shape)
@@ -180,12 +179,13 @@ if __name__ == '__main__':
     print('chunk size: {}'.format(chunk_data.shape))
     chunks.append(chunk_data)
     
-
-
-
-
-
+  stream_data = np.array(chunks)
+  print('stream_data size: {}'.format(stream_data.shape))
   
+  pd.DataFrame(stream_data).to_csv(os.path.join(args.saved, args.stream_file),
+    header=None,
+    index=None
+  )
   
   # == Preparing test(stream) dataset ================
   # test_data_seen = np.array(test_data_seen) #(30000, 785)
@@ -217,10 +217,7 @@ if __name__ == '__main__':
   #     break
   
   # test_data = np.stack(all_temp_data)
-  # pd.DataFrame(test_data).to_csv(os.path.join(args.saved, args.stream_file),
-  #   header=None,
-  #   index=None
-  # )
+
   # print('stream data saved in {}'.format(os.path.join(args.saved, args.stream_file)))
   # dataset = np.concatenate((train_data, test_data), axis=0)
   # file_path = './dataset/fashion-mnist_stream.csv'
