@@ -138,10 +138,9 @@ if __name__ == '__main__':
 
     for known_class in class_to_select:
       n = class_data[known_class].shape[0]
-      print('label: {}, size{}'.format(known_class, n))
+      print('label: {}, size: {}'.format(known_class, n))
       if n > items_per_class:
-        idxs = np.random.choice(range(n), size=items_per_class, replace=False)
-        
+        idxs = np.random.choice(range(n), size=items_per_class, replace=False)  
         selected_data_class = np.concatenate((class_data[known_class][idxs], np.full((items_per_class , 1), known_class)), axis=1)
         chunk_data.extend(selected_data_class)
         
@@ -159,6 +158,7 @@ if __name__ == '__main__':
 
     # check if chunk_data < chunk_size
     if chunk_data.shape[0] < chunk_size:
+      print(class_to_select)
       needed_data = chunk_size - chunk_data.shape[0]
       helper_class = class_to_select[0]
 
