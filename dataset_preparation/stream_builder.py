@@ -139,11 +139,11 @@ if __name__ == '__main__':
     for known_class in class_to_select:
       n = class_data[known_class].shape[0]
       print('label: {}, size: {}'.format(known_class, n))
+      
       if n > items_per_class:
         idxs = np.random.choice(range(n), size=items_per_class, replace=False)  
         selected_data_class = np.concatenate((class_data[known_class][idxs], np.full((items_per_class , 1), known_class)), axis=1)
-        chunk_data.extend(selected_data_class)
-        
+        chunk_data.extend(selected_data_class)  
         class_data[known_class] = np.delete(class_data[known_class], idxs, axis=0)
       
       else:
@@ -152,6 +152,7 @@ if __name__ == '__main__':
         chunk_data.extend(selected_data_class)
 
         class_to_select.remove(known_class)
+        print('select class after remove: {}'.format(class_to_select))
         del class_data[known_class]
 
     chunk_data = np.array(chunk_data)
