@@ -68,7 +68,7 @@ def train(model,
             
             # evalute on val_dataset
             val_loss_total, \
-            val_acc_cls_total = learner.evaluate(model, val_dataloader, args)
+            val_acc_cls_total = learner.evaluate(model, val_loader, args)
 
             print('=== Time: %.2f, Step: %d, Train Loss: %f, Val Loss: %f' % (
               time.time()-global_time, miteration_item+1, train_loss_total, val_loss_total))
