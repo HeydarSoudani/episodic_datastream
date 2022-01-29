@@ -93,7 +93,6 @@ class TotalLoss(nn.Module):
            self.lambda_2 * cls_loss +\
            self.lambda_3 * metric_loss
 
-
 class PairwiseLoss(nn.Module):
   def __init__(self, tao=1.0, b=1.0, beta=0.1):
     super().__init__()
@@ -116,3 +115,15 @@ class PairwiseLoss(nn.Module):
   def _g(self, z):
     return (1 + (self.beta * z).exp()).log() / self.beta if z < 10.0 else z
     # return (1 + (self.beta * z).exp()).log() / self.beta
+
+
+
+class MetricLoss(nn.Module):
+  def __init__(self, tao=1.0, b=1.0, beta=0.1):
+    super().__init__()
+    self.b = b
+    self.tao = tao
+    self.beta = beta
+  
+  def forward(self, features, labels, prototypes):
+    pass

@@ -275,13 +275,12 @@ if __name__ == '__main__':
                   learner.prototypes,
                   detector,
                   args, device)
-  # elif args.phase == 'stream_learn':
-  #   stream_learn(model,
-  #                learner,
-  #                memory,
-  #                detector,
-  #                args,
-  #                device)
+  elif args.phase == 'stream_learn':
+    stream_learn(model,
+                 learner,
+                 memory,
+                 detector,
+                 args, device)
   # elif args.phase == 'zeroshot_test_base':
   #   zeroshot_test(model,
   #                 learner.prototypes,

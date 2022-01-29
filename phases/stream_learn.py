@@ -38,7 +38,6 @@ def stream_learn(model,
     stream_dataset = SimpleDataset(stream_data, args)
   dataloader = DataLoader(dataset=stream_dataset, batch_size=1, shuffle=False)
 
-
   ## == Stream ================================
   unknown_buffer = [] 
   known_buffer = {i:[] for i in detector._known_labels}
