@@ -206,17 +206,17 @@ else:
   model = Conv_4(args)
 
 ## == Load model if exist ==============
-# if args.phase != 'plot':
-#   if args.which_model == 'best':
-#     try: model.load(args.best_model_path)
-#     except FileNotFoundError: pass
-#     else:
-#       print("Load model from {}".format(args.best_model_path))
-#   elif args.which_model == 'last':
-#     try: model.load(args.last_model_path)
-#     except FileNotFoundError: pass
-#     else:
-#       print("Load model from {}".format(args.last_model_path))
+if args.phase != 'plot':
+  if args.which_model == 'best':
+    try: model.load(args.best_model_path)
+    except FileNotFoundError: pass
+    else:
+      print("Load model from {}".format(args.best_model_path))
+  elif args.which_model == 'last':
+    try: model.load(args.last_model_path)
+    except FileNotFoundError: pass
+    else:
+      print("Load model from {}".format(args.last_model_path))
 model.to(device)
 
 ## == Loss & Learner Definition =========
@@ -237,7 +237,6 @@ else: print("Load Prototypes from {}".format(args.prototypes_path))
 
 # == For stream version ==================
 if args.phase not in [
-  'batch_learn',
   'batch_incremental_learn',
   'episodic_incremental_learn',
   'plot']:
@@ -271,14 +270,12 @@ if __name__ == '__main__':
                memory,
                detector,
                train_data,
-               args,
-               device)
-  # elif args.phase == 'zeroshot_test':
-  #   zeroshot_test(model,
-  #                 learner.prototypes,
-  #                 detector,
-  #                 args,
-  #                 device)
+               args, device)
+  elif args.phase == 'zeroshot_test':
+    zeroshot_test(model,
+                  learner.prototypes,
+                  detector,
+                  args, device)
   # elif args.phase == 'stream_learn':
   #   stream_learn(model,
   #                learner,

@@ -27,11 +27,9 @@ def zeroshot_test(model,
     stream_dataset = SimpleDataset(stream_data, args)
   dataloader = DataLoader(dataset=stream_dataset, batch_size=1, shuffle=False)
 
-
   # == =============================================== 
   if known_labels != None:
     detector.set_known_labels(known_labels)
-
 
   ## == Test Model ===================================
   detection_results = []
