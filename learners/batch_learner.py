@@ -53,7 +53,7 @@ class BatchLearner:
         correct_cls_acc += (predicted == labels).sum().item()
         
         ## == loss =============================
-        loss = criterion(logits, labels)
+        loss = self.criterion(logits, labels)
         loss = loss.mean()
         total_loss += loss.item()
       
