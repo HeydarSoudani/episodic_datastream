@@ -30,9 +30,8 @@ def class_distribution(args):
 
 
 if __name__ == '__main__':
-  ## == Params ===========
+  ## == Params ==========================
   parser = argparse.ArgumentParser()
-
   parser.add_argument(
   '--dataset',
   type=str,
@@ -44,15 +43,14 @@ if __name__ == '__main__':
   ],
   default='mnist',
   help='') 
+  args = parser.parse_args()
 
-args = parser.parse_args()
+  ## == Add some variables to args =======
+  args.data_path = 'data/'
+  args.train_file = '{}_train.csv'.format(args.dataset)
+  args.test_file = '{}_test.csv'.format(args.dataset)
+  args.stream_file = '{}_stream.csv'.format(args.dataset)
 
-## == Add some variables to args =======
-args.data_path = 'data/'
-args.train_file = '{}_train.csv'.format(args.dataset)
-args.test_file = '{}_test.csv'.format(args.dataset)
-args.stream_file = '{}_stream.csv'.format(args.dataset)
-
-class_distribution(args)
+  class_distribution(args)
 
   
