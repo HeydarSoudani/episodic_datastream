@@ -53,9 +53,6 @@ def init_learn(model,
       test_dataloader, known_labels,
       args, device)
 
-  
-
-
   # # == save model for plot ===========
   # model.save(os.path.join(args.save, "model_after_init.pt"))
   # print("= ...model after init saved")
@@ -81,24 +78,36 @@ def init_learn(model,
   # memory.save(args.memory_path)
   # print("Memory has been saved in {}.".format(args.memory_path))
 
-
-  ## == Test =============================
+  ## == Test (Batch) =======================
   print('Test with last model')
-  _, acc_dis, acc_cls = learner.evaluate(model,
-                                        test_dataloader,
-                                        known_labels,
-                                        args)
+  _, acc_dis, acc_cls = learner.evaluate(model, test_dataloader, args)
   print('Dist: {}, Cls: {}'.format(acc_dis, acc_cls))
 
   print('Test with best model')
   try: model.load(args.best_model_path)
   except FileNotFoundError: pass
   else: print("Load model from {}".format(args.best_model_path))
-  _, acc_dis, acc_cls = learner.evaluate(model,
-                                        test_dataloader,
-                                        known_labels,
-                                        args)
+  _, acc_dis, acc_cls = learner.evaluate(model, test_dataloader, args)
   print('Dist: {}, Cls: {}'.format(acc_dis, acc_cls))
+
+
+  ## == Test =============================
+  # print('Test with last model')
+  # _, acc_dis, acc_cls = learner.evaluate(model,
+  #                                       test_dataloader,
+  #                                       known_labels,
+  #                                       args)
+  # print('Dist: {}, Cls: {}'.format(acc_dis, acc_cls))
+
+  # print('Test with best model')
+  # try: model.load(args.best_model_path)
+  # except FileNotFoundError: pass
+  # else: print("Load model from {}".format(args.best_model_path))
+  # _, acc_dis, acc_cls = learner.evaluate(model,
+  #                                       test_dataloader,
+  #                                       known_labels,
+  #                                       args)
+  # print('Dist: {}, Cls: {}'.format(acc_dis, acc_cls))
 
 
 

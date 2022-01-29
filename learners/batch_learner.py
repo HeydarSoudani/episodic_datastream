@@ -1,7 +1,6 @@
 import torch
 
-
-class PtLearner:
+class BatchLearner:
   def __init__(self, criterion, device, args):
     self.criterion = criterion
     self.device = device

@@ -1,6 +1,6 @@
 import torch
-from torch.utils.data import DataLoader
 from torch.optim import SGD, Adam
+from torch.utils.data import DataLoader
 from torch.optim.lr_scheduler import StepLR, OneCycleLR
 import os
 import numpy as np
@@ -11,7 +11,6 @@ from utils.preparation import transforms_preparation
 def train(model,
           learner,
           train_data,
-          test_loader,
           args, device):              
   model.to(device)
 
@@ -82,8 +81,6 @@ def train(model,
 
         if args.scheduler:
           scheduler.step()
-
-      _ = test(model, test_loader, args, device)
 
   except KeyboardInterrupt:
     print('skipping training')  
