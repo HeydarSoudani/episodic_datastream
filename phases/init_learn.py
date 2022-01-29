@@ -85,7 +85,7 @@ def init_learn(model,
                                         test_dataloader,
                                         known_labels,
                                         args)
-  print('Dist: {}, Cls: {}'.format(acc_dis, acc_cls))
+  print('Dist: {:.4f}, Cls: {}'.format(acc_dis, acc_cls))
 
   print('Test with best model')
   try: model.load(args.best_model_path)
@@ -95,7 +95,7 @@ def init_learn(model,
                                         test_dataloader,
                                         known_labels,
                                         args)
-  print('Dist: {}, Cls: {}'.format(acc_dis, acc_cls))
+  print('Dist: {:.4f}, Cls: {}'.format(acc_dis, acc_cls))
 
 
 
