@@ -81,16 +81,15 @@ def init_learn(model,
 
   ## == Test (Batch) =======================
   print('Test with last model')
-  _, acc_dis, acc_cls = learner.evaluate(model, test_dataloader, args)
-  print('Dist: {}, Cls: {}'.format(acc_dis, acc_cls))
+  _, acc_cls = learner.evaluate(model, test_dataloader, args)
+  print('Cls: {}'.format(acc_cls))
 
   print('Test with best model')
   try: model.load(args.best_model_path)
   except FileNotFoundError: pass
   else: print("Load model from {}".format(args.best_model_path))
-  _, acc_dis, acc_cls = learner.evaluate(model, test_dataloader, args)
-  print('Dist: {}, Cls: {}'.format(acc_dis, acc_cls))
-
+  _, acc_cls = learner.evaluate(model, test_dataloader, args)
+  print('Cls: {}'.format(acc_cls))
 
   ## == Test =============================
   # print('Test with last model')
