@@ -19,22 +19,6 @@ def init_learn(model,
   ### == train data ========================
   print('train_data: {}'.format(train_data.shape))  
   
-  # ## == Test data ==========================
-  test_data = read_csv(
-            os.path.join(args.data_path, args.test_file),
-            sep=',', header=None).values
-  print('test_data: {}'.format(test_data.shape))
-  if args.use_transform:
-    _, test_transform = transforms_preparation()
-    test_dataset = SimpleDataset(test_data, args, transforms=test_transform)
-  else:
-    test_dataset = SimpleDataset(test_data, args)
-  test_dataloader = DataLoader(dataset=test_dataset,
-                                batch_size=args.batch_size,
-                                shuffle=False)
-  known_labels = test_dataset.label_set
-
-
   ### == Train Model (Batch) ===========
   if args.algorithm == 'batch':
     batch_train(
@@ -77,6 +61,24 @@ def init_learn(model,
   # print("Memory has been saved in {}.".format(args.memory_path))
 
   ## == Test ============================
+  
+  # = load data =========================
+  test_data = read_csv(
+            os.path.join(args.data_path, args.test_file),
+            sep=',', header=None).values
+  print('test_data: {}'.format(test_data.shape))
+  if args.use_transform:
+    _, test_transform = transforms_preparation()
+    test_dataset = SimpleDataset(test_data, args, transforms=test_transform)
+  else:
+    test_dataset = SimpleDataset(test_data, args)
+  test_dataloader = DataLoader(dataset=test_dataset,
+                                batch_size=args.batch_size,
+                                shuffle=False)
+  known_labels = test_dataset.label_set
+  
+  
+  # = 
   print('Test with last model')
   _, acc_dis, acc_cls = learner.evaluate(model,
                                         test_dataloader,
