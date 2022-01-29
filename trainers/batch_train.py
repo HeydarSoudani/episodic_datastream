@@ -9,12 +9,13 @@ from datasets.dataset import SimpleDataset
 from utils.preparation import transforms_preparation
 
 def train(model,
+          learner,
           train_data,
           test_loader,
           args, device):              
   model.to(device)
 
-  ### === Load data =================
+  ### === Load data ======================
   n, _ = train_data.shape
   np.random.shuffle(train_data)
   train_val_data = np.split(train_data, [int(n*0.95), n])
@@ -32,8 +33,7 @@ def train(model,
   train_loader = DataLoader(dataset=train_dataset, batch_size=args.batch_size, shuffle=True)
   val_loader = DataLoader(dataset=val_dataset, batch_size=8, shuffle=False)
 
-
-  criterion = torch.nn.CrossEntropyLoss()
+  # == ====================================
   optim = Adam(model.parameters(), lr=args.lr)
   # optim = SGD(model.parameters(),
   #             lr=args.lr,
@@ -43,50 +43,39 @@ def train(model,
   #               lr=args.lr,
   #               weight_decay=args.wd)
   scheduler = StepLR(optim, step_size=args.step_size, gamma=args.gamma)
-  scheduler = OneCycleLR(optim, 0.01,
-                        epochs=args.epochs, 
-                        steps_per_epoch=len(train_loader))
+  # scheduler = OneCycleLR(optim, 0.01,
+  #                       epochs=args.epochs, 
+  #                       steps_per_epoch=len(train_loader))
 
+  # == Learn model =========================
+  global_time = time.time()
   min_loss = float('inf')
   try:
     for epoch_item in range(args.start_epoch, args.epochs):
       print('=== Epoch %d ===' % epoch_item)
       train_loss = 0.
       for i, batch in enumerate(train_loader):
-        images, labels = batch
-        images, labels = images.to(device), labels.to(device)
         
-        optim.zero_grad()
-        outputs, _ = model.forward(images)
-        loss = criterion(outputs, labels)
-        loss.backward()
-        torch.nn.utils.clip_grad_norm_(model.parameters(), args.grad_clip)
-        optim.step()
-
+        loss = learner.train(model, batch, optim, args)
         train_loss += loss
 
         # evaluation
         if (i+1) % args.log_interval == 0:
           with torch.no_grad():
-            total_val_loss = 0.0
-            model.eval()
-            for j, data in enumerate(val_loader):
-              sample, labels = data
-              sample, labels = sample.to(device), labels.to(device)
+            
+            train_loss_total = train_loss / args.log_interval
+            train_loss = 0.0
+            
+            # evalute on val_dataset
+            val_loss_total, \
+            val_acc_cls_total = learner.evaluate(model, val_dataloader, args)
 
-              logits, _ = model.forward(sample)
-    
-              loss = criterion(logits, labels)
-              loss = loss.mean()
-              total_val_loss += loss.item()
-
-            total_val_loss /= len(val_loader)
-            print('=== Epoch: %d/%d, Train Loss: %f, Val Loss: %f' % (
-              epoch_item, i+1,  train_loss/args.log_interval, total_val_loss))
-            train_loss = 0.
+            print('=== Time: %.2f, Step: %d, Train Loss: %f, Val Loss: %f' % (
+              time.time()-global_time, miteration_item+1, train_loss_total, val_loss_total))
+            global_time = time.time()
 
             # save best model
-            if total_val_loss < min_loss:
+            if val_loss_total < min_loss:
               model.save(os.path.join(args.save, "model_best.pt"))
               min_loss = total_val_loss
               print("Saving new best model")
@@ -103,26 +92,31 @@ def train(model,
   model.save(os.path.join(args.save, "model_last.pt"))
   print("Saving new last model")
 
-def test(model, test_loader, args, device):
-  model.to(device)
 
-  correct = 0
-  total = 0
 
-  model.eval()
-  with torch.no_grad():
-    for i, data in enumerate(test_loader):
-  
-      samples, labels = data
-      samples, labels = samples.to(device), labels.to(device)
-      logits, feature = model.forward(samples)
+
+
+
+
+
+# def test(model, test_loader, args, device):
+#   model.to(device)
+
+#   correct = 0
+#   total = 0
+#   model.eval()
+#   with torch.no_grad():
+#     for i, data in enumerate(test_loader):
+#       samples, labels = data
+#       samples, labels = samples.to(device), labels.to(device)
+#       logits, feature = model.forward(samples)
       
-      _, predicted = torch.max(logits, 1)
-      total += labels.size(0)
-      correct += (predicted == labels).sum().item()
+#       _, predicted = torch.max(logits, 1)
+#       total += labels.size(0)
+#       correct += (predicted == labels).sum().item()
     
-    print('Accuracy of the network on the 10000 test images: %7.4f %%' % (100 * correct / total))
-  return correct / total
+#     print('Accuracy of the network on the 10000 test images: %7.4f %%' % (100 * correct / total))
+#   return correct / total
   
 
   # prepare to count predictions for each class

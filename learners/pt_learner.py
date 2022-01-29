@@ -27,16 +27,9 @@ class PtLearner:
     # self.criterion = torch.nn.CrossEntropyLoss()
     self.device = device
 
-    if args.dataset in ['mnist', 'pmnist', 'rmnist', 'fmnist', 'pfmnist', 'rfmnist', 'cifar10']:
-      class_num = 10
-    elif args.dataset == 'cifar100':
-      class_num = 100
-    else:
-      class_num = 0
-
     self.prototypes = {
       l: torch.zeros(1, args.hidden_dims, device=device)
-      for l in range(class_num)
+      for l in range(args.n_classes)
     }
 
   def train(self, model, batch, optimizer, iteration, args):
@@ -105,19 +98,20 @@ class PtLearner:
 
   def evaluate(self, model, dataloader, known_labels, args):
     model.eval()
+    
+    total_loss = 0.0
+    total_dist_acc = 0.0
+    correct_cls_acc = 0.0
+    total_cls_acc = 0
+    
     ce = torch.nn.CrossEntropyLoss()
 
     known_labels = torch.tensor(list(known_labels), device=self.device)
     pts = torch.cat(
       [self.prototypes[l.item()] for l in known_labels]
     )
-    
-    with torch.no_grad():
-      total_loss = 0.0
-      total_dist_acc = 0.0
-      correct_cls_acc = 0.0
-      total_cls_acc = 0
 
+    with torch.no_grad():
       for i, batch in enumerate(dataloader):
         samples, labels = batch
         labels = labels.flatten()

@@ -6,27 +6,36 @@ import gzip
 import time
 import os
 
-## == Params =====================
+## == Params ===========================
 parser = argparse.ArgumentParser()
-parser.add_argument('--class_num', type=int, default=10, help='')
 parser.add_argument('--seen_class_num', type=int, default=5, help='')
 parser.add_argument('--spc', type=int, default=1200, help='samples per class for initial dataset')
 parser.add_argument('--dataset', type=str, default='mnist', help='') #[mnist, fmnist, cifar10]
 parser.add_argument('--saved', type=str, default='./data/', help='')
-parser.add_argument('--seed', type=int, default=1, help='')
+parser.add_argument('--seed', type=int, default=1, help='')  # seed=1 for regular novel class selection
 args = parser.parse_args()
 
-# = Add some variables to args ===
+# = Add some variables to args =========
 args.data_path = 'data/{}'.format(args.dataset)
 args.train_file = '{}_train.csv'.format(args.dataset)
 args.stream_file = '{}_stream.csv'.format(args.dataset)
 
-## == Apply seed =================
+## == Apply seed =======================
 np.random.seed(args.seed)
 
-## == Add novel points =================
+## == Set class number =================
+if args.dataset in ['mnist', 'fmnist', 'cifar10']:
+  args.n_classes = 10
+elif args.dataset in ['cifar100']:
+  args.n_classes = 100
+
+## == Add novel points params ==========
 start_point = 3
-last_point = 35  # for CFAR: 25, for MNIST: 35
+if args.dataset in ['mnist', 'fmnist']:
+  last_point = 35
+elif args.dataset in ['cifar10', 'cifar100']:
+  last_point = 25
+
 
 if __name__ == '__main__':
   ## ========================================
@@ -64,7 +73,7 @@ if __name__ == '__main__':
   n_data = data.shape[0]
 
   # == Select seen & unseen classes ==========
-  # seen_class = np.random.choice(args.class_num, args.seen_class_num, replace=False)
+  # seen_class = np.random.choice(args.n_classes, args.seen_class_num, replace=False)
   # unseen_class = [x for x in list(set(labels)) if x not in seen_class]
   seen_class = np.array([0, 1, 2, 3, 4]) 
   unseen_class = [5, 6, 7, 8, 9]

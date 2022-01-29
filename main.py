@@ -13,13 +13,14 @@ from utils.memory_selector import OperationalMemory, IncrementalMemory
 from detectors.pt_detector import PtDetector
 from learners.pt_learner import PtLearner
 from learners.reptile_learner import ReptileLearner
+from learners.batch_learner import BatchLearner
 from losses import TotalLoss
 
-from batch_learn import batch_learn
-from init_learn import init_learn
-from zeroshot_test import zeroshot_test
-from stream_learn import stream_learn
-from incremental_learn import batch_increm_learn, episodic_increm_learn
+from phases.batch_learn import batch_learn
+from phases.init_learn import init_learn
+from phases.zeroshot_test import zeroshot_test
+from phases.stream_learn import stream_learn
+from phases.incremental_learn import batch_increm_learn, episodic_increm_learn
 
 from utils.functions import set_novel_label
 from plot.class_distribution import class_distribution
@@ -66,9 +67,9 @@ parser.add_argument(
   default='cifar100',
   help='') 
 parser.add_argument(
-  '--meta_algorithm',
+  '--algorithm',
   type=str,
-  choices=['prototype', 'reptile'],
+  choices=['prototype', 'reptile', 'batch'],
   default='prototype',
   help='')
 
@@ -186,6 +187,12 @@ torch.backends.cudnn.benchmark = False
 if args.cuda:
   torch.cuda.manual_seed_all(args.seed)
 
+## == Set class number =================
+if args.dataset in ['mnist', 'pmnist', 'rmnist', 'fmnist', 'pfmnist', 'rfmnist', 'cifar10']:
+  args.n_classes = 10
+elif args.dataset in ['cifar100']:
+  args.n_classes = 100
+
 ## == Save dir =========================
 if not os.path.exists(args.save):
   os.makedirs(args.save)
@@ -215,13 +222,16 @@ if args.phase != 'plot':
 model.to(device)
 
 ## == Loss & Learner Definition ========
-# criterion_mt = losses.NTXentLoss(temperature=0.07)
-if args.meta_algorithm == 'prototype':
+if args.algorithm == 'prototype':
   criterion = TotalLoss(device, args)
   learner = PtLearner(criterion, device, args)
-elif args.meta_algorithm == 'reptile':
+elif args.algorithm == 'reptile':
   criterion = torch.nn.CrossEntropyLoss()
   learner = ReptileLearner(criterion, device, args)
+elif args.algorithm == 'batch':
+  criterion = torch.nn.CrossEntropyLoss()
+  # criterion = losses.NTXentLoss(temperature=0.07)
+  learner = BatchLearner(criterion, device, args)
 
 try: learner.load(args.prototypes_path)
 except FileNotFoundError: pass

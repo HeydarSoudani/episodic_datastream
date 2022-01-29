@@ -30,7 +30,7 @@ def dataloader_preparation(train_data, val_data, args):
   
   known_labels = train_dataset.label_set
 
-  if args.meta_algorithm == 'prototype':
+  if args.algorithm == 'prototype':
     sampler = PtSampler(
       train_dataset,
       n_way=args.ways,
@@ -38,7 +38,7 @@ def dataloader_preparation(train_data, val_data, args):
       n_query=args.query_num,
       n_tasks=args.meta_iteration
     )
-  elif args.meta_algorithm == 'reptile':
+  elif args.algorithm == 'reptile':
     sampler = ReptileSampler(
       train_dataset,
       n_way=args.ways,

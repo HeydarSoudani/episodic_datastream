@@ -4,11 +4,14 @@ from torch.utils.data import DataLoader
 
 from datasets.dataset import SimpleDataset
 from utils.preparation import transforms_preparation
+
 from trainers.episodic_train import train as episodic_train
+from trainers.batch_train import train as batch_train
+
 from detectors.pt_detector import detector_preparation
 
 def init_learn(model,
-               pt_learner,
+               learner,
                memory,
                detector,
                train_data,
@@ -33,13 +36,25 @@ def init_learn(model,
   known_labels = test_dataset.label_set
   
   
-  ### == Train Model =================
-  episodic_train(
-    model,
-    pt_learner,
-    train_data,
-    test_dataloader, known_labels,
-    args, device)
+  ### == Train Model (Batch) ===========
+  if args.algorithm == 'batch':
+    batch_train(
+      model,
+      learner,
+      train_data,
+      args, device)
+
+  ### == Train Model (Episodic) ========
+  else:
+    episodic_train(
+      model,
+      learner,
+      train_data,
+      test_dataloader, known_labels,
+      args, device)
+
+  
+
 
   # # == save model for plot ===========
   # model.save(os.path.join(args.save, "model_after_init.pt"))
@@ -49,7 +64,7 @@ def init_learn(model,
   # print("Calculating detector ...")
   # samples, known_labels, intra_distances\
   #   = detector_preparation(model,
-  #                          pt_learner.prototypes,
+  #                          learner.prototypes,
   #                          train_data,
   #                          args, device)
 
@@ -67,20 +82,19 @@ def init_learn(model,
   # print("Memory has been saved in {}.".format(args.memory_path))
 
 
-  ## == Test ==========================  
+  ## == Test =============================
   print('Test with last model')
-  _, acc_dis, acc_cls = pt_learner.evaluate(model,
+  _, acc_dis, acc_cls = learner.evaluate(model,
                                         test_dataloader,
                                         known_labels,
                                         args)
   print('Dist: {}, Cls: {}'.format(acc_dis, acc_cls))
 
-
   print('Test with best model')
   try: model.load(args.best_model_path)
   except FileNotFoundError: pass
   else: print("Load model from {}".format(args.best_model_path))
-  _, acc_dis, acc_cls = pt_learner.evaluate(model,
+  _, acc_dis, acc_cls = learner.evaluate(model,
                                         test_dataloader,
                                         known_labels,
                                         args)

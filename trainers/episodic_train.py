@@ -26,7 +26,6 @@ def train(model,
   # optim = Adam(model.parameters(),
   #               lr=args.lr,
   #               weight_decay=args.wd)
-
   scheduler = StepLR(
     optim,
     step_size=args.step_size,
@@ -79,7 +78,6 @@ def train(model,
                                       args)
           print('Dist: {}, Cls: {}'.format(acc_dis, acc_cls))
           
-
         if args.scheduler:
           scheduler.step()
 
