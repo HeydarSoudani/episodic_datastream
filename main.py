@@ -34,7 +34,6 @@ parser.add_argument(
   '--phase',
   type=str,
   choices=[
-    'batch_learn',
     'init_learn',
     'zeroshot_test',
     'stream_learn',
@@ -109,7 +108,7 @@ parser.add_argument('--memory_novel_acceptance', type=int, default=150, help='')
 parser.add_argument('--use_transform', action='store_true')
 
 # Prototypical algorithm
-parser.add_argument('--beta_type', type=str, choices=['fixed', 'evolving'], default='evolving', help='Update Prototype in Prototypical algorithm')
+parser.add_argument('--beta_type', type=str, choices=['fixed', 'evolving'], default='fixed', help='Update Prototype in Prototypical algorithm')
 parser.add_argument('--beta', type=float, default=1.0, help='Update Prototype in Prototypical algorithm')
 parser.add_argument('--drift_beta', type=float, default=1.0, help='')
 parser.add_argument('--std_coefficient', type=float, default=1.0, help='for Pt detector')
@@ -200,8 +199,7 @@ if not os.path.exists(args.save):
 ## == Model Definition =================
 if args.dataset in ['mnist', 'pmnist', 'rmnist']:
   # MLP net selected like CoPE
-  n_inputs, n_feature, n_outputs = 784, args.hidden_dims, 10
-  model = MLP(n_inputs, n_feature, n_outputs, args)
+  model = MLP(784, args.hidden_dims, args.n_classes, args)
 elif args.dataset == 'cifar100':
   model = ResNet18(100, args)
 else:
@@ -221,7 +219,7 @@ else:
 #       print("Load model from {}".format(args.last_model_path))
 model.to(device)
 
-## == Loss & Learner Definition ========
+## == Loss & Learner Definition =========
 if args.algorithm == 'prototype':
   criterion = TotalLoss(device, args)
   learner = PtLearner(criterion, device, args)
@@ -266,10 +264,6 @@ if args.phase not in [
   else: print("Load Detector from {}".format(args.detector_path))
 
 if __name__ == '__main__':
-  # ## == Batch learning =================
-  # if args.phase == 'batch_learn':
-  #   batch_learn(model, args, device)
-  
   ## == Data Stream ====================
   if args.phase == 'init_learn':
     init_learn(model,

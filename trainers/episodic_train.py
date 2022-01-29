@@ -50,7 +50,7 @@ def train(model,
         if (miteration_item + 1) % args.log_interval == 0:
           
           train_loss_total = train_loss / args.log_interval
-          train_loss = 0.
+          train_loss = 0.0
 
           # evalute on val_dataset
           val_loss_total, \

@@ -33,6 +33,8 @@ def train(model,
   train_loader = DataLoader(dataset=train_dataset, batch_size=args.batch_size, shuffle=True)
   val_loader = DataLoader(dataset=val_dataset, batch_size=8, shuffle=False)
 
+  known_labels = val_dataset.label_set
+
   # == ====================================
   optim = Adam(model.parameters(), lr=args.lr)
   # optim = SGD(model.parameters(),
@@ -68,7 +70,8 @@ def train(model,
             
             # evalute on val_dataset
             val_loss_total, \
-            val_acc_cls_total = learner.evaluate(model, val_loader, args)
+            val_acc_dis_total, \
+            val_acc_cls_total = learner.evaluate(model, val_loader, known_labels, args)
 
             print('=== Time: %.2f, Epoch: %d/%d, Train Loss: %f, Val Loss: %f' % (
               time.time()-global_time, epoch_item+1, i+1, train_loss_total, val_loss_total))

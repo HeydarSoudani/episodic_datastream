@@ -18,9 +18,25 @@ def init_learn(model,
                args,
                device):
 
-  ### == train data ====================
+  ### == train data ========================
   print('train_data: {}'.format(train_data.shape))  
   
+  ## == Test data ==========================
+  # test_data = read_csv(
+  #           os.path.join(args.data_path, args.test_file),
+  #           sep=',', header=None).values
+  # print('test_data: {}'.format(test_data.shape))
+  # if args.use_transform:
+  #   _, test_transform = transforms_preparation()
+  #   test_dataset = SimpleDataset(test_data, args, transforms=test_transform)
+  # else:
+  #   test_dataset = SimpleDataset(test_data, args)
+  # test_dataloader = DataLoader(dataset=test_dataset,
+  #                               batch_size=args.batch_size,
+  #                               shuffle=False)
+  # known_labels = test_dataset.label_set
+
+
   ### == Train Model (Batch) ===========
   if args.algorithm == 'batch':
     batch_train(
@@ -35,7 +51,6 @@ def init_learn(model,
       model,
       learner,
       train_data,
-      # test_dataloader, known_labels,
       args, device)
 
   # # == save model for plot ===========
@@ -63,51 +78,24 @@ def init_learn(model,
   # memory.save(args.memory_path)
   # print("Memory has been saved in {}.".format(args.memory_path))
 
-  ## == Test data ==========================
-  test_data = read_csv(
-            os.path.join(args.data_path, args.test_file),
-            sep=',', header=None).values
-  print('test_data: {}'.format(test_data.shape))
-  if args.use_transform:
-    _, test_transform = transforms_preparation()
-    test_dataset = SimpleDataset(test_data, args, transforms=test_transform)
-  else:
-    test_dataset = SimpleDataset(test_data, args)
-  test_dataloader = DataLoader(dataset=test_dataset,
-                                batch_size=args.batch_size,
-                                shuffle=False)
 
-  known_labels = test_dataset.label_set
-
-  ## == Test (Batch) =======================
+  ## == Test =============================
   print('Test with last model')
-  _, acc_cls = learner.evaluate(model, test_dataloader, args)
-  print('Cls: {}'.format(acc_cls))
+  _, acc_dis, acc_cls = learner.evaluate(model,
+                                        test_dataloader,
+                                        known_labels,
+                                        args)
+  print('Dist: {}, Cls: {}'.format(acc_dis, acc_cls))
 
   print('Test with best model')
   try: model.load(args.best_model_path)
   except FileNotFoundError: pass
   else: print("Load model from {}".format(args.best_model_path))
-  _, acc_cls = learner.evaluate(model, test_dataloader, args)
-  print('Cls: {}'.format(acc_cls))
-
-  ## == Test =============================
-  # print('Test with last model')
-  # _, acc_dis, acc_cls = learner.evaluate(model,
-  #                                       test_dataloader,
-  #                                       known_labels,
-  #                                       args)
-  # print('Dist: {}, Cls: {}'.format(acc_dis, acc_cls))
-
-  # print('Test with best model')
-  # try: model.load(args.best_model_path)
-  # except FileNotFoundError: pass
-  # else: print("Load model from {}".format(args.best_model_path))
-  # _, acc_dis, acc_cls = learner.evaluate(model,
-  #                                       test_dataloader,
-  #                                       known_labels,
-  #                                       args)
-  # print('Dist: {}, Cls: {}'.format(acc_dis, acc_cls))
+  _, acc_dis, acc_cls = learner.evaluate(model,
+                                        test_dataloader,
+                                        known_labels,
+                                        args)
+  print('Dist: {}, Cls: {}'.format(acc_dis, acc_cls))
 
 
 
