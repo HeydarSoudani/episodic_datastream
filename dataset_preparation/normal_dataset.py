@@ -9,7 +9,7 @@ def unpickle(file):
     dict = pickle.load(fo, encoding='bytes')
   return dict
 
-## == Params ==========================
+## == Params ===========================
 parser = argparse.ArgumentParser()
 parser.add_argument('--n_tasks', type=int, default=5, help='')
 parser.add_argument('--dataset', type=str, default='mini_imagenet', help='') #[mnist, fmnist, cifar10, cifar100, mini_imagenet]
@@ -17,15 +17,15 @@ parser.add_argument('--seed', type=int, default=2, help='')
 parser.add_argument('--saved', type=str, default='./data/', help='')
 args = parser.parse_args()
 
-# = Add some variables to args ===
+# = Add some variables to args =========
 args.data_path = 'data/{}'.format(args.dataset)
 args.train_file = '{}_train.csv'.format(args.dataset)
 args.test_file = '{}_test.csv'.format(args.dataset)
 
-## == Apply seed ======================
+## == Apply seed =======================
 np.random.seed(args.seed)
 
-## == Save dir ========================
+## == Save dir =========================
 if not os.path.exists(args.saved):
   os.makedirs(args.saved)
 
