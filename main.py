@@ -16,11 +16,11 @@ from learners.reptile_learner import ReptileLearner
 from learners.batch_learner import BatchLearner
 from losses import TotalLoss
 
-from phases.batch_learn import batch_learn
+# from phases.batch_learn import batch_learn
 from phases.init_learn import init_learn
-from phases.zeroshot_test import zeroshot_test
-from phases.stream_learn import stream_learn
-from phases.incremental_learn import batch_increm_learn, episodic_increm_learn
+# from phases.zeroshot_test import zeroshot_test
+# from phases.stream_learn import stream_learn
+# from phases.incremental_learn import batch_increm_learn, episodic_increm_learn
 
 from utils.functions import set_novel_label
 from plot.class_distribution import class_distribution
@@ -266,12 +266,12 @@ if args.phase not in [
   else: print("Load Detector from {}".format(args.detector_path))
 
 if __name__ == '__main__':
-  ## == Batch learning =================
-  if args.phase == 'batch_learn':
-    batch_learn(model, args, device)
+  # ## == Batch learning =================
+  # if args.phase == 'batch_learn':
+  #   batch_learn(model, args, device)
   
   ## == Data Stream ====================
-  elif args.phase == 'init_learn':
+  if args.phase == 'init_learn':
     init_learn(model,
                learner,
                memory,
@@ -279,49 +279,49 @@ if __name__ == '__main__':
                train_data,
                args,
                device)
-  elif args.phase == 'zeroshot_test':
-    zeroshot_test(model,
-                  learner.prototypes,
-                  detector,
-                  args,
-                  device)
-  elif args.phase == 'stream_learn':
-    stream_learn(model,
-                 learner,
-                 memory,
-                 detector,
-                 args,
-                 device)
-  elif args.phase == 'zeroshot_test_base':
-    zeroshot_test(model,
-                  learner.prototypes,
-                  detector,
-                  args,
-                  device,
-                  known_labels=base_labels)
+  # elif args.phase == 'zeroshot_test':
+  #   zeroshot_test(model,
+  #                 learner.prototypes,
+  #                 detector,
+  #                 args,
+  #                 device)
+  # elif args.phase == 'stream_learn':
+  #   stream_learn(model,
+  #                learner,
+  #                memory,
+  #                detector,
+  #                args,
+  #                device)
+  # elif args.phase == 'zeroshot_test_base':
+  #   zeroshot_test(model,
+  #                 learner.prototypes,
+  #                 detector,
+  #                 args,
+  #                 device,
+  #                 known_labels=base_labels)
   
-  ## == incremental learning ============
-  elif args.phase == 'batch_incremental_learn':
-    memory = IncrementalMemory(
-              selection_type=args.mem_sel_type, 
-              total_size=args.mem_total_size,
-              per_class=args.mem_per_class,
-              selection_method=args.mem_sel_method)
-    batch_increm_learn(model,
-                      memory,
-                      args,
-                      device)
-  elif args.phase == 'episodic_incremental_learn':
-    memory = IncrementalMemory(
-              selection_type=args.mem_sel_type, 
-              total_size=args.mem_total_size,
-              per_class=args.mem_per_class,
-              selection_method=args.mem_sel_method)
-    episodic_increm_learn(model,
-                        learner,
-                        memory,
-                        args,
-                        device)
+  # ## == incremental learning ============
+  # elif args.phase == 'batch_incremental_learn':
+  #   memory = IncrementalMemory(
+  #             selection_type=args.mem_sel_type, 
+  #             total_size=args.mem_total_size,
+  #             per_class=args.mem_per_class,
+  #             selection_method=args.mem_sel_method)
+  #   batch_increm_learn(model,
+  #                     memory,
+  #                     args,
+  #                     device)
+  # elif args.phase == 'episodic_incremental_learn':
+  #   memory = IncrementalMemory(
+  #             selection_type=args.mem_sel_type, 
+  #             total_size=args.mem_total_size,
+  #             per_class=args.mem_per_class,
+  #             selection_method=args.mem_sel_method)
+  #   episodic_increm_learn(model,
+  #                       learner,
+  #                       memory,
+  #                       args,
+  #                       device)
   
   ## == Plot ===========================
   elif args.phase == 'plot':
