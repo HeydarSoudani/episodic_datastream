@@ -6,6 +6,9 @@ import numpy as np
 from pandas import read_csv
 
 from trainers.episodic_train import train
+from trainers.episodic_train import train as episodic_train
+from trainers.batch_train import train as batch_train
+
 from detectors.pt_detector import detector_preparation
 from datasets.dataset import SimpleDataset
 from utils.preparation import transforms_preparation
@@ -13,23 +16,21 @@ from evaluation import evaluate
 
 
 def stream_learn(model,
-                 pt_learner,
+                 learner,
                  memory,
                  detector,
-                 args,
-                 device):
+                 args, device):
   print('================================ Stream Learning ================================') 
   
   ## == Set retrain params ====================
   args.epochs = args.retrain_epochs
   args.meta_iteration = args.retrain_meta_iteration
  
-
   ## == Data ==================================
   stream_data = read_csv(
     os.path.join(args.data_path, args.stream_file),
-    sep=',',
-    header=None).values
+    sep=',', header=None).values
+  
   if args.use_transform:
     _, test_transform = transforms_preparation()
     stream_dataset = SimpleDataset(stream_data, args, transforms=test_transform)
@@ -46,14 +47,13 @@ def stream_learn(model,
 
   f = open('output.txt','w')
   for i, data in enumerate(dataloader):
-    
     model.eval()
     with torch.no_grad():
       sample, label = data
       sample, label = sample.to(device), label.to(device)
       _, feature = model.forward(sample)
       real_novelty = label.item() not in detector._known_labels
-      detected_novelty, predicted_label, prob = detector(feature, pt_learner.prototypes)      
+      detected_novelty, predicted_label, prob = detector(feature, learner.prototypes)      
       detection_results.append((label.item(), predicted_label, real_novelty, detected_novelty))
 
       sample = torch.squeeze(sample, 0) #[1, 28, 28]
@@ -96,13 +96,24 @@ def stream_learn(model,
       new_train_data = memory.select(buffer, return_data=True)
       
       ### == 3) Retraining Model ================
-      train(model, pt_learner, new_train_data, args, device)
+      if args.algorithm == 'batch':
+        batch_train(
+          model,
+          learner,
+          new_train_data,
+          args, device)
+      else:
+        episodic_train(
+          model,
+          learner,
+          new_train_data,
+          args, device)
       
       ### == 4) Recalculating Detector ==========
       print("Calculating detector ...")
       _, new_known_labels, intra_distances\
         = detector_preparation(model,
-                               pt_learner.prototypes,
+                               learner.prototypes,
                                new_train_data,
                                args, device)
 
