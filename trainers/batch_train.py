@@ -71,7 +71,7 @@ def train(model,
             val_acc_cls_total = learner.evaluate(model, val_loader, args)
 
             print('=== Time: %.2f, Epoch: %d/%d, Train Loss: %f, Val Loss: %f' % (
-              time.time()-global_time, epoch_item+1, i, train_loss_total, val_loss_total))
+              time.time()-global_time, epoch_item+1, i+1, train_loss_total, val_loss_total))
             global_time = time.time()
 
             # save best model

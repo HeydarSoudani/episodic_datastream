@@ -108,16 +108,18 @@ if __name__ == '__main__':
 
 
   train_data = np.concatenate((X_train, y_train.reshape(-1, 1)), axis=1)
-  # test_data = np.concatenate((X_test, y_test.reshape(-1, 1)), axis=1)
-
+  test_data = np.concatenate((X_test, y_test.reshape(-1, 1)), axis=1)
 
   pd.DataFrame(train_data).to_csv(os.path.join(args.saved, args.train_file),
     header=None,
     index=None
   )
-  print('done')
-  # pd.DataFrame(test_data).to_csv(os.path.join(args.saved, args.test_file),
-  #   header=None,
-  #   index=None
-  # )
+  print('train data saved in {}'.format(os.path.join(args.saved, args.train_file)))
+
+  pd.DataFrame(test_data).to_csv(os.path.join(args.saved, args.test_file),
+    header=None,
+    index=None
+  )
+  print('test data saved in {}'.format(os.path.join(args.saved, args.test_file)))
+  
   
