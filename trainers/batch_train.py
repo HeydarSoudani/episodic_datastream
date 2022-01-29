@@ -52,7 +52,7 @@ def train(model,
   min_loss = float('inf')
   try:
     for epoch_item in range(args.start_epoch, args.epochs):
-      print('=== Epoch %d ===' % epoch_item+1)
+      print('=== Epoch {} ==='.format(epoch_item+1))
       train_loss = 0.
       for i, batch in enumerate(train_loader):
         
