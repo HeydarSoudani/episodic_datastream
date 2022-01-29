@@ -43,7 +43,7 @@ class BatchLearner:
     with torch.no_grad():
       for j, data in enumerate(dataloader):
         sample, labels = data
-        sample, labels = sample.to(device), labels.to(device)
+        sample, labels = sample.to(self.device), labels.to(self.device)
 
         logits, _ = model.forward(sample)
 
