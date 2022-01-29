@@ -52,7 +52,7 @@ def train(model,
   min_loss = float('inf')
   try:
     for epoch_item in range(args.start_epoch, args.epochs):
-      print('=== Epoch %d ===' % epoch_item)
+      print('=== Epoch %d ===' % epoch_item+1)
       train_loss = 0.
       for i, batch in enumerate(train_loader):
         
@@ -70,8 +70,8 @@ def train(model,
             val_loss_total, \
             val_acc_cls_total = learner.evaluate(model, val_loader, args)
 
-            print('=== Time: %.2f, Step: %d, Train Loss: %f, Val Loss: %f' % (
-              time.time()-global_time, miteration_item+1, train_loss_total, val_loss_total))
+            print('=== Time: %.2f, Epoch: %d/%d, Train Loss: %f, Val Loss: %f' % (
+              time.time()-global_time, epoch_item+1, i, train_loss_total, val_loss_total))
             global_time = time.time()
 
             # save best model
