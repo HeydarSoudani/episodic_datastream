@@ -3,6 +3,7 @@ from torch.optim import SGD, Adam
 from torch.utils.data import DataLoader
 from torch.optim.lr_scheduler import StepLR, OneCycleLR
 import os
+import time
 import numpy as np
 
 from datasets.dataset import SimpleDataset
