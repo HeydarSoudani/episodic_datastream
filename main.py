@@ -14,7 +14,7 @@ from detectors.pt_detector import PtDetector
 from learners.pt_learner import PtLearner
 from learners.reptile_learner import ReptileLearner
 from learners.batch_learner import BatchLearner
-from losses import TotalLoss
+from losses import TotalLoss, MetricLoss
 
 from phases.init_learn import init_learn
 from phases.zeroshot_test import zeroshot_test
@@ -226,8 +226,7 @@ elif args.algorithm == 'reptile':
   criterion = torch.nn.CrossEntropyLoss()
   learner = ReptileLearner(criterion, device, args)
 elif args.algorithm == 'batch':
-  criterion = torch.nn.CrossEntropyLoss()
-  # criterion = losses.NTXentLoss(temperature=0.07)
+  criterion = MetricLoss(device, args)
   learner = BatchLearner(criterion, device, args)
 
 try: learner.load(args.prototypes_path)
