@@ -18,7 +18,7 @@ from losses import TotalLoss
 
 from phases.init_learn import init_learn
 from phases.zeroshot_test import zeroshot_test
-# from phases.stream_learn import stream_learn
+from phases.stream_learn import stream_learn
 # from phases.incremental_learn import batch_increm_learn, episodic_increm_learn
 
 from utils.functions import set_novel_label
