@@ -39,7 +39,7 @@ def zeroshot_test(model,
   
       sample, label = data
       sample, label = sample.to(device), label.to(device)
-      out, feature = model.forward(sample)
+      logits, feature = model.forward(sample)
 
       detected_novelty, predicted_label, prob = detector(feature, prototypes)
       real_novelty = label.item() not in detector._known_labels
