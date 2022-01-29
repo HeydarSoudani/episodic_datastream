@@ -77,7 +77,7 @@ def train(model,
             # save best model
             if val_loss_total < min_loss:
               model.save(os.path.join(args.save, "model_best.pt"))
-              min_loss = total_val_loss
+              min_loss = val_loss_total
               print("Saving new best model")
 
         if args.scheduler:
