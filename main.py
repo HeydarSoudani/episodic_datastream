@@ -16,9 +16,8 @@ from learners.reptile_learner import ReptileLearner
 from learners.batch_learner import BatchLearner
 from losses import TotalLoss
 
-# from phases.batch_learn import batch_learn
 from phases.init_learn import init_learn
-# from phases.zeroshot_test import zeroshot_test
+from phases.zeroshot_test import zeroshot_test
 # from phases.stream_learn import stream_learn
 # from phases.incremental_learn import batch_increm_learn, episodic_increm_learn
 
