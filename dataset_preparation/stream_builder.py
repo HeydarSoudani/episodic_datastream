@@ -35,7 +35,7 @@ if __name__ == '__main__':
   ## == Add novel points params ==========
   start_point = 3
   if args.dataset in ['mnist', 'fmnist']:
-    last_point = 35
+    last_point = 30
   elif args.dataset in ['cifar10', 'cifar100']:
     last_point = 25
 
