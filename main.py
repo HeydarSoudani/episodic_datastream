@@ -280,13 +280,12 @@ if __name__ == '__main__':
                  memory,
                  detector,
                  args, device)
-  # elif args.phase == 'zeroshot_test_base':
-  #   zeroshot_test(model,
-  #                 learner.prototypes,
-  #                 detector,
-  #                 args,
-  #                 device,
-  #                 known_labels=base_labels)
+  elif args.phase == 'zeroshot_test_base':
+    zeroshot_test(model,
+                  learner.prototypes,
+                  detector,
+                  args, device,
+                  known_labels=base_labels)
   
   # ## == incremental learning ============
   # elif args.phase == 'batch_incremental_learn':

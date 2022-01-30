@@ -10,8 +10,7 @@ from utils.preparation import transforms_preparation
 def zeroshot_test(model,
                   prototypes,
                   detector,
-                  args,
-                  device,
+                  args, device,
                   known_labels=None):
   print('================================ Zero-Shot Test ================================')
   
