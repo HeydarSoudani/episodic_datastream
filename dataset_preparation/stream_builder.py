@@ -6,38 +6,39 @@ import gzip
 import time
 import os
 
-## == Params ===========================
-parser = argparse.ArgumentParser()
-parser.add_argument('--seen_class_num', type=int, default=5, help='')
-parser.add_argument('--spc', type=int, default=1200, help='samples per class for initial dataset')
-parser.add_argument('--dataset', type=str, default='mnist', help='') #[mnist, fmnist, cifar10]
-parser.add_argument('--saved', type=str, default='./data/', help='')
-parser.add_argument('--seed', type=int, default=1, help='')  # seed=1 for regular novel class selection
-args = parser.parse_args()
-
-# = Add some variables to args =========
-args.data_path = 'data/{}'.format(args.dataset)
-args.train_file = '{}_train.csv'.format(args.dataset)
-args.stream_file = '{}_stream.csv'.format(args.dataset)
-
-## == Apply seed =======================
-np.random.seed(args.seed)
-
-## == Set class number =================
-if args.dataset in ['mnist', 'fmnist', 'cifar10']:
-  args.n_classes = 10
-elif args.dataset in ['cifar100']:
-  args.n_classes = 100
-
-## == Add novel points params ==========
-start_point = 3
-if args.dataset in ['mnist', 'fmnist']:
-  last_point = 35
-elif args.dataset in ['cifar10', 'cifar100']:
-  last_point = 25
-
 
 if __name__ == '__main__':
+
+  ## == Params ===========================
+  parser = argparse.ArgumentParser()
+  parser.add_argument('--seen_class_num', type=int, default=5, help='')
+  parser.add_argument('--spc', type=int, default=1200, help='samples per class for initial dataset')
+  parser.add_argument('--dataset', type=str, default='mnist', help='') #[mnist, fmnist, cifar10]
+  parser.add_argument('--saved', type=str, default='./data/', help='')
+  parser.add_argument('--seed', type=int, default=1, help='')  # seed=1 for regular novel class selection
+  args = parser.parse_args()
+
+  # = Add some variables to args =========
+  args.data_path = 'data/{}'.format(args.dataset)
+  args.train_file = '{}_train.csv'.format(args.dataset)
+  args.stream_file = '{}_stream.csv'.format(args.dataset)
+
+  ## == Apply seed =======================
+  np.random.seed(args.seed)
+
+  ## == Set class number =================
+  if args.dataset in ['mnist', 'fmnist', 'cifar10']:
+    args.n_classes = 10
+  elif args.dataset in ['cifar100']:
+    args.n_classes = 100
+
+  ## == Add novel points params ==========
+  start_point = 3
+  if args.dataset in ['mnist', 'fmnist']:
+    last_point = 35
+  elif args.dataset in ['cifar10', 'cifar100']:
+    last_point = 25
+
   ## ========================================
   # == Get MNIST dataset ====================
   if args.dataset == 'mnist':
