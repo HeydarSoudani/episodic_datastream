@@ -21,9 +21,8 @@ from phases.zeroshot_test import zeroshot_test
 from phases.stream_learn import stream_learn
 # from phases.incremental_learn import batch_increm_learn, episodic_increm_learn
 
-from utils.functions import set_novel_label
 from plot.class_distribution import class_distribution
-from plot.feature_space_visualization import visualization
+from plot.feature_space_visualization import set_novel_label, visualization
 
 
 ## == Params ===========
@@ -157,6 +156,9 @@ parser.add_argument('--compressionRate', type=int, default=2, help='Compression 
 parser.add_argument('--p', default=0.5, type=float, help='Random Erasing probability')
 parser.add_argument('--sh', default=0.4, type=float, help='max erasing area')
 parser.add_argument('--r1', default=0.2, type=float, help='aspect of erasing area')
+
+# visualization
+parser.add_argument('--vis_filename', default='tsne', type=str, help='feature_space_plotting')
 
 args = parser.parse_args()
 
@@ -317,11 +319,11 @@ if __name__ == '__main__':
   elif args.phase == 'plot':
     
     # = Class distribution in stream dataset
-    class_distribution(args)
+    # class_distribution(args)
     
     # # = data in feature-space after training
-    # set_novel_label(base_labels, args)
-    # visualization(model, args, device)
+    stream_data_novel = set_novel_label(base_labels, args)
+    visualization(model, stream_data_novel, args, device, filename=args.vis_filename)
 
   else: 
     raise NotImplementedError()

@@ -15,11 +15,6 @@ from samplers.pt_sampler import PtSampler
 
 
 def set_novel_label(known_labels, args):
-  train_data = pd.read_csv(
-    os.path.join(args.data_path, args.train_file),
-    sep=',', header=None).values
-  train_labels = train_data[:, -1]
-  seen_label = set(train_labels)
   
   stream_data = pd.read_csv(
     os.path.join(args.data_path, args.stream_file),
@@ -27,15 +22,14 @@ def set_novel_label(known_labels, args):
 
   for idx, data in enumerate(stream_data):
     label = data[-1]
-    if label not in seen_label:
+    if label not in known_labels:
       stream_data[idx, -1] = 100
 
-  new_data_file = './data/{}_stream_novel.csv'.format(args.dataset)
-  pd.DataFrame(stream_data).to_csv(
-    new_data_file,
-    header=None, index=None)
-
-
+  return stream_data
+  # new_data_file = './data/{}_stream_novel.csv'.format(args.dataset)
+  # pd.DataFrame(stream_data).to_csv(
+  #   new_data_file,
+  #   header=None, index=None)
 
 
 def tsne_plot(features, labels, file_name='tsne'):
@@ -82,33 +76,33 @@ def hausdorff_calculate(features, labels):
   print('Hausdorff distance is {}'.format(dist))
 
 
-def visualization(model, args, device):  
+def visualization(model, data, args, device, filename):  
   
   # == Load stream data ==============================
   # test_data = read_csv(
   #   os.path.join(args.data_path, args.dataset, args.test_file),
   #   sep=',').values
-  test_data = read_csv(
-    './data/{}_stream_novel.csv'.format(args.dataset),
-    sep=',').values 
+  # test_data = read_csv(
+  #   './data/{}_stream_novel.csv'.format(args.dataset),
+  #   sep=',').values 
 
   if args.use_transform:
     _, test_transform = transforms_preparation()
-    test_dataset = SimpleDataset(test_data, args, transforms=test_transform)
+    dataset = SimpleDataset(data, args, transforms=test_transform)
   else:
-    test_dataset = SimpleDataset(test_data, args)
+    dataset = SimpleDataset(data, args)
   
-  print(test_dataset.label_set)
-  print(len(test_dataset))
+  print(dataset.label_set)
+  print(len(dataset))
   sampler = PtSampler(
-    test_dataset,
+    dataset,
     n_way=6,
     n_shot=1000,
     n_query=0,
     n_tasks=1
   )
-  test_dataloader = DataLoader(
-    test_dataset,
+  dataloader = DataLoader(
+    dataset,
     batch_sampler=sampler,
     num_workers=1,
     pin_memory=True,
@@ -139,26 +133,14 @@ def visualization(model, args, device):
   # hausdorff_calculate(features, support_labels)
   
   
-  ### == last plot ============================
-  model.load(os.path.join(args.save, 'model_last.pt'))
-  # model.load(os.path.join(args.save, 'model.pt'))
-  print(model)
-
-
-  print("Load model from {}".format(os.path.join(args.save, 'model_last.pt')))
-
+  ### == Plot ============================
   with torch.no_grad():
-    batch = next(iter(test_dataloader))
+    batch = next(iter(dataloader))
     support_images, support_labels, _, _ = batch
     support_images = support_images.reshape(-1, *support_images.shape[2:])
     support_labels = support_labels.flatten()
     support_images = support_images.to(device)
     support_labels = support_labels.to(device)
-
-    # model.fc3.register_forward_hook(get_activation('fc3'))
-    # output = model(x)
-    # activation['fc3']
-
 
     outputs, features = model.forward(support_images)
     features = features.cpu().detach().numpy()
@@ -171,8 +153,8 @@ def visualization(model, args, device):
     # print(support_labels.shape)
   # features += 1e-12
 
-  # tsne_plot(features, support_labels, file_name='tsne_last')
-  pca_plot(features, support_labels, file_name='pca_last')
+  tsne_plot(features, support_labels, file_name=filename)
+  # pca_plot(features, support_labels, file_name='pca_last')
   hausdorff_calculate(features, support_labels)
 
 
