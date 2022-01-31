@@ -93,7 +93,7 @@ def stream_learn(model,
       
       ### == 2) Preparing retrain data ==========
       new_train_data = memory.select(buffer, return_data=True)
-      print('Retrain data size: {}'.format(new_train_data.shape))
+      print('Retrain data number: {}'.format(new_train_data.shape[0]))
       print('===========================')
 
       ### == 3) Retraining Model ================

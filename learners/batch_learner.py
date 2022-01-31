@@ -106,6 +106,25 @@ class BatchLearner:
 
     return total_loss, total_dist_acc, total_cls_acc
 
+  
+  def calculate_prototypes(self, model, dataloader):
+    model.eval()
+    
+    all_features = []
+    all_labels = []
+    with torch.no_grad():
+      for j, data in enumerate(dataloader):
+        sample, labels = data
+        sample, labels = sample.to(self.device), labels.to(self.device)
+        _, features = model.forward(sample)
+        all_features.append(features)
+        all_labels.append(labels)
+      
+      all_features = torch.cat(all_features, dim=0)
+      all_labels = torch.cat(all_labels, dim=0)
+      self.prototypes = compute_prototypes(all_features, all_labels)
+        
+
   def load(self, pkl_path):
     self.__dict__.update(torch.load(pkl_path))
 

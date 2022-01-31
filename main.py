@@ -85,7 +85,7 @@ parser.add_argument('--buffer_size', type=int, default=1000, help='')
 parser.add_argument('--retrain_epochs', type=int, default=1, help='')
 parser.add_argument('--retrain_meta_iteration', type=int, default=1000, help='')
 parser.add_argument('--known_retrain_interval', type=int, default=5000, help='')
-parser.add_argument('--known_per_class', type=int, default=100, help='')
+parser.add_argument('--known_per_class', type=int, default=100, help='for known buffer')
 
 # incremental learning
 parser.add_argument('--n_tasks', type=int, default=5, help='')
@@ -93,7 +93,7 @@ parser.add_argument('--batch_size', type=int, default=16, help='')
 
 # Network
 parser.add_argument('--dropout', type=float, default=0.2, help='')
-parser.add_argument('--hidden_dims', type=int, default=128, help='')
+# parser.add_argument('--hidden_dims', type=int, default=128, help='')
 
 # memory
 parser.add_argument('--mem_sel_type', type=str, default='fixed_mem', choices=['fixed_mem', 'pre_class'], help='')
@@ -115,7 +115,7 @@ parser.add_argument('--std_coefficient', type=float, default=1.0, help='for Pt d
 parser.add_argument('--update_step', type=int, default=5, help='for Reptile algorithm')
 
 # Loss function
-parser.add_argument("--lambda_1", type=float, default=1.0, help="DCE Coefficient in loss function")
+parser.add_argument("--lambda_1", type=float, default=1.0, help="DCE Coefficien in loss function")
 parser.add_argument("--lambda_2", type=float, default=1.0, help="CE Coefficient in loss function")
 parser.add_argument("--lambda_3", type=float, default=0.001, help="Metric Coefficient in loss function")
 parser.add_argument("--temp_scale", type=float, default=0.2, help="Temperature scale for DCE in loss function",)
@@ -145,7 +145,7 @@ parser.add_argument('--last_mclassifier_path', type=str, default='saved/mclassif
 # Utils path
 parser.add_argument('--memory_path', type=str, default='saved/memory.pt', help='')
 parser.add_argument('--detector_path', type=str, default='saved/detector.pt', help='')
-parser.add_argument('--prototypes_path', type=str, default='saved/prototypes.pt', help='')
+parser.add_argument('--learner_path', type=str, default='saved/learner.pt', help='')
 
 # WideResNet Model
 parser.add_argument('--depth', type=int, default=28, help='Model depth.')
@@ -187,8 +187,10 @@ if args.cuda:
 ## == Set class number =================
 if args.dataset in ['mnist', 'pmnist', 'rmnist', 'fmnist', 'pfmnist', 'rfmnist', 'cifar10']:
   args.n_classes = 10
+  args.hidden_dims = 128
 elif args.dataset in ['cifar100']:
   args.n_classes = 100
+  args.hidden_dims = 160
 
 ## == Save dir =========================
 if not os.path.exists(args.save):
@@ -228,9 +230,9 @@ elif args.algorithm == 'batch':
   criterion = MetricLoss(device, args)
   learner = BatchLearner(criterion, device, args)
 
-try: learner.load(args.prototypes_path)
+try: learner.load(args.learner_path)
 except FileNotFoundError: pass
-else: print("Load Prototypes from {}".format(args.prototypes_path))
+else: print("Load Learner from {}".format(args.learner_path))
 
 # == For stream version ==================
 if args.phase not in [

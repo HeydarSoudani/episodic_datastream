@@ -89,8 +89,8 @@ def train(model,
   print("= ...New last model saved")
 
   # save learner
-  learner.save(os.path.join(args.save, "prototypes.pt"))
-  print("= ..Pts saved")
+  learner.save(os.path.join(args.save, "learner.pt"))
+  print("= ...Learner saved")
 
 
 if __name__ == '__main__':
