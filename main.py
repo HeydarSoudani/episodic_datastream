@@ -117,7 +117,7 @@ parser.add_argument('--update_step', type=int, default=5, help='for Reptile algo
 # Loss function
 parser.add_argument("--lambda_1", type=float, default=1.0, help="DCE Coefficien in loss function")
 parser.add_argument("--lambda_2", type=float, default=1.0, help="CE Coefficient in loss function")
-parser.add_argument("--lambda_3", type=float, default=0.001, help="Metric Coefficient in loss function")
+parser.add_argument("--lambda_3", type=float, default=0.0001, help="Metric Coefficient in loss function")
 parser.add_argument("--temp_scale", type=float, default=0.2, help="Temperature scale for DCE in loss function",)
 
 # Optimizer
@@ -320,7 +320,7 @@ if __name__ == '__main__':
     class_distribution(args)
     
     # # = data in feature-space after training
-    # set_novel_label(args)
+    set_novel_label(base_labels, args)
     # visualization(model, args, device)
 
   else: 
