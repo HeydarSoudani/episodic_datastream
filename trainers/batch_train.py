@@ -97,8 +97,6 @@ def train(model,
   print('Prototypes are calculating ...')
   learner.calculate_prototypes(model, train_loader)
 
-  print(learner.prototypes.keys())
-
   # save learner
   learner.save(os.path.join(args.save, "learner.pt"))
   print("= ...Learner saved")
