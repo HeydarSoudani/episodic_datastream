@@ -44,16 +44,16 @@ class BatchLearner:
     loss = self.criterion(outputs, labels)
     
     ## == Calculate Prototypes ==============
-    unique_label = torch.unique(labels)
+    # unique_label = torch.unique(labels)
 
-    batch_prototypes = compute_prototypes(features, labels)
-    old_prototypes = torch.cat(
-      [self.prototypes[l.item()] for l in unique_label]
-    )
-    new_prototypes = args.beta * old_prototypes + (1 - args.beta) * batch_prototypes
+    # batch_prototypes = compute_prototypes(features, labels)
+    # old_prototypes = torch.cat(
+    #   [self.prototypes[l.item()] for l in unique_label]
+    # )
+    # new_prototypes = args.beta * old_prototypes + (1 - args.beta) * batch_prototypes
     
-    for idx, l in enumerate(unique_label):
-      self.prototypes[l.item()] = new_prototypes[idx].reshape(1, -1).detach()
+    # for idx, l in enumerate(unique_label):
+    #   self.prototypes[l.item()] = new_prototypes[idx].reshape(1, -1).detach()
 
     ## == Backward ==========================
     loss.backward()
@@ -122,7 +122,11 @@ class BatchLearner:
       
       all_features = torch.cat(all_features, dim=0)
       all_labels = torch.cat(all_labels, dim=0)
-      self.prototypes = compute_prototypes(all_features, all_labels)
+      
+      unique_labels = torch.unique(all_labels)
+      pts = compute_prototypes(all_features, all_labels)
+      for idx, l in enumerate(unique_labels):
+        self.prototypes[l.item()] = pts[idx].reshape(1, -1).detach()
         
 
   def load(self, pkl_path):
