@@ -250,8 +250,7 @@ if args.phase not in [
                             selection_type=args.mem_sel_type,
                             total_size=args.mem_total_size,
                             per_class=args.mem_per_class,
-                            novel_acceptance=args.mem_novel_acceptance,
-                            device=device)
+                            novel_acceptance=args.mem_novel_acceptance)
   try: memory.load(args.memory_path)
   except FileNotFoundError: pass
   else: print("Load Memory from {}".format(args.memory_path))
