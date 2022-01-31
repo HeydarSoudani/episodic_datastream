@@ -36,11 +36,10 @@ def train(model,
   known_labels = val_dataset.label_set
 
   # == ====================================
-  optim = Adam(model.parameters(), lr=args.lr)
-  # optim = SGD(model.parameters(),
-  #             lr=args.lr,
-  #             momentum=args.momentum,
-  #             weight_decay=args.wd) #l2 reg
+  # optim = Adam(model.parameters(), lr=args.lr)
+  optim = SGD(model.parameters(),
+              lr=args.lr,
+              momentum=args.momentum) #l2 reg
   # optim = Adam(model.parameters(),
   #               lr=args.lr,
   #               weight_decay=args.wd)
