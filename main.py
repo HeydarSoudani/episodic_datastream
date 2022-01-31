@@ -239,8 +239,7 @@ else: print("Load Learner from {}".format(args.learner_path))
 # == For stream version ==================
 if args.phase not in [
   'batch_incremental_learn',
-  'episodic_incremental_learn',
-  'plot']:
+  'episodic_incremental_learn']:
 
   ## == load train data from file ========
   train_data = read_csv(
