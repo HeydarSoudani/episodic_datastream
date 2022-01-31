@@ -86,7 +86,7 @@ class PtLearner:
         n_query=args.query_num,
         n_classes=args.ways,
       )
-    # loss = self.criterion(outputs, support_labels)
+    
     loss.backward()
     torch.nn.utils.clip_grad_norm_(model.parameters(), args.grad_clip)
     optimizer.step()

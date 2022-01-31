@@ -79,6 +79,7 @@ parser.add_argument('--ways', type=int, default=5, help='')
 parser.add_argument('--shot', type=int, default=5, help='')
 parser.add_argument('--query_num', type=int, default=5, help='')
 parser.add_argument('--buffer_size', type=int, default=1000, help='')
+parser.add_argument('--batch_size', type=int, default=16, help='')
 
 # retrain
 parser.add_argument('--retrain_epochs', type=int, default=1, help='')
@@ -88,7 +89,6 @@ parser.add_argument('--known_per_class', type=int, default=100, help='for known 
 
 # incremental learning
 parser.add_argument('--n_tasks', type=int, default=5, help='')
-parser.add_argument('--batch_size', type=int, default=16, help='')
 
 # Network
 parser.add_argument('--dropout', type=float, default=0.2, help='')
