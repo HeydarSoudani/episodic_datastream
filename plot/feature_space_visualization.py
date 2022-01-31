@@ -16,7 +16,7 @@ from samplers.pt_sampler import PtSampler
 
 def set_novel_label(known_labels, args):
   
-  stream_data = pd.read_csv(
+  stream_data = read_csv(
     os.path.join(args.data_path, args.stream_file),
     sep=',', header=None).values
 
