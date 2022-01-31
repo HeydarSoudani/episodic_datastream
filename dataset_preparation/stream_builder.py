@@ -225,9 +225,10 @@ args = parser.parse_args()
 ## == Apply seed =================
 np.random.seed(args.seed)
 
-## == Add some variables to args
-args.stream_file = '{}_stream.csv'.format(args.dataset)
+# = Add some variables to args =========
 args.data_path = 'data/{}'.format(args.dataset)
+args.train_file = '{}_train.csv'.format(args.dataset)
+args.stream_file = '{}_stream.csv'.format(args.dataset)
 
 
 
@@ -324,12 +325,11 @@ if __name__ == '__main__':
     test_data_seen.extend(test_data_class)
   
   train_data = np.array(train_data) #(6000, 785)
-  np.random.shuffle(train_data)
-  
-  # pd.DataFrame(train_data).to_csv(os.path.join(args.saved, args.train_file),
-  #   header=None,
-  #   index=None
-  # )
+  np.random.shuffle(train_data)  
+  pd.DataFrame(train_data).to_csv(os.path.join(args.saved, args.train_file),
+    header=None,
+    index=None
+  )
 
   # == Preparing test(stream) dataset ================
   test_data_seen = np.array(test_data_seen) #(30000, 785)
@@ -362,14 +362,14 @@ if __name__ == '__main__':
       break
   
   test_data = np.stack(all_temp_data)
-  # pd.DataFrame(test_data).to_csv(os.path.join(args.saved, args.stream_file),
-  #   header=None,
-  #   index=None
-  # )
-
-  dataset = np.concatenate((train_data, test_data), axis=0)
-  pd.DataFrame(dataset).to_csv(
-    os.path.join(args.saved, args.stream_file),
+  pd.DataFrame(test_data).to_csv(os.path.join(args.saved, args.stream_file),
     header=None,
     index=None
   )
+
+  # dataset = np.concatenate((train_data, test_data), axis=0)
+  # pd.DataFrame(dataset).to_csv(
+  #   os.path.join(args.saved, args.stream_file),
+  #   header=None,
+  #   index=None
+  # )
