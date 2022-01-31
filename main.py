@@ -320,7 +320,7 @@ if __name__ == '__main__':
     class_distribution(args)
     
     # # = data in feature-space after training
-    set_novel_label(base_labels, args)
+    # set_novel_label(base_labels, args)
     # visualization(model, args, device)
 
   else: 
