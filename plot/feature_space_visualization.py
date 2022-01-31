@@ -26,10 +26,6 @@ def set_novel_label(known_labels, args):
       stream_data[idx, -1] = 100
 
   return stream_data
-  # new_data_file = './data/{}_stream_novel.csv'.format(args.dataset)
-  # pd.DataFrame(stream_data).to_csv(
-  #   new_data_file,
-  #   header=None, index=None)
 
 
 def tsne_plot(features, labels, file_name='tsne'):
@@ -78,14 +74,6 @@ def hausdorff_calculate(features, labels):
 
 def visualization(model, data, args, device, filename):  
   
-  # == Load stream data ==============================
-  # test_data = read_csv(
-  #   os.path.join(args.data_path, args.dataset, args.test_file),
-  #   sep=',').values
-  # test_data = read_csv(
-  #   './data/{}_stream_novel.csv'.format(args.dataset),
-  #   sep=',').values 
-
   if args.use_transform:
     _, test_transform = transforms_preparation()
     dataset = SimpleDataset(data, args, transforms=test_transform)
@@ -108,30 +96,6 @@ def visualization(model, data, args, device, filename):
     pin_memory=True,
     collate_fn=sampler.episodic_collate_fn,
   )
-  
-  # == init plot =========================== 
-  # model.load(os.path.join(args.save, 'model_after_init.pt'))
-  # print("Load model from {}".format(os.path.join(args.save, 'model_after_init.pt')))
-
-  # with torch.no_grad():
-  #   batch = next(iter(test_dataloader))
-  #   support_images, support_labels, _, _ = batch
-  #   support_images = support_images.reshape(-1, *support_images.shape[2:])
-  #   support_labels = support_labels.flatten()
-  #   support_images = support_images.to(device)
-  #   support_labels = support_labels.to(device)
-
-  #   outputs, features = model.forward(support_images)
-  #   features = features.cpu().detach().numpy()
-  #   support_labels = support_labels.cpu().detach().numpy()
-
-  # print(features.shape)
-  # print(support_labels.shape)
-
-  # tsne_plot(features, support_labels, file_name='tsne_init')
-  # # pca_plot(features, support_labels, file_name='pca_init')
-  # hausdorff_calculate(features, support_labels)
-  
   
   ### == Plot ============================
   with torch.no_grad():

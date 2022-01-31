@@ -36,13 +36,13 @@ def train(model,
   known_labels = val_dataset.label_set
 
   # == ====================================
-  optim = Adam(model.parameters(), lr=args.lr)
+  # optim = Adam(model.parameters(), lr=args.lr)
   # optim = SGD(model.parameters(),
   #             lr=args.lr,
   #             momentum=args.momentum)
-  # optim = Adam(model.parameters(),
-  #               lr=args.lr,
-  #               weight_decay=args.wd)
+  optim = Adam(model.parameters(),
+                lr=args.lr,
+                weight_decay=args.wd)
   scheduler = StepLR(optim, step_size=args.step_size, gamma=args.gamma)
   # scheduler = OneCycleLR(optim, 0.01,
   #                       epochs=args.epochs, 
