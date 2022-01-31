@@ -13,8 +13,7 @@ def init_learn(model,
                memory,
                detector,
                train_data,
-               args,
-               device):
+               args, device):
 
   ### == train data ========================
   print('train_data: {}'.format(train_data.shape))  

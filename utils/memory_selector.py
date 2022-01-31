@@ -286,10 +286,14 @@ def euclidean_dist(x, y):
 
 class OperationalMemory():
   def __init__(self,
-                per_class,
-                novel_acceptance,
                 device,
+                selection_type='fixed_mem',   # ['fixed_mem', 'pre_class']
+                total_size=1000,
+                per_class=100,
+                novel_acceptance=150,
                 selection_method='rand'):
+    self.selection_type = selection_type
+    self.total_size = total_size
     self.per_class = per_class
     self.novel_acceptance = novel_acceptance
     self.device = device
@@ -308,12 +312,15 @@ class OperationalMemory():
     labels = torch.tensor([item[1] for item in data])
     seen_labels = torch.unique(labels)
 
+    ### === Seperate new data =====================
     new_class_data = {
       l.item(): samples[(labels == l).nonzero(as_tuple=True)[0]]
       for l in seen_labels
     }
 
+    ### == All data together ======================
     if self.class_data != None:
+      # == if not first time
       # should add buffer data
       keys = set(torch.tensor(list(self.class_data.keys())).tolist() + \
       torch.tensor(list(new_class_data.keys())).tolist())
@@ -327,16 +334,33 @@ class OperationalMemory():
         else:
           self.class_data[key] = new_class_data[key]
     else:
+      # if first time
       self.class_data = new_class_data  
 
-    if self.selection_method == 'rand':
-      self.rand_selection()
-    # elif self.selection_method == 'soft_rand':
-    #   self.soft_rand_selection()
     
+    ### == Random selection ========================
+    if self.selection_method == 'rand':
+      if self.selection_type == 'fixed_mem':
+        unique_labels = list(self.class_data.keys())
+        class_size = int(self.total_size / len(unique_labels))
+
+        for label, samples in self.class_data.items():
+          n = samples.shape[0]
+          if n >= class_size:
+            idxs = np.random.choice(range(n), size=class_size, replace=False)
+            self.class_data[label] = samples[idxs]
+          else:
+            self.class_data[label] = samples
+
+      elif self.selection_type == 'pre_class':
+        self.rand_selection()
+
+    # elif self.selection_method == 'soft_rand':
+    #   self.soft_rand_selection() 
     # for label, features in self.class_data.items():
     #   print('{} -> {}'.format(label, features.shape))
-
+    
+    ### == Returning data in appropiate form ========
     if return_data:
       returned_data_list = []
       for label, samples in self.class_data.items():
@@ -350,7 +374,6 @@ class OperationalMemory():
       returned_data = torch.cat(returned_data_list, 0)
       returned_data = returned_data.detach().cpu().numpy()
       np.random.shuffle(returned_data)
-      
       return returned_data
 
   def rand_selection(self):

@@ -90,18 +90,17 @@ parser.add_argument('--known_per_class', type=int, default=100, help='')
 # incremental learning
 parser.add_argument('--n_tasks', type=int, default=5, help='')
 parser.add_argument('--batch_size', type=int, default=16, help='')
-parser.add_argument('--mem_sel_type', type=str, default='fixed_mem', choices=['fixed_mem', 'pre_class'], help='')
-parser.add_argument('--mem_total_size', type=int, default=1000, help='')
-parser.add_argument('--mem_per_class', type=int, default=100, help='')
-parser.add_argument('--mem_sel_method', type=str, default='rand', choices=['rand', 'soft_rand'], help='')
 
 # Network
 parser.add_argument('--dropout', type=float, default=0.2, help='')
 parser.add_argument('--hidden_dims', type=int, default=128, help='')
 
 # memory
-parser.add_argument('--memory_per_class', type=int, default=250, help='')
-parser.add_argument('--memory_novel_acceptance', type=int, default=150, help='')
+parser.add_argument('--mem_sel_type', type=str, default='fixed_mem', choices=['fixed_mem', 'pre_class'], help='')
+parser.add_argument('--mem_total_size', type=int, default=2000, help='')
+parser.add_argument('--mem_per_class', type=int, default=100, help='')
+parser.add_argument('--mem_sel_method', type=str, default='rand', choices=['rand', 'soft_rand'], help='')
+parser.add_argument('--mem_novel_acceptance', type=int, default=150, help='')
 
 # Transform
 parser.add_argument('--use_transform', action='store_true')
@@ -247,8 +246,11 @@ if args.phase not in [
   base_labels = SimpleDataset(train_data, args).label_set
 
   ## == Operational Memory Definition ====
-  memory = OperationalMemory(per_class=args.memory_per_class,
-                            novel_acceptance=args.memory_novel_acceptance,
+  memory = OperationalMemory(device,
+                            selection_type=args.mem_sel_type,
+                            total_size=args.mem_total_size,
+                            per_class=args.mem_per_class,
+                            novel_acceptance=args.mem_novel_acceptance,
                             device=device)
   try: memory.load(args.memory_path)
   except FileNotFoundError: pass
