@@ -16,11 +16,17 @@ S:39 | 0.8169,  0.9097,  0.0135,  0.1818 | 0.7929
 === Contrastive ===============
      | CwCA   | OwCA  | M_new  | F_new  | all_cls
 S:01 | 
-S:05 | 
-S:12 | 
+S:05 | *
+S:12 | *
 S:39 | 
 
 
+=== TripletMargin =============
+     | CwCA   | OwCA  | M_new  | F_new  | all_cls
+S:01 | 
+S:05 | *
+S:12 | *
+S:39 | 
 
 
 
