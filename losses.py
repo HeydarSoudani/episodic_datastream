@@ -123,11 +123,9 @@ class MetricLoss(nn.Module):
     self.lambda_1 = args.lambda_1 # Metric loss coef
     self.lambda_2 = args.lambda_2 # CE coef
 
-    
+    self.miner = miners.AngularMiner(angle=20)
     self.metric = losses.NTXentLoss(temperature=0.07)
     # self.metric = losses.ContrastiveLoss(pos_margin=0, neg_margin=1)
-    
-    self.miner = miners.SomeMiner()
     self.ce = torch.nn.CrossEntropyLoss()
     
   def forward(self, logits, labels):
