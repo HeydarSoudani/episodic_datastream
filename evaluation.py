@@ -238,13 +238,20 @@ def evaluate(results, known_labels, k=(1, 5,), eps=1e-8):
     ow_results['predicted_label']
   )
 
+  # == Accuracy on new classes =====
+  unknown_results = results[np.isin(results['true_label'], list(known_labels), invert=True)]
+  NCA = accuracy_score(
+    unknown_results['true_label'],
+    unknown_results['predicted_label']
+  )
+
   # == All-acc =====================
   # ACA = accuracy_score(
   #   results['true_label'],
   #   results['predicted_label']
   # )
 
-  return M_new, F_new, CwCA, OwCA, cm
+  return M_new, F_new, CwCA, OwCA, NCA, cm
 
 
 

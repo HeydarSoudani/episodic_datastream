@@ -86,9 +86,9 @@ def stream_learn(model,
       ### == 1) evaluation ======================
       sample_num = i-last_idx
       
-      M_new, F_new, CwCA, OwCA, cm = evaluate(detection_results, detector._known_labels)
-      print("[On %5d samples]: %7.4f, %7.4f, %7.4f, %7.4f"%
-        (sample_num, CwCA, OwCA, M_new, F_new))
+      M_new, F_new, CwCA, OwCA, NCA, cm = evaluate(detection_results, detector._known_labels)
+      print("[On %5d samples]: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f"%
+        (sample_num, CwCA, OwCA, NCA, M_new, F_new))
       print("confusion matrix: \n%s"% cm)
       
       ### == 2) Preparing retrain data ==========
@@ -139,8 +139,8 @@ def stream_learn(model,
         known_buffer = {i:[] for i in detector._known_labels}
       
     
-      f.write("[On %5d samples]: %7.4f, %7.4f, %7.4f, %7.4f \n"%
-        (sample_num, CwCA, OwCA, M_new, F_new))
+      f.write("[On %5d samples]: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"%
+        (sample_num, CwCA, OwCA, NCA, M_new, F_new))
       detection_results.clear()
       last_idx = i
       
@@ -149,12 +149,12 @@ def stream_learn(model,
   
   ### == Last evaluation ========================
   sample_num = i-last_idx
-  M_new, F_new, CwCA, OwCA, cm = evaluate(detection_results, detector._known_labels)
-  print("[On %5d samples]: %7.4f, %7.4f, %7.4f, %7.4f"%
-    (sample_num, CwCA, OwCA, M_new, F_new))
+  M_new, F_new, CwCA, OwCA, NCA, cm = evaluate(detection_results, detector._known_labels)
+  print("[On %5d samples]: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f"%
+    (sample_num, CwCA, OwCA, NCA, M_new, F_new))
   print("confusion matrix: \n%s"% cm)
-  f.write("[On %5d samples]: %7.4f, %7.4f, %7.4f, %7.4f \n"%
-    (sample_num, CwCA, OwCA, M_new, F_new))
+  f.write("[On %5d samples]: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"%
+    (sample_num, CwCA, OwCA, NCA, M_new, F_new))
   
   f.close()
   
