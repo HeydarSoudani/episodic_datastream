@@ -130,6 +130,8 @@ class MetricLoss(nn.Module):
     
   def forward(self, logits, labels):
     cls_loss = self.ce(logits, labels.long())
+    
+    
     metric_loss = self.metric(logits, labels.long())
 
     return self.lambda_1 * metric_loss +\
