@@ -116,8 +116,6 @@ class PairwiseLoss(nn.Module):
     return (1 + (self.beta * z).exp()).log() / self.beta if z < 10.0 else z
     # return (1 + (self.beta * z).exp()).log() / self.beta
 
-
-
 class MetricLoss(nn.Module):
   def __init__(self, device, args):
     super().__init__()
@@ -125,13 +123,21 @@ class MetricLoss(nn.Module):
     self.lambda_1 = args.lambda_1 # Metric loss coef
     self.lambda_2 = args.lambda_2 # CE coef
 
-    self.metric = losses.NTXentLoss(temperature=0.07)
+    
+    # self.metric = losses.NTXentLoss(temperature=0.07)
+    self.metric = losses.ContrastiveLoss(pos_margin=0, neg_margin=1)
+    
+    self.miner = miners.SomeMiner()
     self.ce = torch.nn.CrossEntropyLoss()
     
   def forward(self, logits, labels):
     cls_loss = self.ce(logits, labels.long())
     
-    
+    # loss with miner
+    # miner_output = self.miner(logits, labels.long())
+    # metric_loss = self.metric(logits, labels.long(), miner_output)
+
+    # loss without minier
     metric_loss = self.metric(logits, labels.long())
 
     return self.lambda_1 * metric_loss +\
