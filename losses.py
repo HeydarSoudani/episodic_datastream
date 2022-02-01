@@ -124,8 +124,8 @@ class MetricLoss(nn.Module):
     self.lambda_2 = args.lambda_2 # CE coef
 
     
-    # self.metric = losses.NTXentLoss(temperature=0.07)
-    self.metric = losses.ContrastiveLoss(pos_margin=0, neg_margin=1)
+    self.metric = losses.NTXentLoss(temperature=0.07)
+    # self.metric = losses.ContrastiveLoss(pos_margin=0, neg_margin=1)
     
     self.miner = miners.SomeMiner()
     self.ce = torch.nn.CrossEntropyLoss()
