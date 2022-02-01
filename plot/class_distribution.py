@@ -26,6 +26,7 @@ def class_distribution(args):
   plt.ylabel('class labels')
 
   plt.yticks(np.arange(0, 10, 1))
+  plt.savefig('class_dist.png')
   plt.show()
 
 

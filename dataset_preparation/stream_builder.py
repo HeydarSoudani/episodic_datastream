@@ -15,7 +15,7 @@ if __name__ == '__main__':
   parser.add_argument('--spc', type=int, default=1200, help='samples per class for initial dataset')
   parser.add_argument('--dataset', type=str, default='mnist', help='') #[mnist, fmnist, cifar10]
   parser.add_argument('--saved', type=str, default='./data/', help='')
-  parser.add_argument('--seed', type=int, default=1, help='')  # seed=1 for regular novel class selection
+  parser.add_argument('--seed', type=int, default=5, help='')  # seed=1 for regular novel class selection
   args = parser.parse_args()
 
   # = Add some variables to args =========
