@@ -48,8 +48,8 @@ def zeroshot_test(model,
         print("[stream %5d]: %d, %2d, %7.4f, %5s, %5s"%
           (i+1, label, predicted_label, prob, real_novelty, detected_novelty))
     
-    M_new, F_new, CwCA, OwCA, cm = evaluate(detection_results, detector._known_labels)
-    print("Evaluation: %7.4f, %7.4f, %7.4f, %7.4f"%(CwCA, OwCA, M_new, F_new))
+    M_new, F_new, CwCA, OwCA, NCA, cm = evaluate(detection_results, detector._known_labels)
+    print("Evaluation: %7.4f, %7.4f, %7.4f, %7.4f"%(CwCA, OwCA, NCA, M_new, F_new))
     print("confusion matrix: \n%s"% cm)
     
 
