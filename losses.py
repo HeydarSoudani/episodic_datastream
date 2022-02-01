@@ -72,27 +72,6 @@ class DCELoss(nn.Module):
     loss_val = -log_p_y.gather(2, target_inds).mean()
     return loss_val
 
-class TotalLoss(nn.Module):
-  def __init__(self, device, args):
-    super().__init__()
-    self.args = args
-    self.lambda_1 = args.lambda_1
-    self.lambda_2 = args.lambda_2
-    self.lambda_3 = args.lambda_3
-    
-    self.dce = DCELoss(device, gamma=args.temp_scale)
-    self.ce = torch.nn.CrossEntropyLoss()
-    self.metric = losses.NTXentLoss(temperature=0.07)
-
-  def forward(self, features, outputs, labels, prototypes, n_query, n_classes):
-    dce_loss = self.dce(features, labels, prototypes, n_query, n_classes)
-    cls_loss = self.ce(outputs, labels.long())
-    metric_loss = self.metric(outputs, labels.long())
-
-    return self.lambda_1 * dce_loss +\
-           self.lambda_2 * cls_loss +\
-           self.lambda_3 * metric_loss
-
 class PairwiseLoss(nn.Module):
   def __init__(self, tao=1.0, b=1.0, beta=0.1):
     super().__init__()
@@ -115,6 +94,30 @@ class PairwiseLoss(nn.Module):
   def _g(self, z):
     return (1 + (self.beta * z).exp()).log() / self.beta if z < 10.0 else z
     # return (1 + (self.beta * z).exp()).log() / self.beta
+
+class TotalLoss(nn.Module):
+  def __init__(self, device, args):
+    super().__init__()
+    self.args = args
+    self.lambda_1 = args.lambda_1
+    self.lambda_2 = args.lambda_2
+    self.lambda_3 = args.lambda_3
+    
+    self.dce = DCELoss(device, gamma=args.temp_scale)
+    self.ce = torch.nn.CrossEntropyLoss()
+    self.metric = losses.NTXentLoss(temperature=0.07)
+    # self.metric = losses.ContrastiveLoss(pos_margin=0, neg_margin=1)
+    # self.metric = losses.TripletMarginLoss(margin=0.05)
+
+  def forward(self, features, outputs, labels, prototypes, n_query, n_classes):
+    dce_loss = self.dce(features, labels, prototypes, n_query, n_classes)
+    cls_loss = self.ce(outputs, labels.long())
+    metric_loss = self.metric(outputs, labels.long())
+
+    return self.lambda_1 * dce_loss +\
+           self.lambda_2 * cls_loss +\
+           self.lambda_3 * metric_loss
+
 
 class MetricLoss(nn.Module):
   def __init__(self, device, args):
