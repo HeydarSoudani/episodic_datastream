@@ -3,7 +3,7 @@ from torch.optim.lr_scheduler import StepLR, OneCycleLR
 import os
 import time
 
-from utils.preparation import dataloader_preparation
+from utils.preparation import dataloader_preparation, transforms_preparation
 
 
 def train(model,
@@ -89,8 +89,15 @@ def train(model,
   print("= ...New last model saved")
 
   # Claculate Pts.
+  if args.use_transform:
+    train_transform, _ = transforms_preparation()
+    train_dataset = SimpleDataset(train_data, args, transforms=train_transform)
+  else:
+    train_dataset = SimpleDataset(train_data, args)
+  train_loader = DataLoader(dataset=train_dataset, batch_size=8, shuffle=False)
+
   print('Prototypes are calculating ...')
-  learner.calculate_prototypes(model, train_dataloader)
+  learner.calculate_prototypes(model, train_loader)
 
   # save learner
   learner.save(os.path.join(args.save, "learner.pt"))

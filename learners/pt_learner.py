@@ -167,7 +167,6 @@ class PtLearner:
 
       return total_loss, total_dist_acc, total_cls_acc
 
-
   def calculate_prototypes(self, model, dataloader):
     model.eval()
     
@@ -186,6 +185,7 @@ class PtLearner:
       
       unique_labels = torch.unique(all_labels)
       pts = compute_prototypes(all_features, all_labels)
+      
       for idx, l in enumerate(unique_labels):
         self.prototypes[l.item()] = pts[idx].reshape(1, -1).detach()
 
