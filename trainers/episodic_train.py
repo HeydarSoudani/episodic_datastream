@@ -88,6 +88,10 @@ def train(model,
   model.save(os.path.join(args.save, "model_last.pt"))
   print("= ...New last model saved")
 
+  # Claculate Pts.
+  print('Prototypes are calculating ...')
+  learner.calculate_prototypes(model, train_dataloader)
+
   # save learner
   learner.save(os.path.join(args.save, "learner.pt"))
   print("= ...Learner saved")

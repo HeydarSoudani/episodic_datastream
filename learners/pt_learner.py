@@ -57,42 +57,53 @@ class PtLearner:
     episode_prototypes = compute_prototypes(
       features[:support_len], support_labels
     )
-    old_prototypes = torch.cat(
-      [self.prototypes[l.item()] for l in unique_label]
+    
+    loss = self.criterion(
+      features[support_len:],
+      outputs[support_len:],
+      query_labels,
+      episode_prototypes,
+      n_query=args.query_num,
+      n_classes=args.ways,
     )
+    
+        
+    # old_prototypes = torch.cat(
+    #   [self.prototypes[l.item()] for l in unique_label]
+    # )
 
-    if args.beta_type == 'evolving':
-      beta = args.beta * iteration / args.meta_iteration
-      new_prototypes = beta * old_prototypes + (1 - beta) * episode_prototypes
-      loss = self.criterion(
-        features[support_len:],
-        outputs[support_len:],
-        query_labels,
-        # new_prototypes,
-        episode_prototypes,
-        n_query=args.query_num,
-        n_classes=args.ways,
-      )
+    # if args.beta_type == 'evolving':
+    #   beta = args.beta * iteration / args.meta_iteration
+    #   new_prototypes = beta * old_prototypes + (1 - beta) * episode_prototypes
+    #   loss = self.criterion(
+    #     features[support_len:],
+    #     outputs[support_len:],
+    #     query_labels,
+    #     # new_prototypes,
+    #     episode_prototypes,
+    #     n_query=args.query_num,
+    #     n_classes=args.ways,
+    #   )
 
-    elif args.beta_type == 'fixed':
-      beta = args.beta
-      new_prototypes = beta * old_prototypes + (1 - beta) * episode_prototypes
-      loss = self.criterion(
-        features[support_len:],
-        outputs[support_len:],
-        query_labels,
-        new_prototypes,
-        # episode_prototypes,
-        n_query=args.query_num,
-        n_classes=args.ways,
-      )
+    # elif args.beta_type == 'fixed':
+    #   beta = args.beta
+    #   new_prototypes = beta * old_prototypes + (1 - beta) * episode_prototypes
+    #   loss = self.criterion(
+    #     features[support_len:],
+    #     outputs[support_len:],
+    #     query_labels,
+    #     new_prototypes,
+    #     # episode_prototypes,
+    #     n_query=args.query_num,
+    #     n_classes=args.ways,
+    #   )
     
     loss.backward()
     torch.nn.utils.clip_grad_norm_(model.parameters(), args.grad_clip)
     optimizer.step()
 
-    for idx, l in enumerate(unique_label):
-      self.prototypes[l.item()] = new_prototypes[idx].reshape(1, -1).detach()
+    # for idx, l in enumerate(unique_label):
+    #   self.prototypes[l.item()] = new_prototypes[idx].reshape(1, -1).detach()
     
     return loss.detach().item()
 
@@ -155,6 +166,29 @@ class PtLearner:
       total_cls_acc = correct_cls_acc / total_cls_acc  
 
       return total_loss, total_dist_acc, total_cls_acc
+
+
+  def calculate_prototypes(self, model, dataloader):
+    model.eval()
+    
+    all_features = []
+    all_labels = []
+    with torch.no_grad():
+      for j, data in enumerate(dataloader):
+        sample, labels = data
+        sample, labels = sample.to(self.device), labels.to(self.device)
+        _, features = model.forward(sample)
+        all_features.append(features)
+        all_labels.append(labels)
+      
+      all_features = torch.cat(all_features, dim=0)
+      all_labels = torch.cat(all_labels, dim=0)
+      
+      unique_labels = torch.unique(all_labels)
+      pts = compute_prototypes(all_features, all_labels)
+      for idx, l in enumerate(unique_labels):
+        self.prototypes[l.item()] = pts[idx].reshape(1, -1).detach()
+
 
   def load(self, pkl_path):
     self.__dict__.update(torch.load(pkl_path))
