@@ -22,7 +22,7 @@ S:39 | 0.8432,  0.9086,  0.0371,  0.1555 | 0.8188
 === Episodic+NTXent ===============
      | CwCA   | OwCA | M_new  | F_new  | all_cls
 S:01 | 
-
+S:05 | 
 
 
 
