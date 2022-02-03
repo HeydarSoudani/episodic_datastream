@@ -6,7 +6,6 @@ import pandas as pd
 
 from trainers.episodic_train import train as episodic_train
 from trainers.batch_train import train as batch_train
-from trainers.batch_train import test
 from datasets.dataset import SimpleDataset
 from utils.preparation import transforms_preparation
 
