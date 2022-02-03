@@ -12,10 +12,10 @@ S:39 |
 
 === Contrastive ===============
      | CwCA   | OwCA  | M_new  | F_new  | all_cls
-S:01 |
-S:05 |     
-S:12 |
-S:39 |
+S:01 | *
+S:05 | *   
+S:12 | *
+S:39 | *
 
 === TripletMargin =============
      | CwCA   | OwCA  | M_new  | F_new  | all_cls
