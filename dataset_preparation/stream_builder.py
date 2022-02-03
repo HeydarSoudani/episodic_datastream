@@ -45,13 +45,13 @@ if __name__ == '__main__':
   ## == Add novel points params ==========
   if args.dataset in ['mnist']:
     start_point = 3
-    last_point = 30
+    last_point = 25
   elif args.dataset in ['fmnist']:
     start_point = 3
     last_point = 30  
   elif args.dataset in ['cifar10']:
     start_point = 3
-    last_point = 27
+    last_point = 25
   elif args.dataset in ['cifar100']:
     start_point = 1
     last_point = 1
@@ -199,6 +199,7 @@ if __name__ == '__main__':
 
     # check if chunk_data < chunk_size
     if chunk_data.shape[0] < chunk_size:
+      print(all_class_to_select)
       needed_data = chunk_size - chunk_data.shape[0]
       helper_class = all_class_to_select[-1]
 
