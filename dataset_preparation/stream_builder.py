@@ -43,13 +43,15 @@ if __name__ == '__main__':
     args.spc = 100
 
   ## == Add novel points params ==========
-  start_point = 3
   if args.dataset in ['mnist', 'fmnist']:
+    start_point = 3
     last_point = 30
   elif args.dataset in ['cifar10', 'cifar100']:
+    start_point = 3
     last_point = 25
   elif args.dataset in ['cifar100']:
-    last_point = 44
+    start_point = 1
+    last_point = 54
 
   ## ========================================
   # == Get MNIST dataset ====================
@@ -152,7 +154,10 @@ if __name__ == '__main__':
   n_chunk = int(n_data / chunk_size) 
   n_chunk_stream = n_chunk - 6
   chunks = []
-  add_new_class_points = np.random.choice(np.arange(start_point, n_chunk_stream-last_point), len(unseen_class), replace=False)
+  add_new_class_points = np.random.choice(
+    np.arange(start_point, n_chunk_stream-last_point), len(unseen_class),
+    replace=False
+  )
   print('Novel class points: {}'.format(add_new_class_points))
   for i_chunk in range(n_chunk_stream):
     chunk_data = []
