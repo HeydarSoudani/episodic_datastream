@@ -158,7 +158,7 @@ def increm_learn(model,
 
   print(temp)
 
-  forgetting_cls = torch.tensor([torch.mean(temp[i+1:, i])  for i in range(args.n_tasks-1)])
+  forgetting_cls = torch.tensor([torch.mean(temp[i+1:, i]) for i in range(args.n_tasks-1)])
 
   print(forgetting_cls)
 
@@ -168,12 +168,11 @@ def increm_learn(model,
 
 
 
-
   acc_dist_best = torch.max(all_tasks_acc_dist, 0).values
   temp = acc_dist_best - all_tasks_acc_dist
-  forgetting_dist = torch.tensor([torch.mean(temp[:, i:])  for i in range(args.n_tasks)])
-  mean_forgetting_dist = torch.mean(forgetting_dist[:-1])
-  std_forgetting_dist = torch.std(forgetting_dist[:-1])
+  forgetting_dist = torch.tensor([torch.mean(temp[i+1:, i]) for i in range(args.n_tasks-1)])
+  mean_forgetting_dist = torch.mean(forgetting_dist)
+  std_forgetting_dist = torch.std(forgetting_dist)
   print('dist forgetting: {:.4f} ± {:.4f}'.format(mean_forgetting_dist, std_forgetting_dist))
 
 
