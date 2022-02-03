@@ -136,8 +136,8 @@ def increm_learn(model,
       tasks_acc_dist[prev_task] = acc_dis
       tasks_acc_cls[prev_task] = acc_cls
     
-    all_tasks_acc_dist.append(tasks_acc_dist)
-    all_tasks_acc_cls.append(tasks_acc_cls)
+    all_tasks_acc_dist.append(torch.tensor(tasks_acc_dist))
+    all_tasks_acc_cls.append(torch.tensor(tasks_acc_cls))
 
     mean_acc_dist = np.mean(tasks_acc_dist[:task+1])
     mean_acc_cls = np.mean(tasks_acc_cls[:task+1])

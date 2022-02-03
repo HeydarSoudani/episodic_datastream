@@ -207,20 +207,6 @@ elif args.dataset == 'cifar100':
 else:
   model = Conv_4(args)
 
-## == Load model if exist ==============
-if args.phase not in ['init_learn']:
-  if args.which_model == 'best':
-    try: model.load(args.best_model_path)
-    except FileNotFoundError: pass
-    else:
-      print("Load model from {}".format(args.best_model_path))
-  elif args.which_model == 'last':
-    try: model.load(args.last_model_path)
-    except FileNotFoundError: pass
-    else:
-      print("Load model from {}".format(args.last_model_path))
-model.to(device)
-
 ## == Loss & Learner Definition =========
 if args.algorithm == 'prototype':
   criterion = TotalLoss(device, args)
@@ -232,9 +218,25 @@ elif args.algorithm == 'batch':
   criterion = MetricLoss(device, args)
   learner = BatchLearner(criterion, device, args)
 
-try: learner.load(args.learner_path)
-except FileNotFoundError: pass
-else: print("Load Learner from {}".format(args.learner_path))
+## == Load model & learner if exist ==============
+if args.phase not in ['init_learn', 'incremental_learn']:
+  
+  if args.which_model == 'best':
+    try: model.load(args.best_model_path)
+    except FileNotFoundError: pass
+    else:
+      print("Load model from {}".format(args.best_model_path))
+  elif args.which_model == 'last':
+    try: model.load(args.last_model_path)
+    except FileNotFoundError: pass
+    else:
+      print("Load model from {}".format(args.last_model_path))
+
+  try: learner.load(args.learner_path)
+  except FileNotFoundError: pass
+  else: print("Load Learner from {}".format(args.learner_path))
+
+model.to(device)
 
 # == For stream version ==================
 if args.phase != 'incremental_learn':
