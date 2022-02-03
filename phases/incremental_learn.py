@@ -1,3 +1,4 @@
+import torch
 from torch.utils.data import DataLoader
 import os
 import numpy as np
@@ -14,6 +15,9 @@ def increm_learn(model,
                   memory,
                   args, device):
 
+  all_tasks_acc_dist = []
+  all_tasks_acc_cls = []
+  
   for task in range(args.n_tasks):  
     ### === Task data loading =====================
     task_data = pd.read_csv(
@@ -132,6 +136,9 @@ def increm_learn(model,
       tasks_acc_dist[prev_task] = acc_dis
       tasks_acc_cls[prev_task] = acc_cls
     
+    all_tasks_acc_dist.append(tasks_acc_dist)
+    all_tasks_acc_cls.append(tasks_acc_cls)
+
     mean_acc_dist = np.mean(tasks_acc_dist[:task+1])
     mean_acc_cls = np.mean(tasks_acc_cls[:task+1])
     print("Dist acc.: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(tasks_acc_dist))
@@ -140,6 +147,23 @@ def increm_learn(model,
     # print("Cls  acc.: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(tasks_acc_cls))
     print('Mean -> Dist: {}, Cls: {}'.format(round(mean_acc_dist, 3), round(mean_acc_cls, 3)))
 
+  ### == Claculate forgetting =================
+  all_tasks_acc_cls = torch.cat(all_tasks_acc_cls, dim=0)
+  all_tasks_acc_dist = torch.cat(all_tasks_acc_dist, dim=0)
+
+  acc_cls_best = torch.max(all_tasks_acc_cls, 0).values
+  temp = acc_cls_best - all_tasks_acc_cls
+  forgetting_cls = torch.tensor([torch.mean(temp[:, i:])  for i in range(args.n_tasks)])
+  mean_forgetting_cls = torch.mean(forgetting_cls)
+  std_forgetting_cls = torch.std(forgetting_cls)
+  print('cls forgetting: {}±{}'.format(mean_forgetting_cls, std_forgetting_cls))
+
+  acc_dist_best = torch.max(all_tasks_acc_dist, 0).values
+  temp = acc_dist_best - all_tasks_acc_dist
+  forgetting_dist = torch.tensor([torch.mean(temp[:, i:])  for i in range(args.n_tasks)])
+  mean_forgetting_dist = torch.mean(forgetting_dist)
+  std_forgetting_dist = torch.std(forgetting_dist)
+  print('dist forgetting: {}±{}'.format(mean_forgetting_dist, std_forgetting_dist))
 
 
 # def batch_increm_learn(model,
