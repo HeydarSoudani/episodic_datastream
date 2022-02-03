@@ -48,6 +48,8 @@ if __name__ == '__main__':
     last_point = 30
   elif args.dataset in ['cifar10', 'cifar100']:
     last_point = 25
+  elif args.dataset in ['cifar100']:
+    last_point = 44
 
   ## ========================================
   # == Get MNIST dataset ====================
