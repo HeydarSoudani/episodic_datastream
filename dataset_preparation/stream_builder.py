@@ -155,6 +155,7 @@ if __name__ == '__main__':
   n_chunk_stream = n_chunk - 5
   chunks = []
   print(n_chunk_stream)
+  print(len(np.arange(start_point, n_chunk_stream-last_point)))
   print(len(unseen_class))
   add_new_class_points = np.random.choice(
     np.arange(start_point, n_chunk_stream-last_point), len(unseen_class),
