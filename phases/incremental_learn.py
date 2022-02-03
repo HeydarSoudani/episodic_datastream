@@ -158,7 +158,7 @@ def increm_learn(model,
 
   print(temp)
 
-  forgetting_cls = torch.tensor([torch.mean(temp[:, i:])  for i in range(args.n_tasks)])
+  forgetting_cls = torch.tensor([torch.mean(temp[:, i+1:])  for i in range(args.n_tasks-1)])
 
   print(forgetting_cls)
 
