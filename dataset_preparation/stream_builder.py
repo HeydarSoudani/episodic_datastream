@@ -152,8 +152,9 @@ if __name__ == '__main__':
   all_class_to_select = seen_class.tolist()
   chunk_size = 1000
   n_chunk = int(n_data / chunk_size) 
-  n_chunk_stream = n_chunk - 6
+  n_chunk_stream = n_chunk - 5
   chunks = []
+  print(n_chunk_stream)
   add_new_class_points = np.random.choice(
     np.arange(start_point, n_chunk_stream-last_point), len(unseen_class),
     replace=False
