@@ -148,8 +148,8 @@ def increm_learn(model,
     print('Mean -> Dist: {}, Cls: {}'.format(round(mean_acc_dist, 3), round(mean_acc_cls, 3)))
 
   ### == Claculate forgetting =================
-  all_tasks_acc_cls = torch.cat(all_tasks_acc_cls, dim=0)
-  all_tasks_acc_dist = torch.cat(all_tasks_acc_dist, dim=0)
+  all_tasks_acc_cls = torch.stack(all_tasks_acc_cls)
+  all_tasks_acc_dist = torch.stack(all_tasks_acc_dist)
 
   print(all_tasks_acc_cls.shape)
   print(all_tasks_acc_dist.shape)
