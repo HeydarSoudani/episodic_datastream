@@ -136,4 +136,11 @@ class Resnet50(nn.Module):
         features = torch.relu(self.fc1(x))
         out = self.fc2(self.dp2(features))
         return out, features
+    
+    def save(self, path):
+        torch.save(self.state_dict(), path)
+
+    def load(self, path):
+        state_dict = torch.load(path)
+        self.load_state_dict(state_dict)
 
