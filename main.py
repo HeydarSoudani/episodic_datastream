@@ -19,7 +19,7 @@ from losses import TotalLoss, MetricLoss
 from phases.init_learn import init_learn
 from phases.zeroshot_test import zeroshot_test
 from phases.stream_learn import stream_learn
-# from phases.incremental_learn import batch_increm_learn, episodic_increm_learn
+from phases.incremental_learn import increm_learn
 
 from plot.class_distribution import class_distribution
 from plot.feature_space_visualization import set_novel_label, visualization
@@ -238,9 +238,7 @@ except FileNotFoundError: pass
 else: print("Load Learner from {}".format(args.learner_path))
 
 # == For stream version ==================
-if args.phase not in [
-  'batch_incremental_learn',
-  'episodic_incremental_learn']:
+if args.phase != 'incremental_learn':
 
   ## == load train data from file ========
   train_data = read_csv(
@@ -292,28 +290,17 @@ if __name__ == '__main__':
                   args, device,
                   known_labels=base_labels)
   
-  # ## == incremental learning ============
-  # elif args.phase == 'batch_incremental_learn':
-  #   memory = IncrementalMemory(
-  #             selection_type=args.mem_sel_type, 
-  #             total_size=args.mem_total_size,
-  #             per_class=args.mem_per_class,
-  #             selection_method=args.mem_sel_method)
-  #   batch_increm_learn(model,
-  #                     memory,
-  #                     args,
-  #                     device)
-  # elif args.phase == 'episodic_incremental_learn':
-  #   memory = IncrementalMemory(
-  #             selection_type=args.mem_sel_type, 
-  #             total_size=args.mem_total_size,
-  #             per_class=args.mem_per_class,
-  #             selection_method=args.mem_sel_method)
-  #   episodic_increm_learn(model,
-  #                       learner,
-  #                       memory,
-  #                       args,
-  #                       device)
+  ## == incremental learning ============
+  elif args.phase == 'incremental_learn':
+    memory = IncrementalMemory(
+              selection_type=args.mem_sel_type, 
+              total_size=args.mem_total_size,
+              per_class=args.mem_per_class,
+              selection_method=args.mem_sel_method)
+    increm_learn(model,
+                  learner,
+                  memory,
+                  args, device)
   
   ## == Plot ===========================
   elif args.phase == 'plot':
