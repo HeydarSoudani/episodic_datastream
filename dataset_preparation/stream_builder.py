@@ -99,8 +99,11 @@ if __name__ == '__main__':
 
   # == Select seen & unseen classes ==========
   if args.seed == 1:
-    seen_class = np.array([0, 1, 2, 3, 4]) 
-    unseen_class = [5, 6, 7, 8, 9]
+    # seen_class = np.array([0, 1, 2, 3, 4]) 
+    # unseen_class = [5, 6, 7, 8, 9]
+    seen_class = np.arange(args.seen_class_num) 
+    unseen_class = list(np.arange(args.seen_class_num, args.n_classes))
+
   else:
     seen_class = np.random.choice(args.n_classes, args.seen_class_num, replace=False)
     unseen_class = [x for x in list(set(labels)) if x not in seen_class]
