@@ -199,7 +199,7 @@ if __name__ == '__main__':
 
     # check if chunk_data < chunk_size
     if chunk_data.shape[0] < chunk_size:
-      print(all_class_to_select)
+      print('chunk: {}, {}'.format(i_chunk, all_class_to_select))
       needed_data = chunk_size - chunk_data.shape[0]
       helper_class = all_class_to_select[-1]
 
