@@ -51,7 +51,7 @@ if __name__ == '__main__':
     last_point = 30  
   elif args.dataset in ['cifar10']:
     start_point = 3
-    last_point = 25
+    last_point = 27
   elif args.dataset in ['cifar100']:
     start_point = 1
     last_point = 1
