@@ -51,7 +51,7 @@ if __name__ == '__main__':
     last_point = 25
   elif args.dataset in ['cifar100']:
     start_point = 1
-    last_point = 54
+    last_point = 1
 
   ## ========================================
   # == Get MNIST dataset ====================
