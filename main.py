@@ -7,7 +7,7 @@ from pandas import read_csv
 from datasets.dataset import SimpleDataset
 from models.cnn import Conv_4
 from models.mlp import MLP
-from models.resnet import ResNet18
+from models.resnet import ResNet18, Resnet50
 
 from utils.memory_selector import OperationalMemory, IncrementalMemory
 from detectors.pt_detector import PtDetector
@@ -203,7 +203,8 @@ if args.dataset in ['mnist', 'pmnist', 'rmnist']:
   # MLP net selected like CoPE
   model = MLP(784, args.hidden_dims, args.n_classes, args)
 elif args.dataset == 'cifar100':
-  model = ResNet18(100, args)
+  # model = ResNet18(100, args)
+  model = Resnet50(args)
 else:
   model = Conv_4(args)
 

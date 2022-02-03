@@ -1,8 +1,17 @@
 import torch
 import torch.nn as nn
+import torchvision.models as models
 from torch.nn.functional import relu, leaky_relu, avg_pool2d
 import math
 
+def Xavier(m):
+  if m.__class__.__name__ == 'Linear':
+    fan_in, fan_out = m.weight.data.size(1), m.weight.data.size(0)
+    std = 1.0 * math.sqrt(2.0 / (fan_in + fan_out))
+    a = math.sqrt(3.0) * std
+    m.weight.data.uniform_(-a, a)
+    if m.bias is not None:
+      m.bias.data.fill_(0.0)
 
 def conv3x3(in_planes, out_planes, stride=1):
     return nn.Conv2d(in_planes, out_planes, kernel_size=3, stride=stride,
@@ -99,7 +108,32 @@ class ResNet(nn.Module):
         state_dict = torch.load(path)
         self.load_state_dict(state_dict)
 
-
 def ResNet18(nclasses, args, nf=20, bias=True):
     return ResNet(BasicBlock, [2, 2, 2, 2], nclasses, nf, bias, args)
+
+
+
+class Resnet50(nn.Module):
+    def __init__(self, args):
+        super(Resnet50, self).__init__()
+
+        self.pretrained = models.resnet50(pretrained=False)
+        self.fc1 = nn.Linear(1000, args.hidden_dims)
+        self.dp1 = nn.Dropout(args.dropout)
+        self.fc2 = nn.Linear(args.hidden_dims, args.n_classes)
+        self.dp2 = nn.Dropout(args.dropout)
+
+        # init the fc layers
+        self.pretrained.fc.weight.data.normal_(mean=0.0, std=0.01)
+        self.pretrained.fc.bias.data.zero_()
+        self.fc1.apply(Xavier)
+        self.fc2.apply(Xavier)
+
+    def forward(self, x):
+        # x = x.view(x.size(0), -1)
+        x = self.pretrained(x)
+        x = self.dp1(torch.relu(x))
+        features = torch.relu(self.fc1(x))
+        out = self.fc2(self.dp2(features))
+        return out, features
 
