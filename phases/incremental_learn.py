@@ -149,7 +149,10 @@ def increm_learn(model,
 
   ### == Claculate forgetting =================
   all_tasks_acc_cls = torch.cat(all_tasks_acc_cls, dim=0)
-  all_tasks_acc_dist = torch.cat(all_tasks_acc_dist, dim=0)
+  all_tasks_acc_dist = torch.cat(all_tasks_acc_dist, dim=1)
+
+  print(all_tasks_acc_cls.shape)
+  print(all_tasks_acc_dist.shape)
 
   acc_cls_best = torch.max(all_tasks_acc_cls, 0).values
   temp = acc_cls_best - all_tasks_acc_cls
