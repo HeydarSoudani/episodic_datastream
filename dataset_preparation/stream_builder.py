@@ -123,8 +123,8 @@ if __name__ == '__main__':
   for label in class_data.keys():
     class_data[label] = np.array(class_data[label])
 
-  for label, data in class_data.items():
-    print('Label: {} -> {}'.format(label, data.shape))  
+  # for label, data in class_data.items():
+  #   print('Label: {} -> {}'.format(label, data.shape))  
 
 
   # == Preparing train dataset and test seen data ===
@@ -155,6 +155,7 @@ if __name__ == '__main__':
   n_chunk_stream = n_chunk - 5
   chunks = []
   print(n_chunk_stream)
+  print(len(unseen_class))
   add_new_class_points = np.random.choice(
     np.arange(start_point, n_chunk_stream-last_point), len(unseen_class),
     replace=False
