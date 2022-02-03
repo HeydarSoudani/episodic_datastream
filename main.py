@@ -36,8 +36,7 @@ parser.add_argument(
     'zeroshot_test',
     'stream_learn',
     'zeroshot_test_base',
-    'batch_incremental_learn',
-    'episodic_incremental_learn',
+    'incremental_learn',
     'plot'
   ],
   default='plot',
