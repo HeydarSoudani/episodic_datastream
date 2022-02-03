@@ -17,8 +17,8 @@ if __name__ == '__main__':
 
   ## == Params ===========================
   parser = argparse.ArgumentParser()
-  parser.add_argument('--seen_class_num', type=int, default=5, help='')
-  parser.add_argument('--spc', type=int, default=1200, help='samples per class for initial dataset')
+  # parser.add_argument('--seen_class_num', type=int, default=5, help='')
+  # parser.add_argument('--spc', type=int, default=1200, help='samples per class for initial dataset')
   parser.add_argument('--dataset', type=str, default='mnist', help='') #[mnist, fmnist, cifar10]
   parser.add_argument('--saved', type=str, default='./data/', help='')
   parser.add_argument('--seed', type=int, default=5, help='')  # seed=1 for regular novel class selection
@@ -35,8 +35,12 @@ if __name__ == '__main__':
   ## == Set class number =================
   if args.dataset in ['mnist', 'fmnist', 'cifar10']:
     args.n_classes = 10
+    args.seen_class_num = 5
+    args.spc = 1200
   elif args.dataset in ['cifar100']:
     args.n_classes = 100
+    args.seen_class_num = 50
+    args.spc = 100
 
   ## == Add novel points params ==========
   start_point = 3
