@@ -11,6 +11,7 @@ from utils.preparation import transforms_preparation
 
 
 def increm_learn(model,
+                  learner,
                   memory,
                   args, device):
 
