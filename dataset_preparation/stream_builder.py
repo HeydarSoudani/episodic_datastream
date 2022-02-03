@@ -104,11 +104,8 @@ if __name__ == '__main__':
 
   # == Select seen & unseen classes ==========
   if args.seed == 1:
-    # seen_class = np.array([0, 1, 2, 3, 4]) 
-    # unseen_class = [5, 6, 7, 8, 9]
     seen_class = np.arange(args.seen_class_num) 
     unseen_class = list(np.arange(args.seen_class_num, args.n_classes))
-
   else:
     seen_class = np.random.choice(args.n_classes, args.seen_class_num, replace=False)
     unseen_class = [x for x in list(set(labels)) if x not in seen_class]
@@ -128,7 +125,6 @@ if __name__ == '__main__':
 
   # for label, data in class_data.items():
   #   print('Label: {} -> {}'.format(label, data.shape))  
-
 
   # == Preparing train dataset and test seen data ===
   train_data = []
@@ -151,19 +147,17 @@ if __name__ == '__main__':
   )
   print('train data saved in {}'.format(os.path.join(args.saved, args.train_file)))
 
- 
   all_class_to_select = seen_class.tolist()
   chunk_size = 1000
   n_chunk = int(n_data / chunk_size) 
   n_chunk_stream = n_chunk - 5
   chunks = []
-  print(n_chunk_stream)
-  print(len(np.arange(start_point, n_chunk_stream-last_point)))
-  print(len(unseen_class))
+ 
   add_new_class_points = np.random.choice(
     np.arange(start_point, n_chunk_stream-last_point), len(unseen_class),
     replace=False
   )
+
   print('Novel class points: {}'.format(add_new_class_points))
   for i_chunk in range(n_chunk_stream):
     chunk_data = []
