@@ -46,7 +46,7 @@ if __name__ == '__main__':
   if args.dataset in ['mnist', 'fmnist']:
     start_point = 3
     last_point = 30
-  elif args.dataset in ['cifar10', 'cifar100']:
+  elif args.dataset in ['cifar10']:
     start_point = 3
     last_point = 25
   elif args.dataset in ['cifar100']:
