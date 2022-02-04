@@ -168,7 +168,7 @@ S:39 |
 
 === TripletMargin =============
        | S:01  | S:05  | S:12  | S:39  | avg
-offline: , 0.8023, 
+offline: 0.8085, 0.8023, 0.8098, 0.8044 
 
             acc     |  forgetting
        Dist  | Cls  | Dist  | Cls 
