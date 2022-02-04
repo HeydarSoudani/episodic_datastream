@@ -2,6 +2,25 @@
 optim_adam, lr_0.001
 
 === NTXent (InfoNCE) ==========
+       | S:01   | S:05  | S:12  | S:39
+offline: 0.9289, 
+
+           acc     |  forgetting
+      Cls   | Dist | CLs    | Dist
+S:01 |
+S:05 |
+S:12 |
+S:39 |
+
+
+
+### FMNIST ########################
+optim_adam, lr_0.0001
+
+=== NTXent (InfoNCE) ==========
+       | S:01   | S:05  | S:12  | S:39
+offline: 0.9289, 
+
            acc     |  forgetting
       Cls   | Dist | CLs    | Dist
 S:01 |
