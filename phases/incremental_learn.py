@@ -166,7 +166,6 @@ def increm_learn(model,
   print('cls forgetting: {:.4f} ± {:.4f}'.format(mean_forgetting_cls, std_forgetting_cls))
 
 
-
 # def batch_increm_learn(model,
 #                       memory,
 #                       args,
