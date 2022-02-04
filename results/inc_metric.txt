@@ -1,0 +1,11 @@
+### MNIST ########################
+optim_adam, lr_0.001
+
+=== NTXent (InfoNCE) ==========
+           acc     |  forgetting
+      Cls   | Dist | CLs    | Dist
+S:01 |
+S:05 |
+S:12 |
+S:39 |
+
