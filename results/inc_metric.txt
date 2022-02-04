@@ -42,11 +42,28 @@ S:39 |
 
 
 === TripletMargin =============
-       | S:01   | S:05  | S:12  | S:39
-offline: 
+       | S:01   | S:05  | S:12  | S:39  | avg
+offline: 0.934, 0.9324, 0.9321, 0.9312  | 93.24 ± 0.10
 
-           acc     |  forgetting
-       Cls  | Dist | CLs    | Dist
+            acc     |  forgetting
+       Dist  | Cls  | Dist  | Cls 
+      ---------------------------------
+- Mem:2k
+S:01 | 0.862, 0.857 | 0.1164, 0.2162
+S:05 |
+S:12 |
+S:39 |
+- Mem:1k
+S:01 |
+S:05 |
+S:12 |
+S:39 |
+- Mem:0.5k
+S:01 |
+S:05 |
+S:12 |
+S:39 |
+- Mem:0.2k
 S:01 |
 S:05 |
 S:12 |
