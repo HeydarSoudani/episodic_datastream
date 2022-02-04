@@ -95,6 +95,5 @@ def init_learn(model,
   print('Dist: {:.4f}, Cls: {}'.format(acc_dis, acc_cls))
 
 
-
 if __name__ == '__main__':
   pass
