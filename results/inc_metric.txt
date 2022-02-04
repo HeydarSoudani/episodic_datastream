@@ -31,7 +31,7 @@ S:39 |
 
 === Contrastive ===============
        | S:01   | S:05  | S:12  | S:39
-offline: 
+offline: 0.9174, 0.9158, 0.9162, 0.9153
 
            acc     |  forgetting
        Cls  | Dist | CLs    | Dist
