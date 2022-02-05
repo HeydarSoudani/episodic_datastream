@@ -428,7 +428,7 @@ class IncrementalMemory():
     new_samples = np.array(data)
     labels = np.array(data[:, -1]).flatten()
     unique_labels = list(np.unique(labels))
-    print('unique_labels: {}'.format(unique_labels))
+    # print('unique_labels: {}'.format(unique_labels))
 
     new_class_data = {
       l: new_samples[np.where(labels == l)[0]]
@@ -439,16 +439,13 @@ class IncrementalMemory():
 
       if not self.class_data:
         class_size = int(self.total_size / len(unique_labels))
-        print('class_size: {}'.format(class_size))
       else:
         known_labels = list(self.class_data.keys())
         all_labels = unique_labels + known_labels
         class_size = int(self.total_size / len(all_labels))
-        print('class_size: {}'.format(class_size))
         
         for label, samples in self.class_data.items():
           n = samples.shape[0]
-          print('n: {}'.format(n))
           if n > class_size:
             idxs = np.random.choice(range(n), size=class_size, replace=False)
             self.class_data[label] = samples[idxs]
@@ -457,15 +454,11 @@ class IncrementalMemory():
 
       for label, samples in new_class_data.items():
         n = samples.shape[0]
-        print('n unique: {}'.format(n))
         if n > class_size:
           idxs = np.random.choice(range(n), size=class_size, replace=False)
           self.class_data[label] = samples[idxs]
         else:
           self.class_data[label] = samples
-      
-      for label in self.class_data.keys():
-        print('label: {}'.format(self.class_data[label].shape))
     
     elif self.selection_type == 'pre_class':
       for label in unique_labels:
