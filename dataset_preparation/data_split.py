@@ -104,7 +104,6 @@ if __name__ == '__main__':
   ## ========================================
   ## ========================================
 
-
   ### === Permuted dataset (Vector) ===============
   # if args.dataset in ['pmnist', 'pfmnist']:
   #   for t in range(args.n_tasks):
