@@ -36,11 +36,10 @@ def train(model,
   known_labels = val_dataset.label_set
 
   # == ====================================
-  # optim = Adam(model.parameters(), lr=args.lr)
-  optim = SGD(model.parameters(),
-              lr=args.lr,
-              momentum=args.momentum)
-  
+  optim = Adam(model.parameters(), lr=args.lr)
+  # optim = SGD(model.parameters(),
+  #             lr=args.lr,
+  #             momentum=args.momentum)
   scheduler = StepLR(optim, step_size=args.step_size, gamma=args.gamma)
 
   # == Learn model =========================
