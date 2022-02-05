@@ -117,7 +117,7 @@ class Resnet50(nn.Module):
     def __init__(self, args):
         super(Resnet50, self).__init__()
 
-        self.pretrained = models.resnet50(pretrained=True)
+        self.pretrained = models.resnet50(pretrained=False)
         self.fc1 = nn.Linear(1000, args.hidden_dims)
         self.dp1 = nn.Dropout(args.dropout)
         self.fc2 = nn.Linear(args.hidden_dims, args.n_classes)
