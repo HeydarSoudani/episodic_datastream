@@ -439,6 +439,7 @@ class IncrementalMemory():
 
       if not self.class_data:
         class_size = int(self.total_size / len(unique_labels))
+        print('class_size: {}'.format(class_size))
       else:
         known_labels = list(self.class_data.keys())
         all_labels = unique_labels + known_labels
