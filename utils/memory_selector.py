@@ -455,7 +455,7 @@ class IncrementalMemory():
           else:
             self.class_data[label] = samples
 
-      for label, samples in new_class_data.keys():
+      for label, samples in new_class_data.items():
         n = samples.shape[0]
         print('n unique: {}'.format(n))
         if n > class_size:
