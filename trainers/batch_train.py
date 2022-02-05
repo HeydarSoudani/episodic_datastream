@@ -36,17 +36,12 @@ def train(model,
   known_labels = val_dataset.label_set
 
   # == ====================================
-  optim = Adam(model.parameters(), lr=args.lr)
-  # optim = SGD(model.parameters(),
-  #             lr=args.lr,
-  #             momentum=args.momentum)
-  # optim = Adam(model.parameters(),
-  #               lr=args.lr,
-  #               weight_decay=args.wd)
+  # optim = Adam(model.parameters(), lr=args.lr)
+  optim = SGD(model.parameters(),
+              lr=args.lr,
+              momentum=args.momentum)
+  
   scheduler = StepLR(optim, step_size=args.step_size, gamma=args.gamma)
-  # scheduler = OneCycleLR(optim, 0.01,
-  #                       epochs=args.epochs, 
-  #                       steps_per_epoch=len(train_loader))
 
   # == Learn model =========================
   global_time = time.time()
@@ -99,58 +94,4 @@ def train(model,
   # save learner
   learner.save(os.path.join(args.save, "learner.pt"))
   print("= ...Learner saved")
-
-
-
-
-
-
-
-
-
-# def test(model, test_loader, args, device):
-#   model.to(device)
-
-#   correct = 0
-#   total = 0
-#   model.eval()
-#   with torch.no_grad():
-#     for i, data in enumerate(test_loader):
-#       samples, labels = data
-#       samples, labels = samples.to(device), labels.to(device)
-#       logits, feature = model.forward(samples)
-      
-#       _, predicted = torch.max(logits, 1)
-#       total += labels.size(0)
-#       correct += (predicted == labels).sum().item()
-    
-#     print('Accuracy of the network on the 10000 test images: %7.4f %%' % (100 * correct / total))
-#   return correct / total
-  
-
-  # prepare to count predictions for each class
-  # classes = ('tshirt', 'trouser', 'pullover', 'dress', 'coat', 'sandal', 'shirt', 'sneaker', 'bag', 'ankle_boot')
-
-  # correct_pred = {classname: 0 for classname in classes}
-  # total_pred = {classname: 0 for classname in classes}
-
-  # # again no gradients needed
-  # with torch.no_grad():
-  #   for data in test_dataloader:
-  #     sample, labels = data
-  #     sample, labels = sample.to(device), labels.to(device)
-  #     out, feature = model.forward(sample)
-  #     _, predictions = torch.max(out.data, 1)
-  #     # collect the correct predictions for each class
-  #     for label, prediction in zip(labels, predictions):
-  #       if label == prediction:
-  #         correct_pred[classes[label]] += 1
-  #       total_pred[classes[label]] += 1
-
-
-  # # print accuracy for each class
-  # for classname, correct_count in correct_pred.items():
-  #   accuracy = 100 * float(correct_count) / total_pred[classname]
-  #   print("Accuracy for class {:11s} is: {:.1f} %".format(classname, accuracy))
-
 
