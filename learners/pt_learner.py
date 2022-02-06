@@ -189,7 +189,6 @@ class PtLearner:
       for idx, l in enumerate(unique_labels):
         self.prototypes[l.item()] = pts[idx].reshape(1, -1).detach()
 
-
   def load(self, pkl_path):
     self.__dict__.update(torch.load(pkl_path))
 

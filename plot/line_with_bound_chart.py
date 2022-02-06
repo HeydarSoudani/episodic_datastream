@@ -221,7 +221,6 @@ def main():
     axs[idx].set_yticks(np.arange(50, 96, step=5))
 
 
-
   # label = data[0]['label']
   # mean = data[0]['mean']
   # std = data[0]['std']
