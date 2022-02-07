@@ -433,7 +433,7 @@ optim_adam, lr_0.0001
 
 === CrossEntropy (with evolving pt) ==========
        | S:01   | S:05  | S:12  | S:39  | avg
-offline: 0.5838,  | 
+offline: 0.5838, , 0.5848  | 
 
             acc     |  forgetting
        Dist  | Cls  | Dist  | Cls 
