@@ -5,59 +5,82 @@ def get_data(dataset):
 
   if dataset == 'fmnist':
     ## == NTXent (InfoNCE) ===
-    # data = [
-    #   {
-    #     'label': 'upper-bound',
-    #     'mean': np.array([92.81, 92.81, 92.81, 92.81]),
-    #     'std':  np.array([0.14, 0.14, 0.14, 0.14]),
-    #   },
-    #   {
-    #     'label': 'distance-based',
-    #     'mean': np.array([73.60, 80.90, 83.85, 86.12]),
-    #     'std':  np.array([0.86,  0.49, 0.51, 0.26]),
-    #   },
-    #   {
-    #     'label': 'classification-based',
-    #     'mean': np.array([69.10, 79.30, 83.38, 86.42]),
-    #     'std':  np.array([3.92, 1.33, 0.93, 0.38]),
-    #   },
-    # ]
-    ## == Contrastive ========
-    # data = [
-    #   {
-    #     'label': 'upper-bound',
-    #     'mean': np.array([91.62, 91.62, 91.62, 91.62]),
-    #     'std':  np.array([0.08, 0.08, 0.08, 0.08]),
-    #   },
-    #   {
-    #     'label': 'distance-based',
-    #     'mean': np.array([59.33, 68.20, 76.62, 82.60]),
-    #     'std':  np.array([2.80, 3.73, 3.47, 1.67]),
-    #   },
-    #   {
-    #     'label': 'classification-based',
-    #     'mean': np.array([45.27, 58.53, 74.55, 83.47]),
-    #     'std':  np.array([13.85, 11.00, 7.39, 3.01]),
-    #   },
-    # ]
-
-    ## == TripletMargin ======
     data = [
+      # upper bounds
       {
-        'label': 'upper-bound',
+        'label': 'Metric upper-bound',
         'mean': np.array([93.24, 93.24, 93.24, 93.24]),
         'std':  np.array([0.10, 0.10, 0.10, 0.10]),
       },
       {
-        'label': 'distance-based',
-        'mean': np.array([74.38, 80.60, 83.67, 86.33]),
-        'std':  np.array([1.70, 2.24, 0.44, 0.71]),
+        'label': 'Episodic upper-bound',
+        'mean': np.array([92.51, 92.51, 92.51, 92.51]),
+        'std':  np.array([0.23, 0.23, 0.23, 0.23]),
       },
       {
-        'label': 'classification-based',
-        'mean': np.array([68.12, 77.97, 80.15, 84.95]),
-        'std':  np.array([3.58, 2.60, 1.89, 2.25]),
+        'label': 'CrossEntropy upper-bound',
+        'mean': np.array([91.68, 91.68, 91.68, 91.68]),
+        'std':  np.array([0.13, 0.13, 0.13, 0.13]),
       },
+
+      # Episodic approaches
+      {
+        'label': 'Episodic+PT',
+        'mean': np.array([78.97, 84.87, 87.03, 88.63]),
+        'std':  np.array([1.27, 0.46, 0.45, 0.39]),
+      },
+      {
+        'label': 'Episodic+Reptile',
+        'mean': np.array([79.23, 83.66, 86.77, 88.87]),
+        'std':  np.array([1.01, 0.52, 0.12, 0.12]),
+      },
+      {
+        'label': 'Episodic+CE',
+        'mean': np.array([80.00, 84.77, 87.27, 89.13]),
+        'std':  np.array([1.23, 0.29, 0.21, 0.12]),
+      },
+
+      # Metric approaches
+      {
+        'label': 'TripletMargin',
+        'mean': np.array([74.38, 80.60, ]),
+        'std':  np.array([]),
+      },
+      {
+        'label': 'NTXent (InfoNCE)',
+        'mean': np.array([]),
+        'std':  np.array([]),
+      },
+      {
+        'label': 'Contrastive',
+        'mean': np.array([]),
+        'std':  np.array([]),
+      },
+
+      # Baselines
+      {
+        'label': 'CoPE',
+        'mean': np.array([]),
+        'std':  np.array([]),
+      },
+      {
+        'label': 'Reservoir',
+        'mean': np.array([]),
+        'std':  np.array([]),
+      },
+      {
+        'label': 'MIR',
+        'mean': np.array([]),
+        'std':  np.array([]),
+      },
+
+      # CrossEntropy
+      {
+        'label': 'CrossEntropy',
+        'mean': np.array([]),
+        'std':  np.array([]),
+      },
+
     ]
   
   if dataset == 'cifar10':
@@ -180,8 +203,45 @@ def get_data(dataset):
 def main():
   dataset = 'cifar100' #['fmnist', 'cifar10', 'cifar100']
   metric_loss = 'TripletMargin' #['NTXent (InfoNCE)', 'Contrastive', 'TripletMargin']
-  methods = ['upper-bound', 'distance-based', 'classification']
-  colors = ['limegreen', 'royalblue', 'darkorange']
+  methods = [
+    'Metric upper-bound',
+    'Episodic upper-bound',
+    'CrossEntropy upper-bound',
+
+    'Episodic+PT',
+    'Episodic+Reptile',
+    'Episodic+CE',
+    
+    'TripletMargin',
+    'NTXent (InfoNCE)',
+    'Contrastive',
+
+    'CoPE',
+    'Reservoir',
+    'MIR'
+
+    'CrossEntropy'
+  ]
+  colors = [
+    'forestgreen',
+    'seagreen',
+    'olivedrab',
+  
+    'steelblue',
+    'deepskyblue',
+    'darkturquoise',
+
+    'darkorange',
+    'peru',
+    'goldenrod',
+
+    'blueviolet',
+    'teal',
+    'yellow',
+
+    'firebrick'
+  ]
+  
   x = np.arange(4)
   data = get_data(dataset)
 

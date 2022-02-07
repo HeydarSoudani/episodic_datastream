@@ -56,6 +56,9 @@ acc_fog_avg:
 ### FMNIST ########################
 optim_adam, lr_0.0001
 
+
+======================================= Total pts ===============================
+=================================================================================
 === CE (simple batch training) =====
 (e_10)
        | S:01   | S:05  | S:12  | S:39  | avg
@@ -107,7 +110,8 @@ dis_acc_avg: 77.25 ± 0.15
 cls_acc_avg: 74.05 ± 1.02
 dis_fog_avg: 
 acc_fog_avg:
-
+================================================================================
+================================================================================
 
 === NTXent (InfoNCE) ==========
        | S:01   | S:05  | S:12  | S:39  | avg
@@ -426,6 +430,58 @@ acc_fog_avg:
 
 ### CIFAR100 #######################
 optim_adam, lr_0.0001
+
+=== CrossEntropy (with evolving pt) ==========
+       | S:01   | S:05  | S:12  | S:39  | avg
+offline: 0.5838,  | 
+
+            acc     |  forgetting
+       Dist  | Cls  | Dist  | Cls 
+      ---------------------------------
+- Mem:2k
+S:01 |
+S:05 |
+S:12 |
+S:39 |
+-----
+dis_acc_avg: 
+cls_acc_avg:
+dis_fog_avg: 
+acc_fog_avg:
+
+- Mem:1k
+S:01 |
+S:05 |
+S:12 |
+S:39 |
+-----
+dis_acc_avg: 
+cls_acc_avg:
+dis_fog_avg: 
+acc_fog_avg:
+
+- Mem:0.5k
+S:01 |
+S:05 |
+S:12 |
+S:39 |
+-----
+dis_acc_avg: 
+cls_acc_avg:
+dis_fog_avg: 
+acc_fog_avg:
+
+- Mem:0.2k
+S:01 |
+S:05 |
+S:12 |
+S:39 |
+-----
+dis_acc_avg: 
+cls_acc_avg:
+dis_fog_avg: 
+acc_fog_avg:
+
 
 === NTXent (InfoNCE) ==========
        | S:01  | S:05  | S:12  | S:39   | avg
