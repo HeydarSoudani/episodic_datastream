@@ -27,7 +27,7 @@ def increm_learn(model,
 
     ### === Split setting =========================
     if task != 0:
-      if task == 2: args.ways = 5
+      if task == 5: args.ways = 20
       replay_mem = memory()
       train_data = np.concatenate((task_data, replay_mem))
       print('replay_mem: {}'.format(replay_mem.shape))

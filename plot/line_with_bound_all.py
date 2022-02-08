@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 def get_data(dataset):
 
   if dataset == 'fmnist':
-    ## == NTXent (InfoNCE) ===
     data = [
       # upper bounds
       {
@@ -80,128 +79,168 @@ def get_data(dataset):
         'mean': np.array([55.57, 70.30, 78.40, 83.13]),
         'std':  np.array([2.37, 2.04, 0.41, 1.44]),
       },
-
     ]
   
   if dataset == 'cifar10':
-    ## == NTXent (InfoNCE) ===
     data = [
+      # upper bounds
       {
-        'label': 'upper-bound',
-        'mean': np.array([77.78, 77.78, 77.78, 77.78]),
-        'std':  np.array([0.73, 0.73, 0.73, 0.73]),
+        'label': 'Metric upper-bound',
+        'mean': np.array([80.62, 80.62, 80.62, 80.62]),
+        'std':  np.array([0.30, 0.30, 0.30, 0.30]),
       },
       {
-        'label': 'distance-based',
+        'label': 'Episodic upper-bound',
+        'mean': np.array([75.63, 75.63, 75.63, 75.63]),
+        'std':  np.array([0.005, 0.005, 0.005, 0.005]),
+      },
+      {
+        'label': 'CrossEntropy upper-bound',
+        'mean': np.array([70.38, 70.38, 70.38, 70.38]),
+        'std':  np.array([0.57, 0.57, 0.57, 0.57]),
+      },
+
+      # Episodic approaches
+      {
+        'label': 'Episodic+PT',
+        'mean': np.array([41.67, 50.70, 57.13, 61.43]),
+        'std':  np.array([0.25, 0.41, 2.02, 0.98]),
+      },
+      {
+        'label': 'Episodic+Reptile',
+        'mean': np.array([42.80, 50.47, 58.30, 65.03]),
+        'std':  np.array([1.85, 0.99, 0.54, 0.74]),
+      },
+      {
+        'label': 'Episodic+CE',
+        'mean': np.array([41.47, 51.07, 56.90, 61.07]),
+        'std':  np.array([0.95, 0.54, 0.75, 2.15]),
+      },
+
+      # Metric approaches
+      {
+        'label': 'TripletMargin',
+        'mean': np.array([33.50, 41.12, 46.50, 58.67]),
+        'std':  np.array([2.35, 2.07, 3.10, 2.11]),
+      },
+      {
+        'label': 'NTXent (InfoNCE)',
         'mean': np.array([38.52, 45.00, 48.83, 56.35]),
         'std':  np.array([0.67, 2.33, 1.15, 2.23]),
       },
       {
-        'label': 'classification-based',
-        'mean': np.array([22.35, 23.97, 26.52, 36.65]),
-        'std':  np.array([1.81, 1.96, 0.74, 5.01]),
+        'label': 'Contrastive',
+        'mean': np.array([36.07, 45.52, 51.90, 59.15]),
+        'std':  np.array([2.67, 2.47, 3.63, 1.27]),
+      },
+
+      # Baselines
+      {
+        'label': 'CoPE',
+        'mean': np.array([29.47, 33.93, 31.84, 28.71]),
+        'std':  np.array([5.27, 1.75, 3.58, 5.80]),
+      },
+      {
+        'label': 'Reservoir',
+        'mean': np.array([37.06, 46.06, 46.75, 49.90]),
+        'std':  np.array([0.49, 6.20, 15.31, 5.80]),
+      },
+      {
+        'label': 'MIR',
+        'mean': np.array([25.8, 32.3, 36.5, 45.2]),
+        'std':  np.array([1.0, 1.4, 1.3, 2.1]),
+      },
+
+      # CrossEntropy
+      {
+        'label': 'CrossEntropy',
+        'mean': np.array([19.87, 33.53, 41.43, 49.60]),
+        'std':  np.array([0.76, 1.97, 2.70, 1.40]),
       },
     ]
 
-    ## == Contrastive ========
-    # data = [
-    #   {
-    #     'label': 'upper-bound',
-    #     'mean': np.array([78.07, 78.07, 78.07, 78.07]),
-    #     'std':  np.array([0.36, 0.36, 0.36, 0.36]),
-    #   },
-    #   {
-    #     'label': 'distance-based',
-    #     'mean': np.array([36.07, 45.52, 51.90, 59.15]),
-    #     'std':  np.array([2.67, 2.47, 3.63, 1.27]),
-    #   },
-    #   {
-    #     'label': 'classification-based',
-    #     'mean': np.array([26.88, 34.50, 41.85, 54.85]),
-    #     'std':  np.array([2.85, 3.94, 1.05, 2.04]),
-    #   },
-    # ]
-    ## == TripletMargin ======
-    # data = [
-    #   {
-    #     'label': 'upper-bound',
-    #     'mean': np.array([80.62, 80.62, 80.62, 80.62]),
-    #     'std':  np.array([0.30, 0.30, 0.30, 0.30]),
-    #   },
-    #   {
-    #     'label': 'distance-based',
-    #     'mean': np.array([33.50, 41.12, 46.50, 58.67]),
-    #     'std':  np.array([2.35, 2.07, 3.10, 2.11]),
-    #   },
-    #   {
-    #     'label': 'classification-based',
-    #     'mean': np.array([21.32, 23.43, 28.30, 46.62]),
-    #     'std':  np.array([2.61, 3.65, 8.96, 13.76]),
-    #   },
-    # ]
-
   if dataset == 'cifar100':
-    ## == NTXent (InfoNCE) ===
-    # data = [
-    #   {
-    #     'label': 'upper-bound',
-    #     'mean': np.array([54.37, 54.37, 54.37, 54.37]),
-    #     'std':  np.array([0.38, 0.38, 0.38, 0.38]),
-    #   },
-    #   {
-    #     'label': 'distance-based',
-    #     'mean': np.array([19.42, 25.38, 28.17, 30.30]),
-    #     'std':  np.array([1.38, 0.28, 0.46, 0.73]),
-    #   },
-    #   {
-    #     'label': 'classification-based',
-    #     'mean': np.array([24.45, 30.68, 34.23, 37.55]),
-    #     'std':  np.array([1.34,  0.19, 0.36, 0.54]),
-    #   },
-    # ]
-
-    ## == Contrastive ========
-    # data = [
-    #   {
-    #     'label': 'upper-bound',
-    #     'mean': np.array([56.15, 56.15, 56.15, 56.15]),
-    #     'std':  np.array([0.43, 0.43, 0.43, 0.43]),
-    #   },
-    #   {
-    #     'label': 'distance-based',
-    #     'mean': np.array([20.80, 26.42, 29.85, 31.75]),
-    #     'std':  np.array([0.89, 0.51, 0.72, 0.36]),
-    #   },
-    #   {
-    #     'label': 'classification-based',
-    #     'mean': np.array([26.02, 32.12, 35.32, 38.20]),
-    #     'std':  np.array([0.45, 0.61, 0.15, 0.73]),
-    #   },
-    # ]
-
-    ## == TripletMargin ======
     data = [
+      # upper bounds
       {
-        'label': 'upper-bound',
+        'label': 'Metric upper-bound',
         'mean': np.array([57.01, 57.01, 57.01, 57.01]),
         'std':  np.array([0.17, 0.17, 0.17, 0.17]),
       },
       {
-        'label': 'distance-based',
-        'mean': np.array([20.72, 25.85, 27.95, 30.75]),
-        'std':  np.array([0.46, 0.46, 0.30, 0.23]),
+        'label': 'Episodic upper-bound',
+        'mean': np.array([]),
+        'std':  np.array([]),
       },
       {
-        'label': 'classification-based',
+        'label': 'CrossEntropy upper-bound',
+        'mean': np.array([58.33, 58.33, 58.33, 58.33]),
+        'std':  np.array([0.11, 0.11, 0.11, 0.11]),
+      },
+
+      # Episodic approaches
+      {
+        'label': 'Episodic+PT',
+        'mean': np.array([]),
+        'std':  np.array([]),
+      },
+      {
+        'label': 'Episodic+Reptile',
+        'mean': np.array([]),
+        'std':  np.array([]),
+      },
+      {
+        'label': 'Episodic+CE',
+        'mean': np.array([]),
+        'std':  np.array([]),
+      },
+
+      # Metric approaches
+      {
+        'label': 'TripletMargin',
         'mean': np.array([24.52, 30.85, 34.62, 37.15]),
         'std':  np.array([0.18, 0.65, 0.48, 0.42]),
+      },
+      {
+        'label': 'NTXent (InfoNCE)',
+        'mean': np.array([24.45, 30.68, 34.23, 37.55]),
+        'std':  np.array([1.34, 0.19, 0.36, 0.54]),
+      },
+      {
+        'label': 'Contrastive',
+        'mean': np.array([26.02, 32.12, 35.32, 38.20]),
+        'std':  np.array([0.45, 0.61, 0.15, 0.73]),
+      },
+
+      # Baselines
+      {
+        'label': 'CoPE',
+        'mean': np.array([27.40, 31.32, 34.74, 36.31]),
+        'std':  np.array([0.08, 0.65, 0.38, 0.49]),
+      },
+      {
+        'label': 'Reservoir',
+        'mean': np.array([11.82, 14.37, 15.34, 19.38]),
+        'std':  np.array([0.86, 3.39, 0.69, 0.46]),
+      },
+      {
+        'label': 'MIR',
+        'mean': np.array([13.00, 17.70, 19.00, 21.00]),
+        'std':  np.array([0.90, 0.50, 0.90, 1.90]),
+      },
+
+      # CrossEntropy
+      {
+        'label': 'CrossEntropy',
+        'mean': np.array([, , 33.20, 36.05]),
+        'std':  np.array([, , 0.67, 0.53]),
       },
     ]
 
   return data
 
 def main():
-  dataset = 'fmnist' #['fmnist', 'cifar10', 'cifar100']
+  dataset = 'cifar10' #['fmnist', 'cifar10', 'cifar100']
   metric_loss = 'TripletMargin' #['NTXent (InfoNCE)', 'Contrastive', 'TripletMargin']
   methods = [
     'Metric upper-bound',
@@ -259,14 +298,14 @@ def main():
   
   # plt.legend(loc='lower right')
   plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15),
-          nrow=3, ncol=5, fancybox=True, shadow=False)
+          ncol=5, fancybox=True, shadow=False)
   plt.title('All Methods')
   plt.xlabel('Memory size')
   plt.ylabel('Accuracy')
  
   plt.xticks(np.arange(4), ['0.2K', '0.5K', '1K', '2K'])
-  plt.yticks(np.arange(55, 96, step=5)) # For FMNIST
-  # plt.yticks(np.arange(10, 86, step=10)) # For CIFAR10
+  # plt.yticks(np.arange(55, 96, step=5)) # For FMNIST
+  plt.yticks(np.arange(15, 86, step=10)) # For CIFAR10
 
   # For CIFAR100
   # plt.xticks(np.arange(4), ['2K', '3K', '4K', '5K'])
