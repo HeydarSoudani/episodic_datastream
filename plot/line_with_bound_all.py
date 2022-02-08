@@ -223,7 +223,7 @@ def main():
     'CrossEntropy'
   ]
   colors = [
-    'forestgreen',
+    'springgreen',
     'seagreen',
     'olivedrab',
   
@@ -232,14 +232,14 @@ def main():
     'darkturquoise',
 
     'darkorange',
-    'peru',
     'goldenrod',
+    'orange',
 
-    'blueviolet',
-    'teal',
-    'yellow',
+    'darkorchid',
+    'slateblue',
+    'mediumorchid',
 
-    'firebrick'
+    'red'
   ]
   
   x = np.arange(4)
@@ -259,7 +259,7 @@ def main():
   
   # plt.legend(loc='lower right')
   plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15),
-          ncol=5, fancybox=True, shadow=False)
+          nrow=3, ncol=5, fancybox=True, shadow=False)
   plt.title('All Methods')
   plt.xlabel('Memory size')
   plt.ylabel('Accuracy')
