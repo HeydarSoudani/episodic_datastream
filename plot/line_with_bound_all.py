@@ -257,13 +257,15 @@ def main():
     #   facecolor=colors[idx],
     #   alpha=0.2)
   
-  plt.legend(loc='lower right')
-  plt.title(metric_loss)
+  # plt.legend(loc='lower right')
+  plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15),
+          ncol=5, fancybox=True, shadow=False)
+  plt.title('All Methods')
   plt.xlabel('Memory size')
   plt.ylabel('Accuracy')
  
   plt.xticks(np.arange(4), ['0.2K', '0.5K', '1K', '2K'])
-  plt.yticks(np.arange(50, 96, step=5)) # For FMNIST
+  plt.yticks(np.arange(55, 96, step=5)) # For FMNIST
   # plt.yticks(np.arange(10, 86, step=10)) # For CIFAR10
 
   # For CIFAR100
