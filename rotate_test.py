@@ -10,10 +10,10 @@ import numpy as np
 # import os
 
 a = [
-  0.330,
-  0.339,
-  0.337,
-  0.322
+  0.5956,
+  0.5424,
+  0.5797,
+  0.5532
 ]
 
 print('{:.2f} ± {:.2f}'.format(np.mean(a)*100, np.std(a)*100))

@@ -27,7 +27,12 @@ def increm_learn(model,
 
     ### === Split setting =========================
     if task != 0:
-      if task == 5: args.ways = 20
+
+      if args.dataset == 'cifar100':
+        if task == 5: args.ways = 20
+      else:
+        if task == 2: args.ways = 5
+
       replay_mem = memory()
       train_data = np.concatenate((task_data, replay_mem))
       print('replay_mem: {}'.format(replay_mem.shape))
@@ -127,8 +132,12 @@ def increm_learn(model,
 
       # known_labels = test_dataset.label_set
       # print('Test on: {}'.format(known_labels))
-      known_labels = set(range((task+1)*5))  # if cifar100 5 else 2
+      if args.dataset == 'cifar100':
+        known_labels = set(range((task+1)*5))
+      else:
+        known_labels = set(range((task+1)*2))
       # print('Known_labels for task {} is: {}'.format(task, known_labels))
+      
       _, acc_dis, acc_cls = learner.evaluate(model,
                                             test_dataloader,
                                             known_labels,

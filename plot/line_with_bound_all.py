@@ -169,8 +169,8 @@ def get_data(dataset):
       },
       {
         'label': 'Episodic upper-bound',
-        'mean': np.array([]),
-        'std':  np.array([]),
+        'mean': np.array([49.05, 49.05, 49.05, 49.05]),
+        'std':  np.array([0.58, 0.58, 0.58, 0.58]),
       },
       {
         'label': 'CrossEntropy upper-bound',
@@ -179,21 +179,21 @@ def get_data(dataset):
       },
 
       # Episodic approaches
-      {
-        'label': 'Episodic+PT',
-        'mean': np.array([]),
-        'std':  np.array([]),
-      },
-      {
-        'label': 'Episodic+Reptile',
-        'mean': np.array([]),
-        'std':  np.array([]),
-      },
-      {
-        'label': 'Episodic+CE',
-        'mean': np.array([]),
-        'std':  np.array([]),
-      },
+      # {
+      #   'label': 'Episodic+PT',
+      #   'mean': np.array([]),
+      #   'std':  np.array([]),
+      # },
+      # {
+      #   'label': 'Episodic+Reptile',
+      #   'mean': np.array([]),
+      #   'std':  np.array([]),
+      # },
+      # {
+      #   'label': 'Episodic+CE',
+      #   'mean': np.array([]),
+      #   'std':  np.array([]),
+      # },
 
       # Metric approaches
       {
@@ -232,24 +232,23 @@ def get_data(dataset):
       # CrossEntropy
       {
         'label': 'CrossEntropy',
-        'mean': np.array([, , 33.20, 36.05]),
-        'std':  np.array([, , 0.67, 0.53]),
+        'mean': np.array([23.15, 28.75, 33.20, 36.05]),
+        'std':  np.array([0.82, 0.98, 0.67, 0.53]),
       },
     ]
 
   return data
 
 def main():
-  dataset = 'cifar10' #['fmnist', 'cifar10', 'cifar100']
-  metric_loss = 'TripletMargin' #['NTXent (InfoNCE)', 'Contrastive', 'TripletMargin']
+  dataset = 'cifar100' #['fmnist', 'cifar10', 'cifar100']
   methods = [
     'Metric upper-bound',
     'Episodic upper-bound',
     'CrossEntropy upper-bound',
 
-    'Episodic+PT',
-    'Episodic+Reptile',
-    'Episodic+CE',
+    # 'Episodic+PT',
+    # 'Episodic+Reptile',
+    # 'Episodic+CE',
     
     'TripletMargin',
     'NTXent (InfoNCE)',
@@ -266,9 +265,9 @@ def main():
     'seagreen',
     'olivedrab',
   
-    'steelblue',
-    'deepskyblue',
-    'darkturquoise',
+    # 'steelblue',
+    # 'deepskyblue',
+    # 'darkturquoise',
 
     'darkorange',
     'goldenrod',
@@ -298,18 +297,18 @@ def main():
   
   # plt.legend(loc='lower right')
   plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15),
-          ncol=5, fancybox=True, shadow=False)
+          ncol=4, fancybox=True, shadow=False)
   plt.title('All Methods')
   plt.xlabel('Memory size')
   plt.ylabel('Accuracy')
  
-  plt.xticks(np.arange(4), ['0.2K', '0.5K', '1K', '2K'])
+  # plt.xticks(np.arange(4), ['0.2K', '0.5K', '1K', '2K'])
   # plt.yticks(np.arange(55, 96, step=5)) # For FMNIST
-  plt.yticks(np.arange(15, 86, step=10)) # For CIFAR10
+  # plt.yticks(np.arange(15, 86, step=10)) # For CIFAR10
 
   # For CIFAR100
-  # plt.xticks(np.arange(4), ['2K', '3K', '4K', '5K'])
-  # plt.yticks(np.arange(10, 61, step=10)) 
+  plt.xticks(np.arange(4), ['2K', '3K', '4K', '5K'])
+  plt.yticks(np.arange(10, 61, step=10)) 
 
 
   plt.show()
