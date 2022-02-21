@@ -4,14 +4,14 @@ import os
 from pandas import read_csv
 
 from datasets.dataset import SimpleDataset
-from evaluation import evaluate
 from utils.preparation import transforms_preparation
+from evaluation import final_step_evaluation
 
 def zeroshot_test(model,
                   prototypes,
                   detector,
                   args, device,
-                  known_labels=None):
+                  base_labels):
   print('================================ Zero-Shot Test ================================')
   
   # == Load stream data ==============================
@@ -26,9 +26,9 @@ def zeroshot_test(model,
     stream_dataset = SimpleDataset(stream_data, args)
   dataloader = DataLoader(dataset=stream_dataset, batch_size=1, shuffle=False)
 
-  # == =============================================== 
-  if known_labels != None:
-    detector.set_known_labels(known_labels)
+  # # == =============================================== 
+  # if known_labels != None:
+  #   detector.set_known_labels(known_labels)
 
   ## == Test Model ===================================
   detection_results = []
@@ -48,9 +48,9 @@ def zeroshot_test(model,
         print("[stream %5d]: %d, %2d, %7.4f, %5s, %5s"%
           (i+1, label, predicted_label, prob, real_novelty, detected_novelty))
     
-    M_new, F_new, CwCA, OwCA, NCA, cm = evaluate(detection_results, detector._known_labels)
-    print("Evaluation: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f"%(CwCA, OwCA, NCA, M_new, F_new))
-    print("confusion matrix: \n%s"% cm)
+    CwCA, NcCA, AcCA, OwCA, M_new, F_new = final_step_evaluation(detection_results, base_labels, detector._known_labels)
+    print("Evaluation: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f"%(CwCA, NcCA, AcCA, OwCA, M_new, F_new))
+    # print("confusion matrix: \n%s"% cm)
     
 
 

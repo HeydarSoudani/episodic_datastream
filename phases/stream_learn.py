@@ -12,7 +12,7 @@ from trainers.batch_train import train as batch_train
 from detectors.pt_detector import detector_preparation
 from datasets.dataset import SimpleDataset
 from utils.preparation import transforms_preparation
-from evaluation import evaluate
+from evaluation import in_stream_evaluation
 
 
 def stream_learn(model,
@@ -86,10 +86,14 @@ def stream_learn(model,
       ### == 1) evaluation ======================
       sample_num = i-last_idx
       
-      M_new, F_new, CwCA, OwCA, NCA, cm = evaluate(detection_results, detector._known_labels)
-      print("[On %5d samples]: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f"%
-        (sample_num, CwCA, OwCA, NCA, M_new, F_new))
+      CwCA, M_new, F_new, cm = in_stream_evaluation(detection_results, detector._known_labels)
+      print("[On %5d samples]: %7.4f, %7.4f, %7.4f"%
+        (sample_num, CwCA, M_new, F_new))
       print("confusion matrix: \n%s"% cm)
+
+          
+      f.write("[In sample %5d], [On %5d samples]: %7.4f, %7.4f, %7.4f \n"%
+        (i, sample_num, CwCA, M_new, F_new))
       
       ### == 2) Preparing retrain data ==========
       new_train_data = memory.select(buffer, return_data=True)
@@ -138,14 +142,12 @@ def stream_learn(model,
       if (i+1) % args.known_retrain_interval == 0:
         known_buffer = {i:[] for i in detector._known_labels}
       
-    
-      f.write("[On %5d samples]: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"%
-        (sample_num, CwCA, OwCA, NCA, M_new, F_new))
+      ### == Set parameters =====
       detection_results.clear()
       last_idx = i
       
       print('=== Streaming... =================')
-      time.sleep(2)
+      time.sleep(1.5)
   
   ### == Last evaluation ========================
   sample_num = i-last_idx
