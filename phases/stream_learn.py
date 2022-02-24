@@ -87,11 +87,8 @@ def stream_learn(model,
       sample_num = i-last_idx
       
       CwCA, M_new, F_new, cm = in_stream_evaluation(detection_results, detector._known_labels)
-      print("[On %5d samples]: %7.4f, %7.4f, %7.4f"%
-        (sample_num, CwCA, M_new, F_new))
+      print("[On %5d samples]: %7.4f, %7.4f, %7.4f"%(sample_num, CwCA, M_new, F_new))
       print("confusion matrix: \n%s"% cm)
-
-          
       f.write("[In sample %5d], [On %5d samples]: %7.4f, %7.4f, %7.4f \n"%
         (i, sample_num, CwCA, M_new, F_new))
       
@@ -151,12 +148,11 @@ def stream_learn(model,
   
   ### == Last evaluation ========================
   sample_num = i-last_idx
-  M_new, F_new, CwCA, OwCA, NCA, cm = evaluate(detection_results, detector._known_labels)
-  print("[On %5d samples]: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f"%
-    (sample_num, CwCA, OwCA, NCA, M_new, F_new))
+  CwCA, M_new, F_new, cm = in_stream_evaluation(detection_results, detector._known_labels)
+  print("[On %5d samples]: %7.4f, %7.4f, %7.4f"%(sample_num, CwCA, M_new, F_new))
   print("confusion matrix: \n%s"% cm)
-  f.write("[On %5d samples]: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"%
-    (sample_num, CwCA, OwCA, NCA, M_new, F_new))
+  f.write("[In sample %5d], [On %5d samples]: %7.4f, %7.4f, %7.4f \n"%
+    (i, sample_num, CwCA, M_new, F_new))
   
   f.close()
   
