@@ -66,7 +66,7 @@ def final_step_evaluation(results, base_labels, known_labels, k=(1, 5,), eps=1e-
 
   temp1 = nov_results[np.isin(nov_results['true_label'], list(base_labels), invert=True)]
   temp2 = nov_results[np.isin(nov_results['true_label'], list(base_labels))]
-  temp1['true_label'] = True
+  temp1['real_novelty'] = True
   nov_results = np.concatenate((temp1, temp2))
 
   real_novelties = nov_results[nov_results['real_novelty']]
