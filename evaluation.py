@@ -46,6 +46,7 @@ def final_step_evaluation(results, base_labels, known_labels, k=(1, 5,), eps=1e-
   ow_results[temp1]['predicted_label'] = -1
 
   print(ow_results[1000:3000]['predicted_label'])
+  print(np.unique(ow_results['predicted_label']))
   
   temp2 = np.isin(results['true_label'], list(base_labels), invert=True)
   ow_results[temp2]['true_label'] = -1
