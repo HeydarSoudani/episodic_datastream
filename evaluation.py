@@ -43,6 +43,8 @@ def final_step_evaluation(results, base_labels, known_labels, k=(1, 5,), eps=1e-
   ow_results = results
   # TODO: this has bug
   temp1 = np.isin(results['predicted_label'], list(base_labels), invert=True)
+  print(temp1)
+  print(len(temp1))
   ow_results[temp1]['predicted_label'] = -1
 
   print(ow_results[1000:3000]['predicted_label'])
