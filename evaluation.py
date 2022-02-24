@@ -40,8 +40,6 @@ def final_step_evaluation(results, base_labels, known_labels, k=(1, 5,), eps=1e-
   )
 
   ## == Open World Classification Accuracy, OwCA =====
-  # TODO: this has bug
-  # temp1 = np.argwhere(np.isin(results['predicted_label'], list(base_labels), invert=True)).ravel()
   temp1 = results[np.isin(results['predicted_label'], list(base_labels), invert=True)]
   temp2 = results[np.isin(results['predicted_label'], list(base_labels))]
   temp1['predicted_label'] = -1
@@ -61,11 +59,19 @@ def final_step_evaluation(results, base_labels, known_labels, k=(1, 5,), eps=1e-
   )
 
   ## == Unknown (Novel) Detection Accuracy (UDA) =====
-  ow_results[np.isin(ow_results['predicted_label'], [-1])]['detected_novelty'] = True
-  ow_results[np.isin(ow_results['true_label'], [-1])]['real_novelty'] = True
-  real_novelties = ow_results[ow_results['real_novelty']]
-  detected_novelties = ow_results[ow_results['detected_novelty']]
-  detected_real_novelties = ow_results[ow_results['detected_novelty'] & ow_results['real_novelty']]
+  temp1 = results[np.isin(results['predicted_label'], list(base_labels), invert=True)]
+  temp2 = results[np.isin(results['predicted_label'], list(base_labels))]
+  temp1['detected_novelty'] = True
+  nov_results = np.concatenate((temp1, temp2))
+
+  temp1 = nov_results[np.isin(nov_results['true_label'], list(base_labels), invert=True)]
+  temp2 = nov_results[np.isin(nov_results['true_label'], list(base_labels))]
+  temp1['true_label'] = True
+  nov_results = np.concatenate((temp1, temp2))
+
+  real_novelties = nov_results[nov_results['real_novelty']]
+  detected_novelties = nov_results[nov_results['detected_novelty']]
+  detected_real_novelties = nov_results[nov_results['detected_novelty'] & nov_results['real_novelty']]
   
   tp = len(detected_real_novelties)
   fp = len(detected_novelties) - len(detected_real_novelties)
