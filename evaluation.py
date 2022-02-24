@@ -42,17 +42,20 @@ def final_step_evaluation(results, base_labels, known_labels, k=(1, 5,), eps=1e-
   ## == Open World Classification Accuracy, OwCA =====
   ow_results = results
   # TODO: this has bug
-  temp1 = np.argwhere(np.isin(results['predicted_label'], list(base_labels), invert=True)).ravel()
-  # temp1 = results[np.isin(results['predicted_label'], list(base_labels), invert=True)]
-  # print(temp1)
-  print(len(temp1))
-  ow_results[temp1]['predicted_label'] = -1
-
-  print(ow_results[1000:3000]['predicted_label'])
+  # temp1 = np.argwhere(np.isin(results['predicted_label'], list(base_labels), invert=True)).ravel()
+  temp1 = results[np.isin(results['predicted_label'], list(base_labels), invert=True)]
+  temp2 = results[np.isin(results['predicted_label'], list(base_labels))]
+  temp1['predicted_label'] = -1
+  ow_results = np.concatenate((temp1, temp2))
   print(np.unique(ow_results['predicted_label']))
+
+  # print(len(temp1))
+  # ow_results[temp1]['predicted_label'] = -1
+  # print(ow_results[1000:3000]['predicted_label'])
+ 
   
-  temp2 = np.isin(results['true_label'], list(base_labels), invert=True)
-  ow_results[temp2]['true_label'] = -1
+  # temp2 = np.isin(results['true_label'], list(base_labels), invert=True)
+  # ow_results[temp2]['true_label'] = -1
   OwCA = accuracy_score(
     ow_results['true_label'],
     ow_results['predicted_label']
@@ -156,7 +159,6 @@ def evaluate(results, known_labels, k=(1, 5,), eps=1e-8):
   #   unknown_results['true_label'],
   #   unknown_results['predicted_label']
   # )
-  NCA = 0.0
 
   # == All-acc =====================
   # ACA = accuracy_score(
