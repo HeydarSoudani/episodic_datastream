@@ -42,8 +42,11 @@ def final_step_evaluation(results, base_labels, known_labels, k=(1, 5,), eps=1e-
   ## == Open World Classification Accuracy, OwCA =====
   ow_results = results
   # TODO: this has bug
-  ow_results[np.isin(results['predicted_label'], list(base_labels), invert=True)]['predicted_label'] = -1
-  ow_results[np.isin(results['true_label'], list(base_labels), invert=True)]['true_label'] = -1
+  temp1 = np.isin(ow_results['predicted_label'], list(base_labels), invert=True)
+  ow_results[temp1]['predicted_label'] = -1
+  
+  temp2 = np.isin(results['true_label'], list(base_labels), invert=True)
+  ow_results[temp2]['true_label'] = -1
   OwCA = accuracy_score(
     ow_results['true_label'],
     ow_results['predicted_label']
