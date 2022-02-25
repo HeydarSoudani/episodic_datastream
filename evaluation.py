@@ -50,9 +50,6 @@ def final_step_evaluation(results, base_labels, known_labels, k=(1, 5,), eps=1e-
   temp1['true_label'] = -1
   ow_results = np.concatenate((temp1, temp2))
 
-  print(np.unique(ow_results['predicted_label']))
-  print(np.unique(ow_results['true_label']))
-
   OwCA = accuracy_score(
     ow_results['true_label'],
     ow_results['predicted_label']
@@ -63,7 +60,6 @@ def final_step_evaluation(results, base_labels, known_labels, k=(1, 5,), eps=1e-
   temp2 = results[np.isin(results['predicted_label'], list(base_labels))]
   temp1['detected_novelty'] = True
   nov_results = np.concatenate((temp1, temp2))
-
   temp1 = nov_results[np.isin(nov_results['true_label'], list(base_labels), invert=True)]
   temp2 = nov_results[np.isin(nov_results['true_label'], list(base_labels))]
   temp1['real_novelty'] = True

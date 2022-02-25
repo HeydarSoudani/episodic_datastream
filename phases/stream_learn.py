@@ -30,7 +30,18 @@ def stream_learn(model,
   stream_data = read_csv(
     os.path.join(args.data_path, args.stream_file),
     sep=',', header=None).values
-  
+
+  # == Classes start points ===================
+  f = open('output.txt','w')
+
+  labels = stream_data[:, -1]
+  label_set = set(labels)
+  for label in label_set:
+    start_point = np.where(labels==label)[0][0]
+    print('Class {} starts at {}'.format(label, start_point))
+    f.write("[Class %5d], Start point: %5d \n"%(label, start_point))
+      
+
   if args.use_transform:
     _, test_transform = transforms_preparation()
     stream_dataset = SimpleDataset(stream_data, args, transforms=test_transform)
@@ -44,7 +55,7 @@ def stream_learn(model,
   detection_results = []
   last_idx = 0
 
-  f = open('output.txt','w')
+  
   for i, data in enumerate(dataloader):
     model.eval()
     with torch.no_grad():
@@ -132,6 +143,10 @@ def stream_learn(model,
         labels_diff = list(set(new_known_labels)-set(known_labels))
         if len(labels_diff) != 0:
           for label in labels_diff:
+            # =
+            print('Class {} detected at {}'.format(label, i))
+            f.write("[Class %5d], Detected point: %5d \n"%(label, i))
+            # =
             known_buffer[label] = []
         
         unknown_buffer.clear()
