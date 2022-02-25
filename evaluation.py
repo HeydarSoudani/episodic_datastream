@@ -95,7 +95,7 @@ def in_stream_evaluation(results, known_labels, k=(1, 5,), eps=1e-8):
     known_results['predicted_label'],
     sorted(list(known_labels))
   )
-  acc_per_class = cm.diagonal() / cm.sum(axis=1)
+  acc_per_class = cm.diagonal() / cm.sum(axis=0)
 
   CwCA = accuracy_score(
     known_results['true_label'],
