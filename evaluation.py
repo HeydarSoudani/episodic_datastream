@@ -95,6 +95,8 @@ def in_stream_evaluation(results, known_labels, k=(1, 5,), eps=1e-8):
     known_results['predicted_label'],
     sorted(list(np.unique(results['true_label'])))
   )
+  acc_per_class = cm.diagonal() / cm.sum(axis=1)
+
   CwCA = accuracy_score(
     known_results['true_label'],
     known_results['predicted_label']
@@ -111,7 +113,7 @@ def in_stream_evaluation(results, known_labels, k=(1, 5,), eps=1e-8):
   M_new = fn / (tp + fn + eps)
   F_new = fp / (fp + tn + eps)
 
-  return CwCA, M_new, F_new, cm
+  return CwCA, M_new, F_new, cm, acc_per_class
 
 
 def evaluate(results, known_labels, k=(1, 5,), eps=1e-8):
