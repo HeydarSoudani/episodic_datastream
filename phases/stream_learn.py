@@ -100,7 +100,7 @@ def stream_learn(model,
       CwCA, M_new, F_new, cm = in_stream_evaluation(detection_results, detector._known_labels)
       print("[On %5d samples]: %7.4f, %7.4f, %7.4f"%(sample_num, CwCA, M_new, F_new))
       print("confusion matrix: \n%s"% cm)
-      f.write("[In sample %5d], [On %5d samples]: %7.4f, %7.4f, %7.4f \n"%
+      f.write("[In sample %2d], [On %5d samples]: %7.4f, %7.4f, %7.4f \n"%
         (i, sample_num, CwCA, M_new, F_new))
       
       ### == 2) Preparing retrain data ==========
@@ -138,19 +138,17 @@ def stream_learn(model,
       print("Detector has been saved in {}.".format(args.detector_path))
 
       ### == 5) Update parameters ===============
+      known_labels = list(known_buffer.keys())
+      labels_diff = list(set(new_known_labels)-set(known_labels))
+      for label in labels_diff:
+        print('Class {} detected at {}'.format(label, i))
+        f.write("[Class %2d], Detected point: %5d \n"%(label, i))
+      
       if len(unknown_buffer) == args.buffer_size:
-        known_labels = list(known_buffer.keys())
-        labels_diff = list(set(new_known_labels)-set(known_labels))
         if len(labels_diff) != 0:
           for label in labels_diff:
-            # =
-            print('Class {} detected at {}'.format(label, i))
-            f.write("[Class %5d], Detected point: %5d \n"%(label, i))
-            # =
             known_buffer[label] = []
-        
         unknown_buffer.clear()
-
       if (i+1) % args.known_retrain_interval == 0:
         known_buffer = {i:[] for i in detector._known_labels}
       
