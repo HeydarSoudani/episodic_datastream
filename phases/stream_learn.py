@@ -105,7 +105,7 @@ def stream_learn(model,
             print("[On %5d samples]: %7.4f, %7.4f, %7.4f" %
                   (sample_num, CwCA, M_new, F_new))
             print("confusion matrix: \n%s\n" % cm)
-            print("acc per class: \n%s\n" % acc_per_class)
+            print("acc per class: %s\n" % acc_per_class)
 
             f.write("[In sample %2d], [On %5d samples]: %7.4f, %7.4f, %7.4f \n" %
                     (i, sample_num, CwCA, M_new, F_new))
@@ -174,7 +174,7 @@ def stream_learn(model,
     print("[On %5d samples]: %7.4f, %7.4f, %7.4f" %
           (sample_num, CwCA, M_new, F_new))
     print("confusion matrix: \n%s" % cm)
-    print("acc per class: \n%s\n" % acc_per_class)
+    print("acc per class: %s\n" % acc_per_class)
     f.write("[In sample %5d], [On %5d samples]: %7.4f, %7.4f, %7.4f \n" %
             (i, sample_num, CwCA, M_new, F_new))
     f.write("acc per class: %s\n" % acc_per_class)
