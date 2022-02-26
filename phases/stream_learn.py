@@ -102,9 +102,9 @@ def stream_learn(model,
       print("confusion matrix: \n%s"% cm)
       print("acc per class: \n%s"% acc_per_class)
       
-
       f.write("[In sample %2d], [On %5d samples]: %7.4f, %7.4f, %7.4f \n"%
         (i, sample_num, CwCA, M_new, F_new))
+      f.write("acc per class: \n%s"% acc_per_class)
       
       ### == 2) Preparing retrain data ==========
       new_train_data = memory.select(buffer, return_data=True)
