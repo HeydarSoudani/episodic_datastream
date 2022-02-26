@@ -93,15 +93,15 @@ def in_stream_evaluation(results, known_labels, k=(1, 5,), eps=1e-8):
   cm = confusion_matrix(
     known_results['true_label'],
     known_results['predicted_label'],
-    sorted(list(known_labels))
+    sorted(list(known_labels)+[-1])
   )
-  acc_per_class = cm.diagonal() / cm.sum(axis=0)
-
   CwCA = accuracy_score(
     known_results['true_label'],
     known_results['predicted_label']
   )  
-  
+  # == per class Classification Accuracy ===========
+  acc_per_class = cm.diagonal() / cm.sum(axis=0)
+
   ## == Unknown (Novel) Detection Accuracy (UDA) ====
   real_novelties = results[results['real_novelty']]
   detected_novelties = results[results['detected_novelty']]
