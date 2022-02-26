@@ -170,6 +170,7 @@ def stream_learn(model,
   print("acc per class: \n%s"% acc_per_class)
   f.write("[In sample %5d], [On %5d samples]: %7.4f, %7.4f, %7.4f \n"%
     (i, sample_num, CwCA, M_new, F_new))
+  f.write("acc per class: \n%s"% acc_per_class)
   
   f.close()
   
