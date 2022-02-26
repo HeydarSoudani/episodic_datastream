@@ -100,7 +100,7 @@ def in_stream_evaluation(results, known_labels, k=(1, 5,), eps=1e-8):
     known_results['predicted_label']
   )  
   # == per class Classification Accuracy ===========
-  acc_per_class = cm.diagonal() / cm.sum(axis=0)
+  acc_per_class = cm.diagonal() / cm.sum(axis=1)
 
   ## == Unknown (Novel) Detection Accuracy (UDA) ====
   real_novelties = results[results['real_novelty']]
