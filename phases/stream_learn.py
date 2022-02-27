@@ -37,9 +37,9 @@ def stream_learn(model,
     labels = stream_data[:, -1]
     label_set = set(labels)
     for label in label_set:
-        start_point = np.where(labels == label)[0][0]
-        print('Class {} starts at {}'.format(label, start_point))
-        f.write("[Class %5d], Start point: %5d \n" % (label, start_point))
+      start_point = np.where(labels == label)[0][0]
+      print('Class {} starts at {}'.format(label, start_point))
+      f.write("[Class %5d], Start point: %5d \n" % (label, start_point))
 
     if args.use_transform:
         _, test_transform = transforms_preparation()
@@ -149,16 +149,16 @@ def stream_learn(model,
             known_labels = list(known_buffer.keys())
             labels_diff = list(set(new_known_labels)-set(known_labels))
             for label in labels_diff:
-                print('Class {} detected at {}'.format(label, i))
-                f.write("[Class %2d], Detected point: %5d \n" % (label, i))
+              print('Class {} detected at {}'.format(label, i))
+              f.write("[Class %2d], Detected point: %5d \n" % (label, i))
 
             if len(unknown_buffer) == args.buffer_size:
-                if len(labels_diff) != 0:
-                    for label in labels_diff:
-                        known_buffer[label] = []
-                unknown_buffer.clear()
+              if len(labels_diff) != 0:
+                for label in labels_diff:
+                  known_buffer[label] = []
+              unknown_buffer.clear()
             if (i+1) % args.known_retrain_interval == 0:
-                known_buffer = {i: [] for i in detector._known_labels}
+              known_buffer = {i: [] for i in detector._known_labels}
 
             # == Set parameters =====
             detection_results.clear()
