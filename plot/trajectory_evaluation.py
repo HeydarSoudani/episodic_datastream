@@ -2,15 +2,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def main():
-  dataset = 'cifar100' #['fmnist', 'cifar10', 'cifar100']
-  class_num = 10
-  colors = [
+def avg_known_classes():
 
-  ]
   data_points = np.array([5530, 12009, 17163, 21334, 26423, 32294, 40472, 49591, 61954, 63999])
   known_acc   = np.array([0.8161, 0.9082, 0.8276, 0.8271, 0.8182, 0.8158, 0.8050, 0.8396, 0.8558, 0.8709])
-  # plt.plot(data_points, known_acc, '-o') #color=colors[idx], label=label
+  mnew = np.array([])
+  plt.plot(data_points, known_acc, '-o') #color=colors[idx], label=label
+
+
+def main():
+  dataset = 'MNIST' #['fmnist', 'cifar10', 'cifar100']
+  class_num = 10
+  colors = ['limegreen', 'hotpink', 'blueviolet', 'royalblue', 'darkorange', 'gold', 'brown']
 
   known_acc_by_class = np.array([
     [0.8082, 0.9116, 0.8816, 0.8739, 0.8430, 0.8459, 0.8318, 0.8388, 0.8271, 0.8717],
@@ -28,39 +31,50 @@ def main():
   start_points = np.array([6005, 12011, 18002, 24001, 30001])
   detected_points = np.array([12009, 17163, 21334, 26423, 32294])
 
-  # for i in range(class_num):
-  #   plt.plot(data_points, known_acc_by_class[i], '-o', label='class {}'.format(i))
-  #   plt.axvline(x=data_points[i], linestyle='--') #color='k'
-  # plt.legend(loc='lower right')
-  # plt.xlabel('Stream data')
-  # plt.ylabel('Known class Accuracy')
-  # plt.xticks(np.arange(0, 64000, step=10000))
-  # plt.yticks(np.arange(0.4, 1.1, step=0.1)) 
-  # plt.show()
+  # plt.rcParams['axes.grid'] = True
+  fig, axs = plt.subplots(6, 1)
+  fig.subplots_adjust(hspace = .001)
+  # plt.grid()
+  plt.suptitle('{} dataset'.format(dataset))
+
+  for i in range(5):
+    axs[0].plot(data_points, known_acc_by_class[i], '-o', label='class {}'.format(i))
+  axs[0].set_ylim([0.5, 1])
+  axs[0].set_ylabel('Base classes', fontsize=12, rotation=0, ha='right')
+  axs[0].set_yticks(np.arange(0.6, 1.05, step=0.2))
+  axs[0].set_xticks(np.arange(0, 64000, step=10000))
+  axs[0].legend(loc='lower right', ncol=5)
+
+  for class_idx, class_acc in enumerate(known_acc_by_class[5:]):    
+    axs[class_idx+1].plot(data_points, class_acc, '-o', color=colors[class_idx])
+    axs[class_idx+1].axvline(x=start_points[class_idx], linestyle='--', color=colors[class_idx]) #color='k'
+    axs[class_idx+1].axvline(x=detected_points[class_idx], linestyle='-.', color=colors[class_idx])
+    axs[class_idx+1].axvspan(start_points[class_idx], detected_points[class_idx], alpha=0.25, color=colors[class_idx])
+    # axs[class_idx+1].grid()
+    axs[class_idx+1].set_ylim([0.5, 1])
+    axs[class_idx+1].set_ylabel('Label {}'.format(class_idx+5), fontsize=12, rotation=0, ha='right')
+    axs[class_idx+1].set_yticks(np.arange(0.6, 1.05, step=0.2)) 
+    axs[class_idx+1].set_xticks(np.arange(0, 64000, step=5000))
+
+    axs[class_idx+1].annotate(
+      "",
+      xy=(start_points[class_idx], 0.75), xycoords='data',
+      xytext=(detected_points[class_idx], 0.75), textcoords='data',
+      arrowprops=dict(arrowstyle="<->", connectionstyle="arc3", color=colors[class_idx], lw=1),
+    )
+    axs[class_idx+1].text(
+      int(0.5*(detected_points[class_idx] + start_points[class_idx]) - 730 ), 0.8,
+      '%g'%(detected_points[class_idx] - start_points[class_idx]), 
+      rotation=0, fontsize=10, color=colors[class_idx])
+
+    if class_idx != 4:
+      axs[class_idx+1].set_xticklabels(())
   
-  fig, axs = plt.subplots(class_num, 1)
-  for class_idx, class_acc in enumerate(known_acc_by_class):
-    axs[class_idx].plot(data_points, class_acc)
-    plt.subplots_adjust(hspace = .001)
-    if class_idx > 4:
-      axs[class_idx].axvline(x=start_points[class_idx-5], linestyle='--') #color='k'
-      axs[class_idx].axvline(x=detected_points[class_idx-5], linestyle='--')
-    # axs[class_idx].set_title('Class {}'.format(class_idx))
-    # axs[class_idx].set_xlabel('Stream data')
-    
-    axs[class_idx].set_ylabel('Label {}'.format(class_idx), rotation=0, ha='right')
-    axs[class_idx].set_yticks(np.arange(0.6, 1.05, step=0.2)) 
-    axs[class_idx].set_xticks(np.arange(0, 64000, step=10000))
-    if class_idx != 9:
-      axs[class_idx].set_xticklabels(())
-  
-  # plt.xlabel('Stream data')
+  plt.xlabel('Stream data')
   # plt.ylabel('Known class Accuracy')
   plt.show()
 
 
-
-
-
 if __name__ == '__main__':
-  main()
+  # main()
+  avg_known_classes()
