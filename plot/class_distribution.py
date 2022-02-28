@@ -6,29 +6,56 @@ import matplotlib.pyplot as plt
 
 def class_distribution(args):
   
-  ## == load data ======================== 
-  stream_data = read_csv(
-    os.path.join(args.data_path, args.stream_file),
-    sep=',',
-    header=None).values
-  labels = stream_data[:, -1].flatten()
-
-  ## == 
+  seeds = ['1', '5', '12', '39']
   colors = ['royalblue', 'hotpink', 'blueviolet', 'gold', 'darkorange', 'limegreen', 'brown', 'darkcyan', 'goldenrod', 'slateblue']
   
-  plt.scatter(
-    np.arange(labels.shape[0]),
-    labels,
-    c=[colors[label] for label in labels],
-    s=np.full(labels.shape, 1.4)
-  )
-  plt.xlabel('samples')
-  plt.ylabel('class labels')
+  plt.rcParams['figure.figsize'] = [18, 4]
+  fig, axs = plt.subplots(1, len(seeds))
+  for i in range(len(seeds)):
+    stream_data = read_csv(
+      os.path.join(args.data_path, '{}_stream_s{}.csv'.format(args.dataset, seeds[i])),
+      sep=',',
+      header=None).values
+    labels = stream_data[:, -1].flatten()
 
+    axs[i].scatter(
+      np.arange(labels.shape[0]),
+      labels,
+      c=[colors[label] for label in labels],
+      s=np.full(labels.shape, 1.4)
+    )
+    axs[i].set_title('Seed {}'.format(seeds[i]))
+    axs[i].set_xlabel('samples')
+    axs[i].set_ylabel('class labels')
+    axs[i].set_yticks(np.arange(0, 10, 1))
   
-  plt.yticks(np.arange(0, 10, 1))
-  plt.savefig('class_dist.png')
+  plt.savefig('class_dist.png', dpi=800)
   plt.show()
+
+
+
+
+
+  ## == load data ======================== 
+  # stream_data = read_csv(
+  #   os.path.join(args.data_path, args.stream_file),
+  #   sep=',',
+  #   header=None).values
+  # labels = stream_data[:, -1].flatten()
+
+  # ## == 
+  
+  # plt.scatter(
+  #   np.arange(labels.shape[0]),
+  #   labels,
+  #   c=[colors[label] for label in labels],
+  #   s=np.full(labels.shape, 1.4)
+  # )
+  # plt.xlabel('samples')
+  # plt.ylabel('class labels')
+  # plt.yticks(np.arange(0, 10, 1))
+  # plt.savefig('class_dist.png')
+  # plt.show()
 
 
 if __name__ == '__main__':
