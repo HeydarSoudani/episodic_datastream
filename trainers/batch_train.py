@@ -124,12 +124,16 @@ def train(model,
               min_loss = val_loss_total
               print("Saving new best model")
             
+            # =====================
             # == For trajectory ===
+            print('Prototypes are calculating ...')
+            learner.calculate_prototypes(model, train_loader)
+            
             tasks_acc_dist, tasks_acc_cls = increm_test(model, learner, current_task, args)
             for j in range(current_task+1):
               all_dist_acc['task_{}'.format(j)].append(round(tasks_acc_dist[j]*100, 2))
               all_cls_acc['task_{}'.format(j)].append(round(tasks_acc_cls[j]*100, 2))
-
+            # =====================
 
         if args.scheduler:
           scheduler.step()
