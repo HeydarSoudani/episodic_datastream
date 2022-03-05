@@ -117,8 +117,8 @@ def increm_learn(model,
 
     # == For 
     for i in range(task+1):
-      all_dist_acc['task_{}'.format(i)].expand(local_dist_acc['task_{}'.format(i)])
-      all_cls_acc['task_{}'.format(i)].expand(local_cls_acc['task_{}'.format(i)])
+      all_dist_acc['task_{}'.format(i)].extend(local_dist_acc['task_{}'.format(i)])
+      all_cls_acc['task_{}'.format(i)].extend(local_cls_acc['task_{}'.format(i)])
 
     print(all_dist_acc)
 
