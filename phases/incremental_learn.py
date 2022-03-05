@@ -32,9 +32,9 @@ def increm_test(model, current_task, args):
     # known_labels = test_dataset.label_set
     # print('Test on: {}'.format(known_labels))
     if args.dataset == 'cifar100':
-      known_labels = set(range((task+1)*5))
+      known_labels = set(range((current_task+1)*5))
     else:
-      known_labels = set(range((task+1)*2))
+      known_labels = set(range((current_task+1)*2))
     # print('Known_labels for task {} is: {}'.format(task, known_labels))
     
     _, acc_dis, acc_cls = learner.evaluate(model,
