@@ -154,7 +154,7 @@ def increm_learn(model,
       model.load(args.best_model_path)
 
     tasks_acc_dist, tasks_acc_cls = increm_test(model, learner, task, args)
-    for i in range(task):
+    for i in range(task+1):
       all_dist_acc['task_{}'.format(i)].append(tasks_acc_dist[i])
       all_cls_acc['task_{}'.format(i)].append(tasks_acc_cls[i])
 
