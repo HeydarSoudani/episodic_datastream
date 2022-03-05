@@ -8,7 +8,46 @@ import numpy as np
 
 from datasets.dataset import SimpleDataset
 from utils.preparation import transforms_preparation
-from phases.incremental_learn import increm_test
+# from phases.incremental_learn import increm_test
+
+
+def increm_test(model, learner, current_task, args):
+  
+  tasks_acc_dist = [0.0 for _ in range(args.n_tasks)]
+  tasks_acc_cls = [0.0 for _ in range(args.n_tasks)]
+  
+  for prev_task in range(current_task+1):
+    test_data = pd.read_csv(
+                os.path.join(args.split_test_path, "task_{}.csv".format(prev_task)),
+                sep=',', header=None).values
+
+    if args.use_transform:
+      _, test_transform = transforms_preparation()
+      test_dataset = SimpleDataset(test_data, args, transforms=test_transform)
+    else:
+      test_dataset = SimpleDataset(test_data, args)
+    test_dataloader = DataLoader(dataset=test_dataset,
+                                  batch_size=args.batch_size,
+                                  shuffle=False)
+
+    # known_labels = test_dataset.label_set
+    # print('Test on: {}'.format(known_labels))
+    if args.dataset == 'cifar100':
+      known_labels = set(range((current_task+1)*5))
+    else:
+      known_labels = set(range((current_task+1)*2))
+    # print('Known_labels for task {} is: {}'.format(task, known_labels))
+    
+    _, acc_dis, acc_cls = learner.evaluate(model,
+                                          test_dataloader,
+                                          known_labels,
+                                          args)
+                 
+    tasks_acc_dist[prev_task] = acc_dis
+    tasks_acc_cls[prev_task] = acc_cls
+  
+  return tasks_acc_dist, tasks_acc_cls
+
 
 def train(model,
           learner,
