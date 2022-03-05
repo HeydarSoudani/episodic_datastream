@@ -155,8 +155,8 @@ def increm_learn(model,
 
     tasks_acc_dist, tasks_acc_cls = increm_test(model, learner, task, args)
     for i in range(task+1):
-      all_dist_acc['task_{}'.format(i)].append(tasks_acc_dist[i])
-      all_cls_acc['task_{}'.format(i)].append(tasks_acc_cls[i])
+      all_dist_acc['task_{}'.format(i)].append(round(tasks_acc_dist[i]*100, 2))
+      all_cls_acc['task_{}'.format(i)].append(round(tasks_acc_cls[i]*100, 2))
 
     mean_acc_dist = np.mean(tasks_acc_dist[:task+1])
     mean_acc_cls = np.mean(tasks_acc_cls[:task+1])
