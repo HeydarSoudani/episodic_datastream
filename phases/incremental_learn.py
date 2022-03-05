@@ -45,7 +45,7 @@ def increm_test(model, learner, current_task, args):
     tasks_acc_dist[prev_task] = acc_dis
     tasks_acc_cls[prev_task] = acc_cls
   
-  return task_acc_dist, task_acc_cls
+  return tasks_acc_dist, tasks_acc_cls
 
 
 def increm_learn(model,
