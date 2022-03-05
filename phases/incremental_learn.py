@@ -121,6 +121,7 @@ def increm_learn(model,
       all_cls_acc['task_{}'.format(i)].extend(local_cls_acc['task_{}'.format(i)])
 
     print(all_dist_acc)
+    print(all_cls_acc)
 
     ### === After each task evaluation =====
     # print('=== Testing ... ===')
