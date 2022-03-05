@@ -109,7 +109,7 @@ def increm_learn(model,
           task_data,
           args, device)
       
-    ### == Update memoty =================
+    ### == Update memoty ===================
     memory.update(task_data)
 
 
@@ -161,6 +161,9 @@ def increm_learn(model,
     mean_acc_dist = np.mean(tasks_acc_dist[:task+1])
     mean_acc_cls = np.mean(tasks_acc_cls[:task+1])
     
+    print(all_dist_acc)
+    print(all_cls_acc)
+
     if args.dataset == 'cifar100': 
       print("Dist acc.: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(tasks_acc_dist))
       print("Cls  acc.: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(tasks_acc_cls))
