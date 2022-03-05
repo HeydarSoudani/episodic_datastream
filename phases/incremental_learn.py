@@ -80,11 +80,12 @@ def increm_learn(model,
       
       ## == Train Model (Batch) ===========
       if args.algorithm == 'batch':
-        batch_train(
+        local_dist_acc, local_cls_acc = batch_train(
           model,
           learner,
           train_data,
-          args, device)
+          args, device,
+          current_task=task)
       ## == Train Model (Episodic) ========
       else:
         episodic_train(
@@ -95,11 +96,12 @@ def increm_learn(model,
     else:
       ## == Train Model (Batch) ===========
       if args.algorithm == 'batch':
-        batch_train(
+        local_dist_acc, local_cls_acc = batch_train(
           model,
           learner,
           task_data,
-          args, device)
+          args, device,
+          current_task=task)
 
       ## == Train Model (Episodic) ========
       else:
@@ -113,57 +115,26 @@ def increm_learn(model,
     memory.update(task_data)
 
 
-    ### === Without Memory ========================
-    ## == Train Model (Batch) ===========
-    # if args.algorithm == 'batch':
-    #   batch_train(
-    #     model,
-    #     learner,
-    #     task_data,
-    #     args, device)
-
-    # ## == Train Model (Episodic) ========
-    # else:
-    #   episodic_train(
-    #     model,
-    #     learner,
-    #     task_data,
-    #     args, device)
-
-    ### === Drift setting (with memory) ===========
-    # if task == 0:
-    #   episodic_train(model,
-    #         learner,
-    #         task_data,
-    #         args, device)  
-    #   memory.update(task_data)
-    #   args.beta_type = 'fixed'
-    #   args.beta = args.drift_beta
-    # else:
-    #   replay_mem = memory()
-    #   train_data = np.concatenate((task_data, replay_mem))
-    #   episodic_train(model,
-    #       learner,
-    #       train_data,
-    #       args, device) 
-
-
-    ### === After each task evaluation =============
-    print('=== Testing ... ===')
-    if args.which_model == 'best':
-      model.load(args.best_model_path)
-
-    tasks_acc_dist, tasks_acc_cls = increm_test(model, learner, task, args)
+    # == For 
     for i in range(task+1):
-      all_dist_acc['task_{}'.format(i)].append(round(tasks_acc_dist[i]*100, 2))
-      all_cls_acc['task_{}'.format(i)].append(round(tasks_acc_cls[i]*100, 2))
+      all_dist_acc['task_{}'.format(i)].expand(local_dist_acc['task_{}'.format(i)])
+      all_cls_acc['task_{}'.format(i)].expand(local_cls_acc['task_{}'.format(i)])
+
+    print(all_dist_acc)
+
+    ### === After each task evaluation =====
+    # print('=== Testing ... ===')
+    # if args.which_model == 'best':
+    #   model.load(args.best_model_path)
+    tasks_acc_dist, tasks_acc_cls = increm_test(model, learner, task, args)
+    # for i in range(task+1):
+    #   all_dist_acc['task_{}'.format(i)].append(round(tasks_acc_dist[i]*100, 2))
+    #   all_cls_acc['task_{}'.format(i)].append(round(tasks_acc_cls[i]*100, 2))
 
     mean_acc_dist = np.mean(tasks_acc_dist[:task+1])
     mean_acc_cls = np.mean(tasks_acc_cls[:task+1])
     
-    print(all_dist_acc)
-    print(all_cls_acc)
-
+    ## == Print results ==========
     if args.dataset == 'cifar100': 
       print("Dist acc.: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(tasks_acc_dist))
       print("Cls  acc.: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(tasks_acc_cls))
@@ -189,6 +160,13 @@ def increm_learn(model,
   # mean_forgetting_cls = torch.mean(forgetting_cls)
   # std_forgetting_cls = torch.std(forgetting_cls)
   # print('cls forgetting: {:.4f} ± {:.4f}'.format(mean_forgetting_cls, std_forgetting_cls))
+
+
+
+
+
+
+
 
 
 
@@ -227,3 +205,39 @@ def increm_learn(model,
     
     # all_tasks_acc_dist.append(torch.tensor(tasks_acc_dist))
     # all_tasks_acc_cls.append(torch.tensor(tasks_acc_cls))
+
+
+
+    ### === Without Memory ========================
+    ## == Train Model (Batch) ===========
+    # if args.algorithm == 'batch':
+    #   batch_train(
+    #     model,
+    #     learner,
+    #     task_data,
+    #     args, device)
+
+    # ## == Train Model (Episodic) ========
+    # else:
+    #   episodic_train(
+    #     model,
+    #     learner,
+    #     task_data,
+    #     args, device)
+
+    ### === Drift setting (with memory) ===========
+    # if task == 0:
+    #   episodic_train(model,
+    #         learner,
+    #         task_data,
+    #         args, device)  
+    #   memory.update(task_data)
+    #   args.beta_type = 'fixed'
+    #   args.beta = args.drift_beta
+    # else:
+    #   replay_mem = memory()
+    #   train_data = np.concatenate((task_data, replay_mem))
+    #   episodic_train(model,
+    #       learner,
+    #       train_data,
+    #       args, device) 

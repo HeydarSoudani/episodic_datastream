@@ -8,12 +8,20 @@ import numpy as np
 
 from datasets.dataset import SimpleDataset
 from utils.preparation import transforms_preparation
+from phases.incremental_learn import increm_test
 
 def train(model,
           learner,
           train_data,
-          args, device):              
+          args, device,
+          current_task):              
   model.to(device)
+
+
+  # == For trajectory ===
+  all_dist_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
+  all_cls_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
+
 
   ### === Load data ======================
   n, _ = train_data.shape
@@ -75,6 +83,13 @@ def train(model,
               model.save(os.path.join(args.save, "model_best.pt"))
               min_loss = val_loss_total
               print("Saving new best model")
+            
+            # == For trajectory ===
+            tasks_acc_dist, tasks_acc_cls = increm_test(model, learner, current_task, args)
+            for j in range(current_task+1):
+              all_dist_acc['task_{}'.format(j)].append(round(tasks_acc_dist[j]*100, 2))
+              all_cls_acc['task_{}'.format(j)].append(round(tasks_acc_cls[j]*100, 2))
+
 
         if args.scheduler:
           scheduler.step()
@@ -93,4 +108,8 @@ def train(model,
   # save learner
   learner.save(os.path.join(args.save, "learner.pt"))
   print("= ...Learner saved")
+
+
+  # == For trajectory ===
+  return all_dist_acc, all_cls_acc
 
