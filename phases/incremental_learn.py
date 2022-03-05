@@ -10,7 +10,7 @@ from datasets.dataset import SimpleDataset
 from utils.preparation import transforms_preparation
 
 
-def increm_test(model, current_task, args):
+def increm_test(model, learner, current_task, args):
   
   tasks_acc_dist = [0.0 for _ in range(args.n_tasks)]
   tasks_acc_cls = [0.0 for _ in range(args.n_tasks)]
@@ -153,7 +153,7 @@ def increm_learn(model,
     if args.which_model == 'best':
       model.load(args.best_model_path)
 
-    tasks_acc_dist, tasks_acc_cls = increm_test(model, task, args)
+    tasks_acc_dist, tasks_acc_cls = increm_test(model, learner, task, args)
     for i in range(task):
       all_dist_acc['task_{}'.format(i)].append(tasks_acc_dist[i])
       all_cls_acc['task_{}'.format(i)].append(tasks_acc_cls[i])
