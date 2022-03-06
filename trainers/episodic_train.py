@@ -45,7 +45,6 @@ def increm_test(model, learner, current_task, args):
   return tasks_acc_dist, tasks_acc_cls
 
 
-
 def train(model,
           learner,
           train_data,

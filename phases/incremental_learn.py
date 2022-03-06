@@ -74,7 +74,7 @@ def increm_learn(model,
       if args.dataset == 'cifar100':
         if task == 5: args.ways = 20
       else:
-        if task == 2: args.ways = 5
+        if task == 1: args.ways = 4
 
       replay_mem = memory()
       train_data = np.concatenate((task_data, replay_mem))
