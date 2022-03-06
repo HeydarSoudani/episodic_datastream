@@ -57,6 +57,14 @@ def train(model,
   # == For trajectory ===
   all_dist_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
   all_cls_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
+  # Claculate Pts.
+  if args.use_transform:
+    train_transform, _ = transforms_preparation()
+    train_dataset = SimpleDataset(train_data, args, transforms=train_transform)
+  else:
+    train_dataset = SimpleDataset(train_data, args)
+  train_loader = DataLoader(dataset=train_dataset, batch_size=8, shuffle=False)
+
 
 
   train_dataloader,\
@@ -114,7 +122,7 @@ def train(model,
           
           # =====================
           # == For trajectory ===
-          # print('Prototypes are calculating ...')
+          print('Prototypes are calculating ...')
           learner.calculate_prototypes(model, train_loader)
           
           tasks_acc_dist, tasks_acc_cls = increm_test(model, learner, current_task, args)
@@ -141,13 +149,13 @@ def train(model,
   model.save(os.path.join(args.save, "model_last.pt"))
   print("= ...New last model saved")
 
-  # Claculate Pts.
-  if args.use_transform:
-    train_transform, _ = transforms_preparation()
-    train_dataset = SimpleDataset(train_data, args, transforms=train_transform)
-  else:
-    train_dataset = SimpleDataset(train_data, args)
-  train_loader = DataLoader(dataset=train_dataset, batch_size=8, shuffle=False)
+  # # Claculate Pts.
+  # if args.use_transform:
+  #   train_transform, _ = transforms_preparation()
+  #   train_dataset = SimpleDataset(train_data, args, transforms=train_transform)
+  # else:
+  #   train_dataset = SimpleDataset(train_data, args)
+  # train_loader = DataLoader(dataset=train_dataset, batch_size=8, shuffle=False)
 
   print('Prototypes are calculating ...')
   learner.calculate_prototypes(model, train_loader)
