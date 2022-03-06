@@ -53,10 +53,13 @@ def increm_learn(model,
                   memory,
                   args, device):
 
-  # all_tasks_acc_dist = []
-  # all_tasks_acc_cls = []
-  all_dist_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
-  all_cls_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
+  # -- For forgetting ----
+  all_tasks_acc_dist = []
+  all_tasks_acc_cls = []
+ 
+  # -- For acc. trajectory ----
+  traj_dist_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
+  traj_cls_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
   
   for task in range(args.n_tasks):  
     ### === Task data loading =====================
@@ -79,20 +82,23 @@ def increm_learn(model,
       print('train_data(new): {}'.format(train_data.shape))
       
       ## == Train Model (Batch) ===========
+      # -- Output model for trajectory ----
+
       if args.algorithm == 'batch':
         local_dist_acc, local_cls_acc = batch_train(
           model,
           learner,
           train_data,
           args, device,
-          current_task=task)
+          current_task=task) # current_task parameter for acc. trajectory
       ## == Train Model (Episodic) ========
       else:
-        episodic_train(
+        local_dist_acc, local_cls_acc = episodic_train(
           model,
           learner,
           train_data,
-          args, device)
+          args, device,
+          current_task=task) # current_task parameter for acc. trajectory
     else:
       ## == Train Model (Batch) ===========
       if args.algorithm == 'batch':
@@ -105,35 +111,38 @@ def increm_learn(model,
 
       ## == Train Model (Episodic) ========
       else:
-        episodic_train(
+        local_dist_acc, local_cls_acc = episodic_train(
           model,
           learner,
           task_data,
-          args, device)
+          args, device,
+          current_task=task) # current_task parameter for acc. trajectory
       
     ### == Update memoty ===================
     memory.update(task_data)
 
 
-    # == For 
+    # == For acc. trajectory ============
     for i in range(task+1):
-      all_dist_acc['task_{}'.format(i)].extend(local_dist_acc['task_{}'.format(i)])
-      all_cls_acc['task_{}'.format(i)].extend(local_cls_acc['task_{}'.format(i)])
-
-    print(all_dist_acc)
-    print(all_cls_acc)
+      traj_dist_acc['task_{}'.format(i)].extend(local_dist_acc['task_{}'.format(i)])
+      traj_cls_acc['task_{}'.format(i)].extend(local_cls_acc['task_{}'.format(i)])
+    print(traj_dist_acc)
+    print(traj_cls_acc)
 
     ### === After each task evaluation =====
-    # print('=== Testing ... ===')
-    # if args.which_model == 'best':
-    #   model.load(args.best_model_path)
+    print('=== Testing ... ===')
+    if args.which_model == 'best':
+      model.load(args.best_model_path)
     tasks_acc_dist, tasks_acc_cls = increm_test(model, learner, task, args)
-    # for i in range(task+1):
-    #   all_dist_acc['task_{}'.format(i)].append(round(tasks_acc_dist[i]*100, 2))
-    #   all_cls_acc['task_{}'.format(i)].append(round(tasks_acc_cls[i]*100, 2))
+    
+    
+    all_tasks_acc_dist.append(torch.tensor(tasks_acc_dist))
+    all_tasks_acc_cls.append(torch.tensor(tasks_acc_cls))
 
     mean_acc_dist = np.mean(tasks_acc_dist[:task+1])
     mean_acc_cls = np.mean(tasks_acc_cls[:task+1])
+    
+    
     
     ## == Print results ==========
     if args.dataset == 'cifar100': 
@@ -144,23 +153,29 @@ def increm_learn(model,
       print("Cls  acc.: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(tasks_acc_cls))
     print('Mean -> Dist: {}, Cls: {}'.format(round(mean_acc_dist, 3), round(mean_acc_cls, 3)))
 
+  
+  
+  
+  
+  
+  
   ### == Claculate forgetting =================
-  # all_tasks_acc_cls = torch.stack(all_tasks_acc_cls)
-  # all_tasks_acc_dist = torch.stack(all_tasks_acc_dist)
+  all_tasks_acc_cls = torch.stack(all_tasks_acc_cls)
+  all_tasks_acc_dist = torch.stack(all_tasks_acc_dist)
 
-  # acc_dist_best = torch.max(all_tasks_acc_dist, 0).values
-  # temp = acc_dist_best - all_tasks_acc_dist
-  # forgetting_dist = torch.tensor([torch.mean(temp[i+1:, i]) for i in range(args.n_tasks-1)])
-  # mean_forgetting_dist = torch.mean(forgetting_dist)
-  # std_forgetting_dist = torch.std(forgetting_dist)
-  # print('dist forgetting: {:.4f} ± {:.4f}'.format(mean_forgetting_dist, std_forgetting_dist))
+  acc_dist_best = torch.max(all_tasks_acc_dist, 0).values
+  temp = acc_dist_best - all_tasks_acc_dist
+  forgetting_dist = torch.tensor([torch.mean(temp[i+1:, i]) for i in range(args.n_tasks-1)])
+  mean_forgetting_dist = torch.mean(forgetting_dist)
+  std_forgetting_dist = torch.std(forgetting_dist)
+  print('dist forgetting: {:.4f} ± {:.4f}'.format(mean_forgetting_dist, std_forgetting_dist))
 
-  # acc_cls_best = torch.max(all_tasks_acc_cls, 0).values
-  # temp = acc_cls_best - all_tasks_acc_cls
-  # forgetting_cls = torch.tensor([torch.mean(temp[i+1:, i]) for i in range(args.n_tasks-1)])
-  # mean_forgetting_cls = torch.mean(forgetting_cls)
-  # std_forgetting_cls = torch.std(forgetting_cls)
-  # print('cls forgetting: {:.4f} ± {:.4f}'.format(mean_forgetting_cls, std_forgetting_cls))
+  acc_cls_best = torch.max(all_tasks_acc_cls, 0).values
+  temp = acc_cls_best - all_tasks_acc_cls
+  forgetting_cls = torch.tensor([torch.mean(temp[i+1:, i]) for i in range(args.n_tasks-1)])
+  mean_forgetting_cls = torch.mean(forgetting_cls)
+  std_forgetting_cls = torch.std(forgetting_cls)
+  print('cls forgetting: {:.4f} ± {:.4f}'.format(mean_forgetting_cls, std_forgetting_cls))
 
 
 

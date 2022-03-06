@@ -126,7 +126,7 @@ def train(model,
             
             # =====================
             # == For trajectory ===
-            print('Prototypes are calculating ...')
+            # print('Prototypes are calculating ...')
             learner.calculate_prototypes(model, train_loader)
             
             tasks_acc_dist, tasks_acc_cls = increm_test(model, learner, current_task, args)
