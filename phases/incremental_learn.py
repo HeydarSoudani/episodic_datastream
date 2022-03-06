@@ -121,7 +121,6 @@ def increm_learn(model,
     ### == Update memoty ===================
     memory.update(task_data)
 
-
     # == For acc. trajectory ============
     for i in range(task+1):
       traj_dist_acc['task_{}'.format(i)].extend(local_dist_acc['task_{}'.format(i)])
@@ -135,14 +134,11 @@ def increm_learn(model,
       model.load(args.best_model_path)
     tasks_acc_dist, tasks_acc_cls = increm_test(model, learner, task, args)
     
-    
     all_tasks_acc_dist.append(torch.tensor(tasks_acc_dist))
     all_tasks_acc_cls.append(torch.tensor(tasks_acc_cls))
 
     mean_acc_dist = np.mean(tasks_acc_dist[:task+1])
     mean_acc_cls = np.mean(tasks_acc_cls[:task+1])
-    
-    
     
     ## == Print results ==========
     if args.dataset == 'cifar100': 
@@ -153,9 +149,6 @@ def increm_learn(model,
       print("Cls  acc.: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f \n"% tuple(tasks_acc_cls))
     print('Mean -> Dist: {}, Cls: {}'.format(round(mean_acc_dist, 3), round(mean_acc_cls, 3)))
 
-  
-  
-  
   
   
   
