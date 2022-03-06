@@ -7,14 +7,58 @@ import time
 from datasets.dataset import SimpleDataset
 from utils.preparation import dataloader_preparation, transforms_preparation
 
+def increm_test(model, learner, current_task, args):
+  
+  tasks_acc_dist = [0.0 for _ in range(args.n_tasks)]
+  tasks_acc_cls = [0.0 for _ in range(args.n_tasks)]
+  
+  for prev_task in range(current_task+1):
+    test_data = pd.read_csv(
+                os.path.join(args.split_test_path, "task_{}.csv".format(prev_task)),
+                sep=',', header=None).values
+
+    if args.use_transform:
+      _, test_transform = transforms_preparation()
+      test_dataset = SimpleDataset(test_data, args, transforms=test_transform)
+    else:
+      test_dataset = SimpleDataset(test_data, args)
+    test_dataloader = DataLoader(dataset=test_dataset,
+                                  batch_size=args.batch_size,
+                                  shuffle=False)
+
+    # known_labels = test_dataset.label_set
+    # print('Test on: {}'.format(known_labels))
+    if args.dataset == 'cifar100':
+      known_labels = set(range((current_task+1)*5))
+    else:
+      known_labels = set(range((current_task+1)*2))
+    # print('Known_labels for task {} is: {}'.format(task, known_labels))
+    
+    _, acc_dis, acc_cls = learner.evaluate(model,
+                                          test_dataloader,
+                                          known_labels,
+                                          args)
+                 
+    tasks_acc_dist[prev_task] = acc_dis
+    tasks_acc_cls[prev_task] = acc_cls
+  
+  return tasks_acc_dist, tasks_acc_cls
+
+
 
 def train(model,
           learner,
           train_data,
           # test_loader, known_labels,
           args, device,
+          current_task,
           val_data=[]):
   model.to(device)
+
+  # == For trajectory ===
+  all_dist_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
+  all_cls_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
+
 
   train_dataloader,\
   val_dataloader, \
@@ -68,6 +112,17 @@ def train(model,
             model.save(os.path.join(args.save, "model_best.pt"))
             min_loss = val_loss_total
             print("= ...New best model saved")
+          
+          # =====================
+          # == For trajectory ===
+          # print('Prototypes are calculating ...')
+          learner.calculate_prototypes(model, train_loader)
+          
+          tasks_acc_dist, tasks_acc_cls = increm_test(model, learner, current_task, args)
+          for j in range(current_task+1):
+            all_dist_acc['task_{}'.format(j)].append(round(tasks_acc_dist[j]*100, 2))
+            all_cls_acc['task_{}'.format(j)].append(round(tasks_acc_cls[j]*100, 2))
+          # =====================
     
         # ## == test ====================
         # if (miteration_item + 1) % (5 * args.log_interval) == 0:
@@ -101,6 +156,9 @@ def train(model,
   # save learner
   learner.save(os.path.join(args.save, "learner.pt"))
   print("= ...Learner saved")
+
+  # == For trajectory ===
+  return all_dist_acc, all_cls_acc
 
 
 if __name__ == '__main__':
