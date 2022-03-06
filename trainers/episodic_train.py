@@ -3,6 +3,7 @@ from torch.utils.data import DataLoader
 from torch.optim.lr_scheduler import StepLR, OneCycleLR
 import os
 import time
+import pandas as pd
 
 from datasets.dataset import SimpleDataset
 from utils.preparation import dataloader_preparation, transforms_preparation
