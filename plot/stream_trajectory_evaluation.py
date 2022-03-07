@@ -79,6 +79,7 @@ def avg_class_plot():
 
   axs[0].plot(data_points, CwCA_avg, '-o', label='CwCA', color=colors[-1])
   axs[0].set_ylim([0.5, 1])
+  axs[0].set_xlim([0, 64000])
   axs[0].set_ylabel('Average Acc.', fontsize=12, rotation=0, ha='right')
   axs[0].set_yticks(np.arange(0.6, 1.05, step=0.2))
   axs[0].set_xticks(np.arange(0, 64000, step=10000))
@@ -87,6 +88,7 @@ def avg_class_plot():
   for i in range(5):
     axs[1].plot(data_points, known_acc_by_class[i], '-o', label='class {}'.format(i))
   axs[1].set_ylim([0.5, 1])
+  axs[1].set_xlim([0, 64000])
   axs[1].set_ylabel('Base classes', fontsize=12, rotation=0, ha='right')
   axs[1].set_yticks(np.arange(0.6, 1.05, step=0.2))
   axs[1].set_xticks(np.arange(0, 64000, step=10000))
@@ -99,6 +101,7 @@ def avg_class_plot():
     axs[class_idx+2].axvspan(start_points[class_idx], detected_points[class_idx], alpha=0.25, color=colors[class_idx])
 
     axs[class_idx+2].set_ylim([0.5, 1])
+    axs[class_idx+2].set_xlim([0, 64000])
     axs[class_idx+2].set_ylabel('Label {}'.format(class_idx+5), fontsize=12, rotation=0, ha='right')
     axs[class_idx+2].set_yticks(np.arange(0.6, 1.05, step=0.2)) 
     axs[class_idx+2].set_xticks(np.arange(0, 64000, step=5000))
