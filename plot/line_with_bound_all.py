@@ -2,7 +2,32 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def get_data(dataset):
+  if dataset == 'mnist':
+    data = [
+      # upper bounds
+      {
+        'label': 'Metric upper-bound',
+        'mean': np.array([]),
+        'std':  np.array([]),
+      },
+      {
+        'label': 'Episodic upper-bound',
+        'mean': np.array([]),
+        'std':  np.array([]),
+      },
+      {
+        'label': 'CrossEntropy upper-bound',
+        'mean': np.array([]),
+        'std':  np.array([]),
+      },
 
+      # Episodic approaches
+
+      # Metric approaches
+
+      # Baselines
+
+    ]
   if dataset == 'fmnist':
     data = [
       # upper bounds
@@ -240,7 +265,7 @@ def get_data(dataset):
   return data
 
 def main():
-  dataset = 'cifar100' #['fmnist', 'cifar10', 'cifar100']
+  dataset = 'cifar100' #['mnist', 'fmnist', 'cifar10', 'cifar100']
   methods = [
     'Metric upper-bound',
     'Episodic upper-bound',

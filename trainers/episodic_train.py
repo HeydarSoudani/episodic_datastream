@@ -51,20 +51,20 @@ def train(model,
           train_data,
           # test_loader, known_labels,
           args, device,
-          current_task,
+          # current_task,
           val_data=[]):
   model.to(device)
 
   # == For trajectory ===
-  all_dist_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
-  all_cls_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
-  # Claculate Pts.
-  if args.use_transform:
-    train_transform, _ = transforms_preparation()
-    train_dataset = SimpleDataset(train_data, args, transforms=train_transform)
-  else:
-    train_dataset = SimpleDataset(train_data, args)
-  train_loader = DataLoader(dataset=train_dataset, batch_size=8, shuffle=False)
+  # all_dist_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
+  # all_cls_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
+  # # Claculate Pts.
+  # if args.use_transform:
+  #   train_transform, _ = transforms_preparation()
+  #   train_dataset = SimpleDataset(train_data, args, transforms=train_transform)
+  # else:
+  #   train_dataset = SimpleDataset(train_data, args)
+  # train_loader = DataLoader(dataset=train_dataset, batch_size=8, shuffle=False)
 
 
 
@@ -123,13 +123,13 @@ def train(model,
           
           # =====================
           # == For trajectory ===
-          print('Prototypes are calculating ...')
-          learner.calculate_prototypes(model, train_loader)
+          # print('Prototypes are calculating ...')
+          # learner.calculate_prototypes(model, train_loader)
           
-          tasks_acc_dist, tasks_acc_cls = increm_test(model, learner, current_task, args)
-          for j in range(current_task+1):
-            all_dist_acc['task_{}'.format(j)].append(round(tasks_acc_dist[j]*100, 2))
-            all_cls_acc['task_{}'.format(j)].append(round(tasks_acc_cls[j]*100, 2))
+          # tasks_acc_dist, tasks_acc_cls = increm_test(model, learner, current_task, args)
+          # for j in range(current_task+1):
+          #   all_dist_acc['task_{}'.format(j)].append(round(tasks_acc_dist[j]*100, 2))
+          #   all_cls_acc['task_{}'.format(j)].append(round(tasks_acc_cls[j]*100, 2))
           # =====================
     
         # ## == test ====================
@@ -150,15 +150,14 @@ def train(model,
   model.save(os.path.join(args.save, "model_last.pt"))
   print("= ...New last model saved")
 
-  # # Claculate Pts.
-  # if args.use_transform:
-  #   train_transform, _ = transforms_preparation()
-  #   train_dataset = SimpleDataset(train_data, args, transforms=train_transform)
-  # else:
-  #   train_dataset = SimpleDataset(train_data, args)
-  # train_loader = DataLoader(dataset=train_dataset, batch_size=8, shuffle=False)
-
+  # Claculate Pts.
   print('Prototypes are calculating ...')
+  if args.use_transform:
+    train_transform, _ = transforms_preparation()
+    train_dataset = SimpleDataset(train_data, args, transforms=train_transform)
+  else:
+    train_dataset = SimpleDataset(train_data, args)
+  train_loader = DataLoader(dataset=train_dataset, batch_size=8, shuffle=False)
   learner.calculate_prototypes(model, train_loader)
 
   # save learner
@@ -166,7 +165,7 @@ def train(model,
   print("= ...Learner saved")
 
   # == For trajectory ===
-  return all_dist_acc, all_cls_acc
+  # return all_dist_acc, all_cls_acc
 
 
 if __name__ == '__main__':
