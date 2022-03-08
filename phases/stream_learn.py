@@ -66,7 +66,7 @@ def stream_learn(model,
 
     for i, data in enumerate(dataloader):
         
-        if i == 5000:
+        if i == 10000:
             break
 
         model.eval()
@@ -205,6 +205,9 @@ def stream_learn(model,
     all_time = sum(retrainin_times)+sum(detector_times)+sum(memory_times)+sum(eval_times)
     print(all_time)
     print(sum(retrainin_times))
+    print(sum(detector_times))
+    print(sum(memory_times))
+    print(sum(eval_times))
     print("Time: %7.4f, %7.4f, %7.4f, %7.4f"%
         (sum(retrainin_times), sum(detector_times), sum(memory_times), sum(eval_times), all_time ))
      
