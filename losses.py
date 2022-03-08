@@ -105,8 +105,8 @@ class TotalLoss(nn.Module):
     
     self.dce = DCELoss(device, gamma=args.temp_scale)
     self.ce = torch.nn.CrossEntropyLoss()
-    self.metric = losses.NTXentLoss(temperature=0.07)
-    # self.metric = losses.ContrastiveLoss(pos_margin=0, neg_margin=1)
+    # self.metric = losses.NTXentLoss(temperature=0.07)
+    self.metric = losses.ContrastiveLoss(pos_margin=0, neg_margin=1)
     # self.metric = losses.TripletMarginLoss(margin=0.05)
 
   def forward(self, features, outputs, labels, prototypes, n_query, n_classes):
