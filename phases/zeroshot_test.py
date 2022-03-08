@@ -1,6 +1,7 @@
 import torch
 from torch.utils.data import DataLoader
 import os
+import time
 from pandas import read_csv
 
 from datasets.dataset import SimpleDataset
@@ -31,6 +32,8 @@ def zeroshot_test(model,
   #   detector.set_known_labels(known_labels)
 
   ## == Test Model ===================================
+  zeroshot_start_time = time.time()
+
   detection_results = []
   model.eval()
   with torch.no_grad():
@@ -51,6 +54,8 @@ def zeroshot_test(model,
     CwCA, NcCA, AcCA, OwCA, M_new, F_new = final_step_evaluation(detection_results, base_labels, detector._known_labels)
     print("Evaluation: %7.2f, %7.2f, %7.2f, %7.2f, %7.2f, %7.2f"%(CwCA*100, NcCA*100, AcCA*100, OwCA*100, M_new*100, F_new*100))
     # print("confusion matrix: \n%s"% cm)
+  
+  print('Zero-shot test time is: {:.4f}s'.format(time.time() - zeroshot_start_time))
     
 
 
