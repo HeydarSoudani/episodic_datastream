@@ -18,7 +18,8 @@ def init_learn(model,
   ### == train data ========================
   print('train_data: {}'.format(train_data.shape))  
   
-  ### == Train Model (Batch) ===========
+  start_time = time.time()
+  # == Train Model (Batch) ===========
   if args.algorithm == 'batch':
     batch_train(
       model,
@@ -26,18 +27,22 @@ def init_learn(model,
       train_data,
       args, device)
 
-  ### == Train Model (Episodic) ========
+  # == Train Model (Episodic) ========
   else:
     episodic_train(
       model,
       learner,
       train_data,
       args, device)
+  
+  init_learning_time = time.time() - start_time
+  print('init_learning time is: {%.4f}s'.format(init_learning_time))
 
   # == save model for plot ===========
   model.save(os.path.join(args.save, "model_after_init.pt"))
   print("= ...model after init saved")
 
+  start_time = time.time()
   # == Save Novel detector ============
   print("Calculating detector ...")
   samples, known_labels, intra_distances\
@@ -58,6 +63,9 @@ def init_learn(model,
   memory.select(data=samples)
   memory.save(args.memory_path)
   print("Memory has been saved in {}.".format(args.memory_path))
+
+  init_detector_memory_time = time.time() - start_time
+  print('init detector & memory time is: {%.4f}s'.format(init_detector_memory_time))
 
   # ## == Test ============================
   
