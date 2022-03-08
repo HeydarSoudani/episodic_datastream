@@ -37,7 +37,7 @@ def init_learn(model,
       args, device)
   
   init_learning_time = time.time() - start_time
-  print('init_learning time is: {%.4f}s'.format(init_learning_time))
+  print('init_learning time is: {:.4f}s'.format(init_learning_time))
 
   # == save model for plot ===========
   model.save(os.path.join(args.save, "model_after_init.pt"))
@@ -66,7 +66,7 @@ def init_learn(model,
   print("Memory has been saved in {}.".format(args.memory_path))
 
   init_detector_memory_time = time.time() - start_time
-  print('init detector & memory time is: {%.4f}s'.format(init_detector_memory_time))
+  print('init detector & memory time is: {:.4f}s'.format(init_detector_memory_time))
 
   # ## == Test ============================
   
