@@ -65,6 +65,10 @@ def stream_learn(model,
     eval_start_time = time.time()
 
     for i, data in enumerate(dataloader):
+        
+        if i == 5000:
+            break
+
         model.eval()
         with torch.no_grad():
             sample, label = data
@@ -199,6 +203,8 @@ def stream_learn(model,
 
     ## == Print time
     all_time = sum(retrainin_times)+sum(detector_times)+sum(memory_times)+sum(eval_times)
+    print(all_time)
+    print(sum(retrainin_times))
     print("Time: %7.4f, %7.4f, %7.4f, %7.4f"%
         (sum(retrainin_times), sum(detector_times), sum(memory_times), sum(eval_times), all_time ))
      
