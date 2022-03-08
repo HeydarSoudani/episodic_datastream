@@ -8,13 +8,13 @@ import numpy as np
 # import argparse
 # import os
 
-# a = [
-#   0.5956,
-#   0.5424,
-#   0.5797,
-#   0.5532
-# ]
-# print('{:.2f} ± {:.2f}'.format(np.mean(a)*100, np.std(a)*100))
+a = [
+  88.12,
+  85.41,
+  85.71,
+  87.30
+]
+print('{:.2f} ± {:.2f}'.format(np.mean(a), np.std(a)))
 
 ### -- Forgetting ----------------
 # f = 0.0
@@ -54,27 +54,27 @@ import numpy as np
 
 
 ### ---- read from .txt file -------
-from numpy import loadtxt
-# lines = loadtxt("output.txt", comments="#", delimiter=" ", unpack=False)
+# from numpy import loadtxt
+# # lines = loadtxt("output.txt", comments="#", delimiter=" ", unpack=False)
 
-text_file = open("output.txt", "r")
-lines = text_file.readlines()
-new_list = []
-for line in lines:
-  item = line[1:-2]
-  items = item.split(",")
-  float_items = [round(float(i)*100, 2) for i in items]
-  new_list.append(float_items)
+# text_file = open("output.txt", "r")
+# lines = text_file.readlines()
+# new_list = []
+# for line in lines:
+#   item = line[1:-2]
+#   items = item.split(",")
+#   float_items = [round(float(i)*100, 2) for i in items]
+#   new_list.append(float_items)
 
-arr = np.array(new_list)
-n_task = 5
-n_epoch_item = 3
+# arr = np.array(new_list)
+# n_task = 5
+# n_epoch_item = 3
 
-output = {}
-for task in range(n_task):
-  output['task_{}'.format(task)] = list(arr[(task*n_epoch_item):, task])
+# output = {}
+# for task in range(n_task):
+#   output['task_{}'.format(task)] = list(arr[(task*n_epoch_item):, task])
 
-print(output)
+# print(output)
 
 
 
