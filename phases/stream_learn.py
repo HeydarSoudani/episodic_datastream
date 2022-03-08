@@ -208,7 +208,7 @@ def stream_learn(model,
     print(sum(detector_times))
     print(sum(memory_times))
     print(sum(eval_times))
-    print("Time: %7.4f, %7.4f, %7.4f, %7.4f"%
+    print("Time: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f"%
         (sum(retrainin_times), sum(detector_times), sum(memory_times), sum(eval_times), all_time ))
      
     # print(retrainin_times)
