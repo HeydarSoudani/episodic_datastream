@@ -9,10 +9,10 @@ import numpy as np
 # import os
 
 a = [
-  88.12,
-  85.41,
-  85.71,
-  87.30
+  87.85,
+  89.38,
+  89.26,
+  89.48
 ]
 print('{:.2f} ± {:.2f}'.format(np.mean(a), np.std(a)))
 

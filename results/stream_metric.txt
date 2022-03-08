@@ -1,7 +1,179 @@
 
 
+### MNIST ########################
+
+=== CE ======================
+     | CwCA    | NcCA   | AcCA   | OwCA    | M_new | F_new 
+S:01 | 83.63,   88.55,   86.27,   92.19,    0.38,   16.02
+S:05 | 81.62,   90.00,   86.28,   91.63,    0.38,   17.04
+S:12 | 80.42,   92.80,   87.36,   91.01,    0.68,   19.26
+S:39 | 80.77,   81.74,   81.30,   90.95,    0.45,   18.60
+avg--| 
+CwCA | 
+NcCA |
+AcCA |
+OwCA |
+M_new|
+F_new|
+
+=== Triplet =================
+     | CwCA    | NcCA   | AcCA   | OwCA    | M_new | F_new 
+S:01 | 79.23,   86.93,   83.35,   90.24,    0.20,   20.56
+S:05 | 75.41,   88.23,   82.54,   88.98,    0.20,   23.84
+S:12 | 80.13,   92.26,   86.92,   90.92,    0.59,   19.65
+S:39 | 78.70,   87.47,   83.46,   90.14,    0.20,   20.94
+avg--| 
+CwCA | 
+NcCA |
+AcCA |
+OwCA |
+M_new|
+F_new|
+
+=== Contrastive =============
+     | CwCA    | NcCA   | AcCA   | OwCA    | M_new | F_new 
+S:01 |
+S:05 | 
+S:12 | 
+S:39 | 
+avg--| 
+CwCA | 
+NcCA |
+AcCA |
+OwCA |
+M_new|
+F_new|
+
+=== NTXent ==================
+     | CwCA    | NcCA   | AcCA   | OwCA    | M_new | F_new 
+S:01 |
+S:05 | 
+S:12 | 
+S:39 | 
+avg--| 
+CwCA | 
+NcCA |
+AcCA |
+OwCA |
+M_new|
+F_new|
 
 
+### Fashion-MNIST ########################
+
+=== CE ======================
+     | CwCA    | NcCA   | AcCA   | OwCA    | M_new | F_new 
+S:01 |
+S:05 | 
+S:12 | 
+S:39 | 
+avg--| 
+CwCA | 
+NcCA |
+AcCA |
+OwCA |
+M_new|
+F_new|
+
+=== Triplet =================
+     | CwCA    | NcCA   | AcCA   | OwCA    | M_new | F_new 
+S:01 |
+S:05 | 
+S:12 | 
+S:39 | 
+avg--| 
+CwCA | 
+NcCA |
+AcCA |
+OwCA |
+M_new|
+F_new|
+
+=== Contrastive =============
+     | CwCA    | NcCA   | AcCA   | OwCA    | M_new | F_new 
+S:01 |
+S:05 | 
+S:12 | 
+S:39 | 
+avg--| 
+CwCA | 
+NcCA |
+AcCA |
+OwCA |
+M_new|
+F_new|
+
+=== NTXent ==================
+     | CwCA    | NcCA   | AcCA   | OwCA    | M_new | F_new 
+S:01 |
+S:05 | 
+S:12 | 
+S:39 | 
+avg--| 
+CwCA | 
+NcCA |
+AcCA |
+OwCA |
+M_new|
+F_new|
+
+### CIFAR10 ##########################
+
+=== CE ======================
+     | CwCA    | NcCA   | AcCA   | OwCA    | M_new | F_new 
+S:01 |
+S:05 | 
+S:12 | 
+S:39 | 
+avg--| 
+CwCA | 
+NcCA |
+AcCA |
+OwCA |
+M_new|
+F_new|
+
+=== Triplet =================
+     | CwCA    | NcCA   | AcCA   | OwCA    | M_new | F_new 
+S:01 |
+S:05 | 
+S:12 | 
+S:39 | 
+avg--| 
+CwCA | 
+NcCA |
+AcCA |
+OwCA |
+M_new|
+F_new|
+
+=== Contrastive =============
+     | CwCA    | NcCA   | AcCA   | OwCA    | M_new | F_new 
+S:01 |
+S:05 | 
+S:12 | 
+S:39 | 
+avg--| 
+CwCA | 
+NcCA |
+AcCA |
+OwCA |
+M_new|
+F_new|
+
+=== NTXent ==================
+     | CwCA    | NcCA   | AcCA   | OwCA    | M_new | F_new 
+S:01 |
+S:05 | 
+S:12 | 
+S:39 | 
+avg--| 
+CwCA | 
+NcCA |
+AcCA |
+OwCA |
+M_new|
+F_new|
 
 
 
