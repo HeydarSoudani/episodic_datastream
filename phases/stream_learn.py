@@ -21,6 +21,12 @@ def stream_learn(model,
                  detector,
                  args, device):
     print('================================ Stream Learning ================================')
+    
+    # == time lists ============================
+    retrainin_times = []
+    detector_times = []
+    memory_times = []
+    eval_times = []
 
     # == Set retrain params ====================
     args.epochs = args.retrain_epochs
@@ -55,6 +61,8 @@ def stream_learn(model,
     known_buffer = {i: [] for i in detector._known_labels}
     detection_results = []
     last_idx = 0
+
+    eval_start_time = time.time()
 
     for i, data in enumerate(dataloader):
         model.eval()
@@ -102,6 +110,8 @@ def stream_learn(model,
 
             CwCA, M_new, F_new, cm, acc_per_class = in_stream_evaluation(
                 detection_results, detector._known_labels)
+            eval_times.append(time.time() - eval_start_time)
+
             print("[On %5d samples]: %7.4f, %7.4f, %7.4f" %
                   (sample_num, CwCA, M_new, F_new))
             print("confusion matrix: \n%s\n" % cm)
@@ -112,11 +122,14 @@ def stream_learn(model,
             f.write("acc per class: %s\n" % acc_per_class)
 
             # == 2) Preparing retrain data ==========
+            mem_start_time = time.time()
             new_train_data = memory.select(buffer, return_data=True)
+            memory_times.append(time.time() - mem_start_time)
             print('Retrain data number: {}'.format(new_train_data.shape[0]))
             print('===========================')
 
             # == 3) Retraining Model ================
+            retrain_start_time = time.time()
             if args.algorithm == 'batch':
                 batch_train(
                     model,
@@ -129,18 +142,20 @@ def stream_learn(model,
                     learner,
                     new_train_data,
                     args, device)
+            retrainin_times.append(time.time() - retrain_start_time)
 
             # == 4) Recalculating Detector ==========
             print("Calculating detector ...")
+            detector_start_time = time.time()
             _, new_known_labels, intra_distances\
                 = detector_preparation(model,
                                        learner.prototypes,
                                        new_train_data,
                                        args, device)
-
             detector.threshold_calculation(intra_distances,
                                            new_known_labels,
                                            args.std_coefficient)
+            detector_times.append(time.time() - detector_start_time)
             print("Detector Threshold: {}".format(detector.thresholds))
             detector.save(args.detector_path)
             print("Detector has been saved in {}.".format(args.detector_path))
@@ -165,7 +180,8 @@ def stream_learn(model,
             last_idx = i
 
             print('=== Streaming... =================')
-            time.sleep(1.5)
+            eval_start_time = time.time()
+            # time.sleep(1.5)
 
     # == Last evaluation ========================
     sample_num = i-last_idx
