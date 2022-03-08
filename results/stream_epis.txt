@@ -50,7 +50,7 @@ avg--|
 CwCA | 86.64 ± 1.12
 NcCA | 90.89 ± 1.93
 AcCA | 88.99 ± 0.66
-OwCA |
+OwCA | 92.99 ± 0.41
 M_new|
 F_new|
 
