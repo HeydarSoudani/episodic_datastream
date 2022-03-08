@@ -196,14 +196,18 @@ def stream_learn(model,
             (i, sample_num, CwCA, M_new, F_new))
     f.write("acc per class: %s\n" % acc_per_class)
     f.close()
-    
-    ## == Print time 
+
+    ## == Print time
+    all_time = sum(retrainin_times)+sum(detector_times)+sum(memory_times)+sum(eval_times)
+    print("Time: %7.4f, %7.4f, %7.4f, %7.4f"%
+        (sum(retrainin_times), sum(detector_times), sum(memory_times), sum(eval_times), all_time ))
+     
     # print(retrainin_times)
     # print(detector_times)
     # print(memory_times)
     # print(eval_times)
-    print('Retrainin time is: {:.4f}s'.format(sum(retrainin_times)))
-    print('Detector time is: {:.4f}s'.format(sum(detector_times)))
-    print('Memory time is: {:.4f}s'.format(sum(memory_times)))
-    print('Eval time is: {:.4f}s'.format(sum(eval_times)))
-    print('All stream time is: {:.4f}s'.format(sum(retrainin_times)+sum(detector_times)+sum(memory_times)+sum(eval_times)))
+    # print('Retrainin time is: {:.4f}s'.format(sum(retrainin_times)))
+    # print('Detector time is: {:.4f}s'.format(sum(detector_times)))
+    # print('Memory time is: {:.4f}s'.format(sum(memory_times)))
+    # print('Eval time is: {:.4f}s'.format(sum(eval_times)))
+    # print('All stream time is: {:.4f}s'.format(sum(retrainin_times)+sum(detector_times)+sum(memory_times)+sum(eval_times)))

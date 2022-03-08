@@ -103,6 +103,18 @@ AcCA |
 OwCA |
 M_new|
 F_new|
+     | re_time | de_time | me_time | ev_time | all_time
+S:01 |
+S:05 | 
+S:12 | 
+S:39 | 
+avg--| 
+re_t | 
+de_t |
+me_t |
+ev_t |
+al_t |
+
 
 === NTXent ==================
      | CwCA    | NcCA   | AcCA   | OwCA    | M_new | F_new 
