@@ -51,7 +51,7 @@ def train(model,
           train_data,
           # test_loader, known_labels,
           args, device,
-          # current_task,
+          current_task,
           val_data=[]):
   model.to(device)
 
