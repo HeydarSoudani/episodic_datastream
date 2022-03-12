@@ -1,76 +1,174 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from math import floor
 
 def get_data():
   # cpe_1, cpe_3, cpe_5,
-  # MT_ce, MT_xn, MT_co, MT_tr,
+  # MT_xn, MT_co, MT_tr,
+  # EP_ce, EP_pt, EP_rp
   data = [
     {
       'dataset': 'FashionMNIST',
       'mean': np.array([
         2013.15, 3615.75, 5669.10,
-        # 280.77,
         278.57, 266.51, 269.08,
-        568.29, 572.70,
+        568.29, 572.70, 5408.25
       ]),
       'std': np.array([
         257.01, 419.60, 268.74,
-        # 2.84,
         4.81, 4.12, 1.35,
-        2.58, 9.43,
+        2.58, 9.43, 150.14
       ])
     },
     {
       'dataset': 'CIFAR10',
       'mean': np.array([
-
+        1181.12, 2286.18, 3156.93,
+        272.52, 254.56, 267.68,
+        1138.71, 1087.89, 4022.36
       ]),
       'std': np.array([
-
+        156.81, 453.53, 537.65,
+        6.19, 6.34, 2.78,
+        33.43, 39.26, 156.88
       ])
+    }
+  ]
+  return data
+
+def get_details_data():
+  # 'retrain', 'detector', 'memory', 'evaluation'
+  data = [
+    {
+      'dataset':'FashionMNIST',
+      'mean': np.array([
+        [41.20, 57.40, 0.29, 185.62], # MT_xn
+        [28.73, 52.77, 0.27, 184.74], # MT_co
+        [29.74, 54.47, 0.28, 184.59], # MT_tr
+        [324.59, 51.46, 0.28, 191.96], # EP_ce
+        [329.37, 50.94, 0.28, 192.10], # EP_pt
+        [5133.64, 83.41, 0.43, 190.77], # EP_rp
+      ]),
+      'std':  np.array([
+        [3.53, 7.55, 0.02, 0.53], # MT_xn
+        [1.38, 2.54, 0.02, 0.76], # MT_co
+        [0.49, 0.74, 0.02, 0.95], # MT_tr
+        [2.24, 0.97, 0.01, 0.84], # EP_ce
+        [8.42, 0.61, 0.01, 1.40], # EP_pt
+        [148.65, 1.64, 0.03, 0.14], # EP_rp
+      ]),
+    },
+    {
+      'dataset': 'CIFAR10',
+      'mean': np.array([
+        [50.98, 62.09, 0.36, 159.09], # MT_xn
+        [37.32, 59.58, 0.36, 157.31], # MT_co
+        [41.49, 66.65, 0.42, 159.12], # MT_tr
+        [902.03, 71.87, 0.55, 164.26], # EP_ce
+        [855.33, 68.38, 0.51, 163.67], # EP_pt
+        [3802.00, 55.53, 0.42, 164.41], # EP_rp
+      ]),
+      'std':  np.array([
+        [2.18, 3.30, 0.00, 0.89], # MT_xn
+        [2.43, 3.55, 0.02, 0.74], # MT_co
+        [1.40, 2.10, 0.02, 1.18], # MT_tr
+        [30.90, 1.34, 0.04, 1.59], # EP_ce
+        [36.02, 2.79, 0.02, 0.73], # EP_pt
+        [152.72, 2.00, 0.01, 3.79], # EP_rp
+      ]),
     }
   ]
 
   return data
 
-def main():
+
+def all_time_plot():
   data = get_data()
-  methods = ['CPE_e1', 'CPE_e3', 'CPE_e5', 'MT_XN', 'MT_CO', 'MT_TR']  #'MT_CE',
-  colors = ['royalblue', 'hotpink', 'blueviolet', 'gold', 'darkorange', 'limegreen', 'brown']
-  n_methods = 6
+  methods = ['CPE_e1', 'CPE_e3', 'CPE_e5', 'MT_XN', 'MT_CO', 'MT_TR', 'EP_CE', 'EP_PT', 'EP_RP' ]  #'MT_CE',
+  colors = ['royalblue', 'hotpink', 'blueviolet', 'gold', 'darkorange', 'limegreen', 'brown', 'goldenrod', 'darkorchid']
+  n_methods = 9
   n_set = 3
   ind = np.arange(n_set)
   width = 0.1
   
-  fig, axs = plt.subplots(nrows=1, ncols=len(data), constrained_layout=True, figsize=(8,8))
+  fig, axs = plt.subplots(nrows=1, ncols=len(data), figsize=(6,3))
   
-  # for idx, item in enumerate(data):
-  #   dataset = item['dataset']
-  #   mean = item['mean']
-  #   std = item['std']
-  #   for i in range(n_methods):
-  #     index = ind + (i-2.5)*width 
-  #     axs[idx].bar(
-  #       index,
-  #       mean[i],
-  #       yerr=std[i],
-  #       color=colors[i],
-  #       width=width,
-  #       align='center',
-  #       label='{}'.format(methods[i])
+  for idx, item in enumerate(data):
+    dataset = item['dataset']
+    mean = item['mean']
+    std = item['std']
+    for i in range(n_methods):
+      index = floor(i/n_set) + ((i%n_set)-1.5)*width 
+      axs[idx].bar(
+        index,
+        mean[i],
+        yerr=std[i],
+        color=colors[i],
+        width=width,
+        # align='center',
+        align='edge',
+        label='{}'.format(methods[i])
+      )
     
-  #   axs[idx].set_xticks(ind)
-  #   axs[idx].set_xticklabels(['CPE', 'Metric', 'MetaLearning'], fontsize=8)
-  #   axs[idx].set_xlabel('Methods', fontsize=12)
-  #   axs[idx].set_ylabel('Run time (s)', fontsize=12)
-  #   axs[idx].set_title('{}'.format(dataset), fontsize=14, pad=50.0)
-  #   axs[idx].legend(loc='center', bbox_to_anchor=(0.5, 1.12),
-  #     fancybox=True, shadow=False, ncol=3, fontsize=11.5)
+    axs[idx].set_ylim([0, 6000])
+    axs[idx].set_xlim([-1, 3])
+    axs[idx].set_xticks(ind)
+    axs[idx].set_xticklabels(['CPE', 'Metric', 'MetaLearning'], fontsize=8)
+    axs[idx].set_xlabel('Methods', fontsize=12)
+    axs[idx].set_ylabel('Run time (s)', fontsize=12)
+    axs[idx].set_title('{}'.format(dataset), fontsize=12)
+  
+  handles, labels = axs[idx].get_legend_handles_labels()
+  fig.legend(handles, labels, loc='upper center', ncol=3,)
+  # fig.legend(loc='center', bbox_to_anchor=(0.5, 1.12),
+  #   fancybox=True, shadow=False, ncol=3, fontsize=11.5)
 
-  # # fig.savefig('bars.png', format='png', dpi=1400)
-  # plt.show()
+  # fig.savefig('bars.png', format='png', dpi=1400)
+  plt.show()
 
+def details_times_plot():
+  methods = ['MT_XN', 'MT_CO', 'MT_TR', 'EP_CE', 'EP_PT', 'EP_RP' ]  #'MT_CE',
+  colors = ['royalblue', 'hotpink', 'blueviolet', 'gold', 'darkorange', 'limegreen']
+  n_methods = 6
+  width = 0.1
+  ind = np.arange(4)
+  data = get_details_data()
+
+
+  fig, axs = plt.subplots(nrows=1, ncols=len(data), figsize=(6,3))
+  for idx, item in enumerate(data):
+    dataset = item['dataset']
+    mean = item['mean']
+    std = item['std']
+    for i in range(n_methods):
+      index = ind + (i-2.5)*width 
+      axs[idx].bar(
+        index,
+        mean[i],
+        yerr=std[i],
+        color=colors[i],
+        width=width,
+        align='center',
+        label='{}'.format(methods[i])
+      )
+
+    axs[idx].set_yscale('log')  
+    axs[idx].set_xticks(ind)
+    axs[idx].set_xticklabels(['retrain', 'detector', 'memory', 'evaluation'], fontsize=10)
+    axs[idx].set_xlabel('Component', fontsize=12)
+    axs[idx].set_ylabel('Run time (s)', fontsize=12)
+    axs[idx].set_title('{}'.format(dataset), fontsize=14)
+    # axs[idx].legend(loc='center', bbox_to_anchor=(0.5, 1.12),
+    #         fancybox=True, shadow=False, ncol=3, fontsize=11.5)
+  
+  handles, labels = axs[idx].get_legend_handles_labels()
+  fig.legend(handles, labels, loc='upper center', ncol=2,)
+
+  # fig.savefig('bars.png', format='png', dpi=1400)
+  plt.show()
 
 
 if __name__ == '__main__':
-  main()
+  # all_time_plot()
+  details_times_plot()
+

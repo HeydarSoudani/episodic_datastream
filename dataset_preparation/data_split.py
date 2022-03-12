@@ -28,9 +28,9 @@ parser.add_argument(
     'cifar10',
     'cifar100',
   ],
-  default='cifar100',
+  default='cifar10',
   help='')
-parser.add_argument('--seed', type=int, default=5, help='')
+parser.add_argument('--seed', type=int, default=1, help='')
 args = parser.parse_args()
 
 # = Add some variables to args ========

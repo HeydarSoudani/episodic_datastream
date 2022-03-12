@@ -23,7 +23,7 @@ def stream_learn(model,
     print('================================ Stream Learning ================================')
     
     # == time lists ============================
-    retrainin_times = []
+    retrain_times = []
     detector_times = []
     memory_times = []
     eval_times = []
@@ -142,7 +142,7 @@ def stream_learn(model,
                     learner,
                     new_train_data,
                     args, device)
-            retrainin_times.append(time.time() - retrain_start_time)
+            retrain_times.append(time.time() - retrain_start_time)
 
             # == 4) Recalculating Detector ==========
             print("Calculating detector ...")
@@ -198,16 +198,16 @@ def stream_learn(model,
     f.close()
 
     ## == Print time
-    all_time = sum(retrainin_times)+sum(detector_times)+sum(memory_times)+sum(eval_times)
+    all_time = sum(retrain_times)+sum(detector_times)+sum(memory_times)+sum(eval_times)
     print("Time: %7.4f, %7.4f, %7.4f, %7.4f, %7.4f"%
-        (sum(retrainin_times), sum(detector_times), sum(memory_times), sum(eval_times), all_time ))
+        (sum(retrain_times), sum(detector_times), sum(memory_times), sum(eval_times), all_time ))
      
-    # print(retrainin_times)
+    # print(retrain_times)
     # print(detector_times)
     # print(memory_times)
     # print(eval_times)
-    # print('Retrainin time is: {:.4f}s'.format(sum(retrainin_times)))
+    # print('Retrainin time is: {:.4f}s'.format(sum(retrain_times)))
     # print('Detector time is: {:.4f}s'.format(sum(detector_times)))
     # print('Memory time is: {:.4f}s'.format(sum(memory_times)))
     # print('Eval time is: {:.4f}s'.format(sum(eval_times)))
-    # print('All stream time is: {:.4f}s'.format(sum(retrainin_times)+sum(detector_times)+sum(memory_times)+sum(eval_times)))
+    # print('All stream time is: {:.4f}s'.format(sum(retrain_times)+sum(detector_times)+sum(memory_times)+sum(eval_times)))

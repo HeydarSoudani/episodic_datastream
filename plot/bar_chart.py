@@ -140,7 +140,7 @@ def main():
   width = 0.1
   
   
-  fig, axs = plt.subplots(nrows=2, ncols=1, constrained_layout=True, figsize=(8,8))
+  fig, axs = plt.subplots(nrows=2, ncols=1, constrained_layout=True, figsize=(4,4))
   # plt.tight_layout()
 
   for idx, item in enumerate(data):
@@ -159,6 +159,7 @@ def main():
         align='center',
         label='{}: {}'.format(methods[i], mem_avg[i])
       )
+      
     axs[idx].set_xticks(ind)
     axs[idx].set_xticklabels(['0.2K', '0.5K', '1K', '2K'], fontsize=10)
     axs[idx].set_xlabel('Memory size', fontsize=12)
