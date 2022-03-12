@@ -55,9 +55,8 @@ def increm_learn(model,
                   args, device):
 
   # -- For acc. trajectory ----
-  # f = open('inc_trajectory_output.txt', 'w')
-  traj_dist_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
-  traj_cls_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
+  # traj_dist_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
+  # traj_cls_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
 
   # -- For forgetting ----
   all_tasks_acc_dist = []
@@ -92,58 +91,58 @@ def increm_learn(model,
       ## == Train Model (Batch) ===========
       # -- Output model for trajectory ----
       if args.algorithm == 'batch':
-        local_dist_acc, local_cls_acc = batch_train(
-          model,
-          learner,
-          train_data,
-          args, device,
-          current_task=task) # current_task parameter for acc. trajectory
-        # batch_train(
+        # local_dist_acc, local_cls_acc = batch_train(
         #   model,
         #   learner,
         #   train_data,
-        #   args, device)
+        #   args, device,
+        #   current_task=task) # current_task parameter for acc. trajectory
+        batch_train(
+          model,
+          learner,
+          train_data,
+          args, device)
       ## == Train Model (Episodic) ========
       else:
-        local_dist_acc, local_cls_acc = episodic_train(
-          model,
-          learner,
-          train_data,
-          args, device,
-          current_task=task) # current_task parameter for acc. trajectory
-        # episodic_train(
+        # local_dist_acc, local_cls_acc = episodic_train(
         #   model,
         #   learner,
         #   train_data,
-        #   args, device)
+        #   args, device,
+        #   current_task=task) # current_task parameter for acc. trajectory
+        episodic_train(
+          model,
+          learner,
+          train_data,
+          args, device)
     else:
       ## == Train Model (Batch) ===========
       if args.algorithm == 'batch':
-        local_dist_acc, local_cls_acc = batch_train(
-          model,
-          learner,
-          task_data,
-          args, device,
-          current_task=task)
-        # batch_train(
+        # local_dist_acc, local_cls_acc = batch_train(
         #   model,
         #   learner,
         #   task_data,
-        #   args, device)
+        #   args, device,
+        #   current_task=task)
+        batch_train(
+          model,
+          learner,
+          task_data,
+          args, device)
 
       ## == Train Model (Episodic) ========
       else:
-        local_dist_acc, local_cls_acc = episodic_train(
-          model,
-          learner,
-          task_data,
-          args, device,
-          current_task=task) # current_task parameter for acc. trajectory
-        # episodic_train(
+        # local_dist_acc, local_cls_acc = episodic_train(
         #   model,
         #   learner,
         #   task_data,
-        #   args, device)
+        #   args, device,
+        #   current_task=task) # current_task parameter for acc. trajectory
+        episodic_train(
+          model,
+          learner,
+          task_data,
+          args, device)
     train_times.append(time.time() - train_start_time)
     
     ### == Update memoty ===================
@@ -152,11 +151,11 @@ def increm_learn(model,
     memory_times.append(time.time() - mem_start_time)
 
     # == For acc. trajectory ============
-    for i in range(task+1):
-      traj_dist_acc['task_{}'.format(i)].extend(local_dist_acc['task_{}'.format(i)])
-      traj_cls_acc['task_{}'.format(i)].extend(local_cls_acc['task_{}'.format(i)])
-    print(traj_dist_acc)
-    print(traj_cls_acc)
+    # for i in range(task+1):
+    #   traj_dist_acc['task_{}'.format(i)].extend(local_dist_acc['task_{}'.format(i)])
+    #   traj_cls_acc['task_{}'.format(i)].extend(local_cls_acc['task_{}'.format(i)])
+    # print(traj_dist_acc)
+    # print(traj_cls_acc)
 
     ### === After each task evaluation =====
     print('=== Testing ... ===')
@@ -205,7 +204,6 @@ def increm_learn(model,
   print("Time: %7.4f, %7.4f, %7.4f, %7.4f"%
       (sum(train_times), sum(memory_times), sum(eval_times), all_time ))
 
-  # f.close()
 
 
 
