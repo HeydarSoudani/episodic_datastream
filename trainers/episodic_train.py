@@ -165,7 +165,7 @@ def train(model,
   print("= ...Learner saved")
 
   # == For trajectory ===
-  return all_dist_acc, all_cls_acc
+  # return all_dist_acc, all_cls_acc
 
 
 if __name__ == '__main__':
