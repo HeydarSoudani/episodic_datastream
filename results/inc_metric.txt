@@ -1,4 +1,294 @@
 
+# ----- New version with global pt
+
+### MNIST ########################
+
+=== NTXent (InfoNCE) ==================
+            acc     |  forgetting
+       Dist  | Cls  | Dist  | Cls 
+      ---------------------------------
+-- Mem:2k
+S:01 | 0.855, Cls: 0.92 | 0.1053, 0.0714
+S:05 | 0.877, Cls: 0.912 | 0.0861, 0.0776
+S:12 | 0.85, Cls: 0.907 | 0.1091, 0.0774
+S:39 | 0.868, Cls: 0.917 | 0.1020, 0.0724
+-----
+dis_acc_avg: 
+cls_acc_avg: 
+dis_fog_avg: 
+cls_fog_avg: 
+     ----------
+     | tr_time | me_time | ev_time | all_time
+S:01 | 278.7182,  0.4266,  7.9905, 287.1353
+S:05 | 285.6660,  0.4380,  7.9573, 294.0613
+S:12 | 280.5772,  0.4232,  7.8204, 288.8207
+S:39 | 283.7347,  0.4234,  7.8138, 291.9719
+avg--| 
+tr_t | 
+me_t | 
+ev_t | 
+al_t | 
+
+-- Mem:1k
+S:01 | 0.835, Cls: 0.871 | 0.1207, 0.1161
+S:05 | 0.844, Cls: 0.87 | 0.1135, 0.1201
+S:12 | 0.828, Cls: 0.874 | 0.1215, 0.1166
+S:39 | 0.848, Cls: 0.877 | 0.1112, 0.1173
+-----
+dis_acc_avg: 
+cls_acc_avg: 
+dis_fog_avg: 
+cls_fog_avg: 
+     ----------
+     | tr_time | me_time | ev_time | all_time
+S:01 | 275.6017,  0.4345,  7.7056, 283.7417
+S:05 | 273.0999,  0.4232,  7.9510, 281.4741
+S:12 | 295.1639,  0.4950,  9.0172, 304.6760
+S:39 | 275.9722,  0.4105,  8.1167, 284.4994
+avg--| 
+tr_t | 
+me_t | 
+ev_t | 
+al_t | 
+
+-- Mem:0.5k
+S:01 | 0.796, Cls: 0.824 | 0.1480, 0.1758
+S:05 | 0.809, Cls: 0.841 | 0.1506, 0.1601
+S:12 | 0.807, Cls: 0.819 | 0.1503, 0.1604
+S:39 | 0.822, Cls: 0.838 | 0.1341, 0.1504
+-----
+dis_acc_avg: 
+cls_acc_avg: 
+dis_fog_avg: 
+cls_fog_avg: 
+     ----------
+     | tr_time | me_time | ev_time | all_time
+S:01 | 266.0526,  0.4066,  8.2335, 274.6927
+S:05 | 265.9557,  0.4143,  7.6030, 273.9730
+S:12 | 268.8842,  0.4064,  7.7461, 277.0367
+S:39 | 267.6752,  0.4116,  7.5465, 275.6333
+avg--| 
+tr_t | 
+me_t | 
+ev_t | 
+al_t | 
+
+-- Mem:0.2k
+S:01 | 0.761, Cls: 0.698 | 0.1890, 0.2784
+S:05 | 0.75, Cls: 0.735 | 0.1950, 0.2646 
+S:12 | 0.76, Cls: 0.647 | 0.1838, 0.3337
+S:39 | 0.745, Cls: 0.726 | 0.2084, 0.2783
+-----
+dis_acc_avg: 
+cls_acc_avg: 
+dis_fog_avg: 
+cls_fog_avg: 
+     ----------
+     | tr_time | me_time | ev_time | all_time
+S:01 | 262.3343,  0.4068,  7.4452, 270.1863
+S:05 | 268.0656,  0.4142,  7.8779, 276.3577
+S:12 | 263.5712,  0.4030,  7.5323, 271.5065
+S:39 | 263.2445,  0.4120,  7.5461, 271.2026
+avg--| 
+tr_t | 
+me_t | 
+ev_t | 
+al_t | 
+
+
+
+=== Contrastive =====================
+            acc     |  forgetting
+       Dist  | Cls  | Dist  | Cls 
+      ---------------------------------
+-- Mem:2k
+S:01 | 
+S:05 | 
+S:12 | 
+S:39 | 
+-----
+dis_acc_avg: 
+cls_acc_avg: 
+dis_fog_avg: 
+cls_fog_avg: 
+     ----------
+     | tr_time | me_time | ev_time | all_time
+S:01 | 
+S:05 | 
+S:12 | 
+S:39 | 
+avg--| 
+tr_t | 
+me_t | 
+ev_t | 
+al_t | 
+
+-- Mem:1k
+S:01 | 
+S:05 | 
+S:12 | 
+S:39 | 
+-----
+dis_acc_avg: 
+cls_acc_avg: 
+dis_fog_avg: 
+cls_fog_avg: 
+     ----------
+     | tr_time | me_time | ev_time | all_time
+S:01 | 
+S:05 | 
+S:12 | 
+S:39 | 
+avg--| 
+tr_t | 
+me_t | 
+ev_t | 
+al_t | 
+
+-- Mem:0.5k
+S:01 | 
+S:05 | 
+S:12 | 
+S:39 | 
+-----
+dis_acc_avg: 
+cls_acc_avg: 
+dis_fog_avg: 
+cls_fog_avg: 
+     ----------
+     | tr_time | me_time | ev_time | all_time
+S:01 | 
+S:05 | 
+S:12 | 
+S:39 | 
+avg--| 
+tr_t | 
+me_t | 
+ev_t | 
+al_t | 
+
+-- Mem:0.2k
+S:01 | 
+S:05 | 
+S:12 | 
+S:39 | 
+-----
+dis_acc_avg: 
+cls_acc_avg: 
+dis_fog_avg: 
+cls_fog_avg: 
+     ----------
+     | tr_time | me_time | ev_time | all_time
+S:01 | 
+S:05 | 
+S:12 | 
+S:39 | 
+avg--| 
+tr_t | 
+me_t | 
+ev_t | 
+al_t | 
+
+
+=== Triplet =====================
+            acc     |  forgetting
+       Dist  | Cls  | Dist  | Cls 
+      ---------------------------------
+-- Mem:2k
+S:01 | 
+S:05 | 
+S:12 | 
+S:39 | 
+-----
+dis_acc_avg: 
+cls_acc_avg: 
+dis_fog_avg: 
+cls_fog_avg: 
+     ----------
+     | tr_time | me_time | ev_time | all_time
+S:01 | 
+S:05 | 
+S:12 | 
+S:39 | 
+avg--| 
+tr_t | 
+me_t | 
+ev_t | 
+al_t | 
+
+-- Mem:1k
+S:01 | 
+S:05 | 
+S:12 | 
+S:39 | 
+-----
+dis_acc_avg: 
+cls_acc_avg: 
+dis_fog_avg: 
+cls_fog_avg: 
+     ----------
+     | tr_time | me_time | ev_time | all_time
+S:01 | 
+S:05 | 
+S:12 | 
+S:39 | 
+avg--| 
+tr_t | 
+me_t | 
+ev_t | 
+al_t | 
+
+-- Mem:0.5k
+S:01 | 
+S:05 | 
+S:12 | 
+S:39 | 
+-----
+dis_acc_avg: 
+cls_acc_avg: 
+dis_fog_avg: 
+cls_fog_avg: 
+     ----------
+     | tr_time | me_time | ev_time | all_time
+S:01 | 
+S:05 | 
+S:12 | 
+S:39 | 
+avg--| 
+tr_t | 
+me_t | 
+ev_t | 
+al_t | 
+
+-- Mem:0.2k
+S:01 | 
+S:05 | 
+S:12 | 
+S:39 | 
+-----
+dis_acc_avg: 
+cls_acc_avg: 
+dis_fog_avg: 
+cls_fog_avg: 
+     ----------
+     | tr_time | me_time | ev_time | all_time
+S:01 | 
+S:05 | 
+S:12 | 
+S:39 | 
+avg--| 
+tr_t | 
+me_t | 
+ev_t | 
+al_t | 
+
+
+
+
+
+
+
+
 
 
 
