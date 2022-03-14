@@ -56,8 +56,8 @@ def train(model,
   model.to(device)
 
   # == For trajectory ===
-  # all_dist_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
-  # all_cls_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
+  all_dist_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
+  all_cls_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
   
   # train_loader for Claculate Pts.
   if args.use_transform:
