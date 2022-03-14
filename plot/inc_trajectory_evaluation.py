@@ -4,6 +4,130 @@ import matplotlib.pyplot as plt
 
 def get_data():
 
+  all_data = [
+    {
+      'dataset': 'MNIST',
+      'data': [
+        {
+          'label': '',
+          'mean': {
+            'task_0': [],
+            'task_1': [],
+            'task_2': [],
+            'task_3': [],
+            'task_4': []
+          },
+        },
+        {
+          'label': '',
+          'mean': {
+            'task_0': [],
+            'task_1': [],
+            'task_2': [],
+            'task_3': [],
+            'task_4': []
+          },
+        },
+      ] 
+    },
+    {
+      'dataset': '',
+      'data': [
+        {
+          'label': '',
+          'mean': {
+            'task_0': [],
+            'task_1': [],
+            'task_2': [],
+            'task_3': [],
+            'task_4': []
+          },
+          'std': {
+            'task_0': [],
+            'task_1': [],
+            'task_2': [],
+            'task_3': [],
+            'task_4': []
+          },
+        },
+      ]
+    }
+  ]
+
+  return all_data
+
+
+def main():
+  dataset = 'MNIST' #['fmnist', 'cifar10', 'cifar100']
+  n_task = 5
+  n_epoch = 1
+  colors = ['limegreen', 'hotpink', 'blueviolet', 'royalblue', 'darkorange', 'gold', 'brown']
+  data = get_data()
+
+  fig, axs = plt.subplots(n_task, 1)
+  
+  for item in data:
+    label = item['label']
+    tasks_mean = item['mean']
+    # tasks_std = item['std']
+    axs[0].set_title(dataset)
+    for i in range(n_task):
+      x = np.arange(i*n_epoch*3, n_epoch*15, 1)
+      
+      mean = np.array(tasks_mean['task_{}'.format(i)])
+      # std = np.array(tasks_std['task_{}'.format(i)])
+
+      axs[i].plot(x, mean, linewidth=1.2, label=label)
+      # axs[i].fill_between(
+      #   x, mean-std, mean+std,
+      #   edgecolor=colors[i],
+      #   facecolor=colors[i],
+      #   alpha=0.2)
+      
+      axs[i].set_ylim([60, 100])
+      axs[i].set_xlim([0, (n_epoch*14)])
+      axs[i].set_ylabel('Task {} Accuracy'.format(i), fontsize=8)
+      axs[i].set_xlabel('Training step')
+      axs[i].set_yticks(np.arange(60, 101, step=20))
+      axs[i].set_xticks(np.arange(0, (n_epoch*15), step=n_epoch))
+      
+    axs[i].legend(loc='lower left')
+
+  plt.show()
+  
+
+
+if __name__ == '__main__':
+  main()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   ## === 10 epoch, distance based ===============
   data =[
     # {
@@ -228,51 +352,3 @@ def get_data():
   #   }
   # ]
      
-
-  return data
-
-
-def main():
-  dataset = 'MNIST' #['fmnist', 'cifar10', 'cifar100']
-  n_task = 5
-  n_epoch = 1
-  colors = ['limegreen', 'hotpink', 'blueviolet', 'royalblue', 'darkorange', 'gold', 'brown']
-  data = get_data()
-
-  fig, axs = plt.subplots(n_task, 1)
-  
-  for item in data:
-    label = item['label']
-    tasks_mean = item['mean']
-    # tasks_std = item['std']
-    axs[0].set_title(dataset)
-    for i in range(n_task):
-      x = np.arange(i*n_epoch*3, n_epoch*15, 1)
-      
-      mean = np.array(tasks_mean['task_{}'.format(i)])
-      # std = np.array(tasks_std['task_{}'.format(i)])
-
-      axs[i].plot(x, mean, linewidth=1.2, label=label)
-      # axs[i].fill_between(
-      #   x, mean-std, mean+std,
-      #   edgecolor=colors[i],
-      #   facecolor=colors[i],
-      #   alpha=0.2)
-      
-      axs[i].set_ylim([60, 100])
-      axs[i].set_xlim([0, (n_epoch*14)])
-      axs[i].set_ylabel('Task {} Accuracy'.format(i), fontsize=8)
-      axs[i].set_xlabel('Training step')
-      axs[i].set_yticks(np.arange(60, 101, step=20))
-      axs[i].set_xticks(np.arange(0, (n_epoch*15), step=n_epoch))
-      
-    axs[i].legend(loc='lower left')
-
-  plt.show()
-  
-
-
-if __name__ == '__main__':
-  main()
-
-

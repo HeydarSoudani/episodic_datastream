@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from math import floor
 
-def get_data():
+def get_stream_data():
   # cpe_1, cpe_3, cpe_5,
   # MT_xn, MT_co, MT_tr,
   # EP_ce, EP_pt, EP_rp
@@ -36,7 +36,7 @@ def get_data():
   ]
   return data
 
-def get_details_data():
+def get_details_stream_data():
   # 'retrain', 'detector', 'memory', 'evaluation'
   data = [
     {
@@ -82,8 +82,58 @@ def get_details_data():
   return data
 
 
+def get_incremental_data():
+  # iCaRL, GSS, MIR, Res, CoPE,
+  # MT_xn, MT_co, MT_tr,
+  # EP_ce, EP_pt, EP_rp
+  # data = [
+  #   {
+  #     'dataset': 'MNIST',
+  #     'mean': np.array([
+  #       , , , , 119.26,
+  #       290.50, 63.26, 62.38,
+  #       578.39, 584.54, 1094.08
+  #     ]),
+  #     'std': np.array([
+  #       , , , , 1.31,
+  #       2.69, 1.25, 0.33,
+  #       1.67, 8.48, 10.71
+  #     ])
+  #   },
+  #   {
+  #     'dataset': 'FashionMNIST',
+  #     'mean': np.array([
+  #       , , , , 165.44,
+  #       , , ,
+  #       , , ,
+  #     ]),
+  #     'std': np.array([
+  #       , , , , 1.93,
+  #       , , ,
+  #       , , ,
+  #     ])
+  #   },
+  #   {
+  #     'dataset': 'CIFAR10',
+  #     'mean': np.array([
+  #       , , , , ,
+  #       , , ,
+  #       2394.98, 2407.66, 6073.16,
+  #     ]),
+  #     'std': np.array([
+  #       , , , , ,
+  #       , , ,
+  #       11.78, 30.13, 27.34,
+  #     ])
+  #   }
+  # ]
+  data = 0
+  return data
+
+
+
 def all_time_plot():
-  data = get_data()
+  data = get_stream_data()
   methods = ['CPE_e1', 'CPE_e3', 'CPE_e5', 'MT_XN', 'MT_CO', 'MT_TR', 'EP_CE', 'EP_PT', 'EP_RP' ]  #'MT_CE',
   colors = ['royalblue', 'hotpink', 'blueviolet', 'gold', 'darkorange', 'limegreen', 'brown', 'goldenrod', 'darkorchid']
   n_methods = 9
@@ -132,7 +182,8 @@ def details_times_plot():
   n_methods = 6
   width = 0.1
   ind = np.arange(4)
-  data = get_details_data()
+  data = get_details_stream_data()
+
 
 
   fig, axs = plt.subplots(nrows=1, ncols=len(data), figsize=(6,3))

@@ -1,4 +1,4 @@
-# import torch
+import torch
 # import torchvision
 # import torchvision.transforms as transforms
 # from scipy import ndimage
@@ -9,15 +9,35 @@ import numpy as np
 # import os
 
 a = [
-  0.920,
-  0.912,
-  0.907,
-  0.917
+  6054.1391,
+  6045.6276,
+  6116.2595,
+  6076.6275
 ]
-# print('{:.2f} ± {:.2f}'.format(np.mean(a), np.std(a)))
-print('{:.2f} ± {:.2f}'.format(np.mean(a)*100, np.std(a)*100))
+print('{:.2f} ± {:.2f}'.format(np.mean(a), np.std(a)))
+# print('{:.2f} ± {:.2f}'.format(np.mean(a)*100, np.std(a)*100))
 
-### -- Forgetting ----------------
+## -- Forgetting ----------------
+# all_tasks_acc_dist = torch.tensor([
+#   [0.9855, 0.0, 0.0, 0.0, 0.0],
+#   [0.8245, 0.9585, 0.0, 0.0, 0.0],
+#   [0.926, 0.6075, 0.969, 0.0, 0.0],
+#   [0.759, 0.621, 0.5425, 0.9085, 0.0],
+#   [0.7775, 0.5855, 0.616, 0.7065, 0.9845]
+# ])
+# n_tasks = 5
+# # all_tasks_acc_dist = np.transpose(b)
+# acc_dist_best = torch.max(all_tasks_acc_dist, 0).values
+# temp = acc_dist_best - all_tasks_acc_dist
+# forgetting_dist = torch.tensor([torch.mean(temp[i+1:, i]) for i in range(n_tasks-1)])
+# mean_forgetting_dist = torch.mean(forgetting_dist)
+# std_forgetting_dist = torch.std(forgetting_dist)
+# print('dist forgetting: {:.2f} ± {:.2f}'.format(mean_forgetting_dist*100, std_forgetting_dist*100))
+
+
+
+# a = np.transpose(b)
+# print(a)
 # f = 0.0
 # for item in a:
 #   f += a[0] - item

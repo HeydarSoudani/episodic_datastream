@@ -54,14 +54,14 @@ def train(model,
           learner,
           train_data,
           args, device,
-          # current_task
+          current_task
           ):              
   model.to(device)
 
 
   # == For trajectory ===
-  # all_dist_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
-  # all_cls_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
+  all_dist_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
+  all_cls_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
 
 
   ### === Load data ======================
@@ -127,13 +127,13 @@ def train(model,
             
             # =====================
             # == For trajectory ===
-            # print('Prototypes are calculating ...')
-            # learner.calculate_prototypes(model, train_loader)
+            print('Prototypes are calculating ...')
+            learner.calculate_prototypes(model, train_loader)
             
-            # tasks_acc_dist, tasks_acc_cls = increm_test(model, learner, current_task, args)
-            # for j in range(current_task+1):
-            #   all_dist_acc['task_{}'.format(j)].append(round(tasks_acc_dist[j]*100, 2))
-            #   all_cls_acc['task_{}'.format(j)].append(round(tasks_acc_cls[j]*100, 2))
+            tasks_acc_dist, tasks_acc_cls = increm_test(model, learner, current_task, args)
+            for j in range(current_task+1):
+              all_dist_acc['task_{}'.format(j)].append(round(tasks_acc_dist[j]*100, 2))
+              all_cls_acc['task_{}'.format(j)].append(round(tasks_acc_cls[j]*100, 2))
             # =====================
 
         if args.scheduler:
@@ -156,5 +156,5 @@ def train(model,
 
 
   # == For trajectory ===
-  # return all_dist_acc, all_cls_acc
+  return all_dist_acc, all_cls_acc
 
