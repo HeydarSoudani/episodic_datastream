@@ -55,8 +55,8 @@ def increm_learn(model,
                   args, device):
 
   # -- For acc. trajectory ----
-  # traj_dist_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
-  # traj_cls_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
+  traj_dist_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
+  traj_cls_acc = {'task_{}'.format(i): [] for i in range(args.n_tasks)}
 
   # -- For forgetting ----
   all_tasks_acc_dist = []
