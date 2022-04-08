@@ -185,7 +185,6 @@ class PtLearner:
       
       unique_labels = torch.unique(all_labels)
       pts = compute_prototypes(all_features, all_labels)
-      
       for idx, l in enumerate(unique_labels):
         self.prototypes[l.item()] = pts[idx].reshape(1, -1).detach()
 

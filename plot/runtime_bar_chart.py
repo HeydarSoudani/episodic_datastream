@@ -86,51 +86,49 @@ def get_incremental_data():
   # iCaRL, GSS, MIR, Res, CoPE,
   # MT_xn, MT_co, MT_tr,
   # EP_ce, EP_pt, EP_rp
-  # data = [
-  #   {
-  #     'dataset': 'MNIST',
-  #     'mean': np.array([
-  #       , , , , 119.26,
-  #       290.50, 63.26, 62.38,
-  #       578.39, 584.54, 1094.08
-  #     ]),
-  #     'std': np.array([
-  #       , , , , 1.31,
-  #       2.69, 1.25, 0.33,
-  #       1.67, 8.48, 10.71
-  #     ])
-  #   },
-  #   {
-  #     'dataset': 'FashionMNIST',
-  #     'mean': np.array([
-  #       , , , , 165.44,
-  #       , , ,
-  #       , , ,
-  #     ]),
-  #     'std': np.array([
-  #       , , , , 1.93,
-  #       , , ,
-  #       , , ,
-  #     ])
-  #   },
-  #   {
-  #     'dataset': 'CIFAR10',
-  #     'mean': np.array([
-  #       , , , , ,
-  #       , , ,
-  #       2394.98, 2407.66, 6073.16,
-  #     ]),
-  #     'std': np.array([
-  #       , , , , ,
-  #       , , ,
-  #       11.78, 30.13, 27.34,
-  #     ])
-  #   }
-  # ]
-  data = 0
+  data = [
+    {
+      'dataset': 'MNIST',
+      'mean': np.array([
+        , , , , 119.26,
+        290.50, 63.26, 62.38,
+        578.39, 584.54, 1094.08
+      ]),
+      'std': np.array([
+        , , , , 1.31,
+        2.69, 1.25, 0.33,
+        1.67, 8.48, 10.71
+      ])
+    },
+    {
+      'dataset': 'FashionMNIST',
+      'mean': np.array([
+        , , , , 496.31,
+        , , ,
+        , , ,
+      ]),
+      'std': np.array([
+        , , , , 1.16,
+        , , ,
+        , , ,
+      ])
+    },
+    {
+      'dataset': 'CIFAR10',
+      'mean': np.array([
+        , , , , 334.01,
+        , , ,
+        2394.98, 2407.66, 6073.16,
+      ]),
+      'std': np.array([
+        , , , , 2.18,
+        , , ,
+        11.78, 30.13, 27.34,
+      ])
+    }
+  ]
+
   return data
-
-
 
 def all_time_plot():
   data = get_stream_data()
