@@ -38,7 +38,7 @@ parser.add_argument(
     'stream_learn',
     'zeroshot_test_base',
     'incremental_learn',
-    'owr_learn'
+    'owr_learn',
     'plot'
   ],
   default='plot',
