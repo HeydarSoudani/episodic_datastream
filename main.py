@@ -20,6 +20,7 @@ from phases.init_learn import init_learn
 from phases.zeroshot_test import zeroshot_test
 from phases.stream_learn import stream_learn
 from phases.incremental_learn import increm_learn
+from phases.owr_learn import owr_learn
 
 from plot.class_distribution import class_distribution
 from plot.feature_space_visualization import set_novel_label, visualization
@@ -37,6 +38,7 @@ parser.add_argument(
     'stream_learn',
     'zeroshot_test_base',
     'incremental_learn',
+    'owr_learn'
     'plot'
   ],
   default='plot',
@@ -219,7 +221,11 @@ elif args.algorithm == 'batch':
   learner = BatchLearner(criterion, device, args)
 
 ## == Load model & learner if exist ==============
-if args.phase not in ['init_learn', 'incremental_learn']:
+if args.phase not in [
+  'init_learn',
+  'incremental_learn',
+  'owr_learn'
+]:
   
   if args.which_model == 'best':
     try: model.load(args.best_model_path)
@@ -239,8 +245,14 @@ if args.phase not in ['init_learn', 'incremental_learn']:
 model.to(device)
 
 # == For stream version ==================
-if args.phase != 'incremental_learn':
-
+if args.phase in [
+  'init_learn',
+  'zeroshot_test',
+  'stream_learn',
+  'zeroshot_test_base',
+  'owr_learn'
+  'plot'
+]:
   ## == load train data from file ========
   train_data = read_csv(
     os.path.join(args.data_path, args.train_file),
@@ -264,40 +276,67 @@ if args.phase != 'incremental_learn':
   except FileNotFoundError: pass
   else: print("Load Detector from {}".format(args.detector_path))
 
+elif args.phase == 'incremental_learn':
+  memory = IncrementalMemory(
+    selection_type=args.mem_sel_type, 
+    total_size=args.mem_total_size,
+    per_class=args.mem_per_class,
+    selection_method=args.mem_sel_method)
+
+elif args.phase == 'owr_learn':
+  detector = PtDetector()
+
+  memory = IncrementalMemory(
+    selection_type=args.mem_sel_type, 
+    total_size=args.mem_total_size,
+    per_class=args.mem_per_class,
+    selection_method=args.mem_sel_method)
+
+
 if __name__ == '__main__':
   ## == Data Stream ====================
   if args.phase == 'init_learn':
-    init_learn(model,
-               learner,
-               memory,
-               detector,
-               train_data,
-               args, device)
+    init_learn(
+      model,
+      learner,
+      memory,
+      detector,
+      train_data,
+      args, device)
+
   elif args.phase == 'zeroshot_test':
-    zeroshot_test(model,
-                  learner.prototypes,
-                  detector,
-                  args, device,
-                  base_labels)
+    zeroshot_test(
+      model,
+      learner.prototypes,
+      detector,
+      args, device,
+      base_labels)
+
   elif args.phase == 'stream_learn':
-    stream_learn(model,
-                 learner,
-                 memory,
-                 detector,
-                 args, device)
+    stream_learn(
+      model,
+      learner,
+      memory,
+      detector,
+      args, device)
   
   ## == incremental learning ============
   elif args.phase == 'incremental_learn':
-    memory = IncrementalMemory(
-              selection_type=args.mem_sel_type, 
-              total_size=args.mem_total_size,
-              per_class=args.mem_per_class,
-              selection_method=args.mem_sel_method)
-    increm_learn(model,
-                  learner,
-                  memory,
-                  args, device)
+    increm_learn(
+      model,
+      learner,
+      memory,
+      args, device)
   
+  ## == OWR learning ====================
+  elif args.phase == 'owr_learn':
+    owr_learn(
+      model,
+      learner,
+      detector,
+      memory,
+      args, device)
+
   ## == Plot ===========================
   elif args.phase == 'plot':
     
