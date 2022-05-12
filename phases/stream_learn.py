@@ -5,10 +5,8 @@ import time
 import numpy as np
 from pandas import read_csv
 
-from trainers.episodic_train import train
 from trainers.episodic_train import train as episodic_train
 from trainers.batch_train import train as batch_train
-
 from detectors.pt_detector import detector_preparation
 from datasets.dataset import SimpleDataset
 from utils.preparation import transforms_preparation

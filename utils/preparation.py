@@ -19,9 +19,8 @@ def dataloader_preparation(train_data, val_data, args):
     val_data = train_val_data[1]
 
   ## ==========================
-  train_transform, test_transform = transforms_preparation()
-  
   if args.use_transform:
+    train_transform, test_transform = transforms_preparation()
     train_dataset = SimpleDataset(train_data, args, transforms=train_transform)
     val_dataset = SimpleDataset(val_data, args, transforms=test_transform)
   else:

@@ -8,11 +8,12 @@ from datasets.dataset import SimpleDataset
 from utils.preparation import transforms_preparation
 from evaluation import final_step_evaluation
 
-def zeroshot_test(model,
-                  prototypes,
-                  detector,
-                  args, device,
-                  base_labels):
+def zeroshot_test(
+  model,
+  prototypes,
+  detector,
+  args, device,
+  base_labels):
   print('================================ Zero-Shot Test ================================')
   
   # == Load stream data ==============================

@@ -25,7 +25,7 @@ from plot.class_distribution import class_distribution
 from plot.feature_space_visualization import set_novel_label, visualization
 
 
-## == Params ===========
+## == Params ============
 parser = argparse.ArgumentParser()
 
 parser.add_argument(
@@ -77,10 +77,10 @@ parser.add_argument('--log_interval', type=int, default=100, help='must be less 
 parser.add_argument('--ways', type=int, default=5, help='')
 parser.add_argument('--shot', type=int, default=5, help='')
 parser.add_argument('--query_num', type=int, default=5, help='')
-parser.add_argument('--buffer_size', type=int, default=1000, help='')
 parser.add_argument('--batch_size', type=int, default=16, help='')
 
 # retrain
+parser.add_argument('--buffer_size', type=int, default=1000, help='')
 parser.add_argument('--retrain_epochs', type=int, default=1, help='')
 parser.add_argument('--retrain_meta_iteration', type=int, default=1000, help='')
 parser.add_argument('--known_retrain_interval', type=int, default=5000, help='')

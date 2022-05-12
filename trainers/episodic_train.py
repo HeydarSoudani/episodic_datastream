@@ -1,6 +1,6 @@
 from torch.optim import SGD, Adam
 from torch.utils.data import DataLoader
-from torch.optim.lr_scheduler import StepLR, OneCycleLR
+from torch.optim.lr_scheduler import StepLR
 import os
 import time
 import pandas as pd

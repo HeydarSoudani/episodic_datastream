@@ -34,7 +34,6 @@ parser.add_argument('--seed', type=int, default=1, help='')
 args = parser.parse_args()
 
 # = Add some variables to args ========
-
 if args.dataset in ['mnist', 'pmnist', 'rmnist']:
   data_folder = 'mnist'
 elif args.dataset in ['fmnist', 'pfmnist', 'rfmnist']:
