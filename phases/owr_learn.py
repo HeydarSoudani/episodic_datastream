@@ -22,7 +22,7 @@ def owr_test(
   ## == Load & prepare data ========================
   all_data = []
 
-  task_range = args.n_task if current_task == args.n_task-1 else current_task+2
+  task_range = args.n_tasks if current_task == args.n_tasks-1 else current_task+2
   for prev_task in range(task_range):
     task_data = pd.read_csv(
       os.path.join(args.split_test_path, "task_{}.csv".format(prev_task)),
