@@ -82,9 +82,11 @@ class TotalLoss(nn.Module):
     print(prototypes.shape)
     print(labels)
 
-    distance=(features-torch.t(prototypes)[labels])
-    distance=torch.sum(torch.pow(distance,2),1, keepdim=True)
-    distance=(torch.sum(distance, 0, keepdim=True))/features.shape[0]
+    distance = euclidean_dist(features, prototypes)
+
+    
+    # distance=torch.sum(torch.pow(distance,2),1, keepdim=True)
+    # distance=(torch.sum(distance, 0, keepdim=True))/features.shape[0]
     return distance
 
 class MetricLoss(nn.Module):
