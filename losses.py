@@ -74,7 +74,7 @@ class TotalLoss(nn.Module):
            self.lambda_3 * metric_loss +\
            self.lambda_4 * self.pl_regularization(features, prototypes, labels)
   
-  def pl_regularization(features, prototypes, labels):
+  def pl_regularization(self, features, prototypes, labels):
     print(features.shape)
     print(prototypes.shape)
     print(labels)
