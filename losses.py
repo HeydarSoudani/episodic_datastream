@@ -77,7 +77,7 @@ class TotalLoss(nn.Module):
   def pl_regularization(self, features, prototypes, labels):
     
 
-    prototypes = prototypes.repeat(1, self.args.shots).reshape(-1, self.args.hidden_dims)
+    prototypes = prototypes.repeat(1, self.args.shot).reshape(-1, self.args.hidden_dims)
     print(features.shape)
     print(prototypes.shape)
     print(labels)
