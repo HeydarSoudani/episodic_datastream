@@ -118,6 +118,7 @@ parser.add_argument('--update_step', type=int, default=5, help='for Reptile algo
 parser.add_argument("--lambda_1", type=float, default=1.0, help="DCE Coefficien in loss function")
 parser.add_argument("--lambda_2", type=float, default=1.0, help="CE Coefficient in loss function")
 parser.add_argument("--lambda_3", type=float, default=0.0001, help="Metric Coefficient in loss function")
+parser.add_argument("--lambda_4", type=float, default=0.001, help="PL regularization Coefficient in loss function")
 parser.add_argument("--temp_scale", type=float, default=0.2, help="Temperature scale for DCE in loss function",)
 
 # Optimizer
