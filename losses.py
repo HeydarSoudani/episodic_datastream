@@ -49,6 +49,18 @@ class DCELoss(nn.Module):
     loss_val = -log_p_y.gather(2, target_inds).mean()
     return loss_val
 
+
+## prototype loss (PL): "Robust Classification with Convolutional Prototype Learning"
+class PLLoss(nn.Module):
+  def __init__(self, args):
+    super().__init__()
+    self.args = args
+  
+  def forward(self, features, prototypes):
+    prototypes = prototypes.repeat(1, self.args.shot).reshape(-1, self.args.hidden_dims)
+    distance = euclidean_dist(features, prototypes)
+    return distance
+
 class TotalLoss(nn.Module):
   def __init__(self, device, args):
     super().__init__()
@@ -60,6 +72,7 @@ class TotalLoss(nn.Module):
     
     self.dce = DCELoss(device, gamma=args.temp_scale)
     self.ce = torch.nn.CrossEntropyLoss()
+    self.pl = PLLoss(args)
     self.metric = losses.NTXentLoss(temperature=0.07)
     # self.metric = losses.ContrastiveLoss(pos_margin=0, neg_margin=1)
     # self.metric = losses.TripletMarginLoss(margin=0.05)
@@ -67,27 +80,14 @@ class TotalLoss(nn.Module):
   def forward(self, features, outputs, labels, prototypes, n_query, n_classes):
     dce_loss = self.dce(features, labels, prototypes, n_query, n_classes)
     cls_loss = self.ce(outputs, labels.long())
+    pl_loss = self.pl(features, prototypes)
     metric_loss = self.metric(outputs, labels.long())
 
     return self.lambda_1 * dce_loss +\
            self.lambda_2 * cls_loss +\
            self.lambda_3 * metric_loss +\
-           self.lambda_4 * self.pl_regularization(features, prototypes, labels)
-  
-  def pl_regularization(self, features, prototypes, labels):
-    
-
-    prototypes = prototypes.repeat(1, self.args.shot).reshape(-1, self.args.hidden_dims)
-    print(features.shape)
-    print(prototypes.shape)
-    print(labels)
-
-    distance = euclidean_dist(features, prototypes)
-
-    
-    # distance=torch.sum(torch.pow(distance,2),1, keepdim=True)
-    # distance=(torch.sum(distance, 0, keepdim=True))/features.shape[0]
-    return distance
+           self.lambda_4 * pl_loss
+ 
 
 class MetricLoss(nn.Module):
   def __init__(self, device, args):
