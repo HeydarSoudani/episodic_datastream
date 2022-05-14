@@ -75,9 +75,13 @@ class TotalLoss(nn.Module):
            self.lambda_4 * self.pl_regularization(features, prototypes, labels)
   
   def pl_regularization(self, features, prototypes, labels):
+    
+
+    prototypes = prototypes.repeat(1, self.args.shots).reshape(-1, self.args.hidden_dims)
     print(features.shape)
     print(prototypes.shape)
     print(labels)
+
     distance=(features-torch.t(prototypes)[labels])
     distance=torch.sum(torch.pow(distance,2),1, keepdim=True)
     distance=(torch.sum(distance, 0, keepdim=True))/features.shape[0]
