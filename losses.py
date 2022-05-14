@@ -83,8 +83,6 @@ class TotalLoss(nn.Module):
     pl_loss = self.pl(features, prototypes)
     metric_loss = self.metric(outputs, labels.long())
 
-    print(pl_loss.shape)
-
     return self.lambda_1 * dce_loss +\
            self.lambda_2 * cls_loss +\
            self.lambda_3 * metric_loss +\
