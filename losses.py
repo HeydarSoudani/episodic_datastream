@@ -58,8 +58,8 @@ class PLLoss(nn.Module):
   
   def forward(self, features, prototypes):
     prototypes = prototypes.repeat(1, self.args.shot).reshape(-1, self.args.hidden_dims)
-    distance = euclidean_dist(features, prototypes)
-    return distance
+    distance = compute_distance(features, prototypes)
+    return distance.sum()
 
 class TotalLoss(nn.Module):
   def __init__(self, device, args):
