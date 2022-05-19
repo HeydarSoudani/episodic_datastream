@@ -15,6 +15,8 @@ from samplers.pt_sampler import PtSampler
 
 
 def set_novel_label(known_labels, args, data=[]):
+  print(data.shape)
+  
   if data == []:
     data = read_csv(
       os.path.join(args.data_path, args.stream_file),
@@ -23,7 +25,7 @@ def set_novel_label(known_labels, args, data=[]):
   for idx, item in enumerate(data):
     label = item[-1]
     # print(known_labels)
-    print(label)
+    # print(label)
     if label not in known_labels:
       data[idx, -1] = 100
 
