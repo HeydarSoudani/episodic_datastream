@@ -30,13 +30,13 @@ def owr_test(
       sep=',', header=None).values
     all_data.append(task_data)
 
-  data = np.concatenate(all_data)
+  data_set = np.concatenate(all_data)
     
   if args.use_transform:
     _, test_transform = transforms_preparation()
-    test_dataset = SimpleDataset(data, args, transforms=test_transform)
+    test_dataset = SimpleDataset(data_set, args, transforms=test_transform)
   else:
-    test_dataset = SimpleDataset(data, args)
+    test_dataset = SimpleDataset(data_set, args)
   dataloader = DataLoader(dataset=test_dataset, batch_size=1, shuffle=False)
 
   ## == Test Model ==================================
@@ -64,7 +64,7 @@ def owr_test(
   ## == Plot ==================
   print('-- Ploting ... ----')
   known_labels = set(np.arange((current_task+1)*2))
-  new_data = set_novel_label(known_labels, args, data=data)
+  new_data = set_novel_label(known_labels, args, data=data_set)
   visualization(
     model,
     new_data,
