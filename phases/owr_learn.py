@@ -62,19 +62,19 @@ def owr_test(
     print("Evaluation: %7.2f, %7.2f, %7.2f"%(CwCA*100, M_new*100, F_new*100))
 
   ## == Plot ==================
-  # print('-- Ploting ... ----')
-  # known_labels = set(np.arange((current_task+1)*2))
-  # n_label = len(known_labels) if current_task == args.n_tasks-1 else len(known_labels)+1
+  print('-- Ploting ... ----')
+  known_labels = set(np.arange((current_task+1)*2))
+  n_label = len(known_labels) if current_task == args.n_tasks-1 else len(known_labels)+1
 
-  # new_data = set_novel_label(known_labels, args, data=data_set)
-  # visualization(
-  #   model,
-  #   new_data,
-  #   args, device,
-  #   'tsne_taks_{}'.format(current_task),
-  #   n_label=n_label
-  # )
-  # print('--- Plot done! ---')
+  new_data = set_novel_label(known_labels, args, data=data_set)
+  visualization(
+    model,
+    new_data,
+    args, device,
+    'tsne_taks_{}'.format(current_task),
+    n_label=n_label
+  )
+  print('--- Plot done! ---')
 
 def owr_learn(
   model,
