@@ -64,7 +64,7 @@ def owr_test(
   ## == Plot ==================
   print('-- Ploting ... ----')
   known_labels = set(np.arange((current_task+1)*2))
-  new_data = set_novel_label(known_labels, args, data=all_data)
+  new_data = set_novel_label(known_labels, args, data=data)
   visualization(
     model,
     new_data,

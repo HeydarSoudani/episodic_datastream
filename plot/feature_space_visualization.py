@@ -22,8 +22,8 @@ def set_novel_label(known_labels, args, data=[]):
 
   for idx, item in enumerate(data):
     label = item[-1]
-    print(known_labels)
-    print(label)
+    # print(known_labels)
+    # print(label)
     if label not in known_labels:
       data[idx, -1] = 100
 
