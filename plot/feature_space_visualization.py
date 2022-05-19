@@ -47,7 +47,8 @@ def tsne_plot(features, labels, file_name='tsne', n_color=6):
   )
 
   plt.savefig('{}.png'.format(file_name))
-  plt.show()
+  # plt.show()
+  plt.clf()
 
 
 def pca_plot(features, labels, file_name='pca'):
