@@ -84,6 +84,7 @@ def visualization(model, data, args, device, filename, n_label=6):
   else:
     dataset = SimpleDataset(data, args)
   
+  print(n_label)
   print(dataset.label_set)
   print(len(dataset))
   sampler = PtSampler(
