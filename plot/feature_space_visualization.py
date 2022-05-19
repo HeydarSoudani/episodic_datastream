@@ -20,11 +20,11 @@ def set_novel_label(known_labels, args, data=[]):
       os.path.join(args.data_path, args.stream_file),
       sep=',', header=None).values
 
-  for idx, data in enumerate(data):
-    label = data[-1]
+  for idx, item in enumerate(data):
+    label = item[-1]
     if label not in known_labels:
-      print(known_labels)
-      print(label)
+      # print(known_labels)
+      # print(label)
       data[idx, -1] = 100
 
   return data
