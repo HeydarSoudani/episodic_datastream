@@ -32,12 +32,12 @@ def set_novel_label(known_labels, args, data=[]):
   return data
 
 
-def tsne_plot(features, labels, file_name='tsne'):
+def tsne_plot(features, labels, file_name='tsne', n_color=6):
   tsne = TSNE()
   X_embedded = tsne.fit_transform(features)
 
   sns.set(rc={'figure.figsize':(11.7,8.27)})
-  palette = sns.color_palette("bright", 6)
+  palette = sns.color_palette("bright", n_color)
   sns.scatterplot(
     x=X_embedded[:,0],
     y=X_embedded[:,1],
@@ -122,7 +122,7 @@ def visualization(model, data, args, device, filename, n_label=6):
     # print(support_labels.shape)
   # features += 1e-12
 
-  tsne_plot(features, support_labels, file_name=filename)
+  tsne_plot(features, support_labels, file_name=filename, n_color=n_label)
   # pca_plot(features, support_labels, file_name='pca_last')
   hausdorff_calculate(features, support_labels)
 
