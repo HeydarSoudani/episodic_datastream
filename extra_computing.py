@@ -18,22 +18,22 @@ import numpy as np
 # print('{:.2f} ± {:.2f}'.format(np.mean(a)*100, np.std(a)*100))
 
 ## -- Forgetting ----------------
-all_tasks_acc_dist = torch.tensor([
-  [0.9775, 0.0, 0.0, 0.0, 0.0],
-  [0.9595, 0.888, 0.0, 0.0, 0.0],
-  [0.923, 0.807, 0.8435, 0.0, 0.0],
-  [0.7945, 0.667, 0.811, 0.872, 0.0],
-  [0.8585, 0.7625, 0.8095, 0.717, 0.9805]
-])
-n_tasks = 5
-# all_tasks_acc_dist = np.transpose(b)
-acc_dist_best = torch.max(all_tasks_acc_dist, 0).values
-temp = acc_dist_best - all_tasks_acc_dist
-# print(temp)
-forgetting_dist = torch.tensor([torch.mean(temp[i+1:, i]) for i in range(n_tasks-1)])
-mean_forgetting_dist = torch.mean(forgetting_dist)
-std_forgetting_dist = torch.std(forgetting_dist)
-print('dist forgetting: {:.2f} ± {:.2f}'.format(mean_forgetting_dist*100, std_forgetting_dist*100))
+# all_tasks_acc_dist = torch.tensor([
+#   [0.9775, 0.0, 0.0, 0.0, 0.0],
+#   [0.9595, 0.888, 0.0, 0.0, 0.0],
+#   [0.923, 0.807, 0.8435, 0.0, 0.0],
+#   [0.7945, 0.667, 0.811, 0.872, 0.0],
+#   [0.8585, 0.7625, 0.8095, 0.717, 0.9805]
+# ])
+# n_tasks = 5
+# # all_tasks_acc_dist = np.transpose(b)
+# acc_dist_best = torch.max(all_tasks_acc_dist, 0).values
+# temp = acc_dist_best - all_tasks_acc_dist
+# # print(temp)
+# forgetting_dist = torch.tensor([torch.mean(temp[i+1:, i]) for i in range(n_tasks-1)])
+# mean_forgetting_dist = torch.mean(forgetting_dist)
+# std_forgetting_dist = torch.std(forgetting_dist)
+# print('dist forgetting: {:.2f} ± {:.2f}'.format(mean_forgetting_dist*100, std_forgetting_dist*100))
 
 
 
@@ -100,42 +100,41 @@ print('dist forgetting: {:.2f} ± {:.2f}'.format(mean_forgetting_dist*100, std_f
 
 
 ### ---- for stream trajectory -------
-# n_class = 10
-# data = [
-#   [0.708, 0.749, 0.558, 0.688, 0.676],
-#   [0.67476636, 0.6725     ,0.57170172 ,0.66604478, 0.60148976],
-#   [0.72075472, 0.735      ,0.65618449 ,0.66594828, 0.73003802],
-#   [0.70866142, 0.72196796 ,0.63841808 ,0.66132723 ,0.73684211],
-#   [0.63665595, 0.71856287 ,0.65048544 ,0.5915493 , 0.66352201],
-#   [0.5       , 0.63664596 ,0.4689441  ,0.34684685, 0.65495208, 0.69417476],
-#   [0.52222222, 0.67399267 ,0.51515152 ,0.36641221, 0.58558559, 0.55185185],
-#   [0.43859649, 0.47953216 ,0.45704467 ,0.34812287, 0.44144144, 0.32982456, 0.43727599, 0.43103448, 0.53790614, 0.5170068 ],
-#   [0.48948949, 0.51351351 ,0.49369369 ,0.34954955, 0.51351351, 0.37657658, 0.6       , 0.49189189, 0.61441441, 0.50714286],
-#   [0.44104803, 0.52144082 ,0.51282051 ,0.37096774, 0.47881356, 0.44425386, 0.6970339 , 0.53056769, 0.68267581, 0.55753425],
-#   [0.49292453, 0.53012048        ,None,        None, 0.54814815, 0.45774648, 0.6507177 , 0.56971154, 0.60336538, 0.56169429],
-#   [0.46153846,        None,        None ,       None, 0.40229885, 0.5060241 , 0.69095477, 0.61      , 0.7325    , 0.65158371],
-#   [None ,  None ,  None,   None,   None, 0.51,  0.72,  0.633, 0.769, 0.645],
-#   [None ,       None   ,     None,        None  ,      None, 0.53495763, 0.68541667, 0.59365079, 0.74893617, 0.65884861],
-#   [None  ,      None    ,    None ,       None ,       None, 0.73214286, 0.825     , 0.63636364, 0.76666667, 0.72580645],
-#   [None  ,      None     ,   None  ,      None,        None, 0.66341463, 0.73206278, 0.66333333, 0.79888889, 0.72801451]
+n_class = 10
+data = [
+  [0.715, 0.777, 0.524, 0.62,  0.672],
+  [0.7218, 0.70819672, 0.51548947, 0.60223048, 0.64344942],
+  [0.72875, 0.74210526, 0.59585492, 0.60103627, 0.70558376],
+  [0.71653543, 0.70366133, 0.62711864, 0.64530892, 0.69221968],
+  [0.60201511, 0.67322835, 0.50510204, 0.44366197, 0.6375, 0.46517413],
+  [0.66239316, 0.71489362, 0.58995816, 0.49099099, 0.71861472, 0.50847458],
+  [0.61261261, 0.73873874, 0.54594595, 0.41081081, 0.57057057, 0.45405405, 0.58108108],
+  [0.611, 0.63265306, 0.35555556, 0.37777778, 0.5, 0.43902439, 0.52,       0.54166667],
+  [0.60960961, 0.60506329, 0.49019608, 0.36666667, 0.58762887, 0.53501946, 0.57227723, 0.57593688, 0.48418972, 0.4844358],
+  [0.51746725, 0.6535163,  0.52991453, 0.33870968, 0.61016949, 0.51801029, 0.58898305, 0.51310044, 0.60891938, 0.49315068],
+  [0.59393939, 0.71084337,        None,        None, 0.52941176, 0.5,        0.62,       0.55405405, 0.62365591, 0.56300997],
+  [0.5,  None, None,  None,        None, 0.505,      0.6969697,  0.51315789, 0.72222222, 0.58252427],
+  [None,  None, None,  None,         None, 0.51,  0.672, 0.646, 0.709, 0.669],
+  [None,  None, None,  None,   None, 0.52,  0.685, 0.634, 0.71,  0.686],
+  [None,  None,  None, None,        None, 0.60696517, 0.65566038, 0.71634615, 0.68396226, 0.67699115,],
+  [None,  None,  None, None,        None, 0.75,       0.71323529, 0.70953757, 0.79505814, 0.72976055,]
+]
+# print(data)
 
-# ]
-# # print(data)
+new_data = []
+for row in data:
+  new_row = np.concatenate(
+    (np.array(row),
+    np.full((n_class - len(row), ), 0.0))
+  )
+  new_data.append(new_row)
 
-# new_data = []
-# for row in data:
-#   new_row = np.concatenate(
-#     (np.array(row),
-#     np.full((n_class - len(row), ), 0.0))
-#   )
-#   new_data.append(new_row)
+new_data_arr = np.array(new_data)
+new_data_arr = np.round(new_data_arr.astype('float'), 4)
+new_data_arr[new_data_arr == 0.] = None
+new_data_arr_t = np.transpose(new_data_arr)
 
-# new_data_arr = np.array(new_data)
-# new_data_arr = np.round(new_data_arr.astype('float'), 4)
-# new_data_arr[new_data_arr == 0.] = None
-# new_data_arr_t = np.transpose(new_data_arr)
-
-# print(repr(new_data_arr_t))
+print(repr(new_data_arr_t))
 
 # a = np.array([
 # [0.5, 0.0, 0.0, 0.0, 0.0],

@@ -14,18 +14,18 @@ from utils.preparation import transforms_preparation
 from samplers.pt_sampler import PtSampler
 
 
-def set_novel_label(known_labels, args):
-  
-  stream_data = read_csv(
-    os.path.join(args.data_path, args.stream_file),
-    sep=',', header=None).values
+def set_novel_label(known_labels, args, data=[]):
+  if data == []:
+    data = read_csv(
+      os.path.join(args.data_path, args.stream_file),
+      sep=',', header=None).values
 
-  for idx, data in enumerate(stream_data):
+  for idx, data in enumerate(data):
     label = data[-1]
     if label not in known_labels:
-      stream_data[idx, -1] = 100
+      data[idx, -1] = 100
 
-  return stream_data
+  return data
 
 
 def tsne_plot(features, labels, file_name='tsne'):
@@ -72,7 +72,7 @@ def hausdorff_calculate(features, labels):
   print('Hausdorff distance is {}'.format(dist))
 
 
-def visualization(model, data, args, device, filename):  
+def visualization(model, data, args, device, filename, n_label=6):  
   
   if args.use_transform:
     _, test_transform = transforms_preparation()
@@ -84,7 +84,7 @@ def visualization(model, data, args, device, filename):
   print(len(dataset))
   sampler = PtSampler(
     dataset,
-    n_way=6,
+    n_way=n_label,
     n_shot=2000,
     n_query=0,
     n_tasks=1

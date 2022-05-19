@@ -11,6 +11,7 @@ from datasets.dataset import SimpleDataset
 from utils.preparation import transforms_preparation
 from detectors.pt_detector import detector_preparation
 from evaluation import in_stream_evaluation
+from plot.feature_space_visualization import set_novel_label, visualization
 
 def owr_test(
   model,
@@ -60,6 +61,16 @@ def owr_test(
               detection_results, detector._known_labels)
     print("Evaluation: %7.2f, %7.2f, %7.2f"%(CwCA*100, M_new*100, F_new*100))
 
+  ## == Plot ==================
+  known_labels = set(range((current_task+1)*2))
+  new_data = set_novel_label(known_labels, args, data=all_data)
+  visualization(
+    model,
+    new_data,
+    args, device,
+    'tsne_taks_{}'.format(current_task),
+    n_label=len(known_labels)+1
+  )
 
 def owr_learn(
   model,
@@ -79,7 +90,7 @@ def owr_learn(
     if args.dataset == 'cifar100':
       if task == 5: args.ways = 20
     else: 
-      if task == 1: args.ways = 4
+      if task == 2: args.ways = 4
     
     if task != 0:
       replay_mem = memory()
@@ -129,5 +140,10 @@ def owr_learn(
       detector,
       task,
       device, args)
+    
+
+    ### === Plot feature space ===============
+
+
 
 

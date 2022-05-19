@@ -5,9 +5,9 @@ def get_data():
   # mn_tr, mn_pt, fm_co, fm_pt, c10_tr, c10_rp
   data = {
     "mn_pt": {
-      "x_points": np.array([5107, 9999, 12061, 19999, 21452, 29999, 33290, 39999, 49561, 49999, 59999, 63999]),
-      'start_points': np.array([3001, 8001, 10012, 16000, 26014]),
-      'detected_points': np.array([5107, 12061, 12061, 21452, 33290]),
+      "x_points": np.array([5.107, 9.999, 12.061, 19.999, 21.452, 29.999, 33.290, 39.999, 49.561, 49.999, 59.999, 63.999]),
+      'start_points': np.array([3.001, 8.001, 10.012, 16.000, 26.014]),
+      'detected_points': np.array([5.107, 12.061, 12.061, 21.452, 33.290]),
       'CwCA': np.array([0.8406, 0.8831, 0.8731, 0.8766, 0.8602, 0.8812, 0.8628, 0.9012, 0.8697, 0.8950, 0.8860, 0.8838]),
       'Mnew': np.array([0.3159, 0.4118, 0.3744, 0.6840, 0.4759, 0.8487, 0.6875, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000]),
       'Fnew': np.array([0.1519, 0.0738, 0.1145, 0.0801, 0.1169, 0.0649, 0.1030, 0.0356, 0.0796, 0.0434, 0.0681, 0.0650]),
@@ -25,9 +25,9 @@ def get_data():
       )
     },
     "mn_tr": {
-      "x_points": np.array([4682, 9999, 11336, 16030, 19999, 20566, 27009, 29999, 33204, 39562, 39999, 45693, 49999, 53703, 59999, 63448, 63999]),
-      'start_points': np.array([3001, 8001, 10012, 16000, 26014]),
-      'detected_points': np.array([4682, 11336, 16030, 20566, 33204]),
+      "x_points": np.array([4.682, 9.999, 11.336, 16.030, 19.999, 20.566, 27.009, 29.999, 33.204, 39.562, 39.999, 45.693, 49.999, 53.703, 59.999, 63.448, 63.999]),
+      'start_points': np.array([3.001, 8.001, 10.012, 16.000, 26.014]),
+      'detected_points': np.array([4.682, 11.336, 16.030, 20.566, 33.204]),
       'CwCA': np.array([0.8180, 0.8336, 0.8323, 0.8398, 0.8241, 0.7798, 0.8117, 0.8401, 0.8223, 0.8031, 0.8558, 0.8031, 0.8609, 0.8386, 0.8696, 0.8745, 0.9655]),
       'Mnew': np.array([0.3333, 0.6471, 0.3618, 0.3290, 0.3313, 0.2500, 0.5446, 0.6222, 0.6760, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000]),
       'Fnew': np.array([0.1785, 0.1123, 0.1503, 0.1337, 0.1491, 0.1960, 0.1499, 0.1277, 0.1567, 0.1573, 0.1190, 0.1665, 0.1115, 0.1404, 0.1015, 0.1047, 0.0145]),
@@ -44,9 +44,9 @@ def get_data():
         [   None,    None,    None,    None,    None,    None,    None,    None, None, 0.7143, 0.94  , 0.8312, 0.8736, 0.8488, 0.9323, 0.9332, 0.9903]])
     },
     "fm_pt": {
-      "x_points": np.array([9999, 10011, 19999, 20876, 26887, 29999, 38316, 39999, 49999, 53879, 59999, 63999]),
-      'start_points': np.array([12000, 16003, 19087, 21008, 23001]),
-      'detected_points': np.array([20876, 29999, 29999, 26887, 38316]),
+      "x_points": np.array([9.999, 10.011, 19.999, 20.876, 26.887, 29.999, 38.316, 39.999, 49.999, 53.879, 59.999, 63.999]),
+      'start_points': np.array([12.000, 16.003, 19.087, 21.008, 23.001]),
+      'detected_points': np.array([20.876, 29.999, 29.999, 26.887, 38.316]),
       'CwCA': np.array([0.8437, 0.7500, 0.8901, 0.8994, 0.8880, 0.8792, 0.8024, 0.8039, 0.7701, 0.7853, 0.8000, 0.8055]),
       'Mnew': np.array([0.0000, 0.0000, 0.6949, 0.4395, 0.6394, 0.9015, 0.6562, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000]),
       'Fnew': np.array([0.0997, 0.2500, 0.0298, 0.0443, 0.0550, 0.0610, 0.0614, 0.0362, 0.0683, 0.0660, 0.0355, 0.0400]),
@@ -64,9 +64,9 @@ def get_data():
       ])
     },
     "fm_co": {
-      "x_points": np.array([8512, 9999, 17761, 19999, 25045, 29999, 35907, 39999, 47896, 49999, 59999, 62003, 63999]),
-      'start_points': np.array([12000, 16003, 19087, 21008, 23001]),
-      'detected_points': np.array([17761, 29999, 25045, 25045, 29999]),
+      "x_points": np.array([8.512, 9.999, 17.761, 19.999, 25.045, 29.999, 35.907, 39.999, 47.896, 49.999, 59.999, 62.003, 63.999]),
+      'start_points': np.array([12.000, 16.003, 19.087, 21.008, 23.001]),
+      'detected_points': np.array([17.761, 29.999, 25.045, 25.045, 29.999]),
       'CwCA': np.array([0.8265, 0.8890, 0.8782, 0.8501, 0.8528, 0.8446, 0.7877, 0.8343, 0.7807, 0.8398, 0.8505, 0.7999, 0.8823]),
       'Mnew': np.array([0.0000, 0.0000, 0.4574, 0.9552, 0.6674, 0.7299, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000]),
       'Fnew': np.array([0.1175, 0.0457, 0.0586, 0.0787, 0.0796, 0.0953, 0.0633, 0.0494, 0.1011, 0.0509, 0.0633, 0.1297, 0.0386]),
@@ -83,10 +83,29 @@ def get_data():
         [   None,    None,    None,    None,    None,    None, 0.8733, 0.8987, 0.8544, 0.911 , 0.9078, 0.835 , 0.9467]
       ])
     },
+    "c10_pt": {
+      "x_points": np.array([4.999, 9.043, 9.999, 14.999, 17.900, 19.999, 24.999, 25.414, 29.999, 34.999, 39.662, 39.999, 44.999, 49.999, 51.058, 53.999]),
+      'start_points': np.array([7.001, 12.021, 14.028, 17.009, 18.009]),
+      'detected_points': np.array([14.999, 24.999, 19.999, 25.414, 25.414]),
+      'CwCA': np.array([0.6616, 0.6355, 0.6611, 0.6754, 0.5524, 0.6247, 0.5519, 0.4844, 0.5234, 0.5454, 0.5822, 0.6142, 0.6412, 0.6470, 0.6686, 0.7365]),
+      'Mnew': np.array([0.0000, 0.8825, 0.9617, 0.9337, 0.8329, 0.8732, 0.7845, 0.7158, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000]),
+      'Fnew': np.array([0.0974, 0.1279, 0.0699, 0.1113, 0.1437, 0.0915, 0.1107, 0.1094, 0.0417, 0.0686, 0.0999, 0.0415, 0.0626, 0.1068, 0.1313, 0.0585]),
+      'acc_per_class': np.array([
+        [0.715 , 0.7218, 0.7288, 0.7165, 0.602 , 0.6624, 0.6126, 0.611, 0.6096, 0.5175, 0.5939, 0.5,    None,    None,    None,    None],
+        [0.777 , 0.7082, 0.7421, 0.7037, 0.6732, 0.7149, 0.7387, 0.6327, 0.6051, 0.6535, 0.7108,    None,    None,    None,    None,    None],
+        [0.524 , 0.5155, 0.5959, 0.6271, 0.5051, 0.59  , 0.5459, 0.3556, 0.4902, 0.5299,    None,    None,    None,    None,    None,    None],
+        [0.62  , 0.6022, 0.601 , 0.6453, 0.4437, 0.491 , 0.4108, 0.3778, 0.3667, 0.3387,    None,    None,    None,    None,    None,    None],
+        [0.672 , 0.6434, 0.7056, 0.6922, 0.6375, 0.7186, 0.5706, 0.5, 0.5876, 0.6102, 0.5294,    None,    None,    None,    None,    None],
+        [None,    None,    None,    None, 0.4652, 0.5085, 0.4541, 0.439, 0.535 , 0.518 , 0.5   , 0.505 , 0.51  , 0.52  , 0.607 , 0.75  ],
+        [None,    None,    None,    None,    None,    None, 0.5811, 0.52, 0.5723, 0.589 , 0.62  , 0.697 , 0.672 , 0.685 , 0.6557, 0.7132],
+        [None,    None,    None,    None,    None,    None,    None, 0.5417, 0.5759, 0.5131, 0.5541, 0.5132, 0.646 , 0.634 , 0.7163, 0.7095],
+        [None,    None,    None,    None,    None,    None,    None,    None, 0.4842, 0.6089, 0.6237, 0.7222, 0.709 , 0.71  , 0.684 , 0.7951],
+        [None,    None,    None,    None,    None,    None,    None,    None, 0.4844, 0.4932, 0.563 , 0.5825, 0.669 , 0.686 , 0.677 , 0.7298]])
+    },
     "c10_rp": {
-      "x_points": np.array([4999, 9999, 11409, 14999, 19999, 24999, 26103, 29999, 34999, 39999, 44999, 49999, 50337, 53999]),
-      'start_points': np.array([7001, 12021, 14028, 17009, 18009]),
-      'detected_points': np.array([14999, 26103, 26103, 26103, 26103]),
+      "x_points": np.array([4.999, 9.999, 11.409, 14.999, 19.999, 24.999, 26.103, 29.999, 34.999, 39.999, 44.999, 49.999, 50.337, 53.999]),
+      'start_points': np.array([7.001, 12.021, 14.028, 17.009, 18.009]),
+      'detected_points': np.array([14.999, 26.103, 26.103, 26.103, 26.103]),
       'CwCA': np.array([0.6132, 0.5934, 0.6236, 0.6636, 0.5625, 0.5138, 0.5284, 0.3832, 0.4476, 0.4872, 0.5018, 0.5318, 0.5355, 0.5945]),
       'Mnew': np.array([0.0000, 0.8850, 0.8506, 0.9795, 0.9497, 0.8912, 0.8604, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000]),
       'Fnew': np.array([0.0638, 0.1077, 0.0945, 0.0378, 0.0581, 0.0844, 0.1070, 0.0149, 0.0268, 0.0372, 0.0484, 0.0706, 0.0799, 0.0180]),
@@ -104,9 +123,9 @@ def get_data():
       ])
     },
     "c10_tr": {
-      "x_points": np.array([4999, 7666, 9999, 14999, 17226, 19999, 22428, 24999, 29999, 34999, 37794, 39999, 44999, 49726, 49999, 53999]),
-      'start_points': np.array([7001, 12021, 14028, 17009, 18009]),
-      'detected_points': np.array([17226, 22428, 22428, 22428, 22428]),
+      "x_points": np.array([4.999, 7.666, 9.999, 14.999, 17.226, 19.999, 22.428, 24.999, 29.999, 34.999, 37.794, 39.999, 44.999, 49.726, 49.999, 53.999]),
+      'start_points': np.array([7.001, 12.021, 14.028, 17.009, 18.009]),
+      'detected_points': np.array([17.226, 22.428, 22.428, 22.428, 22.428]),
       'CwCA': np.array([0.6758, 0.6357, 0.6950, 0.6944, 0.6465, 0.5519, 0.5317, 0.4403, 0.4940, 0.5326, 0.5635, 0.6372, 0.6554, 0.6444, 0.7326, 0.7270]),
       'Mnew': np.array([0.0000, 0.8676, 0.9267, 0.9380, 0.8508, 0.7884, 0.7232, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000, 0.0000]),
       'Fnew': np.array([0.1170, 0.1569, 0.0770, 0.1084, 0.1505, 0.1578, 0.1614, 0.0292, 0.0540, 0.0688, 0.1113, 0.0558, 0.0596, 0.1225, 0.0659, 0.0847]),
@@ -128,125 +147,162 @@ def get_data():
   return data
 
 def UDA_plot():
-  method = 'mn_tr' #[mn_tr, mn_pt, fm_co, fm_pt, c10_tr, c10_rp]
+  method = 'mn_tr' #[mn_tr, mn_pt, fm_pt, fm_co, c10_pt, c10_tr]
   data = get_data()
 
-  fig, axs = plt.subplots(3, 2)
-
-  for idx, (method, item) in enumerate(data.items()):
-    
+  # ['MNIST: Prototypical', 'MNIST: Triplet',
+  #  'FashionMNIST: Prototypical', 'FashionMNIST: Contrastive',
+  #  'CIFAR10: Prototypical', 'CIFAR10: Triplet']
+  plot_labels = ['CIFAR10: Prototypical', 'CIFAR10: Triplet']
+  methods = ['c10_pt', 'c10_tr']
+  fig, axs = plt.subplots(len(methods), 1)
+  fig.subplots_adjust(hspace = .001)
+  
+  for idx, method in enumerate(methods):
+    item = get_data()[method]
+  
     if method in ['mn_tr', 'mn_pt', 'fm_pt', 'fm_co']:
-      x_lim = [0, 65000]
-      x_ticks = np.arange(0, 64000, step=10000)
-    elif method in ['c10_rp', 'c10_tr']:
-      x_lim = [0, 55000]
-      x_ticks = np.arange(0, 54000, step=5000)
+      x_lim = [0, 65]
+      x_ticks = np.arange(0, 64, step=10)
+    elif method in ['c10_pt', 'c10_tr']:
+      x_lim = [0, 55]
+      x_ticks = np.arange(0, 54, step=5)
     
     # print(item)
     x_points = item['x_points']
     Mnew = item['Mnew']
     Fnew = item['Fnew']
 
-    axs[int(idx/2), idx%2].plot(x_points, Mnew, '-o', label='M_new')
-    axs[int(idx/2), idx%2].plot(x_points, Fnew, '-o', label='F_new')
+    axs[idx].plot(x_points, Mnew, '-o', label='M_new')
+    axs[idx].plot(x_points, Fnew, '-o', label='F_new')
+    axs[idx].set_title(plot_labels[idx], fontsize=10)
+    axs[idx].set_ylim([0.0, 1])
+    axs[idx].set_yticks(np.arange(0.0, 1.05, step=0.25))
+    # axs[idx].set_ylabel('Percentage', fontsize=10)
+    axs[idx].set_xlim(x_lim)
+    axs[idx].set_xticks(x_ticks)
+    if idx == len(methods)-1:
+      axs[idx].set_xlabel('Stream data (K)')
 
-    axs[int(idx/2), idx%2].set_title('Method: {}'.format(method))
-    axs[int(idx/2), idx%2].set_ylim([0.0, 1])
-    axs[int(idx/2), idx%2].set_yticks(np.arange(0.0, 1.05, step=0.25))
-    axs[int(idx/2), idx%2].set_ylabel('Percentage', fontsize=10)
-    axs[int(idx/2), idx%2].set_xlim(x_lim)
-    axs[int(idx/2), idx%2].set_xticks(x_ticks)
-    axs[int(idx/2), idx%2].set_xlabel('Stream data')
+    
+    # axs[int(idx/2), idx%2].plot(x_points, Mnew, '-o', label='M_new')
+    # axs[int(idx/2), idx%2].plot(x_points, Fnew, '-o', label='F_new')
+    # axs[int(idx/2), idx%2].set_title('Method: {}'.format(method))
+    # axs[int(idx/2), idx%2].set_ylim([0.0, 1])
+    # axs[int(idx/2), idx%2].set_yticks(np.arange(0.0, 1.05, step=0.25))
+    # axs[int(idx/2), idx%2].set_ylabel('Percentage', fontsize=10)
+    # axs[int(idx/2), idx%2].set_xlim(x_lim)
+    # axs[int(idx/2), idx%2].set_xticks(x_ticks)
+    # axs[int(idx/2), idx%2].set_xlabel('Stream data (K)')
 
-  handles, labels = axs[0,0].get_legend_handles_labels()
+  handles, labels = axs[0].get_legend_handles_labels()
   fig.legend(handles, labels, loc='upper center', ncol=2)
   fig.subplots_adjust(hspace=0.4)
   plt.show()
 
 def avg_class_plot():
-  dataset = 'CIFAR10' #['MNIST', 'FashionMNIST', 'CIFAR10',]
-  class_num = 10
-  method = 'c10_tr' #[mn_tr, mn_pt, fm_co, fm_pt, c10_tr, c10_rp]
-  data = get_data()[method]
+  dataset = 'MNIST' #['MNIST', 'FashionMNIST', 'CIFAR10',]
+  # method = 'mn_tr' #['mn_pt', 'mn_tr', 'fm_pt', 'fm_co', 'c10_rp', 'c10_tr']
+  methods = ['c10_pt', 'c10_tr']
   colors = ['limegreen', 'hotpink', 'blueviolet', 'royalblue', 'darkorange', 'gold', 'brown']
-
-  ### Get data
-  x_points = data['x_points']
-  start_points = data['start_points']
-  detected_points = data['detected_points']
-  acc_per_class = data['acc_per_class']
-  CwCA = data['CwCA']
+  legend_fs = 8
   
-  if method in ['mn_tr', 'mn_pt']:
-    y_lim = [0.5, 1]
-    x_lim = [0, 65000]
-    y_ticks = np.arange(0.6, 1.05, step=0.2)
-    x_ticks = np.arange(0, 64000, step=10000)
-    y_annotate = 0.75
-  elif method in ['fm_pt', 'fm_co']:
-    y_lim = [0.2, 1]
-    x_lim = [0, 65000]
-    y_ticks = np.arange(0.3, 1.05, step=0.2)
-    x_ticks = np.arange(0, 64000, step=10000)
-    y_annotate = 0.6
-  elif method in ['c10_rp', 'c10_tr']:
-    y_lim = [0.2, 0.85]
-    x_lim = [0, 55000]
-    y_ticks = np.arange(0.3, 0.8, step=0.2)
-    x_ticks = np.arange(0, 54000, step=5000)
-    y_annotate = 0.5
-
+  # ['MNIST: Prototypical', 'MNIST: Triplet',
+  #  'FashionMNIST: Prototypical', 'FashionMNIST: Contrastive',
+  #  'CIFAR10: Prototypical', 'CIFAR10: Triplet']
+  cols_labels = ['CIFAR10: Prototypical', 'CIFAR10: Triplet']
+  rows_label = ['Known classes', 'Base classes', 'Class 5', 'Class 6', 'Class 7', 'Class 8', 'Class 9']
+  
+  ### === Define plot ==============
   # plt.rcParams['axes.grid'] = True
-  fig, axs = plt.subplots(7, 1)
+  fig, axs = plt.subplots(7, len(methods), figsize=(15,7))
+  # fig.set_size_inches(18.5, 10.5)
   fig.subplots_adjust(hspace = .001)
-  plt.suptitle('{} dataset, {}'.format(dataset, method), fontsize=14, y=0.92)
+  # plt.suptitle('{} dataset, {}'.format(dataset, method), fontsize=14, y=0.92)
 
-  axs[0].plot(x_points, CwCA, '-o', label='CwCA', color=colors[-1])
-  axs[0].set_ylim(y_lim)
-  axs[0].set_xlim(x_lim)
-  axs[0].set_ylabel('Known class Acc.', fontsize=12, rotation=0, ha='right')
-  axs[0].set_yticks(y_ticks)
-  axs[0].set_xticks(x_ticks)
-  axs[0].legend(loc='lower right', ncol=5)
-
-  for i in range(5):
-    axs[1].plot(x_points, acc_per_class[i], '-o', label='class {}'.format(i))
-  axs[1].set_ylim(y_lim)
-  axs[1].set_xlim(x_lim)
-  axs[1].set_ylabel('Base classes', fontsize=12, rotation=0, ha='right')
-  axs[1].set_yticks(y_ticks)
-  axs[1].set_xticks(x_ticks)
-  axs[1].legend(loc='lower right', ncol=5)
-
-  for class_idx, class_acc in enumerate(acc_per_class[5:]):    
-    axs[class_idx+2].plot(x_points, class_acc, '-o', color=colors[class_idx])
-    axs[class_idx+2].axvline(x=start_points[class_idx], linestyle='--', color=colors[class_idx]) #color='k'
-    axs[class_idx+2].axvline(x=detected_points[class_idx], linestyle='-.', color=colors[class_idx])
-    axs[class_idx+2].axvspan(start_points[class_idx], detected_points[class_idx], alpha=0.25, color=colors[class_idx])
-
-    axs[class_idx+2].set_ylim(y_lim)
-    axs[class_idx+2].set_xlim(x_lim)
-    axs[class_idx+2].set_ylabel('Label {}'.format(class_idx+5), fontsize=12, rotation=0, ha='right')
-    axs[class_idx+2].set_yticks(y_ticks) 
-    axs[class_idx+2].set_xticks(x_ticks)
-
-    axs[class_idx+2].annotate(
-      "",
-      xy=(start_points[class_idx], y_annotate), xycoords='data',
-      xytext=(detected_points[class_idx], y_annotate), textcoords='data',
-      arrowprops=dict(arrowstyle="<->", connectionstyle="arc3", color=colors[class_idx], lw=1),
-    )
-    axs[class_idx+2].text(
-      int(0.5*(detected_points[class_idx] + start_points[class_idx]) - 730 ), y_annotate+0.05,
-      '%g'%(detected_points[class_idx] - start_points[class_idx]), 
-      rotation=0, fontsize=10, color=colors[class_idx])
-
-    if class_idx != 4:
-      axs[class_idx+2].set_xticklabels(())
+  for ax, col in zip(axs[0], cols_labels):
+    ax.set_title(col)
   
-    plt.xlabel('Stream data')
-  
-  plt.savefig('trajectory_eval.png', dpi=800)
+  for ax, row in zip(axs[:,0], rows_label):
+    ax.set_ylabel(row, rotation=0, ha='right')
+
+  for method_idx, method in enumerate(methods):
+    ### === Get data =================
+    data = get_data()[method]
+    x_points = data['x_points']
+    start_points = data['start_points']
+    detected_points = data['detected_points']
+    acc_per_class = data['acc_per_class']
+    CwCA = data['CwCA']
+    
+    if method in ['mn_tr', 'mn_pt']:
+      y_lim = [0.5, 1]
+      x_lim = [0, 65]
+      y_ticks = np.arange(0.7, 1.05, step=0.3)
+      x_ticks = np.arange(0, 64, step=10)
+      y_annotate = 0.75
+    elif method in ['fm_pt', 'fm_co']:
+      y_lim = [0.2, 1]
+      x_lim = [0, 65]
+      y_ticks = np.arange(0.3, 1.05, step=0.3)
+      x_ticks = np.arange(0, 64, step=10)
+      y_annotate = 0.6
+    elif method in ['c10_rp', 'c10_pt', 'c10_tr']:
+      y_lim = [0.2, 0.85]
+      x_lim = [0, 55]
+      y_ticks = np.arange(0.3, 0.8, step=0.2)
+      x_ticks = np.arange(0, 54, step=5)
+      y_annotate = 0.5
+
+    axs[0][method_idx].plot(x_points, CwCA, '-o', label='CwCA', color=colors[-1])
+    axs[0][method_idx].set_ylim(y_lim)
+    axs[0][method_idx].set_xlim(x_lim)
+    # axs[0][method_idx].set_ylabel('Known class Acc.', fontsize=12, rotation=0, ha='right')
+    
+    axs[0][method_idx].set_yticks(y_ticks)
+    axs[0][method_idx].set_xticks(x_ticks)
+    axs[0][method_idx].legend(loc='lower right', ncol=5, fontsize=legend_fs) 
+    axs[0][method_idx].set_xticklabels(())
+
+    for i in range(5):
+      axs[1][method_idx].plot(x_points, acc_per_class[i], '-o', label='class {}'.format(i))
+    axs[1][method_idx].set_ylim(y_lim)
+    axs[1][method_idx].set_xlim(x_lim)
+    # axs[1][method_idx].set_ylabel('Base classes', fontsize=12, rotation=0, ha='right')
+    axs[1][method_idx].set_yticks(y_ticks)
+    axs[1][method_idx].set_xticks(x_ticks)
+    axs[1][method_idx].set_xticklabels(())
+    axs[1][method_idx].legend(loc='lower right', ncol=5, fontsize=legend_fs)
+
+    for class_idx, class_acc in enumerate(acc_per_class[5:]):    
+      axs[class_idx+2][method_idx].plot(x_points, class_acc, '-o', color=colors[class_idx])
+      axs[class_idx+2][method_idx].axvline(x=start_points[class_idx], linestyle='--', color=colors[class_idx]) #color='k'
+      axs[class_idx+2][method_idx].axvline(x=detected_points[class_idx], linestyle='-.', color=colors[class_idx])
+      axs[class_idx+2][method_idx].axvspan(start_points[class_idx], detected_points[class_idx], alpha=0.25, color=colors[class_idx])
+
+      axs[class_idx+2][method_idx].set_ylim(y_lim)
+      axs[class_idx+2][method_idx].set_xlim(x_lim)
+      # axs[class_idx+2][method_idx].set_ylabel('Label {}'.format(class_idx+5), fontsize=12, rotation=0, ha='right')
+      axs[class_idx+2][method_idx].set_yticks(y_ticks) 
+      axs[class_idx+2][method_idx].set_xticks(x_ticks)
+
+      axs[class_idx+2][method_idx].annotate(
+        "",
+        xy=(start_points[class_idx], y_annotate), xycoords='data',
+        xytext=(detected_points[class_idx], y_annotate), textcoords='data',
+        arrowprops=dict(arrowstyle="<->", connectionstyle="arc3", color=colors[class_idx], lw=1),
+      )
+      axs[class_idx+2][method_idx].text(
+        int(0.5*(detected_points[class_idx] + start_points[class_idx]) - 2.0 ), y_annotate+0.05,
+        '%g'%(detected_points[class_idx] - start_points[class_idx]), 
+        rotation=0, fontsize=10, color=colors[class_idx])
+
+      if class_idx != 4:
+        axs[class_idx+2][method_idx].set_xticklabels(())
+      else:
+        axs[class_idx+2][method_idx].set_xlabel('Stream Of Data (K)', ha='center')
+    
+  plt.savefig('trajectory_eval.png', dpi=1200)
   plt.show()
 
 

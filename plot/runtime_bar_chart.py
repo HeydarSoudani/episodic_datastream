@@ -82,71 +82,71 @@ def get_details_stream_data():
   return data
 
 
-def get_incremental_data():
-  # iCaRL, GSS, MIR, Res, CoPE,
-  # MT_xn, MT_co, MT_tr,
-  # EP_ce, EP_pt, EP_rp
-  data = [
-    {
-      'dataset': 'MNIST',
-      'mean': np.array([
-        , , , , 119.26,
-        290.50, 63.26, 62.38,
-        578.39, 584.54, 1094.08
-      ]),
-      'std': np.array([
-        , , , , 1.31,
-        2.69, 1.25, 0.33,
-        1.67, 8.48, 10.71
-      ])
-    },
-    {
-      'dataset': 'FashionMNIST',
-      'mean': np.array([
-        , , , , 496.31,
-        , , ,
-        , , ,
-      ]),
-      'std': np.array([
-        , , , , 1.16,
-        , , ,
-        , , ,
-      ])
-    },
-    {
-      'dataset': 'CIFAR10',
-      'mean': np.array([
-        , , , , 334.01,
-        , , ,
-        2394.98, 2407.66, 6073.16,
-      ]),
-      'std': np.array([
-        , , , , 2.18,
-        , , ,
-        11.78, 30.13, 27.34,
-      ])
-    }
-  ]
+# def get_incremental_data():
+#   # iCaRL, GSS, MIR, Res, CoPE,
+#   # MT_xn, MT_co, MT_tr,
+#   # EP_ce, EP_pt, EP_rp
+#   data = [
+#     {
+#       'dataset': 'MNIST',
+#       'mean': np.array([
+#         , , , , 119.26,
+#         290.50, 63.26, 62.38,
+#         578.39, 584.54, 1094.08
+#       ]),
+#       'std': np.array([
+#         , , , , 1.31,
+#         2.69, 1.25, 0.33,
+#         1.67, 8.48, 10.71
+#       ])
+#     },
+#     {
+#       'dataset': 'FashionMNIST',
+#       'mean': np.array([
+#         , , , , 496.31,
+#         , , ,
+#         , , ,
+#       ]),
+#       'std': np.array([
+#         , , , , 1.16,
+#         , , ,
+#         , , ,
+#       ])
+#     },
+#     {
+#       'dataset': 'CIFAR10',
+#       'mean': np.array([
+#         , , , , 334.01,
+#         , , ,
+#         2394.98, 2407.66, 6073.16,
+#       ]),
+#       'std': np.array([
+#         , , , , 2.18,
+#         , , ,
+#         11.78, 30.13, 27.34,
+#       ])
+#     }
+#   ]
 
-  return data
+#   return data
 
 def all_time_plot():
   data = get_stream_data()
-  methods = ['CPE_e1', 'CPE_e3', 'CPE_e5', 'MT_XN', 'MT_CO', 'MT_TR', 'EP_CE', 'EP_PT', 'EP_RP' ]  #'MT_CE',
+  methods = ['CPE_e1', 'CPE_e3', 'CPE_e5', 'MT_XN', 'MT_CO', 'MT_TR', 'ML_CE', 'ML_PT', 'ML_RP' ]  #'MT_CE',
   colors = ['royalblue', 'hotpink', 'blueviolet', 'gold', 'darkorange', 'limegreen', 'brown', 'goldenrod', 'darkorchid']
   n_methods = 9
   n_set = 3
   ind = np.arange(n_set)
-  width = 0.1
+  width = 0.14
   
-  fig, axs = plt.subplots(nrows=1, ncols=len(data), figsize=(6,3))
+  fig, axs = plt.subplots(nrows=len(data), ncols=1, figsize=(4.5,8))
   
   for idx, item in enumerate(data):
     dataset = item['dataset']
     mean = item['mean']
     std = item['std']
     for i in range(n_methods):
-      index = floor(i/n_set) + ((i%n_set)-1.5)*width 
+      index = 0.6*floor(i/n_set) + ((i%n_set)-1.5)*width 
       axs[idx].bar(
         index,
         mean[i],
@@ -159,15 +159,16 @@ def all_time_plot():
       )
     
     axs[idx].set_ylim([0, 6000])
-    axs[idx].set_xlim([-1, 3])
-    axs[idx].set_xticks(ind)
-    axs[idx].set_xticklabels(['CPE', 'Metric', 'MetaLearning'], fontsize=8)
-    axs[idx].set_xlabel('Methods', fontsize=12)
-    axs[idx].set_ylabel('Run time (s)', fontsize=12)
-    axs[idx].set_title('{}'.format(dataset), fontsize=12)
+    axs[idx].set_xlim([-0.4, 1.6])
+    axs[idx].set_xticks([0, 0.6, 1.2])
+    axs[idx].set_xticklabels(['CPE', 'Metric', 'MetaLearning'], fontsize=9)
+    axs[idx].set_yticklabels(np.arange(0, 6001, step=1000), fontsize=9, rotation=45)
+    # axs[idx].set_xlabel('Methods', fontsize=10)
+    axs[idx].set_ylabel('Run time', fontsize=10)
+    axs[idx].set_title('{}'.format(dataset), fontsize=10)
   
   handles, labels = axs[idx].get_legend_handles_labels()
-  fig.legend(handles, labels, loc='upper center', ncol=3,)
+  fig.legend(handles, labels, ncol=3, loc='upper center', fontsize=9)
   # fig.legend(loc='center', bbox_to_anchor=(0.5, 1.12),
   #   fancybox=True, shadow=False, ncol=3, fontsize=11.5)
 
@@ -218,6 +219,6 @@ def details_times_plot():
 
 
 if __name__ == '__main__':
-  # all_time_plot()
-  details_times_plot()
+  all_time_plot()
+  # details_times_plot()
 
