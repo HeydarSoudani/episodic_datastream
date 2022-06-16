@@ -304,7 +304,7 @@ class OperationalMemory():
     """
     Compute ...
     Args:
-      data: list of (sample, label)
+      data: list of (sample, label, feature)
     Returns:
       ---
     """ 
