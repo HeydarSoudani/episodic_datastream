@@ -15,7 +15,9 @@ def pseudo_labeler(data, n_component=2, ratio=1.0):
 	labels = torch.tensor([item[1] for item in data])
 	features = torch.stack([item[2] for item in data])
 
-	gmm = GaussianMixture(n_components=n_component,  random_state=0)
+	print(features.shape)
+
+	gmm = GaussianMixture(n_components=n_component, random_state=0)
 	gmm.fit(features.detach().cpu().numpy())
 	gmm_predict = gmm.predict(features.detach().cpu().numpy())
 
