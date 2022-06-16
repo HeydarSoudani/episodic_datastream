@@ -13,7 +13,7 @@ def pseudo_labeler(data, n_component=2, ratio=1.0):
 	p_data = []
 	samples = torch.stack([item[0] for item in data])
 	labels = torch.tensor([item[1] for item in data])
-	features = torch.stack([item[2] for item in data])
+	features = torch.squeeze(torch.stack([item[2] for item in data]))
 
 	print(features.shape)
 
