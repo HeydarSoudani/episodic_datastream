@@ -147,15 +147,16 @@ def get_data():
   return data
 
 def UDA_plot():
-  method = 'mn_tr' #[mn_tr, mn_pt, fm_pt, fm_co, c10_pt, c10_tr]
+  method = 'mn_tr' #[mn_pt, mn_tr, fm_pt, fm_co, c10_pt, c10_tr]
   data = get_data()
 
-  # ['MNIST: Prototypical', 'MNIST: Triplet',
-  #  'FashionMNIST: Prototypical', 'FashionMNIST: Contrastive',
-  #  'CIFAR10: Prototypical', 'CIFAR10: Triplet']
-  plot_labels = ['CIFAR10: Prototypical', 'CIFAR10: Triplet']
-  methods = ['c10_pt', 'c10_tr']
-  fig, axs = plt.subplots(len(methods), 1)
+  plot_labels = [
+    'MNIST: Prototypical', 'MNIST: Triplet',
+    'FashionMNIST: Prototypical', 'FashionMNIST: Contrastive',
+    'CIFAR10: Prototypical', 'CIFAR10: Triplet'
+  ]
+  methods = ['mn_pt', 'mn_tr', 'fm_pt', 'fm_co', 'c10_pt', 'c10_tr']
+  fig, axs = plt.subplots(3, 2, figsize=(15,7))
   fig.subplots_adjust(hspace = .001)
   
   for idx, method in enumerate(methods):
@@ -173,44 +174,47 @@ def UDA_plot():
     Mnew = item['Mnew']
     Fnew = item['Fnew']
 
-    axs[idx].plot(x_points, Mnew, '-o', label='M_new')
-    axs[idx].plot(x_points, Fnew, '-o', label='F_new')
-    axs[idx].set_title(plot_labels[idx], fontsize=10)
-    axs[idx].set_ylim([0.0, 1])
-    axs[idx].set_yticks(np.arange(0.0, 1.05, step=0.25))
-    # axs[idx].set_ylabel('Percentage', fontsize=10)
-    axs[idx].set_xlim(x_lim)
-    axs[idx].set_xticks(x_ticks)
-    if idx == len(methods)-1:
-      axs[idx].set_xlabel('Stream data (K)')
+    # axs[idx].plot(x_points, Mnew, '-o', label='M_new')
+    # axs[idx].plot(x_points, Fnew, '-o', label='F_new')
+    # axs[idx].set_title(plot_labels[idx], fontsize=10)
+    # axs[idx].set_ylim([0.0, 1])
+    # axs[idx].set_yticks(np.arange(0.0, 1.05, step=0.25))
+    # # axs[idx].set_ylabel('Percentage', fontsize=10)
+    # axs[idx].set_xlim(x_lim)
+    # axs[idx].set_xticks(x_ticks)
+    # if idx == len(methods)-1:
+    #   axs[idx].set_xlabel('Stream data (K)')
 
     
-    # axs[int(idx/2), idx%2].plot(x_points, Mnew, '-o', label='M_new')
-    # axs[int(idx/2), idx%2].plot(x_points, Fnew, '-o', label='F_new')
-    # axs[int(idx/2), idx%2].set_title('Method: {}'.format(method))
-    # axs[int(idx/2), idx%2].set_ylim([0.0, 1])
-    # axs[int(idx/2), idx%2].set_yticks(np.arange(0.0, 1.05, step=0.25))
-    # axs[int(idx/2), idx%2].set_ylabel('Percentage', fontsize=10)
-    # axs[int(idx/2), idx%2].set_xlim(x_lim)
-    # axs[int(idx/2), idx%2].set_xticks(x_ticks)
-    # axs[int(idx/2), idx%2].set_xlabel('Stream data (K)')
-
-  handles, labels = axs[0].get_legend_handles_labels()
-  fig.legend(handles, labels, loc='upper center', ncol=2)
+    axs[int(idx/2), idx%2].plot(x_points, Mnew, '-o', label='M_new')
+    axs[int(idx/2), idx%2].plot(x_points, Fnew, '-o', label='F_new')
+    axs[int(idx/2), idx%2].set_title(plot_labels[idx], fontsize=10)
+    axs[int(idx/2), idx%2].set_ylim([0.0, 1])
+    axs[int(idx/2), idx%2].set_yticks(np.arange(0.0, 1.05, step=0.5))
+    axs[int(idx/2), idx%2].set_xlim(x_lim)
+    axs[int(idx/2), idx%2].set_xticks(x_ticks)
+    
+    if idx%2 == 0:
+      axs[int(idx/2), idx%2].set_ylabel('Percentage', fontsize=10)
+    if int(idx/2) == 2:
+      axs[int(idx/2), idx%2].set_xlabel('Stream data (K)')
+  
+  handles, labels = axs[0, 0].get_legend_handles_labels()
+  fig.legend(handles, labels, loc='upper center', ncol=2, fontsize=12)
   fig.subplots_adjust(hspace=0.4)
   plt.show()
 
 def avg_class_plot():
   dataset = 'MNIST' #['MNIST', 'FashionMNIST', 'CIFAR10',]
   # method = 'mn_tr' #['mn_pt', 'mn_tr', 'fm_pt', 'fm_co', 'c10_rp', 'c10_tr']
-  methods = ['c10_pt', 'c10_tr']
+  methods = ['mn_pt', 'mn_tr']
   colors = ['limegreen', 'hotpink', 'blueviolet', 'royalblue', 'darkorange', 'gold', 'brown']
   legend_fs = 8
   
   # ['MNIST: Prototypical', 'MNIST: Triplet',
   #  'FashionMNIST: Prototypical', 'FashionMNIST: Contrastive',
   #  'CIFAR10: Prototypical', 'CIFAR10: Triplet']
-  cols_labels = ['CIFAR10: Prototypical', 'CIFAR10: Triplet']
+  cols_label = ['MNIST: Prototypical', 'MNIST: Triplet']
   rows_label = ['Known classes', 'Base classes', 'Class 5', 'Class 6', 'Class 7', 'Class 8', 'Class 9']
   
   ### === Define plot ==============
@@ -220,7 +224,7 @@ def avg_class_plot():
   fig.subplots_adjust(hspace = .001)
   # plt.suptitle('{} dataset, {}'.format(dataset, method), fontsize=14, y=0.92)
 
-  for ax, col in zip(axs[0], cols_labels):
+  for ax, col in zip(axs[0], cols_label):
     ax.set_title(col)
   
   for ax, row in zip(axs[:,0], rows_label):

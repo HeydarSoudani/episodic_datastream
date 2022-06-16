@@ -1,8 +1,8 @@
+from html import entities
 import numpy as np
 import matplotlib.pyplot as plt
 
 def get_data(dataset):
-
   if dataset == 'MNIST':
     data = [
       {
@@ -77,8 +77,7 @@ def get_data(dataset):
       }
     ]
 
-  elif dataset == 'FMNIST':
-    
+  elif dataset == 'FashionMNIST': 
     data = [
       {
         'label': 'Meta-PT (dist)',
@@ -189,10 +188,7 @@ def get_data(dataset):
   
   return data
 
-
 def get_data_one_epoch(dataset):
-
-
   if dataset == 'MNIST':
     data = [
       {
@@ -236,7 +232,8 @@ def get_data_one_epoch(dataset):
         }
       }
     ]
-  elif dataset == 'FMNIST':
+  
+  elif dataset == 'FashionMNIST':
     data = [
       {
         'label': 'Meta-PT (dist)',
@@ -327,67 +324,73 @@ def get_data_one_epoch(dataset):
   return data
 
 
-
 def main():
-  dataset = 'CIFAR10' #['MNIST', 'FMNIST', 'CIFAR10']
+  dataset = 'CIFAR10' #['MNIST', 'FashionMNIST', 'CIFAR10']
   n_task = 5
   n_per_task = 10
-  colors = ['limegreen', 'hotpink', 'blueviolet', 'royalblue', 'darkorange', 'gold', 'brown']
+  colors = ['limegreen', 'dodgerblue', 'deeppink', 'darkorange', 'maroon']
   
   # data = get_data(dataset)
   data = get_data_one_epoch(dataset)
 
-  fig, axs = plt.subplots(n_task, 1)
+  fig, axs = plt.subplots(n_task, 1, figsize=(14,6))
 
+  ### === For 10 epoch
   # if dataset == 'MNIST':
   #   ylim = [60, 100]
   #   yticks = np.arange(60, 101, step=15)
-  # elif dataset == 'FMNIST':
+  # elif dataset == 'FashionMNIST':
   #   ylim = [40, 100]
   #   yticks = np.arange(40, 101, step=20)
   # elif dataset == 'CIFAR10':
   #   ylim = [0, 100]
-  #   yticks = np.arange(00, 101, step=25)
+  #   yticks = np.arange(00, 101, step=50)
 
-  # For 1 epoch
+  ### === For 1 epoch
   if dataset == 'MNIST':
     ylim = [0, 100]
-    yticks = np.arange(0, 101, step=25)
-  elif dataset == 'FMNIST':
+    yticks = np.arange(0, 101, step=50)
+  elif dataset == 'FashionMNIST':
     ylim = [0, 100]
-    yticks = np.arange(0, 101, step=25)
+    yticks = np.arange(0, 101, step=50)
   elif dataset == 'CIFAR10':
     ylim = [0, 100]
-    yticks = np.arange(00, 101, step=25)
+    yticks = np.arange(00, 101, step=50)
 
-  
-  for item in data:
-    label = item['label']
-    tasks_mean = item['mean']
-    # tasks_std = item['std']
-    axs[0].set_title(dataset)
-    for i in range(n_task):
-      x = np.arange(i*n_per_task, n_task*n_per_task, 1)
-      mean = np.array(tasks_mean['task_{}'.format(i)])
+
+  axs[0].set_title(dataset, fontsize=14)
+  for task_idx in range(n_task):
+
+    for method_idx, method_data in enumerate(data):
+      label = method_data['label']
+      tasks_mean = method_data['mean']
+      # tasks_std = item['std']
+      
+      x = np.arange(task_idx*n_per_task, n_task*n_per_task, 1)
+      mean = np.array(tasks_mean['task_{}'.format(task_idx)])
       # std = np.array(tasks_std['task_{}'.format(i)])
+      axs[task_idx].plot(x, mean, linewidth=1.4, label=label, c=colors[method_idx])
 
-      axs[i].plot(x, mean, linewidth=1.2, label=label)
-      for j in range(n_task):
-        axs[i].axvline(x=j*n_per_task, linestyle='--', color='darkgray') #color='k'
-      # axs[i].fill_between(
-      #   x, mean-std, mean+std,
-      #   edgecolor=colors[i],
-      #   facecolor=colors[i],
-      #   alpha=0.2)
-      
-      axs[i].set_ylim(ylim)
-      axs[i].set_xlim([0, n_task*n_per_task])
-      axs[i].set_ylabel('Task {} Accuracy'.format(i), fontsize=8)
-      axs[i].set_xlabel('Training step')
-      axs[i].set_yticks(yticks)
-      axs[i].set_xticks(np.arange(0, (n_task*n_per_task)+1, step=5))
-      
-    axs[i].legend(loc='lower left')
+    for j in range(n_task):
+      axs[task_idx].axvline(x=j*n_per_task, linestyle='--', color='darkgray') #color='k'
+    # axs[i].fill_between(
+    #   x, mean-std, mean+std,
+    #   edgecolor=colors[i],
+    #   facecolor=colors[i],
+    #   alpha=0.2)
+    
+    axs[task_idx].set_ylim(ylim)
+    axs[task_idx].set_xlim([0, n_task*n_per_task])
+    axs[task_idx].set_ylabel('Task {}'.format(task_idx), fontsize=10)
+    
+    axs[task_idx].set_yticks(yticks)
+    if task_idx == n_task-1:
+      axs[task_idx].set_xlabel('Training step')
+      axs[task_idx].set_xticks(np.arange(0, (n_task*n_per_task)+1, step=5))
+    else:
+      axs[task_idx].set_xticks([])
+
+  axs[task_idx].legend(loc='lower left', ncol=2)
 
   plt.show()
   

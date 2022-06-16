@@ -139,7 +139,7 @@ def all_time_plot():
   ind = np.arange(n_set)
   width = 0.14
   
-  fig, axs = plt.subplots(nrows=len(data), ncols=1, figsize=(4.5,8))
+  fig, axs = plt.subplots(nrows=1, ncols=len(data), figsize=(10,4.5))
   
   for idx, item in enumerate(data):
     dataset = item['dataset']
@@ -161,10 +161,10 @@ def all_time_plot():
     axs[idx].set_ylim([0, 6000])
     axs[idx].set_xlim([-0.4, 1.6])
     axs[idx].set_xticks([0, 0.6, 1.2])
-    axs[idx].set_xticklabels(['CPE', 'Metric', 'MetaLearning'], fontsize=9)
+    axs[idx].set_xticklabels(['CPE', 'Metric', 'MetaLearning'], fontsize=10)
     axs[idx].set_yticklabels(np.arange(0, 6001, step=1000), fontsize=9, rotation=45)
     # axs[idx].set_xlabel('Methods', fontsize=10)
-    axs[idx].set_ylabel('Run time', fontsize=10)
+    axs[idx].set_ylabel('Run time (sec)', fontsize=10)
     axs[idx].set_title('{}'.format(dataset), fontsize=10)
   
   handles, labels = axs[idx].get_legend_handles_labels()
@@ -182,8 +182,6 @@ def details_times_plot():
   width = 0.1
   ind = np.arange(4)
   data = get_details_stream_data()
-
-
 
   fig, axs = plt.subplots(nrows=1, ncols=len(data), figsize=(6,3))
   for idx, item in enumerate(data):

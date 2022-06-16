@@ -71,7 +71,7 @@ def owr_test(
     model,
     new_data,
     args, device,
-    'tsne_taks_{}'.format(current_task),
+    '{}_task{}'.format(args.algorithm, current_task+1),
     n_label=n_label
   )
   print('--- Plot done! ---')
