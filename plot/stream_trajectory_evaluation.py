@@ -188,7 +188,7 @@ def UDA_plot():
     
     axs[int(idx/2), idx%2].plot(x_points, Mnew, '-o', label='M_new')
     axs[int(idx/2), idx%2].plot(x_points, Fnew, '-o', label='F_new')
-    axs[int(idx/2), idx%2].set_title(plot_labels[idx], fontsize=10)
+    axs[int(idx/2), idx%2].set_title(plot_labels[idx], fontsize=12)
     axs[int(idx/2), idx%2].set_ylim([0.0, 1])
     axs[int(idx/2), idx%2].set_yticks(np.arange(0.0, 1.05, step=0.5))
     axs[int(idx/2), idx%2].set_xlim(x_lim)
@@ -198,6 +198,9 @@ def UDA_plot():
       axs[int(idx/2), idx%2].set_ylabel('Percentage', fontsize=10)
     if int(idx/2) == 2:
       axs[int(idx/2), idx%2].set_xlabel('Stream data (K)')
+    if int(idx/2) == 0:
+      pos = axs[int(idx/2), idx%2].get_position()
+      axs[int(idx/2), idx%2].set_position([pos.x0, pos.y0, pos.width, pos.height * 0.9])
   
   handles, labels = axs[0, 0].get_legend_handles_labels()
   fig.legend(handles, labels, loc='upper center', ncol=2, fontsize=12)

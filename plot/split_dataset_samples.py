@@ -50,6 +50,7 @@ def imshow(imgs):
 def show_samples():
   
   datasets = ['mnist', 'fmnist', 'cifar10']
+  dataset_titles = ['MNIST', 'FashionMNIST', 'CIFAR10']
   fig, axs = plt.subplots(args.n_tasks, len(datasets))
 
   for idx, dataset in enumerate(datasets):
@@ -84,9 +85,9 @@ def show_samples():
       grid_imgs = torchvision.utils.make_grid(torch.tensor(support_images), nrow=10)
       
       if idx == 0:
-        axs[task, idx].set_ylabel('task {}'.format(task), fontsize=12, rotation=0, ha='right')
+        axs[task, idx].set_ylabel('task {}'.format(task+1), fontsize=12, rotation=0, ha='right')
       if task == 0:
-        axs[task, idx].set_title('{}'.format(args.dataset), fontsize=13)
+        axs[task, idx].set_title(dataset_titles[idx], fontsize=13)
       
       axs[task, idx].set_xticks([])
       axs[task, idx].set_yticks([])

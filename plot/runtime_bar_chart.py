@@ -139,7 +139,7 @@ def all_time_plot():
   ind = np.arange(n_set)
   width = 0.14
   
-  fig, axs = plt.subplots(nrows=1, ncols=len(data), figsize=(10,4.5))
+  fig, axs = plt.subplots(nrows=1, ncols=len(data), figsize=(11,4.5))
   
   for idx, item in enumerate(data):
     dataset = item['dataset']
@@ -161,14 +161,17 @@ def all_time_plot():
     axs[idx].set_ylim([0, 6000])
     axs[idx].set_xlim([-0.4, 1.6])
     axs[idx].set_xticks([0, 0.6, 1.2])
-    axs[idx].set_xticklabels(['CPE', 'Metric', 'MetaLearning'], fontsize=10)
-    axs[idx].set_yticklabels(np.arange(0, 6001, step=1000), fontsize=9, rotation=45)
+    axs[idx].set_xticklabels(['CPE', 'Metric', 'MetaLearning'], fontsize=12)
+    axs[idx].set_yticklabels(np.arange(0, 6001, step=1000), fontsize=10, rotation=45)
     # axs[idx].set_xlabel('Methods', fontsize=10)
-    axs[idx].set_ylabel('Run time (sec)', fontsize=10)
-    axs[idx].set_title('{}'.format(dataset), fontsize=10)
+    axs[idx].set_ylabel('Run time (sec)', fontsize=12)
+    axs[idx].set_title('{}'.format(dataset), fontsize=12)
+
+    pos = axs[idx].get_position()
+    axs[idx].set_position([pos.x0, pos.y0, pos.width, pos.height * 0.82])
   
   handles, labels = axs[idx].get_legend_handles_labels()
-  fig.legend(handles, labels, ncol=3, loc='upper center', fontsize=9)
+  fig.legend(handles, labels, ncol=3, loc='upper center', fontsize=12)
   # fig.legend(loc='center', bbox_to_anchor=(0.5, 1.12),
   #   fancybox=True, shadow=False, ncol=3, fontsize=11.5)
 
@@ -203,9 +206,9 @@ def details_times_plot():
     axs[idx].set_yscale('log')  
     axs[idx].set_xticks(ind)
     axs[idx].set_xticklabels(['retrain', 'detector', 'memory', 'evaluation'], fontsize=10)
-    axs[idx].set_xlabel('Component', fontsize=12)
-    axs[idx].set_ylabel('Run time (s)', fontsize=12)
-    axs[idx].set_title('{}'.format(dataset), fontsize=14)
+    axs[idx].set_xlabel('Component', fontsize=14)
+    axs[idx].set_ylabel('Run time (s)', fontsize=14)
+    axs[idx].set_title('{}'.format(dataset), fontsize=16)
     # axs[idx].legend(loc='center', bbox_to_anchor=(0.5, 1.12),
     #         fancybox=True, shadow=False, ncol=3, fontsize=11.5)
   

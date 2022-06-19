@@ -12,7 +12,7 @@ def main():
     image = mpimg.imread('photos/{}.png'.format(label))
     axs[idx].imshow(image, aspect="auto")    
 
-    axs[idx].set_title(label)
+    axs[idx].set_title(label, c='royalblue')
     axs[idx].set_xticklabels(())
     axs[idx].set_yticklabels(())
     axs[idx].set_xticks(())
@@ -52,7 +52,7 @@ def main():
   #     axs[row_idx][col_idx].spines['bottom'].set_visible(False)
   #     axs[row_idx][col_idx].spines['left'].set_visible(False)
 
-  # plt.axis("tight")
+  # # plt.axis("tight")
   # plt.subplots_adjust(wspace=0, hspace=0)
   # plt.show()
       
