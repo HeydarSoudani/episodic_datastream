@@ -1,3 +1,4 @@
+from turtle import left
 import torch
 from torch.utils.data import DataLoader
 import os
@@ -45,6 +46,7 @@ def tsne_plot(features, labels, file_name='tsne', n_color=6):
     legend='full',
     palette=palette
   )
+  sns.tick_params(bottom=False, left=False)
 
   plt.savefig('{}.png'.format(file_name))
   # plt.show()

@@ -151,9 +151,9 @@ def UDA_plot():
   data = get_data()
 
   plot_labels = [
-    'MNIST: Prototypical', 'MNIST: Triplet',
-    'FashionMNIST: Prototypical', 'FashionMNIST: Contrastive',
-    'CIFAR10: Prototypical', 'CIFAR10: Triplet'
+    'MNIST: Meta-learning (Prototypical)', 'MNIST: Metric-learning (Triplet)',
+    'FashionMNIST: Meta-learning (Prototypical)', 'FashionMNIST: Metric-learning (Contrastive)',
+    'CIFAR10: Meta-learning (Prototypical)', 'CIFAR10: Metric-learning (Triplet)'
   ]
   methods = ['mn_pt', 'mn_tr', 'fm_pt', 'fm_co', 'c10_pt', 'c10_tr']
   fig, axs = plt.subplots(3, 2, figsize=(15,7))
@@ -197,13 +197,13 @@ def UDA_plot():
     if idx%2 == 0:
       axs[int(idx/2), idx%2].set_ylabel('Percentage', fontsize=10)
     if int(idx/2) == 2:
-      axs[int(idx/2), idx%2].set_xlabel('Stream data (K)')
+      axs[int(idx/2), idx%2].set_xlabel('Stream of Data (K)')
     if int(idx/2) == 0:
       pos = axs[int(idx/2), idx%2].get_position()
       axs[int(idx/2), idx%2].set_position([pos.x0, pos.y0, pos.width, pos.height * 0.9])
   
   handles, labels = axs[0, 0].get_legend_handles_labels()
-  fig.legend(handles, labels, loc='upper center', ncol=2, fontsize=12)
+  fig.legend(handles, labels, loc='upper center', ncol=2, fontsize=13)
   fig.subplots_adjust(hspace=0.4)
   plt.show()
 
@@ -217,7 +217,7 @@ def avg_class_plot():
   # ['MNIST: Prototypical', 'MNIST: Triplet',
   #  'FashionMNIST: Prototypical', 'FashionMNIST: Contrastive',
   #  'CIFAR10: Prototypical', 'CIFAR10: Triplet']
-  cols_label = ['MNIST: Prototypical', 'MNIST: Triplet']
+  cols_label = ['MNIST: Meta-learning (Prototypical)', 'MNIST: Metric-learning (Triplet)']
   rows_label = ['Known classes', 'Base classes', 'Class 5', 'Class 6', 'Class 7', 'Class 8', 'Class 9']
   
   ### === Define plot ==============
