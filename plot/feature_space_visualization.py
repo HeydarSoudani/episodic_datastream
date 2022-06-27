@@ -46,21 +46,27 @@ def tsne_plot(features, labels, file_name='tsne', n_color=6):
   
   tsne = TSNE()
   X_embedded = tsne.fit_transform(features)
-  plt.tick_params(
+  
+  fig, ax = plt.subplots()
+
+  ax.tick_params(
     left=False,
     labelleft=False,
     bottom = False,
     labelbottom=False
   )
-  plt.scatter(
+  scatter = ax.scatter(
     X_embedded[:,0],
     X_embedded[:,1],
     marker='o',
     c=[colors[9] if i==100 else colors[i] for i in labels],
     label=['Novel' if i==100 else i for i in labels]
   )
-  plt.legend(loc='upper right', fontsize=10)
-  
+  print(*scatter.legend_elements())
+  legend1 = ax.legend(*scatter.legend_elements(),
+                    loc="upper right", title="Classes", fontsize=9)
+  ax.add_artist(legend1)
+    
   # sns.set(rc={'figure.figsize':(11.7,8.27)})
   # palette = sns.color_palette("bright", n_color)
   # sns.scatterplot(
