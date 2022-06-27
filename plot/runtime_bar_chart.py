@@ -133,7 +133,13 @@ def get_details_stream_data():
 def all_time_plot():
   data = get_stream_data()
   methods = ['CPE_e1', 'CPE_e3', 'CPE_e5', 'MT_XN', 'MT_CO', 'MT_TR', 'ML_CE', 'ML_PT', 'ML_RP' ]  #'MT_CE',
-  colors = ['royalblue', 'hotpink', 'blueviolet', 'gold', 'darkorange', 'limegreen', 'brown', 'goldenrod', 'darkorchid']
+  colors = [
+    'royalblue', 'forestgreen',
+    'darkorchid', 'brown',
+    'gold', 'red',
+    'darkcyan', 'greenyellow',
+    'peru',
+    'hotpink']
   n_methods = 9
   n_set = 3
   ind = np.arange(n_set)

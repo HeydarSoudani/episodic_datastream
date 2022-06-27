@@ -35,6 +35,15 @@ def set_novel_label(known_labels, args, data=[]):
 
 def tsne_plot(features, labels, file_name='tsne', n_color=6):
   
+  colors = [
+    'royalblue', 'forestgreen',
+    'darkorchid', 'brown',
+    'gold', 'red',
+    'darkcyan', 'greenyellow',
+    'peru',
+    'hotpink'
+  ]
+  
   tsne = TSNE()
   X_embedded = tsne.fit_transform(features)
   plt.tick_params(
@@ -47,7 +56,8 @@ def tsne_plot(features, labels, file_name='tsne', n_color=6):
     X_embedded[:,0],
     X_embedded[:,1],
     marker='o',
-    label=[ 'Novel' if i==100 else i for i in labels]  
+    c=[colors[9] if i==100 else colors[i] for i in labels],
+    label=['Novel' if i==100 else i for i in labels]
   )
   
   # sns.set(rc={'figure.figsize':(11.7,8.27)})
