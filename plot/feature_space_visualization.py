@@ -59,6 +59,7 @@ def tsne_plot(features, labels, file_name='tsne', n_color=6):
     c=[colors[9] if i==100 else colors[i] for i in labels],
     label=['Novel' if i==100 else i for i in labels]
   )
+  plt.legend(loc='upper right', fontsize=10)
   
   # sns.set(rc={'figure.figsize':(11.7,8.27)})
   # palette = sns.color_palette("bright", n_color)
