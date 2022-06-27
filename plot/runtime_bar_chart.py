@@ -186,7 +186,7 @@ def details_times_plot():
   ind = np.arange(4)
   data = get_details_stream_data()
 
-  fig, axs = plt.subplots(nrows=1, ncols=len(data), figsize=(6,3))
+  fig, axs = plt.subplots(nrows=1, ncols=len(data), figsize=(11, 4.5))
   for idx, item in enumerate(data):
     dataset = item['dataset']
     mean = item['mean']
@@ -205,21 +205,22 @@ def details_times_plot():
 
     axs[idx].set_yscale('log')  
     axs[idx].set_xticks(ind)
-    axs[idx].set_xticklabels(['retrain', 'detector', 'memory', 'evaluation'], fontsize=10)
+    axs[idx].set_xticklabels(['retrain', 'detector', 'memory', 'evaluation'], fontsize=12)
     axs[idx].set_xlabel('Component', fontsize=14)
     axs[idx].set_ylabel('Run time (s)', fontsize=14)
     axs[idx].set_title('{}'.format(dataset), fontsize=16)
-    # axs[idx].legend(loc='center', bbox_to_anchor=(0.5, 1.12),
-    #         fancybox=True, shadow=False, ncol=3, fontsize=11.5)
+
+    pos = axs[idx].get_position()
+    axs[idx].set_position([pos.x0, pos.y0, pos.width, pos.height * 0.82])
   
   handles, labels = axs[idx].get_legend_handles_labels()
-  fig.legend(handles, labels, loc='upper center', ncol=2,)
+  fig.legend(handles, labels, loc='upper center', ncol=2, fontsize=12)
 
   # fig.savefig('bars.png', format='png', dpi=1400)
   plt.show()
 
 
 if __name__ == '__main__':
-  all_time_plot()
-  # details_times_plot()
+  # all_time_plot()
+  details_times_plot()
 

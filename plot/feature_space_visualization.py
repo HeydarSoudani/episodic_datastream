@@ -34,19 +34,32 @@ def set_novel_label(known_labels, args, data=[]):
 
 
 def tsne_plot(features, labels, file_name='tsne', n_color=6):
+  
   tsne = TSNE()
   X_embedded = tsne.fit_transform(features)
-
-  sns.set(rc={'figure.figsize':(11.7,8.27)})
-  palette = sns.color_palette("bright", n_color)
-  sns.scatterplot(
-    x=X_embedded[:,0],
-    y=X_embedded[:,1],
-    hue=labels,
-    legend='full',
-    palette=palette
+  plt.tick_params(
+    left=False,
+    labelleft=False,
+    bottom = False,
+    labelbottom=False
   )
-  sns.tick_params(bottom=False, left=False)
+  plt.scatter(
+    X_embedded[:,0],
+    X_embedded[:,1],
+    marker='o',
+    label=[ 'Novel' if i==100 else i for i in labels]  
+  )
+  
+  # sns.set(rc={'figure.figsize':(11.7,8.27)})
+  # palette = sns.color_palette("bright", n_color)
+  # sns.scatterplot(
+  #   x=X_embedded[:,0],
+  #   y=X_embedded[:,1],
+  #   hue=labels,
+  #   legend='full',
+  #   palette=palette
+  # )
+  # sns.tick_params(bottom=False, left=False)
 
   plt.savefig('{}.png'.format(file_name))
   # plt.show()
