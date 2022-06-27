@@ -59,7 +59,7 @@ def tsne_plot(features, labels, file_name='tsne', n_color=6):
     X_embedded[:,0],
     X_embedded[:,1],
     marker='o',
-    c=[colors[9] if i==100 else colors[i] for i in labels],
+    c=np.array([colors[9] if i==100 else colors[i] for i in labels]),
     # label=['Novel' if i==100 else i for i in labels]
   )
   print(*scatter.legend_elements())
