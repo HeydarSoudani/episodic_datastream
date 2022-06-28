@@ -48,7 +48,7 @@ def tsne_plot(features, labels, file_name='tsne', n_color=6):
   X_embedded = tsne.fit_transform(features)
   
   fig, ax = plt.subplots()
-
+  plt_colors = np.array([colors[9] if i==100 else colors[i] for i in labels])
   ax.tick_params(
     left=False,
     labelleft=False,
@@ -59,12 +59,17 @@ def tsne_plot(features, labels, file_name='tsne', n_color=6):
     X_embedded[:,0],
     X_embedded[:,1],
     marker='o',
-    c=np.array([colors[9] if i==100 else colors[i] for i in labels]),
+    c=plt_colors,
     label=['Novel' if i==100 else i for i in labels]
   )
-  print(*scatter.legend_elements())
-  legend1 = ax.legend(*scatter.legend_elements(),
-                    loc="upper right", title="Classes", fontsize=9)
+
+  print(np.unique(plt_colors))
+  legend1 = ax.legend(
+    np.unique(plt_colors),
+    loc="upper right",
+    title="Classes",
+    fontsize=9
+  )
   ax.add_artist(legend1)
     
   # sns.set(rc={'figure.figsize':(11.7,8.27)})
