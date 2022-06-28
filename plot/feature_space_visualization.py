@@ -63,9 +63,9 @@ def tsne_plot(features, labels, file_name='tsne', n_color=6):
       X_embedded[np.where(labels==label)[0], 0],
       X_embedded[np.where(labels==label)[0], 1],
       marker='o',
-      c=plt_colors
+      c= colors[9] if idx==100 else colors[idx]
     )
-    
+
   plt.legend(
     scatterpoints=1,
     frameon=False,
