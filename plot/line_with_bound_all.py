@@ -269,7 +269,7 @@ def main():
   ]
   
   fig, axs = plt.subplots(1, len(datasets), figsize=(15,6))
-  axs[0].set_ylabel('Accuracy')
+  axs[0].set_ylabel('Accuracy', fontsize=12)
   
   for ds_idx, dataset in enumerate(datasets):
     data = get_data(dataset)
@@ -285,8 +285,8 @@ def main():
       #   facecolor=colors[idx],
       #   alpha=0.2)
   
-    axs[ds_idx].set_title(dataset)
-    axs[ds_idx].set_xlabel('Memory size')
+    axs[ds_idx].set_title(dataset, fontsize=14)
+    axs[ds_idx].set_xlabel('Memory size', fontsize=12)
     axs[ds_idx].set_xticks(np.arange(4))
     axs[ds_idx].set_xticklabels(['0.2K', '0.5K', '1K', '2K'])
     if dataset == 'CIFAR10':
