@@ -102,6 +102,9 @@ parser.add_argument('--mem_per_class', type=int, default=100, help='')
 parser.add_argument('--mem_sel_method', type=str, default='rand', choices=['rand', 'soft_rand'], help='')
 parser.add_argument('--mem_novel_acceptance', type=int, default=150, help='')
 
+# labeling
+parser.add_argument('--labeling_ratio', type=float, default=1.0, help='')
+
 # Transform
 parser.add_argument('--use_transform', action='store_true')
 
