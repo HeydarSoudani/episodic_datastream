@@ -107,8 +107,8 @@ def stream_learn(model,
 
 
 			# == Preparing buffer ==================
+			buffer = []
 			if (i+1) % args.known_retrain_interval == 0:
-				buffer = []
 				for label, data in known_buffer.items():
 					n = len(data)
 					if n > args.known_per_class:
@@ -156,12 +156,12 @@ def stream_learn(model,
 			detector_start_time = time.time()
 			_, new_known_labels, intra_distances\
 					= detector_preparation(model,
-																	learner.prototypes,
-																	new_train_data,
-																	args, device)
+										learner.prototypes,
+										new_train_data,
+										args, device)
 			detector.threshold_calculation(intra_distances,
-																			new_known_labels,
-																			args.std_coefficient)
+											new_known_labels,
+											args.std_coefficient)
 			detector_times.append(time.time() - detector_start_time)
 			print("Detector Threshold: {}".format(detector.thresholds))
 			detector.save(args.detector_path)
