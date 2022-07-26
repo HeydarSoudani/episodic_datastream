@@ -122,16 +122,16 @@ def stream_learn(model,
 				buffer = unknown_buffer
 
 			# == 2-0) Create pseudo-label for buffer data
-			n_component = len(detector._known_labels) if len(detector._known_labels) == args.n_classes else len(detector._known_labels)+1
-			pseudo_buffer = pseudo_labeler(
-				buffer,
-				n_component=n_component,
-				ratio=args.labeling_ratio
-			)
+			# n_component = len(detector._known_labels) if len(detector._known_labels) == args.n_classes else len(detector._known_labels)+1
+			# pseudo_buffer = pseudo_labeler(
+			# 	buffer,
+			# 	n_component=n_component,
+			# 	ratio=args.labeling_ratio
+			# )
 			
 			# == 2) Preparing retrain data ==========
 			mem_start_time = time.time()
-			new_train_data = memory.select(pseudo_buffer, return_data=True) # buffer
+			new_train_data = memory.select(buffer, return_data=True) # pseudo_buffer
 			memory_times.append(time.time() - mem_start_time)
 			print('Retrain data number: {}'.format(new_train_data.shape[0]))
 			print('===========================')
