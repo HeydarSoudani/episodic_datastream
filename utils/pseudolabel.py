@@ -10,6 +10,9 @@ def pseudo_labeler(data, n_component=2, ratio=1.0):
 	Returns:
 		---
 	""" 
+	print(len(data))
+	print(n_component)
+	print(ratio)
 	p_data = []
 	samples = torch.stack([item[0] for item in data])
 	labels = torch.tensor([item[1] for item in data])
