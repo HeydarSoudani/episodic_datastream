@@ -33,9 +33,14 @@ def pseudo_labeler(data, n_component=2, ratio=1.0):
 		plabel = torch.argmax(torch.bincount(labels[component_idx_ratio])).item()
 		component_samples = samples[component_idx]
 		component_features = features[component_idx]
+		component_labels = labels[component_idx]
+
 		p_data.extend([
-			(component_samples[i], plabel, component_features[i])
-			for i in range(n)
+			(
+				component_samples[j],
+				component_labels[j] if j in component_idx_ratio else plabel,
+				component_features[j])
+			for j in range(n)
 		])
 
 	return p_data
