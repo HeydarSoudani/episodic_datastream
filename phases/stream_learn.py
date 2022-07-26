@@ -128,6 +128,8 @@ def stream_learn(model,
 				n_component=n_component,
 				ratio=args.labeling_ratio
 			)
+			print('buffer len: {}'.format(len(buffer)))
+			print('pseudo_buffer len: {}'.format(len(pseudo_buffer)))
 			
 			# == 2) Preparing retrain data ==========
 			mem_start_time = time.time()

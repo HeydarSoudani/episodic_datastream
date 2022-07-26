@@ -10,7 +10,6 @@ def pseudo_labeler(data, n_component=2, ratio=1.0):
 	Returns:
 		---
 	""" 
-	print(len(data))
 	print(n_component)
 	print(ratio)
 	p_data = []
@@ -21,7 +20,7 @@ def pseudo_labeler(data, n_component=2, ratio=1.0):
 	gmm = GaussianMixture(n_components=n_component, random_state=0)
 	gmm.fit(features.detach().cpu().numpy())
 	gmm_predict = gmm.predict(features.detach().cpu().numpy())
-
+  
 	for i in range(n_component):
 		component_idx = np.where(gmm_predict == i)[0].astype(int)
 		n = component_idx.shape[0]
@@ -38,13 +37,11 @@ def pseudo_labeler(data, n_component=2, ratio=1.0):
 		p_data.extend([
 			(
 				component_samples[j],
-				component_labels[j] if j in component_idx_ratio else plabel,
+				component_labels[j] , #if j in component_idx_ratio else plabel
 				component_features[j])
 			for j in range(n)
 		])
 
 	return p_data
-
-
 
 
