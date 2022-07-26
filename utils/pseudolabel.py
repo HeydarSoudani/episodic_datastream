@@ -40,7 +40,7 @@ def pseudo_labeler(data, n_component=2, ratio=1.0):
     p_data.extend([
       (
         component_samples[j],
-        component_labels[j] if j in component_idx_ratio else plabel,
+        component_labels[j] if component_idx[j] in component_idx_ratio else plabel,
         component_features[j])
       for j in range(n)
     ])
