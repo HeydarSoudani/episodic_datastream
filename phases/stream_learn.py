@@ -122,9 +122,10 @@ def stream_learn(model,
 				buffer = unknown_buffer
 
 			# == 2-0) Create pseudo-label for buffer data
+			n_component = len(detector._known_labels) if len(detector._known_labels) == args.n_classes else len(detector._known_labels)+1
 			pseudo_buffer = pseudo_labeler(
 				buffer,
-				n_component=len(detector._known_labels)+1,
+				n_component=n_component,
 				ratio=args.labeling_ratio
 			)
 			
