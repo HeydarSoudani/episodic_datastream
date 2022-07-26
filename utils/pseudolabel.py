@@ -35,6 +35,10 @@ def pseudo_labeler(data, n_component=2, ratio=1.0):
       # component_idx[np.random.choice(
       #   range(n), size=int(n*ratio), replace=False
       # )]
+    
+    print('component_idx_ratio: {}'.format(len(component_idx_ratio)))
+    print('component_idx: {}'.format(len(component_idx)))
+
     plabel = torch.argmax(torch.bincount(labels[component_idx_ratio])).item()
 		
     p_data.extend([
