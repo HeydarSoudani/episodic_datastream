@@ -31,7 +31,7 @@ def pseudo_labeler(data, n_component=2, ratio=1.0):
     component_labels = labels[component_idx]
 
     n = component_idx.shape[0]
-    component_idx_ratio = random.sample(component_idx, int(n*ratio))
+    component_idx_ratio = random.sample(list(component_idx), int(n*ratio))
       # component_idx[np.random.choice(
       #   range(n), size=int(n*ratio), replace=False
       # )]
