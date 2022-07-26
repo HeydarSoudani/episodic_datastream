@@ -132,20 +132,19 @@ def get_details_stream_data():
 
 def all_time_plot():
   data = get_stream_data()
-  methods = ['CPE_e1', 'CPE_e3', 'CPE_e5', 'MT_XN', 'MT_CO', 'MT_TR', 'ML_CE', 'ML_PT', 'ML_RP' ]  #'MT_CE',
+  methods = ['CPE_e1', 'CPE_e3', 'CPE_e5', 'XN_PE', 'CO_PE', 'TR_PE', 'MPE_CE', 'MPE_PT', 'MPE_RP' ]  #'MT_CE',
   colors = [
-    'royalblue', 'forestgreen',
-    'darkorchid', 'brown',
-    'gold', 'red',
-    'darkcyan', 'greenyellow',
-    'peru',
-    'hotpink']
+    'orchid', 'darkorchid', 'blueviolet',
+    'darkorange', 'goldenrod', 'peru',
+    'darkgreen', 'olivedrab', 'yellowgreen',
+    ]
   n_methods = 9
   n_set = 3
   ind = np.arange(n_set)
   width = 0.14
   
-  fig, axs = plt.subplots(nrows=1, ncols=len(data), figsize=(11,4.5))
+  fig, axs = plt.subplots(nrows=2, ncols=1, figsize=(6, 8))
+  # fig.subplots_adjust(hspace = .001)
   
   for idx, item in enumerate(data):
     dataset = item['dataset']
@@ -173,13 +172,14 @@ def all_time_plot():
     axs[idx].set_ylabel('Run time (sec)', fontsize=12)
     axs[idx].set_title('{}'.format(dataset), fontsize=12)
 
+    # if idx == 0:
     pos = axs[idx].get_position()
-    axs[idx].set_position([pos.x0, pos.y0, pos.width, pos.height * 0.82])
+    axs[idx].set_position([pos.x0, pos.y0, pos.width, pos.height * 0.92])
   
   handles, labels = axs[idx].get_legend_handles_labels()
   fig.legend(handles, labels, ncol=3, loc='upper center', fontsize=12)
-  # fig.legend(loc='center', bbox_to_anchor=(0.5, 1.12),
-  #   fancybox=True, shadow=False, ncol=3, fontsize=11.5)
+  fig.legend(loc='center', bbox_to_anchor=(0.5, 1.12),
+    fancybox=True, shadow=False, ncol=3, fontsize=11.5)
 
   # fig.savefig('bars.png', format='png', dpi=1400)
   plt.show()
@@ -227,6 +227,6 @@ def details_times_plot():
 
 
 if __name__ == '__main__':
-  # all_time_plot()
-  details_times_plot()
+  all_time_plot()
+  # details_times_plot()
 

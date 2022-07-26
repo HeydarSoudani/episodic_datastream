@@ -152,12 +152,12 @@ def UDA_plot():
 
   plot_labels = [
     'MNIST: Meta-learning (Prototypical)', 'MNIST: Metric-learning (Triplet)',
-    'FashionMNIST: Meta-learning (Prototypical)', 'FashionMNIST: Metric-learning (Contrastive)',
-    'CIFAR10: Meta-learning (Prototypical)', 'CIFAR10: Metric-learning (Triplet)'
+    # 'FashionMNIST: Meta-learning (Prototypical)', 'FashionMNIST: Metric-learning (Contrastive)',
+    # 'CIFAR10: Meta-learning (Prototypical)', 'CIFAR10: Metric-learning (Triplet)'
   ]
-  methods = ['mn_pt', 'mn_tr', 'fm_pt', 'fm_co', 'c10_pt', 'c10_tr']
-  fig, axs = plt.subplots(3, 2, figsize=(15,7))
-  fig.subplots_adjust(hspace = .001)
+  methods = ['mn_pt', 'mn_tr'] #'fm_pt', 'fm_co', 'c10_pt', 'c10_tr'
+  fig, axs = plt.subplots(2, 1, figsize=(6,6))
+  # fig.subplots_adjust(hspace = .001)
   
   for idx, method in enumerate(methods):
     item = get_data()[method]
@@ -174,37 +174,43 @@ def UDA_plot():
     Mnew = item['Mnew']
     Fnew = item['Fnew']
 
-    # axs[idx].plot(x_points, Mnew, '-o', label='M_new')
-    # axs[idx].plot(x_points, Fnew, '-o', label='F_new')
-    # axs[idx].set_title(plot_labels[idx], fontsize=10)
-    # axs[idx].set_ylim([0.0, 1])
-    # axs[idx].set_yticks(np.arange(0.0, 1.05, step=0.25))
-    # # axs[idx].set_ylabel('Percentage', fontsize=10)
-    # axs[idx].set_xlim(x_lim)
-    # axs[idx].set_xticks(x_ticks)
-    # if idx == len(methods)-1:
-    #   axs[idx].set_xlabel('Stream data (K)')
+    axs[idx].plot(x_points, Mnew, '-o', label='M_new')
+    axs[idx].plot(x_points, Fnew, '-o', label='F_new')
+    axs[idx].set_title(plot_labels[idx], fontsize=12)
+    axs[idx].set_ylim([0.0, 1])
+    axs[idx].set_yticks(np.arange(0.0, 1.05, step=0.25))
+    axs[idx].set_xlim(x_lim)
+    axs[idx].set_xticks(x_ticks)
+    if idx == len(methods)-1:
+      axs[idx].set_xlabel('Stream data (K)')
 
+    axs[idx].set_ylabel('Percentage', fontsize=10)
+    if idx == 1:
+      axs[idx].set_xlabel('Stream of Data (K)', fontsize=10)
     
-    axs[int(idx/2), idx%2].plot(x_points, Mnew, '-o', label='M_new')
-    axs[int(idx/2), idx%2].plot(x_points, Fnew, '-o', label='F_new')
-    axs[int(idx/2), idx%2].set_title(plot_labels[idx], fontsize=12)
-    axs[int(idx/2), idx%2].set_ylim([0.0, 1])
-    axs[int(idx/2), idx%2].set_yticks(np.arange(0.0, 1.05, step=0.5))
-    axs[int(idx/2), idx%2].set_xlim(x_lim)
-    axs[int(idx/2), idx%2].set_xticks(x_ticks)
+    pos = axs[idx].get_position()
+    axs[idx].set_position([pos.x0, pos.y0, pos.width, pos.height * 0.90])
+  handles, labels = axs[0].get_legend_handles_labels()
+
+    # axs[int(idx/2), idx%2].plot(x_points, Mnew, '-o', label='M_new')
+    # axs[int(idx/2), idx%2].plot(x_points, Fnew, '-o', label='F_new')
+    # axs[int(idx/2), idx%2].set_title(plot_labels[idx], fontsize=12)
+    # axs[int(idx/2), idx%2].set_ylim([0.0, 1])
+    # axs[int(idx/2), idx%2].set_yticks(np.arange(0.0, 1.05, step=0.5))
+    # axs[int(idx/2), idx%2].set_xlim(x_lim)
+    # axs[int(idx/2), idx%2].set_xticks(x_ticks)
     
-    if idx%2 == 0:
-      axs[int(idx/2), idx%2].set_ylabel('Percentage', fontsize=10)
-    if int(idx/2) == 2:
-      axs[int(idx/2), idx%2].set_xlabel('Stream of Data (K)')
-    if int(idx/2) == 0:
-      pos = axs[int(idx/2), idx%2].get_position()
-      axs[int(idx/2), idx%2].set_position([pos.x0, pos.y0, pos.width, pos.height * 0.9])
-  
-  handles, labels = axs[0, 0].get_legend_handles_labels()
+    # if idx%2 == 0:
+    #   axs[int(idx/2), idx%2].set_ylabel('Percentage', fontsize=10)
+    # if int(idx/2) == 2:
+    #   axs[int(idx/2), idx%2].set_xlabel('Stream of Data (K)')
+    # if int(idx/2) == 0:
+    #   pos = axs[int(idx/2), idx%2].get_position()
+    #   axs[int(idx/2), idx%2].set_position([pos.x0, pos.y0, pos.width, pos.height * 0.9])
+  # handles, labels = axs[0, 0].get_legend_handles_labels()
+
   fig.legend(handles, labels, loc='upper center', ncol=2, fontsize=13)
-  fig.subplots_adjust(hspace=0.4)
+  # fig.subplots_adjust(hspace=0.4)
   plt.show()
 
 def avg_class_plot():
